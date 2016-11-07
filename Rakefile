@@ -45,49 +45,31 @@ task :compile do
     if OS.bits == 64
       sh"GOOS=linux GOARCH=amd64 go build /go/source/ff.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/fd/releases/download/v#{ENV["FD_VER"]}/fd-#{ENV["FD_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fw/releases/download/v#{ENV["FW_VER"]}/fw-#{ENV["FW_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fs/releases/download/v#{ENV["FS_VER"]}/fs-#{ENV["FS_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/ft/releases/download/#{ENV["FT_VER"]}/ft-#{ENV["FT_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
     elsif OS.bits == 32
       sh"GOOS=linux GOARCH=386 go build /go/source/ff.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/fd/releases/download/v#{ENV["FD_VER"]}/fd-#{ENV["FD_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fw/releases/download/v#{ENV["FW_VER"]}/fw-#{ENV["FW_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fs/releases/download/v#{ENV["FS_VER"]}/fs-#{ENV["FS_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/ft/releases/download/#{ENV["FT_VER"]}/ft-#{ENV["FT_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
     end
   elsif OS.mac?
     if OS.bits == 64
       sh"GOOS=darwin GOARCH=amd64 go build /go/source/ff.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/fd/releases/download/v#{ENV["FD_VER"]}/fd-#{ENV["FD_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fw/releases/download/v#{ENV["FW_VER"]}/fw-#{ENV["FW_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fs/releases/download/v#{ENV["FS_VER"]}/fs-#{ENV["FS_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/ft/releases/download/#{ENV["FT_VER"]}/ft-#{ENV["FT_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
     elsif OS.bits == 32
       sh"GOOS=darwin GOARCH=386 go build /go/source/ff.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/fd/releases/download/v#{ENV["FD_VER"]}/fd-#{ENV["FD_VER"]}-i386-apple-darwin14.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fw/releases/download/v#{ENV["FW_VER"]}/fw-#{ENV["FW_VER"]}-i386-apple-darwin14.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fs/releases/download/v#{ENV["FS_VER"]}/fs-#{ENV["FS_VER"]}-i386-apple-darwin14.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/ft/releases/download/#{ENV["FT_VER"]}/ft-#{ENV["FT_VER"]}-i386-apple-darwin14.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i386-apple-darwin14.tgz | tar xz"
     end
   elsif OS.windows?
     if OS.bits == 64
       sh"GOOS=windows GOARCH=amd64 go build /go/source/ff.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/fd/releases/download/v#{ENV["FD_VER"]}/fd-#{ENV["FD_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fw/releases/download/v#{ENV["FW_VER"]}/fw-#{ENV["FW_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fs/releases/download/v#{ENV["FS_VER"]}/fs-#{ENV["FS_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/ft/releases/download/#{ENV["FT_VER"]}/ft-#{ENV["FT_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
     elsif OS.bits == 32
       sh"GOOS=windows GOARCH=386 go build /go/source/ff.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/fd/releases/download/v#{ENV["FD_VER"]}/fd-#{ENV["FD_VER"]}-i686-w64-mingw32.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fw/releases/download/v#{ENV["FW_VER"]}/fw-#{ENV["FW_VER"]}-i686-w64-mingw32.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/fs/releases/download/v#{ENV["FS_VER"]}/fs-#{ENV["FS_VER"]}-i686-w64-mingw32.tgz  | tar xz"
-      sh "curl -L https://github.com/appPlant/ft/releases/download/#{ENV["FT_VER"]}/ft-#{ENV["FT_VER"]}-i686-w64-mingw32.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-w64-mingw32.tgz  | tar xz"
     end
   end
   sh "echo #{OS.windows?}"
