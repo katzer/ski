@@ -9,7 +9,7 @@ file :mruby do
   FileUtils.mv("mruby-1.2.0", "mruby")
 end
 
-APP_NAME=ENV["APP_NAME"] || "fd"
+APP_NAME=ENV["APP_NAME"] || "goo"
 APP_ROOT=ENV["APP_ROOT"] || Dir.pwd
 bin_path="#{APP_ROOT}/bin"
 tools_path="#{ENV["TOOLS_PATH"]}"
@@ -19,57 +19,36 @@ task :compile do
   sh "rm -r tools" unless !Dir.exists?(tools_path)
   sh "mkdir tools" unless Dir.exists?(tools_path)
   sh "mkdir bin" unless Dir.exists?(bin_path)
-=begin
-  Dir.chdir("bin")
-  sh "rm -r win64"
-  sh "rm -r win32"
-  sh "rm -r mac64"
-  sh "rm -r mac32"
-  sh "rm -r linux64"
-  sh "rm -r linux32"
-  sh "mkdir win64" unless Dir.exists?("/go/bin/win64")
-  sh "mkdir win32" unless Dir.exists?("/go/bin/win32")
-  sh "mkdir mac64" unless Dir.exists?("/go/bin/mac64")
-  sh "mkdir mac32" unless Dir.exists?("/go/bin/mac32")
-  sh "mkdir linux64" unless Dir.exists?("/go/bin/linux64")
-  sh "mkdir linux32" unless Dir.exists?("/go/bin/linux32")
-  Dir.chdir("/go/bin/win64")
-  Dir.chdir("/go/bin/win32")
-  Dir.chdir("/go/bin/mac64")
-  Dir.chdir("/go/bin/mac32")
-  Dir.chdir("/go/bin")
-  Dir.chdir("/go/bin/linux32")
-=end
   Dir.chdir("/go/bin")
   if OS.linux?
     if OS.bits == 64
-      sh"GOOS=linux GOARCH=amd64 go build /go/source/ff.go"
+      sh"GOOS=linux GOARCH=amd64 go build /go/source/goo.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
     elsif OS.bits == 32
-      sh"GOOS=linux GOARCH=386 go build /go/source/ff.go"
+      sh"GOOS=linux GOARCH=386 go build /go/source/goo.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
     end
   elsif OS.mac?
     if OS.bits == 64
-      sh"GOOS=darwin GOARCH=amd64 go build /go/source/ff.go"
+      sh"GOOS=darwin GOARCH=amd64 go build /go/source/goo.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
     elsif OS.bits == 32
-      sh"GOOS=darwin GOARCH=386 go build /go/source/ff.go"
+      sh"GOOS=darwin GOARCH=386 go build /go/source/goo.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i386-apple-darwin14.tgz | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i386-apple-darwin14.tgz | tar xz"
     end
   elsif OS.windows?
     if OS.bits == 64
-      sh"GOOS=windows GOARCH=amd64 go build /go/source/ff.go"
+      sh"GOOS=windows GOARCH=amd64 go build /go/source/goo.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
     elsif OS.bits == 32
-      sh"GOOS=windows GOARCH=386 go build /go/source/ff.go"
+      sh"GOOS=windows GOARCH=386 go build /go/source/goo.go"
       Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/v#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-w64-mingw32.tgz  | tar xz"
+      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-w64-mingw32.tgz  | tar xz"
     end
   end
   sh "echo #{OS.windows?}"

@@ -2,10 +2,8 @@ FROM golang:alpine
 
 ENV GOBIN /go/bin
 ENV TOOLS_PATH /go/tools
-ENV FD_VER 0.0.1
-ENV FS_VER 0.0.1
-ENV FW_VER 0.0.1
-ENV FT_VER 0.0.1
+ENV FF_VER 0.0.1
+ENV IPS_ORBIT_FILE /go/bintest/test.json
 ENV PATH $PATH:/go/tools
 
 RUN apk update
