@@ -1,0 +1,50 @@
+[
+	{
+		"id": "id1",
+		"type": "server",
+		"user": "user1",
+		"password": "uwish",
+		"url": "url1.de"
+	},
+	{
+		"id": "id2",
+		"type": "server",
+		"user": "user2",
+		"password": "uwish",
+		"url": "url2.de"
+	},
+	{
+		"id": "id3",
+		"type": "db",
+		"user": "user1",
+		"password": "uwish",
+		"url": "url_url1.bla.blergh.de",
+		"host": "host1.bla",
+		"port": 666,
+		"sid": "horst1"
+	},
+	{
+		"id": "id4",
+		"type": "db",
+		"user": "user2",
+		"password": "uwish",
+		"url": "url_url2.bla.blergh.de",
+		"host": "host2.bla",
+		"port": 777,
+		"sid": "horst2"
+	},
+	{
+		"id": "id5",
+		"type": "web",
+		"user": "user1",
+		"password": "uwish",
+		"url": "https://url.1.net"
+	},
+	{
+		"id": "id6",
+		"type": "web",
+		"user": "user2",
+		"password": "uwish",
+		"url": "https://url.2.net"
+	}
+]
