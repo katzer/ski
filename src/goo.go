@@ -13,18 +13,21 @@ func main() {
 		os.Exit(0)
 	}
 	idString := os.Args[1]
-	cmdName := os.Args[2]
+	if(len(os.Args) == 3){
+		//cmdName := os.Args[2]
+	}
+
 	//cmdArgs := os.Args[3:len(os.Args)]
 	cmd 	 := exec.Command("ff",idString)
 	out, err := cmd.CombinedOutput()
+
 	if err != nil {
     		fmt.Println(fmt.Sprint(err) + ": " + string(out))
     		return
 	}
 	connectionData := string(out)
-	fmt.Println("The id is", idString)
-	fmt.Println("The command is", cmdName)
-	fmt.Println("The output is", connectionData)
+
+	fmt.Println(connectionData)
 
 	cmd 	 = exec.Command("ff","-t" ,idString)
 	out, err = cmd.CombinedOutput()
@@ -33,16 +36,19 @@ func main() {
     		return
 	}
 	planetType := string(out)
+	fmt.Println("Type is", planetType)
 	switch planetType{
 		case "server":
-			//do server
+			//cmd 	 := exec.Command("ssh",idString)
+			//out, err := cmd.CombinedOutput()
 		case "db":
-			//do db
+			//cmd 	 := exec.Command("ssh",idString)
+			//out, err := cmd.CombinedOutput()
 		case "web":
-			//do web
+			//cmd 	 := exec.Command("ssh",idString)
+			//out, err := cmd.CombinedOutput()
 		default:
 
 	}
 
-	fmt.Println("Type is", planetType)
 }

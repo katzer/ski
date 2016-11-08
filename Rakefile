@@ -22,31 +22,31 @@ task :compile do
   Dir.chdir("/go/bin")
   if OS.linux?
     if OS.bits == 64
-      sh"GOOS=linux GOARCH=amd64 go build /go/source/goo.go"
+      sh"GOOS=linux GOARCH=amd64 go build /go/src/goo.go"
       Dir.chdir(tools_path)
       sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
     elsif OS.bits == 32
-      sh"GOOS=linux GOARCH=386 go build /go/source/goo.go"
+      sh"GOOS=linux GOARCH=386 go build /go/src/goo.go"
       Dir.chdir(tools_path)
       sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
     end
   elsif OS.mac?
     if OS.bits == 64
-      sh"GOOS=darwin GOARCH=amd64 go build /go/source/goo.go"
+      sh"GOOS=darwin GOARCH=amd64 go build /go/src/goo.go"
       Dir.chdir(tools_path)
       sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
     elsif OS.bits == 32
-      sh"GOOS=darwin GOARCH=386 go build /go/source/goo.go"
+      sh"GOOS=darwin GOARCH=386 go build /go/src/goo.go"
       Dir.chdir(tools_path)
       sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i386-apple-darwin14.tgz | tar xz"
     end
   elsif OS.windows?
     if OS.bits == 64
-      sh"GOOS=windows GOARCH=amd64 go build /go/source/goo.go"
+      sh"GOOS=windows GOARCH=amd64 go build /go/src/goo.go"
       Dir.chdir(tools_path)
       sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
     elsif OS.bits == 32
-      sh"GOOS=windows GOARCH=386 go build /go/source/goo.go"
+      sh"GOOS=windows GOARCH=386 go build /go/src/goo.go"
       Dir.chdir(tools_path)
       sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-w64-mingw32.tgz  | tar xz"
     end
@@ -84,11 +84,7 @@ namespace :test do
 
   desc "run integration tests"
   task :bintest => :compile do
-    MRuby.each_target do |target|
-      clean_env(%w(MRUBY_ROOT MRUBY_CONFIG)) do
-        run_bintest if target.bintest_enabled?
-      end
-    end
+    ruby "/go/bintest/goo.rb"
   end
 end
 

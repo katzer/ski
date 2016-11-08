@@ -21,20 +21,33 @@
 # @APPPLANT_LICENSE_HEADER_END@
 
 require 'open3'
+require "test/unit"
 
-BIN_PATH = File.join(File.dirname(__FILE__), "../mruby/bin/fd")
+BIN_PATH = File.join(File.dirname(__FILE__), "../bin/goo")
 
-YAMLENV =  Hash["IPS_ORBIT_FILE" => "/home/mruby/code/bintest/test.json"]
-MALFORMEDYAMLFILE =  Hash["IPS_ORBIT_FILE" => "/home/mruby/code/bintest/wrongTest.json"]
-MALFORMEDYAMLENV =  Hash["IPS_ORBIT_FILE" => "/home/mruby/code/bintest/404.json"]
+YAMLENV =  Hash["IPS_ORBIT_FILE" => "/go/bintest/test.json"]
+MALFORMEDYAMLFILE =  Hash["IPS_ORBIT_FILE" => "/go/bintest/wrongTest.json"]
+MALFORMEDYAMLENV =  Hash["IPS_ORBIT_FILE" => "/go/bintest/404.json"]
+`cp /go/bintest/ssh /bin`
 
-assert('checking enviroment variable existence') do
-  output, error, status = Open3.capture3(BIN_PATH,"id1")
+class TestGoo < Test::Unit::TestCase
 
-  assert_false status.success?, "Process did not exit cleanly"
-  assert_include error, "env IPS_ORBIT_FILE not set"
+  def test_simple
+    output, error, status = Open3.capture3(YAMLENV,"ssh","id1")
+    assert_true status.success?, "yada"
+    assert_include output, "yahada"
+  end
+
+  def test_typecheck
+    assert_true(true)
+  end
+
+  def test_failure
+    assert_false(false)
+  end
+
 end
-
+=begin
 assert('checking json file existence') do
   output, error, status = Open3.capture3(MALFORMEDYAMLENV,BIN_PATH,"id1")
 
@@ -96,3 +109,6 @@ assert('case: found id, wrong type') do
   assert_false status.success?, "Process did not exit cleanly"
   assert_include error, "Wrong type"
 end
+=end
+
+
