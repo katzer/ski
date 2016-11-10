@@ -30,7 +30,7 @@ task :compile do
   Dir.chdir("/go/bin/Linux64")
   sh"GOOS=linux GOARCH=amd64 go build /go/src/goo.go"
   Dir.chdir("/go/bin/Linuxi686")
-=begin  sh"GOOS=linux GOARCH=386 go build /go/src/goo.go"
+  sh"GOOS=linux GOARCH=386 go build /go/src/goo.go"
   Dir.chdir("/go/bin/Win64")
   sh"GOOS=windows GOARCH=amd64 go build /go/src/goo.go"
   Dir.chdir("/go/bin/Wini686")
@@ -39,7 +39,7 @@ task :compile do
   sh"GOOS=darwin GOARCH=amd64 go build /go/src/goo.go"
   Dir.chdir("/go/bin/Maci386")
   sh"GOOS=darwin GOARCH=386 go build /go/src/goo.go"
-=end
+
   if OS.linux?
     if OS.bits == 64
       sh"GOOS=linux GOARCH=amd64 go build /go/src/goo.go"
