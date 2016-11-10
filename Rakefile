@@ -100,7 +100,7 @@ namespace :test do
 
   desc "run integration tests"
   task :bintest => :compile do
-    ruby "/go/bintest/goo.rb"
+    ruby "/go/bintest/goo.rb path_bin"
   end
 end
 

@@ -20,6 +20,8 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
+puts ARGV
+
 require 'open3'
 require "test/unit"
 require 'os'
