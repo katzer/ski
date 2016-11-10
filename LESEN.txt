@@ -1,0 +1,1 @@
+tests sind doch nur für hostsystem möglich. bei test als übergabeparameter optional gewünschte binary angeben

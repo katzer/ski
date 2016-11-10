@@ -22,8 +22,30 @@
 
 require 'open3'
 require "test/unit"
+require 'os'
 
-BIN_PATH = File.join(File.dirname(__FILE__), "../bin/goo")
+
+if OS.linux?
+    if OS.bits == 64
+      BIN_PATH = "/go/bin/Linux64/goo"
+    elsif OS.bits == 32
+      BIN_PATH = "/go/bin/Linuxi686/goo"
+    end
+  elsif OS.mac?
+    if OS.bits == 64
+      BIN_PATH = "/go/bin/Mac64/goo"
+    elsif OS.bits == 32
+      BIN_PATH = "/go/bin/Maci386/goo"
+    end
+  elsif OS.windows?
+    if OS.bits == 64
+      BIN_PATH = "/go/bin/Win64/goo"
+    elsif OS.bits == 32
+      BIN_PATH = "/go/bin/Wini686/goo"
+    end
+  end
+
+
 
 YAMLENV =  Hash["IPS_ORBIT_FILE" => "/go/bintest/test.json"]
 MALFORMEDYAMLFILE =  Hash["IPS_ORBIT_FILE" => "/go/bintest/wrongTest.json"]
@@ -32,14 +54,22 @@ MALFORMEDYAMLENV =  Hash["IPS_ORBIT_FILE" => "/go/bintest/404.json"]
 
 class TestGoo < Test::Unit::TestCase
 
-  def test_simple
-    output, error, status = Open3.capture3(YAMLENV,"ssh","id1")
+  def test_success
+    output, error, status = Open3.capture3(BIN_PATH,"id1")
     assert_true status.success?, "yada"
-    assert_include output, "yahada"
+    assert_include output, "Connected to user1@url1.de"
   end
 
-  def test_typecheck
-    assert_true(true)
+  def test_not_supportet
+    output, error, status = Open3.capture3(BIN_PATH,"id3")
+    assert_false status.success?, "yada"
+    assert_include output, "This Type of Connection is not yet supportet"
+  end
+
+  def test_commands
+    output, error, status = Open3.capture3(BIN_PATH,"id1","command1","command2","command3")
+    assert_true status.success?, "yada"
+    assert_include output, "command2"
   end
 
   def test_failure

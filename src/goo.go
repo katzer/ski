@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	//"strconv"
 )
 
@@ -12,9 +13,10 @@ func main() {
 		fmt.Println("usage: goo <Server-ID> <Command> [Arguments]")
 		os.Exit(0)
 	}
+	var cmdArgs []string
 	idString := os.Args[1]
-	if(len(os.Args) == 3){
-		//cmdName := os.Args[2]
+	if(len(os.Args) >= 3){
+		cmdArgs = os.Args[2:(len(os.Args))]
 	}
 
 	//cmdArgs := os.Args[3:len(os.Args)]
@@ -23,31 +25,47 @@ func main() {
 
 	if err != nil {
     		fmt.Println(fmt.Sprint(err) + ": " + string(out))
-    		return
+    		os.Exit(1)
 	}
 	connectionData := string(out)
-
-	fmt.Println(connectionData)
 
 	cmd 	 = exec.Command("ff","-t" ,idString)
 	out, err = cmd.CombinedOutput()
 	if err != nil {
     		fmt.Println(fmt.Sprint(err) + ": " + string(out))
-    		return
+    		os.Exit(1)
 	}
-	planetType := string(out)
-	fmt.Println("Type is", planetType)
-	switch planetType{
+	planetType := strings.TrimSpace(string(out))
+	fmt.Println(planetType)
+	switch planetType {
 		case "server":
-			//cmd 	 := exec.Command("ssh",idString)
-			//out, err := cmd.CombinedOutput()
+			cmd 	 := exec.Command("ssh",connectionData)
+			out, err := cmd.CombinedOutput()
+			fmt.Println(string(out))
+			if err != nil {
+    				fmt.Println(fmt.Sprint(err) + ": " + string(out))
+    				os.Exit(1)
+			}
+			if len(os.Args) >= 3 {
+				for _, command := range cmdArgs {
+					cmd 	 := exec.Command("ssh",connectionData,command)
+					out, err := cmd.CombinedOutput()
+					fmt.Println(string(out))
+					if err != nil {
+    						fmt.Println(fmt.Sprint(err) + ": " + string(out))
+    						os.Exit(1)
+					}
+				}
+			}
+
 		case "db":
-			//cmd 	 := exec.Command("ssh",idString)
-			//out, err := cmd.CombinedOutput()
+			fmt.Println("This Type of Connection is not yet supportet")
+			os.Exit(1)
 		case "web":
-			//cmd 	 := exec.Command("ssh",idString)
-			//out, err := cmd.CombinedOutput()
+			fmt.Println("This Type of Connection is not yet supportet")
+			os.Exit(1)
 		default:
+			fmt.Println("Sag doch irgendetwas")
 
 	}
 

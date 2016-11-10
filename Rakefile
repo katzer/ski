@@ -18,8 +18,28 @@ desc "compile binary"
 task :compile do
   sh "rm -r tools" unless !Dir.exists?(tools_path)
   sh "mkdir tools" unless Dir.exists?(tools_path)
-  sh "mkdir bin" unless Dir.exists?(bin_path)
+  sh "rm -r /go/bin" unless !Dir.exists?("/go/bin")
+  sh "mkdir /go/bin"
   Dir.chdir("/go/bin")
+  sh "mkdir Linux64"
+  sh "mkdir Linuxi686"
+  sh "mkdir Win64"
+  sh "mkdir Wini686"
+  sh "mkdir Mac64"
+  sh "mkdir Maci386"
+  Dir.chdir("/go/bin/Linux64")
+  sh"GOOS=linux GOARCH=amd64 go build /go/src/goo.go"
+  Dir.chdir("/go/bin/Linuxi686")
+=begin  sh"GOOS=linux GOARCH=386 go build /go/src/goo.go"
+  Dir.chdir("/go/bin/Win64")
+  sh"GOOS=windows GOARCH=amd64 go build /go/src/goo.go"
+  Dir.chdir("/go/bin/Wini686")
+  sh"GOOS=windows GOARCH=386 go build /go/src/goo.go"
+  Dir.chdir("/go/bin/Mac64")
+  sh"GOOS=darwin GOARCH=amd64 go build /go/src/goo.go"
+  Dir.chdir("/go/bin/Maci386")
+  sh"GOOS=darwin GOARCH=386 go build /go/src/goo.go"
+=end
   if OS.linux?
     if OS.bits == 64
       sh"GOOS=linux GOARCH=amd64 go build /go/src/goo.go"
@@ -51,10 +71,6 @@ task :compile do
       sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-w64-mingw32.tgz  | tar xz"
     end
   end
-  sh "echo #{OS.windows?}"
-  sh "echo #{OS.mac?}"
-  sh "echo #{OS.linux?}"
-  sh "echo #{OS.bits}"
 end
 
 namespace :test do
