@@ -30,7 +30,7 @@ task :compile do
   Dir.mkdir("Maci386")
   Dir.chdir("#{bin_path}/Linux64")
   puts "Linux64 #{system("GOOS=linux GOARCH=amd64 go build #{src_path}/goo.go")}"
-=begin
+
   Dir.chdir("#{bin_path}/Linuxi686")
   puts "Linuxi686 #{system("GOOS=linux GOARCH=386 go build #{src_path}/goo.go")}"
   Dir.chdir("#{bin_path}/Win64")
@@ -41,7 +41,7 @@ task :compile do
   puts "Mac64 #{system("GOOS=darwin GOARCH=amd64 go build #{src_path}/goo.go")}"
   Dir.chdir("#{bin_path}/Maci386")
   puts "Maci386 #{system("GOOS=darwin GOARCH=386 go build #{src_path}/goo.go")}"
-=end
+
 end
 
 namespace :test do
