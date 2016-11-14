@@ -8,40 +8,41 @@ import (
 	//"strconv"
 )
 
-
+func throwErr(out []byte, err error){
+	fmt.Print(fmt.Sprint(err) + ": " + string(out) + "path is " + os.Getenv("PATH"))
+	os.Stderr.WriteString(fmt.Sprint(err) + ": " + string(out))
+	os.Exit(1)
+}
 
 func execCommand(connectionData string, command string){
 	cmd 	 := exec.Command("ssh",connectionData, command)
 	out, err := cmd.CombinedOutput()
 	fmt.Println(string(out))
 	if err != nil {
-			fmt.Println(fmt.Sprint(err) + ": " + string(out))
-			os.Exit(1)
+		throwErr(out,err)
 	}
 }
 
-func getType string(args []string){
+func getType(args []string) string{
 	cmd 	 := exec.Command("ff","-t" ,args[1])
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-    		fmt.Println(fmt.Sprint(err) + ": " + string(out))
-    		os.Exit(1)
+    	throwErr(out,err)
 	}
 	return strings.TrimSpace(string(out))
 }
 
-func getConnDet string(args []string){
+func getConnDet(args []string) string{
 	cmd 	 := exec.Command("ff",args[1])
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-    		fmt.Println(fmt.Sprint(err) + ": " + string(out))
-    		os.Exit(1)
+    	throwErr(out,err)
 	}
 	return strings.TrimSpace(string(out))
 }
 
-func getCommand string(args []string){
-	var string command = args[2]
+func getCommand(args []string) string{
+	var command string  = args[2]
 	var cmdArgs []string
 	if(len(args) >= 3){
 		cmdArgs = args[2:(len(args))]
@@ -56,7 +57,7 @@ func getCommand string(args []string){
 
 func main() {
 	var args []string = os.Args
-	if len.(args) <=2 || args[1] == "-h"{
+	if (len(args) <=2) || args[1] == "-h"{
 		fmt.Println("usage: goo <Server-ID> <Command> [Arguments]")
 		os.Exit(0)
 	}
@@ -66,10 +67,10 @@ func main() {
 			var command string = getCommand(args)
 			execCommand(connDet,command)
 		case "db":
-			fmt.Println("This type of connection ist not yet supported.")
+			fmt.Println("This Type of Connection is not yet supported.")
 			os.Exit(1)
 		default:
-			fmt.Println("This type connection is not supported.")
+			fmt.Println("This Type of Connection is not supported.")
 			os.Exit(1)
 	}
 }

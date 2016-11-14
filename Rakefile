@@ -12,65 +12,36 @@ end
 APP_NAME=ENV["APP_NAME"] || "goo"
 APP_ROOT=ENV["APP_ROOT"] || Dir.pwd
 bin_path="#{APP_ROOT}/bin"
+src_path="#{APP_ROOT}/src"
 tools_path="#{ENV["TOOLS_PATH"]}"
 
 desc "compile binary"
 task :compile do
-  sh "rm -r tools" unless !Dir.exists?(tools_path)
-  sh "mkdir tools" unless Dir.exists?(tools_path)
-  sh "rm -r /go/bin" unless !Dir.exists?("/go/bin")
-  sh "mkdir /go/bin"
-  Dir.chdir("/go/bin")
-  sh "mkdir Linux64"
-  sh "mkdir Linuxi686"
-  sh "mkdir Win64"
-  sh "mkdir Wini686"
-  sh "mkdir Mac64"
-  sh "mkdir Maci386"
-  Dir.chdir("/go/bin/Linux64")
-  sh"GOOS=linux GOARCH=amd64 go build /go/src/goo.go"
-  Dir.chdir("/go/bin/Linuxi686")
-  sh"GOOS=linux GOARCH=386 go build /go/src/goo.go"
-  Dir.chdir("/go/bin/Win64")
-  sh"GOOS=windows GOARCH=amd64 go build /go/src/goo.go"
-  Dir.chdir("/go/bin/Wini686")
-  sh"GOOS=windows GOARCH=386 go build /go/src/goo.go"
-  Dir.chdir("/go/bin/Mac64")
-  sh"GOOS=darwin GOARCH=amd64 go build /go/src/goo.go"
-  Dir.chdir("/go/bin/Maci386")
-  sh"GOOS=darwin GOARCH=386 go build /go/src/goo.go"
-
-  if OS.linux?
-    if OS.bits == 64
-      sh"GOOS=linux GOARCH=amd64 go build /go/src/goo.go"
-      Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-pc-linux-gnu.tgz  | tar xz"
-    elsif OS.bits == 32
-      sh"GOOS=linux GOARCH=386 go build /go/src/goo.go"
-      Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-pc-linux-gnu.tgz  | tar xz"
-    end
-  elsif OS.mac?
-    if OS.bits == 64
-      sh"GOOS=darwin GOARCH=amd64 go build /go/src/goo.go"
-      Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-apple-darwin14.tgz  | tar xz"
-    elsif OS.bits == 32
-      sh"GOOS=darwin GOARCH=386 go build /go/src/goo.go"
-      Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i386-apple-darwin14.tgz | tar xz"
-    end
-  elsif OS.windows?
-    if OS.bits == 64
-      sh"GOOS=windows GOARCH=amd64 go build /go/src/goo.go"
-      Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-x86_64-w64-mingw32.tgz  | tar xz"
-    elsif OS.bits == 32
-      sh"GOOS=windows GOARCH=386 go build /go/src/goo.go"
-      Dir.chdir(tools_path)
-      sh "curl -L https://github.com/appPlant/ff/releases/download/#{ENV["FF_VER"]}/ff-#{ENV["FF_VER"]}-i686-w64-mingw32.tgz  | tar xz"
-    end
-  end
+  FileUtils.rm_r "#{APP_ROOT}/tools" unless !Dir.exists?(tools_path)
+  Dir.mkdir("#{APP_ROOT}/tools")
+  FileUtils.rm_r bin_path unless !Dir.exists?(bin_path)
+  Dir.mkdir(bin_path)
+  Dir.chdir(bin_path)
+  Dir.mkdir("Linux64")
+  Dir.mkdir("Linuxi686")
+  Dir.mkdir("Win64")
+  Dir.mkdir("Wini686")
+  Dir.mkdir("Mac64")
+  Dir.mkdir("Maci386")
+  Dir.chdir("#{bin_path}/Linux64")
+  puts "Linux64 #{system("GOOS=linux GOARCH=amd64 go build #{src_path}/goo.go")}"
+=begin
+  Dir.chdir("#{bin_path}/Linuxi686")
+  puts "Linuxi686 #{system("GOOS=linux GOARCH=386 go build #{src_path}/goo.go")}"
+  Dir.chdir("#{bin_path}/Win64")
+  puts "Win64 #{system("GOOS=windows GOARCH=amd64 go build #{src_path}/goo.go")}"
+  Dir.chdir("#{bin_path}/Wini686")
+  puts "Wini686 #{system("GOOS=windows GOARCH=386 go build #{src_path}/goo.go")}"
+  Dir.chdir("#{bin_path}/Mac64")
+  puts "Mac64 #{system("GOOS=darwin GOARCH=amd64 go build #{src_path}/goo.go")}"
+  Dir.chdir("#{bin_path}/Maci386")
+  puts "Maci386 #{system("GOOS=darwin GOARCH=386 go build #{src_path}/goo.go")}"
+=end
 end
 
 namespace :test do
@@ -100,7 +71,28 @@ namespace :test do
 
   desc "run integration tests"
   task :bintest => :compile do
-    ruby "/go/bintest/goo.rb path_bin"
+    os = ""
+    if OS.linux?
+      if OS.bits == 64
+        os = "Linux64"
+      elsif OS.bits == 32
+        os = "Linuxi686"
+      end
+    elsif OS.mac?
+      if OS.bits == 64
+        os = "Mac64"
+      elsif OS.bits == 32
+        os = "Maci386"
+      end
+    elsif OS.windows?
+      if OS.bits == 64
+        os = "Win64"
+      elsif OS.bits == 32
+        os = "Wini686"
+      end
+    end
+    bin_path = File.join(File.dirname(__FILE__), "bin/#{os}/goo")
+    ruby "#{APP_ROOT}/bintest/goo.rb #{bin_path}"
   end
 end
 

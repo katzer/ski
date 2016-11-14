@@ -20,57 +20,36 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-puts ARGV
 
 require 'open3'
 require "test/unit"
 require 'os'
 
-
-if OS.linux?
-    if OS.bits == 64
-      BIN_PATH = "/go/bin/Linux64/goo"
-    elsif OS.bits == 32
-      BIN_PATH = "/go/bin/Linuxi686/goo"
-    end
-  elsif OS.mac?
-    if OS.bits == 64
-      BIN_PATH = "/go/bin/Mac64/goo"
-    elsif OS.bits == 32
-      BIN_PATH = "/go/bin/Maci386/goo"
-    end
-  elsif OS.windows?
-    if OS.bits == 64
-      BIN_PATH = "/go/bin/Win64/goo"
-    elsif OS.bits == 32
-      BIN_PATH = "/go/bin/Wini686/goo"
-    end
-  end
+BIN_PATH = ARGV.fetch(0)
 
 
 
+puts File.join(File.dirname(__FILE__), "testtools")
 YAMLENV =  Hash["IPS_ORBIT_FILE" => "/go/bintest/test.json"]
-MALFORMEDYAMLFILE =  Hash["IPS_ORBIT_FILE" => "/go/bintest/wrongTest.json"]
-MALFORMEDYAMLENV =  Hash["IPS_ORBIT_FILE" => "/go/bintest/404.json"]
-`cp /go/bintest/ssh /bin`
+PATH = Hash["PATH" => File.join(File.dirname(__FILE__), "testtools")]
 
 class TestGoo < Test::Unit::TestCase
 
-  def test_success
-    output, error, status = Open3.capture3(BIN_PATH,"id1")
-    assert_true status.success?, "yada"
-    assert_include output, "Connected to user1@url1.de"
+  def test_not_yet_supportet
+    output, error, status = Open3.capture3(PATH,BIN_PATH,"id3","command")
+    assert_false status.success?, "This type of connection will be implemted at a later state"
+    assert_include output, "This Type of Connection is not yet supported"
   end
 
   def test_not_supportet
-    output, error, status = Open3.capture3(BIN_PATH,"id3")
-    assert_false status.success?, "yada"
-    assert_include output, "This Type of Connection is not yet supportet"
+    output, error, status = Open3.capture3(PATH,BIN_PATH,"id5","command")
+    assert_false status.success?, "Web won't be supported ever"
+    assert_include output, "This Type of Connection is not supported"
   end
 
   def test_commands
-    output, error, status = Open3.capture3(BIN_PATH,"id1","command1","command2","command3")
-    assert_true status.success?, "yada"
+    output, error, status = Open3.capture3(PATH,BIN_PATH,"id1","command1","command2","command3")
+    assert_true status.success?, "This test should succeed"
     assert_include output, "command2"
   end
 
