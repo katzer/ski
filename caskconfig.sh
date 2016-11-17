@@ -1,5 +1,5 @@
 #!/bin/sh
-<br>brew install go
-<br>brew install ruby
-<br>brew install wget
-<br>gem install os
+brew install go
+brew install ruby
+brew install wget
+gem install os

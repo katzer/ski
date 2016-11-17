@@ -3,7 +3,7 @@ FROM golang:alpine
 ENV GOBIN /go/bin
 ENV TOOLS_PATH /go/tools
 ENV FF_VER 0.0.1
-ENV IPS_ORBIT_FILE /go/bintest/test.json
+#ENV IPS_ORBIT_FILE /go/bintest/testtools/test.json
 ENV PATH $PATH:/go/tools
 
 RUN apk update

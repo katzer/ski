@@ -30,7 +30,8 @@ BIN_PATH = ARGV.fetch(0)
 
 
 puts File.join(File.dirname(__FILE__), "testtools")
-YAMLENV =  Hash["IPS_ORBIT_FILE" => "/go/bintest/testtools/test.json"]
+
+IPS_ORBIT_FILE =  Hash["IPS_ORBIT_FILE" => File.join(File.dirname(__FILE__), "testtools/test.json")]
 PATH = Hash["PATH" => File.join(File.dirname(__FILE__), "testtools")]
 
 class TestGoo < Test::Unit::TestCase
