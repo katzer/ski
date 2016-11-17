@@ -16,6 +16,7 @@ before_deploy:
 - docker-compose run release
 - export BUILD_VERSION=`rake local:version`
 - sudo chmod -R 1777 releases
+- echo $BUILD_VERSION
 - ls -la releases
 - ls -la releases/v$BUILD_VERSION
 notifications:
