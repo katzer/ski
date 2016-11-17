@@ -9,5 +9,5 @@ before_install:
 script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake compile	; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake test:bintest	; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest;fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest 	;fi
 
