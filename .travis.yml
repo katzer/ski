@@ -2,10 +2,12 @@ language: generic
 sudo: false
 os:
 - osx
+- linux
 before_install:
-- brew update
-- ./caskconfig.sh
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update        	; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./caskconfig.sh    	; fi
 script:
-- rake compile
-- rake test:bintest
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake compile	; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake test:bintest	; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest;fi
 
