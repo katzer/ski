@@ -3,6 +3,8 @@ sudo: false
 os:
 - osx
 - linux
+services:
+- docker
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update        	; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./caskconfig.sh    	; fi
