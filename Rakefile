@@ -11,6 +11,7 @@ end
 
 APP_NAME=ENV["APP_NAME"] || "goo"
 APP_ROOT=ENV["APP_ROOT"] || Dir.pwd
+APP_VERSION=ENV["APP_VERSION"] || "6.6.6"
 bin_path="#{APP_ROOT}/bin"
 src_path="#{APP_ROOT}/src"
 tools_path="#{ENV["TOOLS_PATH"]}"
@@ -30,7 +31,6 @@ task :compile do
   Dir.mkdir("Maci386")
   Dir.chdir("#{bin_path}/Linux64")
   puts "Linux64 #{system("GOOS=linux GOARCH=amd64 go build #{src_path}/goo.go")}"
-
   Dir.chdir("#{bin_path}/Linuxi686")
   puts "Linuxi686 #{system("GOOS=linux GOARCH=386 go build #{src_path}/goo.go")}"
   Dir.chdir("#{bin_path}/Win64")
@@ -104,42 +104,61 @@ desc "cleanup"
 task :clean do
   sh "rake deep_clean"
 end
-=begin
+
 desc "generate a release tarball"
 task :release => :compile do
-  require 'tmpdir'
 
-  Dir.chdir(mruby_root) do
-    # since we're in the mruby/
-    release_dir  = "releases/v#{APP_VERSION}"
-    release_path = Dir.pwd + "/../#{release_dir}"
-    app_name     = "#{APP_NAME}-#{APP_VERSION}"
-    FileUtils.mkdir_p(release_path)
+  Dir.chdir(APP_ROOT)
+  release_dir  = "releases/v#{APP_VERSION}"
+  release_path = Dir.pwd + "/#{release_dir}"
+  app_name     = "#{APP_NAME}-#{APP_VERSION}"
+  FileUtils.mkdir_p(release_path)
 
-    Dir.mktmpdir do |tmp_dir|
-      Dir.chdir(tmp_dir) do
-        MRuby.each_target do |target|
-          next if name == "host"
+  #Linux64
+  arch = "x86_64-pc-linux-gnu"
+  arch_release = "#{app_name}-#{arch}"
+  Dir.chdir("#{bin_path}/Linux64")
+  puts "#{bin_path}/Linux64"
+  puts "Writing #{release_dir}/#{arch_release}.tgz "
+  `tar czf #{release_path}/#{arch_release}.tgz *`
+  #Linuxi686
+  arch = "i686-pc-linux-gnu"
+  arch_release = "#{app_name}-#{arch}"
+  Dir.chdir("#{bin_path}/Linuxi686")
+  puts "Writing #{release_dir}/#{arch_release}.tgz "
+  `tar czf #{release_path}/#{arch_release}.tgz *`
+  #Mac64
+  arch = "x86_64-apple-darwin14"
+  arch_release = "#{app_name}-#{arch}"
+  Dir.chdir("#{bin_path}/Mac64")
+  puts "Writing #{release_dir}/#{arch_release}.tgz "
+  `tar czf #{release_path}/#{arch_release}.tgz *`
+  #Maci386
+  arch = "i386-apple-darwin14"
+  arch_release = "#{app_name}-#{arch}"
+  Dir.chdir("#{bin_path}/Maci386")
+  puts "Writing #{release_dir}/#{arch_release}.tgz "
+  `tar czf #{release_path}/#{arch_release}.tgz *`
+  #Win64
+  arch = "x86_64-w64-mingw32"
+  arch_release = "#{app_name}-#{arch}"
+  Dir.chdir("#{bin_path}/Win64")
+  puts "Writing #{release_dir}/#{arch_release}.tgz "
+  `tar czf #{release_path}/#{arch_release}.tgz *`
+  #Wini686
+  arch = "i686-w64-mingw32"
+  arch_release = "#{app_name}-#{arch}"
+  Dir.chdir("#{bin_path}/Wini686")
+  puts "Writing #{release_dir}/#{arch_release}.tgz "
+  `tar czf #{release_path}/#{arch_release}.tgz *`
 
-          arch = name
-          bin  = "#{build_dir}/bin/#{exefile(APP_NAME)}"
-          FileUtils.mkdir_p(name)
-          FileUtils.cp(bin, name)
+  #source
+  Dir.chdir(src_path)
+  puts "Writing #{release_dir}/#{app_name}.tgz "
+  `tar czf #{release_path}/#{app_name}.tgz *`
 
-          Dir.chdir(arch) do
-            arch_release = "#{app_name}-#{arch}"
-            puts "Writing #{release_dir}/#{arch_release}.tgz  | tar xz"
-            `tar czf #{release_path}/#{arch_release}.tgz  | tar xz *`
-          end
-        end
-
-        puts "Writing #{release_dir}/#{app_name}.tgz  | tar xz"
-        `tar czf #{release_path}/#{app_name}.tgz  | tar xz *`
-      end
-    end
-  end
 end
-
+=begin
 namespace :local do
   desc "show version"
   task :version do

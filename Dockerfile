@@ -5,6 +5,8 @@ ENV TOOLS_PATH /go/tools
 ENV FF_VER 0.0.1
 #ENV IPS_ORBIT_FILE /go/bintest/testtools/test.json
 ENV PATH $PATH:/go/tools
+ENV APP_VERSION 0.0.1
+ENV APP_NAME goo
 
 RUN apk update
 RUN apk add ruby
