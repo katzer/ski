@@ -158,7 +158,7 @@ task :release => :compile do
   `tar czf #{release_path}/#{app_name}.tgz *`
 
 end
-=begin
+
 namespace :local do
   desc "show version"
   task :version do
@@ -170,7 +170,7 @@ def is_in_a_docker_container?
   `grep -q docker /proc/self/cgroup`
   $?.success?
 end
-
+=begin
 Rake.application.tasks.each do |task|
   next if ENV["MRUBY_CLI_LOCAL"]
   unless task.name.start_with?("local:")
