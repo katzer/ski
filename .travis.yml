@@ -14,8 +14,8 @@ script:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest	; fi
 before_deploy:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run release	; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-export BUILD_VERSION=`rake local:version`	; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then then sudo chmod -R 1777 releases	; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export BUILD_VERSION=`rake local:version`	; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo chmod -R 1777 releases	; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ls -la releases			; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ls -la releases/v$BUILD_VERSION	; fi
 notifications:
