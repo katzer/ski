@@ -1,7 +1,7 @@
 language: generic
 sudo: false
 os:
-- osx
+#- osx
 - linux
 services:
 - docker
@@ -13,11 +13,11 @@ script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake test:bintest			; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest	; fi
 before_deploy:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run release	; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export BUILD_VERSION=`rake local:version`	; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo chmod -R 1777 releases	; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ls -la releases			; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ls -la releases/v$BUILD_VERSION	; fi
+- docker-compose run release
+- export BUILD_VERSION=`rake local:version`
+- sudo chmod -R 1777 releases
+- ls -la releases
+- ls -la releases/v$BUILD_VERSION
 notifications:
   slack:
     secure: ges/NMftobtq3p7FrxFE5xuiN9kYTMC8+tM/ltgZrAxxqvcgygVNqlkBYBf5Z7Q4OFAEjS69/17Kuu1+0VfJZRgNcN70IiXUB5qesVUlR2DtaA+yg4ZXLyEhAnx/gT1aTCooYUhXOtznLk6ts8LjbWMgih9cmgsojZlwqFVBTC3aYh1z7WtuW8hBRXEjSsve9TVGV5keBNqnBUznO9jnCoJOhkESdMzFf/sv9kHmh2UuM/PlWz7yHNt2TpohJh7o5p6dwik5++P0zr3tEe2DY7pYObvWnQOw+i98xVFOUBKakWjprafcqbYw6ZbvC9+BQdTW1rX11E/ExuhMmLZS28ZRBaDK4B7nmJW8dqLbbOQcOg9OJKl49CoLSUZNA3qouvIUvHiamJoIa/7vhEYTY/b593V3gj1C5XNAWZgX6ZXqFhSDEQ2fUavGlBhY5ZIrty1yZReMo5uJXo8LAcSNdxYB1lMhZq2DIyO8Zs8Zbxxt/99lNXLmSDYnLzQDOyfUVozyEWwVf2IYXTMetHLdNLKw2SzhphXmiS8iUgeAyw/DrafMwJUEC0om55Kcs5ruv4HKMOO8I8jKn+naaQeIkXqAHr0ttliKIjHt1ZOeLGYXrO9rMVE028Bhxb0cUlwy2LNe4THCMU4iCsy+pIxtV9H60gajzaGle6balY9n9aQ=
