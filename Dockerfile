@@ -7,6 +7,7 @@ ENV FF_VER 0.0.1
 ENV PATH $PATH:/go/tools
 ENV APP_VERSION 0.0.1
 ENV APP_NAME goo
+ENV BUILD_VERSION 0.0.1
 
 RUN apk update
 RUN apk add ruby
