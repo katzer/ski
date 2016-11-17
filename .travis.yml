@@ -1,0 +1,11 @@
+language: generic
+sudo: false
+os:
+- osx
+before_install:
+- brew update
+- ./caskconfig.sh
+script:
+- rake compile
+- rake test:bintest
+
