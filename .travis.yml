@@ -6,32 +6,32 @@ os:
 services:
 - docker
 before_install:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update        	; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./caskconfig.sh    	; fi
+- "if [[ \"$TRAVIS_OS_NAME\" == \"osx\" ]]; then brew update        \t; fi"
+- "if [[ \"$TRAVIS_OS_NAME\" == \"osx\" ]]; then ./caskconfig.sh    \t; fi"
 script:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake compile	; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake test:bintest	; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest 	;fi
+- "if [[ \"$TRAVIS_OS_NAME\" == \"osx\" ]]; then rake compile\t; fi"
+- "if [[ \"$TRAVIS_OS_NAME\" == \"osx\" ]]; then rake test:bintest\t; fi"
+- "if [[ \"$TRAVIS_OS_NAME\" == \"linux\" ]]; then docker-compose run bintest \t;fi"
 before_deploy:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run release	;fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export BUILD_VERSION=`rake local:version`	;fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo chmod -R 1777 releases	;fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ls -la releases			;fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ls -la releases/v$BUILD_VERSION	;fi
+- "if [[ \"$TRAVIS_OS_NAME\" == \"linux\" ]]; then docker-compose run release\t;fi"
+- "if [[ \"$TRAVIS_OS_NAME\" == \"linux\" ]]; then export BUILD_VERSION=`rake local:version`\t;fi"
+- "if [[ \"$TRAVIS_OS_NAME\" == \"linux\" ]]; then sudo chmod -R 1777 releases\t;fi"
+- "if [[ \"$TRAVIS_OS_NAME\" == \"linux\" ]]; then ls -la releases\t\t\t;fi"
+- "if [[ \"$TRAVIS_OS_NAME\" == \"linux\" ]]; then ls -la releases/v$BUILD_VERSION\t;fi"
 notifications:
   slack:
     secure: ges/NMftobtq3p7FrxFE5xuiN9kYTMC8+tM/ltgZrAxxqvcgygVNqlkBYBf5Z7Q4OFAEjS69/17Kuu1+0VfJZRgNcN70IiXUB5qesVUlR2DtaA+yg4ZXLyEhAnx/gT1aTCooYUhXOtznLk6ts8LjbWMgih9cmgsojZlwqFVBTC3aYh1z7WtuW8hBRXEjSsve9TVGV5keBNqnBUznO9jnCoJOhkESdMzFf/sv9kHmh2UuM/PlWz7yHNt2TpohJh7o5p6dwik5++P0zr3tEe2DY7pYObvWnQOw+i98xVFOUBKakWjprafcqbYw6ZbvC9+BQdTW1rX11E/ExuhMmLZS28ZRBaDK4B7nmJW8dqLbbOQcOg9OJKl49CoLSUZNA3qouvIUvHiamJoIa/7vhEYTY/b593V3gj1C5XNAWZgX6ZXqFhSDEQ2fUavGlBhY5ZIrty1yZReMo5uJXo8LAcSNdxYB1lMhZq2DIyO8Zs8Zbxxt/99lNXLmSDYnLzQDOyfUVozyEWwVf2IYXTMetHLdNLKw2SzhphXmiS8iUgeAyw/DrafMwJUEC0om55Kcs5ruv4HKMOO8I8jKn+naaQeIkXqAHr0ttliKIjHt1ZOeLGYXrO9rMVE028Bhxb0cUlwy2LNe4THCMU4iCsy+pIxtV9H60gajzaGle6balY9n9aQ=
 deploy:
   provider: releases
   api_key:
-    secure: WFsGVFTTSc1o9VuyDKzYvLCn24Sa1c7nntCOUCHTbPvuwan+q6O+B8AGMq6xVmNARMS7hnIGCfBs2he19kkbK0XaKwUmDYi+ABFDD2areKGeOMaq2C9i6eiCPkZNfqZq0xgwTpuzoxOhPg6nuegZntMC2idC/MC9wFbRAEr2HfsRaqitrK/d2Nr54vQ03/MVQbHOJjonQ4zqDtNPjFraGdThOsthR+OfABLq7ct8a2T5glqqXcQxCu1G3Y1AYn3hy8rHoq4gB7BUcsatKyXExLCYBKlXmFMWUrBT66/VtR25Kya7nQ31f6F0k+TVTNF9MM6jkrnqSWqck7UZa9GifIsD1VU7QCn6/o6OcztFi6uLVF0VVm1BIJBv2RTMiqsz3wWdrmiT9kGYF5mHS1QMp2FVYy+GBbgF2Ud9NqWNAepQW5vp3aLx5PJ5y5kTdJSJAKJwIv7IjMQzN3DvtByc8ru+qpPysywYi5xocCgtUek8E1PQdo5If4WEqgRHAd9WWmzMetlq0wPUYP9K2oWYnweax4h5RZxCuux47puvyKcdIDAaHFCctj0+13gWH05/yYvacOobzERKmNYi3eHt6DYBcX2fJ1LKKWGEszj515IKc4kLPU3n/u63mdfMnLeqrC+B7Y6J4tFTj+7pLe0eAnEJGNvUOeTD3ZEXjjulG7s=
+    secure: okTZ8oJpi9TM8D0yEMt5QEJ5jKxdEvFcPfg522oNT/+OOpOf5l40J2gggzi72Ehj/zWt3sVmMNWJSJqif73s99zYIuR97bMGC0DBoJqAcWcKJRtR3nEZqKZvb8h2uVRL1QZEO5niqURwlApDw8Vft8ICXa7B2CvXmYkZFmHbq/8cUmv+3r1d28e23hjVFlKQlyvMM3tyKtRisdwgkPPiInVSjJe+NAQPtvGjEaPDk8U3neKqUeYLVumwFmLM5BUW48rZPQUb2ZmZRgFZBPSuMV1rVYpK0gJB9leoHtSpt/CFeDhUcWXIqBS1vQl9LOmL2/PGzaJ79UA1p7Zp18aR45iQZ+Op2OPf6G3rXdhBPKmq/AtSdPzkAXD35NDypsJTAGl8e+XAUibl+MQ+C/MIZDiIQP8/arhtSpaQftwZtnBnRgjuuhYOsg/VYC8HgOLPW1V5CLBuedT1qe1xJP2z4Fw6hHRLQ+MY0qv9rRClCsdvA7BZMYfkcmIyii4QAiOQSCYHfPRdf4a6/sJvj6gu8IKq9BpMfWApQuPfLEE3dqU7YRzsAh5vKleMQ8Acrd0iw5IDekV+E0+qFZUumNiEAa4NgJYz5ua8c5Hdir4Yu8qz8Eb/wzWhjGx31BzdZXp7SiRcMD6+rXb/5jcfpZ+ZrURgERcIzSXHJV02vM/cgVA=
   file:
-    - "releases/v$BUILD_VERSION/fd-$BUILD_VERSION-i386-apple-darwin14.tgz"
-    - "releases/v$BUILD_VERSION/fd-$BUILD_VERSION-i686-pc-linux-gnu.tgz"
-    - "releases/v$BUILD_VERSION/fd-$BUILD_VERSION-i686-w64-mingw32.tgz"
-    - "releases/v$BUILD_VERSION/fd-$BUILD_VERSION-x86_64-apple-darwin14.tgz"
-    - "releases/v$BUILD_VERSION/fd-$BUILD_VERSION-x86_64-pc-linux-gnu.tgz"
-    - "releases/v$BUILD_VERSION/fd-$BUILD_VERSION-x86_64-w64-mingw32.tgz"
+    - "releases/v$BUILD_VERSION/goo-$BUILD_VERSION-i386-apple-darwin14.tgz"
+    - "releases/v$BUILD_VERSION/goo-$BUILD_VERSION-i686-pc-linux-gnu.tgz"
+    - "releases/v$BUILD_VERSION/goo-$BUILD_VERSION-i686-w64-mingw32.tgz"
+    - "releases/v$BUILD_VERSION/goo-$BUILD_VERSION-x86_64-apple-darwin14.tgz"
+    - "releases/v$BUILD_VERSION/goo-$BUILD_VERSION-x86_64-pc-linux-gnu.tgz"
+    - "releases/v$BUILD_VERSION/goo-$BUILD_VERSION-x86_64-w64-mingw32.tgz"
     # - "releases/v$BUILD_VERSION/ft-$BUILD_VERSION.tgz"
   skip_cleanup: true
   on:
