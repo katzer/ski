@@ -12,7 +12,9 @@ RUN apk add ruby-rdoc
 RUN apk add ruby-dev
 RUN apk add ruby-irb
 RUN apk add ruby-rake
-RUN apk add bash bash-doc bash-completion
+RUN apk add bash
+#RUN apk add bash-doc
+RUN apk add bash-completion
 RUN gem install os
 RUN apk add wget
 RUN apk --no-cache add ca-certificates
