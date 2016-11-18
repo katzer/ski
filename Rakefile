@@ -17,6 +17,9 @@ tools_path="#{ENV["TOOLS_PATH"]}"
 
 desc "compile binary"
 task :compile do
+  puts ENV["APP_NAME"]
+  puts ENV["APP_ROOT"]
+  puts ENV["APP_VERSION"]
   FileUtils.rm_r "#{APP_ROOT}/tools" unless !Dir.exists?("#{APP_ROOT}/tools")
   Dir.mkdir("#{APP_ROOT}/tools")
   FileUtils.rm_r bin_path unless !Dir.exists?(bin_path)
