@@ -162,8 +162,7 @@ end
 namespace :local do
   desc "show version"
   task :version do
-    appversion = ENV["APP_VERSION"] || "6.6.6"
-    puts ENV["APP_VERSION"]
+    appversion = ENV["APP_VERSION"]
     puts appversion
   end
 end
