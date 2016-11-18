@@ -85,5 +85,6 @@ func main() {
 		default:
 			fmt.Println("This Type of Connection is not supported.")
 			os.Exit(1)
+
 	}
 }
