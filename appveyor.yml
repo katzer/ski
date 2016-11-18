@@ -22,10 +22,13 @@ install:
   - go env
   - cinst ruby
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
+  - gem update --system
   - gem install bundler --no-document -v 1.10.5
+  - gem install os
+  - gem install rake
   - bundle install --retry=3
 
 test_script:
-  - bundle exec rake
+  - cmd: rake compile
 
 build: off
