@@ -22,4 +22,4 @@ install:
   - bundle install
 
 build_script:
-  - bundle exec rake compile
+  - exec rake compile
