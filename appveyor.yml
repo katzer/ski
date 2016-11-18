@@ -25,5 +25,7 @@ install:
   - gem install bundler --no-document -v 1.10.5
   - bundle install --retry=3
 
-build_script:
+test_script:
   - bundle exec rake
+
+build: off
