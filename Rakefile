@@ -10,6 +10,16 @@ end
 
 APP_NAME=ENV["APP_NAME"] || "goo"
 APP_ROOT=ENV["APP_ROOT"] || Dir.pwd
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
+puts ENV["APP_VERSION"]
 APP_VERSION=ENV["APP_VERSION"] || "6.6.6"
 bin_path="#{APP_ROOT}/bin"
 src_path="#{APP_ROOT}/src"
