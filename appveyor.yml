@@ -10,6 +10,9 @@ clone_folder: c:\gopath\src\github.com\account\myproject
 
 environment:
   GOPATH: c:\gopath
+  matrix:
+    - ruby_version: "21"
+    - ruby_version: "21-x64"
 
 install:
   - echo %PATH%
@@ -18,7 +21,9 @@ install:
   - go version
   - go env
   - cinst ruby
-  - set PATH=C:\Ruby22\bin;%PATH%
+  - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
+  - gem install bundler --no-document -v 1.10.5
+  - bundle install --retry=3
 
 build_script:
-  - exec rake compile
+  - bundle exec rake
