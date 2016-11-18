@@ -1,5 +1,4 @@
 require 'fileutils'
-require 'os'
 
 MRUBY_VERSION="1.2.0"
 
@@ -71,6 +70,7 @@ namespace :test do
 
   desc "run integration tests"
   task :bintest => :compile do
+  require 'os'
     os = ""
     if OS.linux?
       if OS.bits == 64
