@@ -17,3 +17,7 @@ install:
   - set PATH=%GOPATH%\bin;c:\go\bin;%PATH%
   - go version
   - go env
+  - cinst ruby
+
+build_script:
+  - ps: .\rake compile
