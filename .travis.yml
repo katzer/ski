@@ -14,7 +14,7 @@ script:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest	; fi
 before_deploy:
 - docker-compose run release
-- export BUILD_VERSION=`rake local:version`
+- export BUILD_VERSION=`rake version`
 - sudo chmod -R 1777 releases
 - echo $BUILD_VERSION
 - ls -la releases

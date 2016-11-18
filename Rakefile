@@ -162,12 +162,9 @@ task :release => :compile do
 
 end
 
-namespace :local do
-  desc "show version"
-  task :version do
-    appversion = ENV["APP_VERSION"]
-    puts appversion
-  end
+
+task :version do
+  puts ENV["APP_VERSION"]
 end
 
 def is_in_a_docker_container?
