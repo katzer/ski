@@ -19,7 +19,6 @@ install:
   - go env
   - cinst ruby
   - set PATH=C:\Ruby22\bin;%PATH%
-  - bundle install
 
 build_script:
   - exec rake compile
