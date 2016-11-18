@@ -164,7 +164,7 @@ end
 
 
 task :version do
-  puts ENV["APP_VERSION"]
+  puts `#{bin_path}/Linux64/goo -v`
 end
 
 def is_in_a_docker_container?

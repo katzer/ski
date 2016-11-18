@@ -8,6 +8,10 @@ import (
 	//"strconv"
 )
 
+func printVersion(){
+	fmt.Println("0.0.1")
+}
+
 func throwErr(out []byte, err error){
 	fmt.Print(fmt.Sprint(err) + ": " + string(out) + "path is " + os.Getenv("PATH"))
 	os.Stderr.WriteString(fmt.Sprint(err) + ": " + string(out))
@@ -57,9 +61,18 @@ func getCommand(args []string) string{
 
 func main() {
 	var args []string = os.Args
-	if (len(args) <=2) || args[1] == "-h"{
-		fmt.Println("usage: goo <Server-ID> <Command> [Arguments]")
-		os.Exit(0)
+	if (len(args) <=2) {
+		switch args[1]{
+		case "-h":
+			fmt.Println("usage: goo <Server-ID> <Command> [Arguments]")
+			os.Exit(0)
+		case "-v":
+			printVersion()
+			os.Exit(0)
+		default:
+			fmt.Println("Could not interpret arguments. For help, run goo -h")
+			os.Exit(1)
+		}
 	}
 	switch getType(args) {
 		case "server":
