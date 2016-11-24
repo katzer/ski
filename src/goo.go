@@ -151,10 +151,11 @@ func printHelp(){
 
 func main() {
 	var args []string = os.Args
-	scriptFlag := false
 	prettyFlag := false
 	typeFlag := false
 	versionFlag := false
+
+
 
 	if(len(args) <2){
 		printHelp()
@@ -162,20 +163,18 @@ func main() {
 	for _, argument := range args {
 		if(argument == "-h" || argument == "--help"){
 			printHelp()
-		}
-		if(argument == "-s" || argument == "--script"){
+		}else if(argument == "-s" || argument == "--script"){
 			scriptFlag = true
-		}
-		if(argument == "-p" || argument == "--pretty"){
+		}else if(argument == "-p" || argument == "--pretty"){
 			prettyFlag = true
-		}
-		if(argument == "-t" || argument == "--type"){
+		}else if(argument == "-t" || argument == "--type"){
 			typeFlag = true
-		}
-		if(argument == "-v" || argument == "--version"){
+		}else if(argument == "-v" || argument == "--version"){
 			versionFlag = true
 		}
+
 	}
+
 	if(versionFlag){
 		printVersion()
 	}
