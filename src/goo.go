@@ -138,25 +138,50 @@ func getArg(args []string, argType string) string{
 
 }
 
+func printHelp(){
+	fmt.Println("usage: goo [options...] <planet>... <command>")
+	fmt.Println("Options:")
+	fmt.Println("-s, --script     Execute script and return result")
+	fmt.Println("-p, --pretty     Pretty print output as a table")
+	fmt.Println("-t, --type       Show type of planet")
+	fmt.Println("-h, --help       This help text")
+	fmt.Println("-v, --version    Show version number")
+	os.Exit(1)
+}
+
 func main() {
 	var args []string = os.Args
+	scriptFlag := false
+	prettyFlag := false
+	typeFlag := false
+	versionFlag := false
+
 	if(len(args) <2){
-		fmt.Println("usage: goo <Server-ID> <Command> [Arguments]")
-		os.Exit(1)
+		printHelp()
 	}
-	if (len(args) <=2) {
-		switch args[1]{
-		case "-h":
-			fmt.Println("usage: goo <Server-ID> <Command> [Arguments]")
-			os.Exit(0)
-		case "-v":
-			printVersion()
-			os.Exit(0)
-		default:
-			fmt.Println("Could not interpret arguments. For help, run goo -h")
-			os.Exit(1)
+	for _, argument := range args {
+		if(argument == "-h" || argument == "--help"){
+			printHelp()
+		}
+		if(argument == "-s" || argument == "--script"){
+			scriptFlag = true
+		}
+		if(argument == "-p" || argument == "--pretty"){
+			prettyFlag = true
+		}
+		if(argument == "-t" || argument == "--type"){
+			typeFlag = true
+		}
+		if(argument == "-v" || argument == "--version"){
+			versionFlag = true
 		}
 	}
+	if(versionFlag){
+		printVersion()
+	}
+	_ = scriptFlag
+	_ = prettyFlag
+	_ = typeFlag
 	switch getType(getArg(args,"id")) {
 		case "server":
 			var connDet string = getConnDet(getArg(args,"id"))
