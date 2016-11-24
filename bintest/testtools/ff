@@ -6,6 +6,10 @@ if [ "$1" == "-t" ]
   	then
   	echo "server"
   fi
+  if [ "$2" == "local" ]
+  	then
+  	echo "server"
+  fi
   if [ "$2" == "id3" ]
   	then
   	echo "db"
@@ -18,4 +22,8 @@ fi
 if [ "$1" == "id1" ]
 	then
 	echo "user1@url1.de"
+fi
+if [ "$1" == "local" ]
+	then
+	echo "root@localhost"
 fi

@@ -1,2 +1,0 @@
-tests sind doch nur für hostsystem möglich. bei test als übergabeparameter optional gewünschte binary angeben
-install scripts für homebrew und chocolatey (davon ausgehen dass alles für go schon installiert ist)

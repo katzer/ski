@@ -47,7 +47,7 @@ class TestGoo < Test::Unit::TestCase
     assert_false status.success?, "Web won't be supported ever"
     assert_include output, "This Type of Connection is not supported"
   end
-
+=begin
   def test_commands
     output, error, status = Open3.capture3(PATH,BIN_PATH,"id1","command1","command2","command3")
     assert_true status.success?, "This test should succeed"
@@ -59,7 +59,7 @@ class TestGoo < Test::Unit::TestCase
   end
 
 end
-=begin
+
 assert('checking json file existence') do
   output, error, status = Open3.capture3(MALFORMEDYAMLENV,BIN_PATH,"id1")
 

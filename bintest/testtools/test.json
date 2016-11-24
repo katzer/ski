@@ -7,6 +7,13 @@
 		"url": "url1.de"
 	},
 	{
+		"id": "local",
+		"type": "server",
+		"user": "root",
+		"password": "uwish",
+		"url": "localhost"
+	},
+	{
 		"id": "id2",
 		"type": "server",
 		"user": "user2",
