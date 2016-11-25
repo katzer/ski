@@ -154,6 +154,7 @@ func main() {
 	prettyFlag := false
 	typeFlag := false
 	versionFlag := false
+	scriptFlag := false
 
 
 
