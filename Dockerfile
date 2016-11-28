@@ -3,7 +3,7 @@ FROM golang:alpine
 # ENV GOBIN /go/bin
 # ENV TOOLS_PATH /go/tools
 # ENV FF_VER 0.0.1
-#ENV IPS_ORBIT_FILE /go/bintest/testtools/test.json
+# ENV IPS_ORBIT_FILE /go/bintest/testtools/test.json
 # ENV PATH $PATH:/go/tools
 ENV APP_VERSION 0.0.1
 ENV APP_NAME goo
@@ -17,8 +17,8 @@ RUN apk add ruby
 # RUN apk add ruby-dev
 # RUN apk add ruby-irb
 RUN apk add ruby-rake
-# RUN apk add bash
-#RUN apk add bash-doc
+RUN apk add bash
+# RUN apk add bash-doc
 # RUN apk add bash-completion
 RUN apk add openssh
 RUN gem install os --no-ri --no-rdoc
@@ -35,10 +35,11 @@ RUN mv /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 
 ENV GOROOT /usr/local/go
 ENV GOPATH /usr/local/go/packages
-ENV PATH $PATH:$GOROOT/bin:$GOPATH/bin
+ENV PATH $PATH:$GOROOT/bi:$GOPATH/bin
+ENV ORBIT_KEY /.ssh/id_rsa
 
 RUN apk add git
-RUN go get golang.org/x/crypto/ssh
+RUN go get gopkg.in/hypersleep/easyssh.v0
 
 
 

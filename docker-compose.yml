@@ -12,3 +12,6 @@ clean:
 release:
   <<: *defaults
   command: rake release
+shell:
+  <<: *defaults
+  command: bash

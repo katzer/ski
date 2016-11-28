@@ -26,12 +26,15 @@ require "test/unit"
 require 'os'
 
 BIN_PATH = ARGV.fetch(0)
-
+`/usr/sbin/sshd`
 
 
 puts File.join(File.dirname(__FILE__), "testtools")
-
-IPS_ORBIT_FILE =  Hash["IPS_ORBIT_FILE" => File.join(File.dirname(__FILE__), "testtools/test.json")]
+puts ENV["PATH"]
+puts ENV["ORBIT_KEY"]
+puts ENV["APP_NAME"]
+ORBIT_FILE =  Hash["ORBIT_FILE" => File.join(File.dirname(__FILE__), "testtools/test.json")]
+ORBIT_KEY =  Hash["ORBIT_KEY" => File.join(File.dirname(__FILE__), "testtools/test.json")]
 PATH = Hash["PATH" => File.join(File.dirname(__FILE__), "testtools")]
 
 class TestGoo < Test::Unit::TestCase
@@ -46,6 +49,12 @@ class TestGoo < Test::Unit::TestCase
     output, error, status = Open3.capture3(PATH,BIN_PATH,"id5","command")
     assert_false status.success?, "Web won't be supported ever"
     assert_include output, "This Type of Connection is not supported"
+  end
+
+  def test_localhost_success
+    output, error, status = Open3.capture3(PATH,BIN_PATH,"local","whoami")
+    assert_true status.success?, "This Action is valid"
+    assert_include output, "root"
   end
 =begin
   def test_commands
@@ -122,5 +131,5 @@ assert('case: found id, wrong type') do
   assert_include error, "Wrong type"
 end
 =end
-
+end
 

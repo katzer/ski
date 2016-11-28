@@ -5,11 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-    "golang.org/x/crypto/ssh"
-    //"bytes"
-    "io"
-    "io/ioutil"
-    //"time"
+    "gopkg.in/hypersleep/easyssh.v0"
 )
 
 func printVersion(){
@@ -22,22 +18,6 @@ func throwErr(out []byte, err error){
 	os.Exit(1)
 }
 
-func PublicKeyFile(file string) ssh.AuthMethod {
-	buffer, err := ioutil.ReadFile(file)
-	if err != nil {
-		return nil
-	}
-
-	key, err := ssh.ParsePrivateKey(buffer)
-	if err != nil {
-		return nil
-	}
-	return ssh.PublicKeys(key)
-}
-
-
-
-
 func getHost(connDet string) string{
 	toReturn := strings.Split(connDet,"@")
 	return toReturn[1]
@@ -49,52 +29,25 @@ func getUser(connDet string) string{
 }
 
 func execCommand(connDet string, cmd string){
-    //timeout := time.After(5 * time.Second) // in 5 seconds the message will come to timeout channel
-
+	user := getUser(connDet)
 	hostname := getHost(connDet)
-    user := getUser(connDet)
-    sshConfig := &ssh.ClientConfig{
-		User: user,
-		Auth: []ssh.AuthMethod{
-		PublicKeyFile("/root/.ssh/id_rsa"),
-		},
+
+	ssh := &easyssh.MakeConfig{
+		User:   user,
+		Server: hostname,
+		// Optional key or Password without either we try to contact your agent SOCKET
+		Key:  os.Getenv("ORBIT_KEY"),
+		Port: "22",
 	}
 
-    connection, err := ssh.Dial("tcp", hostname + ":22", sshConfig)
-
+	// Call Run method with command you want to run on remote server.
+	response, err := ssh.Run(cmd)
+	// Handle errors
 	if err != nil {
-		fmt.Println("Failed to dial: %s", err)
-		os.Exit(1)
-	}
-
-	session, err := connection.NewSession()
-	if err != nil {
-		fmt.Println("Failed to create session: %s", err)
-	}
-
-	stdin, err := session.StdinPipe()
-	if err != nil {
-		fmt.Println("Unable to setup stdin for session: %v", err)
-	}
-	go io.Copy(stdin, os.Stdin)
-
-	stdout, err := session.StdoutPipe()
-	if err != nil {
-		fmt.Println("Unable to setup stdout for session: %v", err)
-	}
-	go io.Copy(os.Stdout, stdout)
-
-	stderr, err := session.StderrPipe()
-	if err != nil {
-		fmt.Println("Unable to setup stderr for session: %v", err)
-	}
-	go io.Copy(os.Stderr, stderr)
-
-	err = session.Run(cmd)
-
-	//fmt.Println(string(stdout))
-	//fmt.Println(string(stderr))
-
+		panic("Can't run remote command: " + err.Error())
+	} else {
+		fmt.Println(response)
+}
 
 }
 
