@@ -1,165 +1,83 @@
+#
+# Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
+#
+# @APPPLANT_LICENSE_HEADER_START@
+#
+# This file contains Original Code and/or Modifications of Original Code
+# as defined in and that are subject to the Apache License
+# Version 2.0 (the 'License'). You may not use this file except in
+# compliance with the License. Please obtain a copy of the License at
+# http://opensource.org/licenses/Apache-2.0/ and read it before using this
+# file.
+#
+# The Original Code and all software distributed under the License are
+# distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+# INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+# Please see the License for the specific language governing rights and
+# limitations under the License.
+#
+# @APPPLANT_LICENSE_HEADER_END@
+
 require 'fileutils'
+require_relative 'src/tasks/build.rb'
+require_relative 'build_config.rb'
 
-MRUBY_VERSION="1.2.0"
+APP_NAME     = ENV['APP_NAME'] || 'goo'
+APP_ROOT     = ENV['APP_ROOT'] || Dir.pwd
+APP_VERSION  = ENV['APP_VERSION'] || '0.0.1'
 
-file :mruby do
-  #sh "git clone --depth=1 https://github.com/mruby/mruby"
-  sh "curl -L -L --fail --retry 3 --retry-delay 1 https://github.com/mruby/mruby/archive/1.2.0.tar.gz -s -o - | tar zxf -"
-  FileUtils.mv("mruby-1.2.0", "mruby")
-end
+release_path = "#{APP_ROOT}/releases"
+build_path   = "#{APP_ROOT}/build"
+src_path     = "#{APP_ROOT}/src"
 
-APP_NAME=ENV["APP_NAME"] || "goo"
-APP_ROOT=ENV["APP_ROOT"] || Dir.pwd
-APP_VERSION=ENV["APP_VERSION"] || "6.6.6"
-bin_path="#{APP_ROOT}/bin"
-src_path="#{APP_ROOT}/src"
-tools_path="#{ENV["TOOLS_PATH"]}"
-
-desc "compile binary"
+desc 'compile binary'
 task :compile do
-  puts ENV["APP_NAME"]
-  puts ENV["APP_ROOT"]
-  puts ENV["APP_VERSION"]
-  FileUtils.rm_r "#{APP_ROOT}/tools" unless !Dir.exists?("#{APP_ROOT}/tools")
-  Dir.mkdir("#{APP_ROOT}/tools")
-  FileUtils.rm_r bin_path unless !Dir.exists?(bin_path)
-  Dir.mkdir(bin_path)
-  %w(linux windows darwin).each do |osItem|
-    %w(amd64 386).each do |archItem|
-      Dir.mkdir("#{bin_path}/#{osItem}_#{archItem}")
-      Dir.chdir("#{bin_path}/#{osItem}_#{archItem}")
-      puts "#{osItem}_#{archItem} #{system("GOOS=#{osItem} GOARCH=#{archItem} go build #{src_path}/goo.go")}"
-    end
+  Goo::Build.builds.each do |gb|
+    bin_path = "#{build_path}/#{gb.name}/bin"
+    goo_path = "#{src_path}/#{APP_NAME}.go"
+    mkdir_p(bin_path)
+    cd(bin_path) { sh "GOOS=#{gb.os} GOARCH=#{gb.arch} go build #{goo_path}" }
   end
 end
 
 namespace :test do
-  desc "run mruby & unit tests"
-  # only build mtest for host
-
-  def clean_env(envs)
-    old_env = {}
-    envs.each do |key|
-      old_env[key] = ENV[key]
-      ENV[key] = nil
+  desc 'run integration tests'
+  task :bintest do
+    Goo::Build.builds.each do |gb|
+      next unless gb.bintest?
+      bin_path = "#{build_path}/#{gb.name}/bin/goo"
+      bin_path << '.exe' if File.exist? "#{bin_path}.exe"
+      sh "ruby #{APP_ROOT}/bintest/goo.rb #{bin_path}"
     end
-    yield
-    envs.each do |key|
-      ENV[key] = old_env[key]
-    end
-  end
-
-  desc "run integration tests"
-  task :bintest => :compile do
-  require 'os'
-    os = ""
-    if OS.linux?
-      if OS.bits == 64
-        os = "Linux64"
-      elsif OS.bits == 32
-        os = "Linuxi686"
-      end
-    elsif OS.mac?
-      if OS.bits == 64
-        os = "Mac64"
-      elsif OS.bits == 32
-        os = "Maci386"
-      end
-    elsif OS.windows?
-      if OS.bits == 64
-        os = "Win64"
-      elsif OS.bits == 32
-        os = "Wini686"
-      end
-    end
-    bin_path = File.join(File.dirname(__FILE__), "bin/#{os}/goo")
-    #ruby "#{APP_ROOT}/bintest/goo.rb #{bin_path}"
   end
 end
 
-
-desc "cleanup"
+desc 'cleanup builds'
 task :clean do
-  sh "rake deep_clean"
+  rm_rf build_path
 end
 
-desc "generate a release tarball"
-task :release => :compile do
+desc 'generate a release tarball'
+task release: :compile do
+  release_dir = "#{release_path}/v#{APP_VERSION}"
+  latest_dir  = "#{release_path}/latest"
 
-  Dir.chdir(APP_ROOT)
-  release_dir  = "releases/v#{APP_VERSION}"
-  release_path = Dir.pwd + "/#{release_dir}"
-  app_name     = "#{APP_NAME}-#{APP_VERSION}"
-  FileUtils.mkdir_p(release_path)
+  mkdir_p(release_dir)
+  rm_rf(latest_dir)
+  mkdir_p(latest_dir)
+  cd(release_dir) { sh "tar czf #{APP_NAME}-#{APP_VERSION}.tgz #{src_path}" }
 
-  #Linux64
-  arch = "x86_64-pc-linux-gnu"
-  arch_release = "#{app_name}-#{arch}"
-  Dir.chdir("#{bin_path}/linux_amd64")
-  puts "#{bin_path}/Linux64"
-  puts "Writing #{release_dir}/#{arch_release}.tgz "
-  `tar czf #{release_path}/#{arch_release}.tgz *`
-  #Linuxi686
-  arch = "i686-pc-linux-gnu"
-  arch_release = "#{app_name}-#{arch}"
-  Dir.chdir("#{bin_path}/linux_386")
-  puts "Writing #{release_dir}/#{arch_release}.tgz "
-  `tar czf #{release_path}/#{arch_release}.tgz *`
-  #Mac64
-  arch = "x86_64-apple-darwin14"
-  arch_release = "#{app_name}-#{arch}"
-  Dir.chdir("#{bin_path}/darwin_amd64")
-  puts "Writing #{release_dir}/#{arch_release}.tgz "
-  `tar czf #{release_path}/#{arch_release}.tgz *`
-  #Maci386
-  arch = "i386-apple-darwin14"
-  arch_release = "#{app_name}-#{arch}"
-  Dir.chdir("#{bin_path}/darwin_386")
-  puts "Writing #{release_dir}/#{arch_release}.tgz "
-  `tar czf #{release_path}/#{arch_release}.tgz *`
-  #Win64
-  arch = "x86_64-w64-mingw32"
-  arch_release = "#{app_name}-#{arch}"
-  Dir.chdir("#{bin_path}/windows_amd64")
-  puts "Writing #{release_dir}/#{arch_release}.tgz "
-  `tar czf #{release_path}/#{arch_release}.tgz *`
-  #Wini686
-  arch = "i686-w64-mingw32"
-  arch_release = "#{app_name}-#{arch}"
-  Dir.chdir("#{bin_path}/windows_386")
-  puts "Writing #{release_dir}/#{arch_release}.tgz "
-  `tar czf #{release_path}/#{arch_release}.tgz *`
+  Goo::Build.builds.each do |gb|
+    bin_path = "#{build_path}/#{gb.name}/bin/"
+    tar_path = "#{APP_NAME}-#{APP_VERSION}-#{gb.name}.tgz"
+    cd(release_dir) { sh "tar czf #{tar_path} #{bin_path}" }
+  end
 
-  #source
-  Dir.chdir(src_path)
-  puts "Writing #{release_dir}/#{app_name}.tgz "
-  `tar czf #{release_path}/#{app_name}.tgz *`
-
+  ln Dir.glob("#{release_dir}/*"), latest_dir
 end
-
 
 task :version do
-  puts `#{bin_path}/Linux64/goo -v`
+  puts `#{build_path}/Linux64/goo -v`
 end
-
-def is_in_a_docker_container?
-  `grep -q docker /proc/self/cgroup`
-  $?.success?
-end
-=begin
-Rake.application.tasks.each do |task|
-  next if ENV["MRUBY_CLI_LOCAL"]
-  unless task.name.start_with?("local:")
-    # Inspired by rake-hooks
-    # https://github.com/guillermo/rake-hooks
-    old_task = Rake.application.instance_variable_get('@tasks').delete(task.name)
-    desc old_task.full_comment
-    task old_task.name => old_task.prerequisites do
-      abort("Not running in docker, you should type \"docker-compose run <task>\".") \
-        unless is_in_a_docker_container?
-      old_task.invoke
-    end
-  end
-end
-=end
-

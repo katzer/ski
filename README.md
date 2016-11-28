@@ -1,4 +1,4 @@
-# ff [![Build Status](https://travis-ci.org/appPlant/goo.svg?branch=master)](https://travis-ci.org/appPlant/goo) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Code Climate](https://codeclimate.com/github/appPlant/goo/badges/gpa.svg)](https://codeclimate.com/github/appPlant/goo)
+# goo [![Build Status](https://travis-ci.org/appPlant/goo.svg?branch=master)](https://travis-ci.org/appPlant/goo) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Code Climate](https://codeclimate.com/github/appPlant/goo/badges/gpa.svg)](https://codeclimate.com/github/appPlant/goo)
 
 Execute commands or collect informations on multiple servers in parallel.
 
@@ -13,7 +13,7 @@ Execute commands or collect informations on multiple servers in parallel.
 
 ## Prerequisites
 You'll need the following installed and in your `PATH`:
-- [ff][ff]
+- [goo][goo]
 
 ## Installation
 
@@ -98,7 +98,7 @@ Made with :yum: from Leipzig
 
 © 2016 [appPlant GmbH][appplant]
 
-[ff]: https://github.com/appPlant/ff/releases
+[goo]: https://github.com/appPlant/goo/releases
 [releases]: https://github.com/appPlant/goo/releases
 [docker]: https://docs.docker.com/engine/installation
 [license]: http://opensource.org/licenses/Apache-2.0

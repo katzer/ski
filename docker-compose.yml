@@ -3,21 +3,12 @@ compile: &defaults
   volumes:
     - .:/go:rw
   command: rake compile
-test:
-  <<: *defaults
-  command: rake test
 bintest:
   <<: *defaults
   command: rake test:bintest
-mtest:
-  <<: *defaults
-  command: rake test:mtest
 clean:
   <<: *defaults
   command: rake clean
-shell:
-  <<: *defaults
-  command: bash
 release:
   <<: *defaults
   command: rake release

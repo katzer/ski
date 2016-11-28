@@ -1,94 +1,59 @@
-def gem_config(conf)
-  # conf.gembox 'default'
+#
+# Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
+#
+# @APPPLANT_LICENSE_HEADER_START@
+#
+# This file contains Original Code and/or Modifications of Original Code
+# as defined in and that are subject to the Apache License
+# Version 2.0 (the 'License'). You may not use this file except in
+# compliance with the License. Please obtain a copy of the License at
+# http://opensource.org/licenses/Apache-2.0/ and read it before using this
+# file.
+#
+# The Original Code and all software distributed under the License are
+# distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+# INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+# Please see the License for the specific language governing rights and
+# limitations under the License.
+#
+# @APPPLANT_LICENSE_HEADER_END@
 
-  # be sure to include this gem (the cli app)
-  conf.gem File.expand_path(File.dirname(__FILE__))
+require 'os'
+
+Goo::Build.new('x86_64-pc-linux-gnu') do
+  os :linux
+  arch :amd64
+  bintest_if OS.linux? && OS.bits == 64
 end
 
-MRuby::Build.new do |conf|
-  toolchain :clang
-
-  conf.enable_bintest
-  conf.enable_debug
-  conf.enable_test
-
-  gem_config(conf)
+Goo::Build.new('i686-pc-linux-gnu') do
+  os :linux
+  arch :'386'
+  bintest_if OS.linux? && OS.bits == 32
 end
 
-MRuby::Build.new('x86_64-pc-linux-gnu') do |conf|
-  toolchain :gcc
-
-  gem_config(conf)
-end
-MRuby::CrossBuild.new('i686-pc-linux-gnu') do |conf|
-  toolchain :gcc
-
-  [conf.cc, conf.cxx, conf.linker].each do |cc|
-    cc.flags << "-m32"
-  end
-
-  gem_config(conf)
+Goo::Build.new('x86_64-apple-darwin14') do
+  os :darwin
+  arch :amd64
+  bintest_if OS.mac? && OS.bits == 64
 end
 
-MRuby::CrossBuild.new('x86_64-apple-darwin14') do |conf|
-  toolchain :clang
-
-  [conf.cc, conf.linker].each do |cc|
-    cc.command = 'x86_64-apple-darwin14-clang'
-  end
-  conf.cxx.command      = 'x86_64-apple-darwin14-clang++'
-  conf.archiver.command = 'x86_64-apple-darwin14-ar'
-
-  conf.build_target     = 'x86_64-pc-linux-gnu'
-  conf.host_target      = 'x86_64-apple-darwin14'
-
-  gem_config(conf)
+Goo::Build.new('i386-apple-darwin14') do
+  os :darwin
+  arch :'386'
+  bintest_if OS.mac? && OS.bits == 32
 end
 
-MRuby::CrossBuild.new('i386-apple-darwin14') do |conf|
-  toolchain :clang
-
-  [conf.cc, conf.linker].each do |cc|
-    cc.command = 'i386-apple-darwin14-clang'
-  end
-  conf.cxx.command      = 'i386-apple-darwin14-clang++'
-  conf.archiver.command = 'i386-apple-darwin14-ar'
-
-  conf.build_target     = 'i386-pc-linux-gnu'
-  conf.host_target      = 'i386-apple-darwin14'
-
-  gem_config(conf)
+Goo::Build.new('x86_64-w64-mingw32') do
+  os :windows
+  arch :amd64
+  bintest_if OS.windows? && OS.bits == 64
 end
 
-MRuby::CrossBuild.new('x86_64-w64-mingw32') do |conf|
-  toolchain :gcc
-
-  [conf.cc, conf.linker].each do |cc|
-    cc.command = 'x86_64-w64-mingw32-gcc'
-  end
-  conf.cxx.command      = 'x86_64-w64-mingw32-cpp'
-  conf.archiver.command = 'x86_64-w64-mingw32-gcc-ar'
-  conf.exts.executable  = ".exe"
-
-  conf.build_target     = 'x86_64-pc-linux-gnu'
-  conf.host_target      = 'x86_64-w64-mingw32'
-
-  gem_config(conf)
+Goo::Build.new('i686-w64-mingw32') do
+  os :windows
+  arch :'386'
+  bintest_if OS.windows? && OS.bits == 32
 end
-
-MRuby::CrossBuild.new('i686-w64-mingw32') do |conf|
-  toolchain :gcc
-
-  [conf.cc, conf.linker].each do |cc|
-    cc.command = 'i686-w64-mingw32-gcc'
-  end
-  conf.cxx.command      = 'i686-w64-mingw32-cpp'
-  conf.archiver.command = 'i686-w64-mingw32-gcc-ar'
-  conf.exts.executable  = ".exe"
-
-  conf.build_target     = 'i686-pc-linux-gnu'
-  conf.host_target      = 'i686-w64-mingw32'
-
-  gem_config(conf)
-end
-

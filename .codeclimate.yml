@@ -1,0 +1,24 @@
+engines:
+  gofmt:
+    enabled: true
+  golint:
+    enabled: true
+  govet:
+    enabled: true
+  rubocop:
+    enabled: true
+  fixme:
+    enabled: true
+  duplication:
+    enabled: false
+    config:
+      languages:
+      - ruby
+      - go
+ratings:
+  paths:
+  - lib/**
+  - bintest/**
+  - Rakefile
+exclude_paths:
+- bintest/testtools/**
