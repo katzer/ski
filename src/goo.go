@@ -63,7 +63,7 @@ func execCommand(connDet string, cmd string){
     connection, err := ssh.Dial("tcp", hostname + ":22", sshConfig)
 
 	if err != nil {
-		fmt.Println("error on dialup")
+		fmt.Println("Failed to dial: %s", err)
 		os.Exit(1)
 	}
 
@@ -90,7 +90,7 @@ func execCommand(connDet string, cmd string){
 	}
 	go io.Copy(os.Stderr, stderr)
 
-	err = session.Run("ls -l $LC_USR_DIR")
+	err = session.Run(cmd)
 
 	//fmt.Println(string(stdout))
 	//fmt.Println(string(stderr))
@@ -123,8 +123,8 @@ func getArg(args []string, argType string) string{
 		case "command":
 			var command string  = args[2]
 			var cmdArgs []string
-			if(len(args) >= 3){
-				cmdArgs = args[2:(len(args))]
+			if(len(args) > 3){
+				cmdArgs = args[3:(len(args))]
 				for _, argument := range cmdArgs {
 					command += (" " + argument)
 				}
@@ -156,9 +156,10 @@ func main() {
 	versionFlag := false
 	scriptFlag := false
 
+	fmt.Println(args)
 
 
-	if(len(args) <2){
+	if(len(args) <3){
 		printHelp()
 	}
 	for _, argument := range args {
@@ -186,6 +187,10 @@ func main() {
 		case "server":
 			var connDet string = getConnDet(getArg(args,"id"))
 			var command string = getArg(args,"command")
+			fmt.Println(connDet)
+			fmt.Println("##########################")
+			fmt.Println(command)
+			fmt.Println("##########################")
 			execCommand(connDet,command)
 		case "db":
 			fmt.Println("This Type of Connection is not yet supported.")
