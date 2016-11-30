@@ -6,7 +6,7 @@
 # Folders
 _obj
 _test
-/bin/
+build/
 releases/
 
 # Architecture specific extensions/prefixes
