@@ -14,4 +14,4 @@ release:
   command: rake release
 shell:
   <<: *defaults
-  command: bash
+  command: sh -l
