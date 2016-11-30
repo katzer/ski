@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #
 # Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
 #
@@ -20,16 +22,11 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-FROM golang:alpine
-MAINTAINER Sebastian Katzer "katzer@appplant.de"
+export GOROOT=/usr/local/go
+export GOPATH=/usr/local/go/pkgs
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export ORBIT_KEY=$HOME/.ssh/orbit_rsa
 
-COPY scripts/init.sh /etc/profile.d/init.sh
-COPY scripts/install.sh $GOPATH
-
-ENV GOROOT /usr/local/go
-ENV GOPATH /usr/local/go/pkgs
-ENV PATH $PATH:$GOROOT/bin:$GOPATH/bin
-ENV ORBIT_KEY $HOME/.ssh/orbit_rsa
-
-RUN chmod +x install.sh
-RUN ./install.sh
+/usr/sbin/sshd
+eval `ssh-agent -s`
+ssh-add $ORBIT_KEY
