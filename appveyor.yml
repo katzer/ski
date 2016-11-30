@@ -1,3 +1,25 @@
+#
+# Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
+#
+# @APPPLANT_LICENSE_HEADER_START@
+#
+# This file contains Original Code and/or Modifications of Original Code
+# as defined in and that are subject to the Apache License
+# Version 2.0 (the 'License'). You may not use this file except in
+# compliance with the License. Please obtain a copy of the License at
+# http://opensource.org/licenses/Apache-2.0/ and read it before using this
+# file.
+#
+# The Original Code and all software distributed under the License are
+# distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
+# INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
+# Please see the License for the specific language governing rights and
+# limitations under the License.
+#
+# @APPPLANT_LICENSE_HEADER_END@
+
 version: 0.0.1.{build}
 
 platform: x64
@@ -6,28 +28,16 @@ branches:
   only:
     - master
 
-clone_folder: c:\gopath\src\github.com\account\myproject
+clone_folder: C:\goo
 
 environment:
-  GOPATH: c:\gopath
-  matrix:
-    - ruby_version: "21"
-    - ruby_version: "21-x64"
+  GOROOT: C:\go
+  GOPATH: C:\go\pkgs
+  PATH: '%GOROOT%\bin;%GOPATH%\bin;%PATH%'
 
 install:
-  - echo %PATH%
-  - echo %GOPATH%
-  - set PATH=%GOPATH%\bin;c:\go\bin;%PATH%
-  - go version
-  - go env
-  - cinst ruby
-  - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
-  - gem update --system
-  - gem install bundler --no-document -v 1.10.5
-  - gem install os
-  - bundle install --retry=3
+  - ps: .\scripts\install.ps1
 
-test_script:
-  - cmd: rake compile
-
-build: off
+build_script:
+  - cmd: env GOOS=windows GOARCH=amd64 go build C:/goo/src/goo.go
+  # - cmd: rake compile
