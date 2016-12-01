@@ -43,7 +43,7 @@ task :compile do
 
     cd(bin_path) do
       if OS.windows?
-        sh "$env:GOOS='#{gb.os}';$env:GOARCH='#{gb.arch}';go build #{goo_path}"
+        sh "set GOOS=#{gb.os}&&set GOARCH=#{gb.arch}&&go build #{goo_path}"
       else
         sh "GOOS=#{gb.os} GOARCH=#{gb.arch} go build #{goo_path}"
       end
