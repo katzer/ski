@@ -39,5 +39,5 @@ install:
   - ps: .\scripts\install.ps1
 
 build_script:
-  - cmd: env GOOS=windows GOARCH=amd64 go build C:/goo/src/goo.go
-  # - cmd: rake compile
+  - ps: $env:GOOS='windows'; $env:GOARCH='amd64'; go build C:/goo/src/goo.go
+  - ps: rake compile

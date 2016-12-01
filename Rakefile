@@ -20,7 +20,9 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
+require 'os'
 require 'fileutils'
+
 require_relative 'src/tasks/build.rb'
 require_relative 'build_config.rb'
 
@@ -38,7 +40,14 @@ task :compile do
     bin_path = "#{build_path}/#{gb.name}/bin"
     goo_path = "#{src_path}/#{APP_NAME}.go"
     mkdir_p(bin_path)
-    cd(bin_path) { sh "GOOS=#{gb.os} GOARCH=#{gb.arch} go build #{goo_path}" }
+
+    cd(bin_path) do
+      if OS.windows?
+        sh "$env:GOOS='#{gb.os}';$env:GOARCH='#{gb.arch}';go build #{goo_path}"
+      else
+        sh "GOOS=#{gb.os} GOARCH=#{gb.arch} go build #{goo_path}"
+      end
+    end
   end
 end
 
