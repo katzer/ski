@@ -62,3 +62,5 @@ setup_ssh_server() {
 install_deps
 install_pkgs
 setup_ssh_server
+apk add bash
+apk add bash-completion

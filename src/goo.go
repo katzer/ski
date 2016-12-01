@@ -24,9 +24,18 @@ func printVersion(){
 /**
 *	Formats and prints the given output and error.
 */
-func throwErr(out []byte, err error){
-	fmt.Print(fmt.Sprint(err) + ": " + string(out) + "path is " + os.Getenv("PATH"))
-	os.Stderr.WriteString(fmt.Sprint(err) + ": " + string(out))
+func throwErrOut(out []byte, err error){
+	fmt.Print(fmt.Sprint(err) + " output is: " + string(out) + "called from ErrOut. ")
+	os.Stderr.WriteString(fmt.Sprint(err) + " output is: " + string(out) + "called from ErrOut. ")
+	os.Exit(1)
+}
+
+/**
+*	Formats and prints the given error.
+*/
+func throwErr(err error){
+	fmt.Print(fmt.Sprint(err)  + " called from Err. ")
+	os.Stderr.WriteString(fmt.Sprint(err) + "called from Err. ")
 	os.Exit(1)
 }
 
@@ -35,6 +44,7 @@ func throwErr(out []byte, err error){
 								SSH-Section
 ################################################################################
 */
+
 
 
 /**
@@ -50,19 +60,47 @@ func execCommand(connDet string, cmd string){
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:  os.Getenv("ORBIT_KEY"),
+		Key:  os.Getenv("ORBORB"),
 		Port: "22",
 	}
 
 	// Call Run method with command you want to run on remote server.
-	response, err := ssh.Run(cmd)
+	out, err := ssh.Run(cmd)
 	// Handle errors
 	if err != nil {
-		panic("Can't run remote command: " + err.Error())
+		throwErr(err)
 	} else {
-		fmt.Println(response)
+		fmt.Println(out)
+	}
 }
 
+/**
+*	Uploads a file to the remote server
+*/
+func uploadFile(connDet string, path string){
+	user := getUser(connDet)
+	hostname := getHost(connDet)
+
+	ssh := &easyssh.MakeConfig{
+		User:   user,
+		Server: hostname,
+		Key:  os.Getenv("ORBORB"),
+		Port: "22",
+	}
+
+	// Call Scp method with file you want to upload to remote server.
+	err := ssh.Scp(path)
+
+	// Handle errors
+	if err != nil {
+		throwErr(err)
+	} else {
+		fmt.Println("success")
+
+		response, _ := ssh.Run("ls -al")
+
+		fmt.Println(response)
+}
 }
 
 
@@ -104,7 +142,7 @@ func getType(id string) string{
 	cmd 	 := exec.Command("ff","-t" ,id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-    	throwErr(out,err)
+    	throwErrOut(out,err)
 	}
 	return strings.TrimSpace(string(out))
 }
@@ -119,7 +157,7 @@ func getConnDet(id string) string{
 	cmd 	 := exec.Command("ff",id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-    	throwErr(out,err)
+    	throwErrOut(out,err)
 	}
 	return strings.TrimSpace(string(out))
 }
@@ -129,24 +167,23 @@ func getConnDet(id string) string{
 *	@params:
 *		args: Arguments to be searched in.
 *		type: Type of desired Argument (command,id)
+*		position: starting position of desired argument
 *	@return: The desired arguments
 */
-func getArg(args []string, argType string) string{
+func getArg(args []string, argType string, position int) string{
 	switch argType{
 		case "command":
-			var command string  = args[2]
+			var command string  = args[position]
 			var cmdArgs []string
-			if(len(args) > 3){
-				cmdArgs = args[3:(len(args))]
+			if(len(args) > (position+1)){
+				cmdArgs = args[(position+1):(len(args))]
 				for _, argument := range cmdArgs {
 					command += (" " + argument)
 				}
 			}
 			return command
-		case "id":
-			return args[1]
 		default:
-			return "Unhandled Arg"
+			return args[position]
 	}
 
 }
@@ -163,7 +200,7 @@ func getArg(args []string, argType string) string{
 func printHelp(){
 	fmt.Println("usage: goo [options...] <planet>... <command>")
 	fmt.Println("Options:")
-	fmt.Println("-s, --script     Execute script and return result")
+	fmt.Println("-s <path/to/script>, --script  <path/to/script>   Execute script and return result")
 	fmt.Println("-p, --pretty     Pretty print output as a table")
 	fmt.Println("-t, --type       Show type of planet")
 	fmt.Println("-h, --help       This help text")
@@ -180,7 +217,11 @@ func main() {
 	typeFlag := false
 	versionFlag := false
 	scriptFlag := false
-
+	commandsPosition := 2
+	planetPosition := 1
+	scriptPosition := 0
+	index := 0
+	_ = scriptPosition
 	fmt.Println(args)
 
 
@@ -192,31 +233,43 @@ func main() {
 			printHelp()
 		}else if(argument == "-s" || argument == "--script"){
 			scriptFlag = true
+			planetPosition += 2
+			scriptPosition = index + 1
 		}else if(argument == "-p" || argument == "--pretty"){
 			prettyFlag = true
+			commandsPosition ++
+			planetPosition ++
 		}else if(argument == "-t" || argument == "--type"){
 			typeFlag = true
+			commandsPosition ++
+			planetPosition ++
 		}else if(argument == "-v" || argument == "--version"){
 			versionFlag = true
+			commandsPosition ++
+			planetPosition ++
 		}
-
+		index ++
 	}
 
 	if(versionFlag){
 		printVersion()
 	}
-	_ = scriptFlag
+	if(typeFlag){
+		fmt.Println(getType(getArg(args,"id",planetPosition)))
+	}
 	_ = prettyFlag
-	_ = typeFlag
-	switch getType(getArg(args,"id")) {
+	switch getType(getArg(args,"id",planetPosition)) {
 		case "server":
-			var connDet string = getConnDet(getArg(args,"id"))
-			var command string = getArg(args,"command")
-			fmt.Println(connDet)
-			fmt.Println("##########################")
-			fmt.Println(command)
-			fmt.Println("##########################")
-			execCommand(connDet,command)
+			var connDet string = getConnDet(getArg(args,"id",planetPosition))
+			if(scriptFlag){
+				scriptFile := getArg(args,"scriptFile",scriptPosition)
+				uploadFile(connDet,scriptFile)
+				path := strings.Split(scriptFile,"/")
+				execCommand(connDet,"./" + path[len(path)-1])
+			}else{
+				command := getArg(args,"command",commandsPosition)
+				execCommand(connDet,command)
+			}
 		case "db":
 			fmt.Println("This Type of Connection is not yet supported.")
 			os.Exit(1)
@@ -224,9 +277,9 @@ func main() {
 			fmt.Println("This Type of Connection is not supported.")
 			os.Exit(1)
 		default:
-			fmt.Println(getType(getArg(args,"id")))
+			fmt.Println(getType(getArg(args,"id",planetPosition)))
 			fmt.Println("###")
-			fmt.Println(getArg(args,"id"))
+			fmt.Println(getArg(args,"id",planetPosition))
 
 	}
 }
