@@ -22,8 +22,8 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-$env:GOROOT = "C:\go"
-$env:GOPATH = "C:\go\pkgs"
+# $env:GOROOT = "C:\go"
+$env:GOPATH = "C:\go\pkg"
 
 function Install-Deps() {
     choco install ruby golang openssh git -y
@@ -38,10 +38,15 @@ function Update-Certs() {
 }
 
 function Install-Pkgs() {
+    Update-Certs
     gem install rake os test-unit --no-ri --no-rdoc
     go get gopkg.in/hypersleep/easyssh.v0
 }
 
+function Setup-Sshd() {
+
+}
+
 Install-Deps
-Update-Certs
 Install-Pkgs
+Setup-Sshd

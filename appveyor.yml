@@ -31,8 +31,8 @@ branches:
 clone_folder: C:\goo
 
 environment:
-  GOROOT: C:\go
-  GOPATH: C:\go\pkgs
+  # GOROOT: C:\go
+  GOPATH: C:\go\pkg
   PATH: '%GOROOT%\bin;%GOPATH%\bin;%PATH%'
 
 install:
@@ -40,4 +40,6 @@ install:
 
 build_script:
   - ps: $env:GOOS='windows'; $env:GOARCH='amd64'; go build C:/goo/src/goo.go
+  - cmd: set GOOS=windows&&set GOARCH=amd64&&go build C:/goo/src/goo.go
+  - cmd: go env
   - ps: rake compile

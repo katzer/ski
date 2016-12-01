@@ -51,7 +51,7 @@ install_pkgs() {
     go get gopkg.in/hypersleep/easyssh.v0
 }
 
-setup_ssh_server() {
+setup_sshd() {
     /usr/bin/ssh-keygen -A
     /usr/sbin/sshd
     mkdir $HOME/.ssh
@@ -61,6 +61,4 @@ setup_ssh_server() {
 
 install_deps
 install_pkgs
-setup_ssh_server
-apk add bash
-apk add bash-completion
+setup_sshd
