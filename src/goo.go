@@ -8,26 +8,41 @@ import (
     "gopkg.in/hypersleep/easyssh.v0"
 )
 
+/**
+################################################################################
+							Miscallenous-Section
+################################################################################
+*/
+
+/**
+*	Prints the current Version of the goo application
+*/
 func printVersion(){
 	fmt.Println("0.0.1")
 }
 
+/**
+*	Formats and prints the given output and error.
+*/
 func throwErr(out []byte, err error){
 	fmt.Print(fmt.Sprint(err) + ": " + string(out) + "path is " + os.Getenv("PATH"))
 	os.Stderr.WriteString(fmt.Sprint(err) + ": " + string(out))
 	os.Exit(1)
 }
 
-func getHost(connDet string) string{
-	toReturn := strings.Split(connDet,"@")
-	return toReturn[1]
-}
+/**
+################################################################################
+								SSH-Section
+################################################################################
+*/
 
-func getUser(connDet string) string{
-	toReturn := strings.Split(connDet,"@")
-	return toReturn[0]
-}
 
+/**
+*	Executes a command on a remote ssh server
+*	@params:
+*		connDet: connection details in following form: user@hostname
+*		cmd: command to be executed
+*/
 func execCommand(connDet string, cmd string){
 	user := getUser(connDet)
 	hostname := getHost(connDet)
@@ -35,7 +50,6 @@ func execCommand(connDet string, cmd string){
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		// Optional key or Password without either we try to contact your agent SOCKET
 		Key:  os.Getenv("ORBIT_KEY"),
 		Port: "22",
 	}
@@ -52,7 +66,40 @@ func execCommand(connDet string, cmd string){
 }
 
 
+/**
+################################################################################
+						Information-Retrieval-Section
+################################################################################
+*/
 
+/**
+*	Splits the given connectiondetails and returns the hostname
+*	@params:
+*		connDet: Connection details in following form: user@hostname
+*	@return: hostname
+*/
+func getHost(connDet string) string{
+	toReturn := strings.Split(connDet,"@")
+	return toReturn[1]
+}
+
+/**
+*	Splits the given connectiondetails and returns the user
+*	@params:
+*		connDet: Connection details in following form: user@hostname
+*	@return: user
+*/
+func getUser(connDet string) string{
+	toReturn := strings.Split(connDet,"@")
+	return toReturn[0]
+}
+
+/**
+*	Returns the type of a given planet
+*	@params:
+*		id: The planets id
+*	@return: The planets type
+*/
 func getType(id string) string{
 	cmd 	 := exec.Command("ff","-t" ,id)
 	out, err := cmd.CombinedOutput()
@@ -62,6 +109,12 @@ func getType(id string) string{
 	return strings.TrimSpace(string(out))
 }
 
+/**
+*	Returns the connection details to a given planet
+*	@params:
+*		id: The planets id
+*	@return: The connection details to the planet
+*/
 func getConnDet(id string) string{
 	cmd 	 := exec.Command("ff",id)
 	out, err := cmd.CombinedOutput()
@@ -71,6 +124,13 @@ func getConnDet(id string) string{
 	return strings.TrimSpace(string(out))
 }
 
+/**
+*	Extracts the desired argument from the arguments list.
+*	@params:
+*		args: Arguments to be searched in.
+*		type: Type of desired Argument (command,id)
+*	@return: The desired arguments
+*/
 func getArg(args []string, argType string) string{
 	switch argType{
 		case "command":
@@ -91,6 +151,15 @@ func getArg(args []string, argType string) string{
 
 }
 
+/**
+################################################################################
+								Main-Section
+################################################################################
+*/
+
+/**
+*	Prints the help dialog
+*/
 func printHelp(){
 	fmt.Println("usage: goo [options...] <planet>... <command>")
 	fmt.Println("Options:")
@@ -102,6 +171,9 @@ func printHelp(){
 	os.Exit(1)
 }
 
+/**
+*	Main function
+*/
 func main() {
 	var args []string = os.Args
 	prettyFlag := false
