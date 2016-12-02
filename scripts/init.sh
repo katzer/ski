@@ -22,13 +22,23 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-export GOROOT=/usr/local/go
-export GOPATH=/usr/local/go/pkgs
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-export PATH=$PATH:/go/bintest/testtools
-export ORBIT_KEY=$HOME/.ssh/orbit_rsa
-export ORBIT_KEY_SHORT=/.ssh/orbit_rsa
+init_go() {
+    export GOROOT=/usr/local/go
+    export GOPATH=/go
+    export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+}
 
-/usr/sbin/sshd
-eval `ssh-agent -s`
-ssh-add $ORBIT_KEY
+init_orbit() {
+    export ORBIT_KEY=/.ssh/orbit_rsa
+    export PATH=$APP_HOME/bintest/tools:$PATH
+}
+
+init_sshd() {
+    /usr/sbin/sshd
+    eval `ssh-agent -s`
+    ssh-add $HOME$ORBIT_KEY
+}
+
+init_go
+init_orbit
+init_sshd

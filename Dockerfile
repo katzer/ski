@@ -23,14 +23,11 @@
 FROM golang:alpine
 MAINTAINER Sebastian Katzer "katzer@appplant.de"
 
-COPY scripts/init.sh /etc/profile.d/init.sh
-COPY scripts/install.sh $GOPATH
+ENV APP_HOME /code
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
 
-ENV GOROOT /usr/local/go
-ENV GOPATH /usr/local/go/pkgs
-ENV PATH $PATH:$GOROOT/bin:$GOPATH/bin
-ENV ORBIT_KEY $HOME/.ssh/orbit_rsa
-ENV ORBIT_KEY_SHORT /.ssh/orbit_rsa
+COPY scripts/install.sh .
+RUN sh install.sh
 
-RUN chmod +x install.sh
-RUN ./install.sh
+COPY scripts/init.sh /etc/profile.d

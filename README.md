@@ -13,7 +13,7 @@ Execute commands or collect informations on multiple servers in parallel.
 
 ## Prerequisites
 You'll need the following installed and in your `PATH`:
-- [goo][goo]
+- [ff][ff]
 
 ## Installation
 
@@ -98,7 +98,7 @@ Made with :yum: from Leipzig
 
 © 2016 [appPlant GmbH][appplant]
 
-[goo]: https://github.com/appPlant/goo/releases
+[ff]: https://github.com/appPlant/ff/releases
 [releases]: https://github.com/appPlant/goo/releases
 [docker]: https://docs.docker.com/engine/installation
 [license]: http://opensource.org/licenses/Apache-2.0

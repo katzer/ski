@@ -52,11 +52,12 @@ install_pkgs() {
 }
 
 setup_sshd() {
-    /usr/bin/ssh-keygen -A
+    ssh-keygen -A
     /usr/sbin/sshd
-    mkdir $HOME/.ssh
+    mkdir -p $HOME/.ssh
     ssh-keygen -q -f $HOME/.ssh/orbit_rsa -N ""
     cp $HOME/.ssh/orbit_rsa.pub $HOME/.ssh/authorized_keys
+    ssh-keyscan -t ecdsa-sha2-nistp256 localhost > $HOME/.ssh/known_hosts
 }
 
 install_deps

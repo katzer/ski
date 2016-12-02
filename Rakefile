@@ -20,73 +20,25 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-require 'os'
-require 'fileutils'
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-require_relative 'src/tasks/build.rb'
 require_relative 'build_config.rb'
 
-APP_NAME     = ENV['APP_NAME'] || 'goo'
-APP_ROOT     = ENV['APP_ROOT'] || Dir.pwd
-APP_VERSION  = ENV['APP_VERSION'] || '0.0.1'
+APP_NAME     = 'goo'.freeze
+APP_ROOT     = Dir.pwd.freeze
+APP_VERSION  = ENV.fetch('APP_VERSION', '0.0.1').freeze
 
-release_path = "#{APP_ROOT}/releases"
-build_path   = "#{APP_ROOT}/build"
-src_path     = "#{APP_ROOT}/src"
-
-desc 'compile binary'
-task :compile do
-  Goo::Build.builds.each do |gb|
-    bin_path = "#{build_path}/#{gb.name}/bin"
-    goo_path = "#{src_path}/#{APP_NAME}.go"
-    mkdir_p(bin_path)
-
-    cd(bin_path) do
-      if OS.windows?
-        sh "set GOOS=#{gb.os}&&set GOARCH=#{gb.arch}&&go build #{goo_path}"
-      else
-        sh "GOOS=#{gb.os} GOARCH=#{gb.arch} go build #{goo_path}"
-      end
-    end
-  end
+def release_path
+  "#{APP_ROOT}/releases"
 end
 
-namespace :test do
-  desc 'run integration tests'
-  task :bintest do
-    Goo::Build.builds.each do |gb|
-      next unless gb.bintest?
-      bin_path = "#{build_path}/#{gb.name}/bin/goo"
-      bin_path << '.exe' if File.exist? "#{bin_path}.exe"
-      sh "ruby #{APP_ROOT}/bintest/goo.rb #{bin_path}"
-    end
-  end
+def build_path
+  "#{APP_ROOT}/build"
 end
 
-desc 'cleanup builds'
-task :clean do
-  rm_rf build_path
+def src_path
+  "#{APP_ROOT}/src"
 end
 
-desc 'generate a release tarball'
-task release: :compile do
-  release_dir = "#{release_path}/v#{APP_VERSION}"
-  latest_dir  = "#{release_path}/latest"
-
-  mkdir_p(release_dir)
-  rm_rf(latest_dir)
-  mkdir_p(latest_dir)
-  cd(release_dir) { sh "tar czf #{APP_NAME}-#{APP_VERSION}.tgz #{src_path}" }
-
-  Goo::Build.builds.each do |gb|
-    bin_path = "#{build_path}/#{gb.name}/bin/"
-    tar_path = "#{APP_NAME}-#{APP_VERSION}-#{gb.name}.tgz"
-    cd(release_dir) { sh "tar czf #{tar_path} #{bin_path}" }
-  end
-
-  ln Dir.glob("#{release_dir}/*"), latest_dir
-end
-
-task :version do
-  puts `#{build_path}/Linux64/goo -v`
-end
+Dir.chdir('lib') { Dir['tasks/*.rake'].each { |file| load file } }

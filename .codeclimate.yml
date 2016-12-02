@@ -17,8 +17,10 @@ engines:
       - go
 ratings:
   paths:
-  - lib/**
-  - bintest/**
+  - src/**/*
+  - lib/**/*
+  - bintest/**/*.rb
   - Rakefile
 exclude_paths:
-- bintest/testtools/**
+- bintest/tools/**
+- build_config.rb

@@ -20,37 +20,22 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-module Goo
-  class Build
-    attr_reader :name
+desc 'generate a release tarball'
+task release: [:compile] do
+  release_dir = "#{release_path}/v#{APP_VERSION}"
+  latest_dir  = "#{release_path}/latest"
 
-    def self.builds
-      @builds ||= []
-    end
+  mkdir_p(release_dir)
+  rm_rf(latest_dir)
+  mkdir_p(latest_dir)
 
-    def initialize(name, &block)
-      @name = name
-      instance_exec(&block)
-      self.class.builds << self
-    end
+  cd(release_dir) { sh "tar czf #{APP_NAME}-#{APP_VERSION}.tgz #{src_path}" }
 
-    def os(name = nil)
-      @os = name if name
-      @os
-    end
-
-    def arch(name = nil)
-      @arch = name if name
-      @arch
-    end
-
-    def bintest_if(enabled)
-      @test = enabled
-      @test
-    end
-
-    def bintest?
-      @test == true
-    end
+  Go::Build.builds.each do |gb|
+    bin_path = "#{build_path}/#{gb.name}/bin/"
+    tar_path = "#{APP_NAME}-#{APP_VERSION}-#{gb.name}.tgz"
+    cd(release_dir) { sh "tar czf #{tar_path} #{bin_path}" }
   end
+
+  ln Dir.glob("#{release_dir}/*"), latest_dir
 end

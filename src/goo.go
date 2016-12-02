@@ -74,7 +74,7 @@ func execCommand(connDet string, cmd string){
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:  os.Getenv("ORBIT_KEY_SHORT"),
+		Key:  os.Getenv("ORBIT_KEY"),
 		Port: "22",
 	}
 	// Call Run method with command you want to run on remote server.
@@ -97,7 +97,7 @@ func uploadFile(connDet string, path string){
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:  os.Getenv("ORBIT_KEY_SHORT"),
+		Key:  os.Getenv("ORBIT_KEY"),
 		Port: "22",
 	}
 
