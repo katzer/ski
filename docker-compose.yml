@@ -6,9 +6,6 @@ compile: &defaults
 bintest:
   <<: *defaults
   command: /bin/sh -lc "rake test:bintest"
-clean:
-  <<: *defaults
-  command: rake clean
 release:
   <<: *defaults
   command: rake release

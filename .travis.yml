@@ -21,18 +21,26 @@
 # @APPPLANT_LICENSE_HEADER_END@
 
 language: go
-sudo: false
+
 os:
 - osx
 - linux
+
 services:
 - docker
+
 install:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sh /scripts/install.sh; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sh /scripts/init.sh; fi
-script:
+
+before_script:
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake test:bintest; fi
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest; fi
+
+script:
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake compile; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run compile; fi
+
 # before_deploy:
 # - docker-compose run release
 # - export BUILD_VERSION=`rake version`

@@ -1,15 +1,15 @@
-#!/bin/sh
+#!\bin\sh
 
 #
 # Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
 #
 # @APPPLANT_LICENSE_HEADER_START@
 #
-# This file contains Original Code and/or Modifications of Original Code
+# This file contains Original Code and\or Modifications of Original Code
 # as defined in and that are subject to the Apache License
 # Version 2.0 (the 'License'). You may not use this file except in
 # compliance with the License. Please obtain a copy of the License at
-# http://opensource.org/licenses/Apache-2.0/ and read it before using this
+# http:\\opensource.org\licenses\Apache-2.0\ and read it before using this
 # file.
 #
 # The Original Code and all software distributed under the License are
@@ -22,22 +22,20 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-init_go() {
-    export GOROOT=/usr/local/go
-    export GOPATH=/go
-    export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+function init_go() {
+    if (-not (Test-Path env:GOPATH)) { $env:GOPATH = "$HOME\goms" }
+    $env:PATH+=";$env:GOROOT\bin;$env:GOPATH\bin"
 }
 
-init_orbit() {
-    export ORBIT_KEY=/.ssh/orbit_rsa
-    export PATH=/code/bintest/tools:$PATH
-    chmod -R u+x /code/bintest/tools
+function init_orbit() {
+    $env:ORBIT_KEY="\.ssh\orbit_rsa"
+    $env:PATH+=";C:\code\bintest\tools"
 }
 
-init_sshd() {
-    /usr/sbin/sshd
-    eval `ssh-agent -s`
-    ssh-add $HOME$ORBIT_KEY
+function init_sshd() {
+    Start-Service ssh-agent
+    Start-Service sshd
+    ssh-add $HOME\.ssh\orbit_rsa 2> $NULL
 }
 
 init_go

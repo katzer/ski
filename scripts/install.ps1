@@ -22,11 +22,9 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-$env:GOPATH = "C:\go\pkg"
-
 function Install-Deps() {
     choco install ruby golang openssh git -y
-    $env:PATH = [System.Environment]::GetEnvironmentVariable("Path","Machine")
+    $env:PATH=[System.Environment]::GetEnvironmentVariable("Path","Machine")
 }
 
 function Update-Certs() {
@@ -39,16 +37,24 @@ function Update-Certs() {
 function Install-Pkgs() {
     Update-Certs
     gem install rake os test-unit --no-ri --no-rdoc
+    if (-not (Test-Path env:GOPATH)) { $env:GOPATH = "$HOME\goms" }
     go get gopkg.in/hypersleep/easyssh.v0
 }
 
 function Setup-Sshd() {
     cd 'C:\Program Files\OpenSSH-Win64'
     .\install-sshd.ps1
-    ssh-keygen.exe -A
-    Start-Service ssh-agent
-    ssh-keygen -q -f C:\Users\katze/.ssh/orbit_rsa -N="12345"
-    ssh-add C:\Users\katze/.ssh/orbit_rsa
+    .\install-sshlsa.ps1
+    ssh-keygen -A
+    ntrights.exe -u "NT SERVICE\SSHD" +r SeAssignPrimaryTokenPrivilege
+    mkdir -f $HOME\.ssh
+    Remove-Item $HOME\.ssh\orbit_rsa -ErrorAction Ignore
+    cd 'C:\Program Files\Git\usr\bin'
+    .\ssh-keygen -q -f $HOME\.ssh\orbit_rsa -N "''"
+    Start-Service sshd
+    .\ssh-keyscan -t ecdsa-sha2-nistp256 localhost 2> $NULL > $HOME\.ssh\known_hosts
+    # New-NetFirewallRule -Protocol TCP -LocalPort 22 -Direction Inbound -Action Allow -DisplayName SSH
+    # netsh advfirewall firewall add rule name='SSH Port' dir=in action=allow protocol=TCP localport=22
 }
 
 Install-Deps
