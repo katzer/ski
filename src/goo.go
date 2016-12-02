@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"strings"
     "gopkg.in/hypersleep/easyssh.v0"
+    "strconv"
 )
 
 /**
@@ -19,6 +20,19 @@ import (
 */
 func printVersion(){
 	fmt.Println("0.0.1")
+}
+
+/**
+*	Prints the help dialog
+*/
+func printHelp(){
+	fmt.Println("usage: goo [options...] <planet>... -c=\"<command>\"")
+	fmt.Println("Options:")
+	fmt.Println("-s=\"<path/to/script>\", --script=\"<path/to/script>\"  Execute script and return result")
+	fmt.Println("-p, --pretty     Pretty print output as a table")
+	fmt.Println("-t, --type       Show type of planet")
+	fmt.Println("-h, --help       This help text")
+	fmt.Println("-v, --version    Show version number")
 }
 
 /**
@@ -104,6 +118,56 @@ func uploadFile(connDet string, path string){
 */
 
 /**
+*	Returns the contents of args in following order:
+*	prettyprint flag
+*	script flag
+*	script path
+*	command
+*	planets
+*/
+func procArgs(args []string) (bool, bool, string, string, []string){
+	prettyFlag := false
+	scriptFlag := false
+	typeFlag := false
+	var scriptPath string = ""
+	var command string = ""
+	planets := make([]string,0)
+	fmt.Println(args)
+
+
+
+	for _, argument := range args {
+		if(strings.HasPrefix(argument,"-h") || strings.HasPrefix(argument,"--help")){
+			printHelp()
+			os.Exit(0)
+		}else if(strings.HasPrefix(argument,"-p") || strings.HasPrefix(argument,"--pretty")){
+			prettyFlag = true
+		}else if(strings.HasPrefix(argument,"-t") || strings.HasPrefix(argument,"--type")){
+			typeFlag = true
+		}else if(strings.HasPrefix(argument,"-v") || strings.HasPrefix(argument,"--version")){
+			printVersion()
+			os.Exit(0)
+		}else if(strings.HasPrefix(argument,"-c") || strings.HasPrefix(argument,"--command")){
+			// TODO what if theres a = in the command itself?
+			command = strings.TrimSuffix(strings.TrimPrefix(strings.Split(argument,"=")[1],"\""),"\"")
+		}else if(strings.HasPrefix(argument,"-s") || strings.HasPrefix(argument,"--script")){
+			scriptFlag = true
+			scriptPath = strings.Split(argument,"=")[1]
+		}else{
+			planets = append(planets,argument)
+		}
+	}
+	if(len(args) <3){
+		printHelp()
+		os.Exit(0)
+	}
+	_ = typeFlag
+	_ = prettyFlag
+
+	return prettyFlag,scriptFlag,scriptPath,command,planets
+}
+
+/**
 *	Splits the given connectiondetails and returns the hostname
 *	@params:
 *		connDet: Connection details in following form: user@hostname
@@ -156,6 +220,8 @@ func getConnDet(id string) string{
 }
 
 /**
+*					DEPRECATED
+*
 *	Extracts the desired argument from the arguments list.
 *	@params:
 *		args: Arguments to be searched in.
@@ -188,92 +254,51 @@ func getArg(args []string, argType string, position int) string{
 */
 
 /**
-*	Prints the help dialog
-*/
-func printHelp(){
-	fmt.Println("usage: goo [options...] <planet>... <command>")
-	fmt.Println("Options:")
-	fmt.Println("-s <path/to/script>, --script  <path/to/script>   Execute script and return result")
-	fmt.Println("-p, --pretty     Pretty print output as a table")
-	fmt.Println("-t, --type       Show type of planet")
-	fmt.Println("-h, --help       This help text")
-	fmt.Println("-v, --version    Show version number")
-	os.Exit(1)
-}
-
-/**
 *	Main function
 */
 func main() {
+
 	var args []string = os.Args
-	prettyFlag := false
-	typeFlag := false
-	versionFlag := false
-	scriptFlag := false
-	commandsPosition := 2
-	planetPosition := 1
-	scriptPosition := 0
-	index := 0
-	_ = scriptPosition
-	fmt.Println(args)
 
+	prettyFlag,scriptFlag,scriptPath,command,planets := procArgs(args)
 
-	if(len(args) <3){
-		printHelp()
-	}
-	for _, argument := range args {
-		if(argument == "-h" || argument == "--help"){
-			printHelp()
-		}else if(argument == "-s" || argument == "--script"){
-			scriptFlag = true
-			planetPosition += 2
-			scriptPosition = index + 1
-		}else if(argument == "-p" || argument == "--pretty"){
-			prettyFlag = true
-			commandsPosition ++
-			planetPosition ++
-		}else if(argument == "-t" || argument == "--type"){
-			typeFlag = true
-			commandsPosition ++
-			planetPosition ++
-		}else if(argument == "-v" || argument == "--version"){
-			versionFlag = true
-			commandsPosition ++
-			planetPosition ++
-		}
-		index ++
-	}
-
-	if(versionFlag){
-		printVersion()
-	}
-	if(typeFlag){
-		fmt.Println(getType(getArg(args,"id",planetPosition)))
-	}
 	_ = prettyFlag
-	switch getType(getArg(args,"id",planetPosition)) {
-		case "server":
-			var connDet string = getConnDet(getArg(args,"id",planetPosition))
-			if(scriptFlag){
-				scriptFile := getArg(args,"scriptFile",scriptPosition)
-				uploadFile(connDet,scriptFile)
-				path := strings.Split(scriptFile,"/")
-				execCommand(connDet,"chmod +x " + path[len(path)-1])
-				execCommand(connDet,"./" + path[len(path)-1])
-			}else{
-				command := getArg(args,"command",commandsPosition)
-				execCommand(connDet,command)
-			}
-		case "db":
-			fmt.Println("This Type of Connection is not yet supported.")
-			os.Exit(1)
-		case "web":
-			fmt.Println("This Type of Connection is not supported.")
-			os.Exit(1)
-		default:
-			fmt.Println(getType(getArg(args,"id",planetPosition)))
-			fmt.Println("###")
-			fmt.Println(getArg(args,"id",planetPosition))
 
+	fmt.Println("prettyflag " + strconv.FormatBool(prettyFlag))
+	fmt.Println("scriptflag " + strconv.FormatBool(scriptFlag))
+	fmt.Println("scriptpath " + scriptPath)
+	fmt.Println("command " + command)
+	for _, planet := range planets {
+		fmt.Println("planet " + planet)
+	}
+
+
+	for _, planet := range planets {
+		switch getType(planet) {
+			case "server":
+				var connDet string = getConnDet(planet)
+				if(scriptFlag){
+					uploadFile(connDet,scriptPath)
+					path := strings.Split(scriptPath,"/")
+					fmt.Println("Executing command " + path[len(path)-1] + " on " + planet)
+					execCommand(connDet,"chmod +x " + path[len(path)-1])
+					execCommand(connDet,"./" + path[len(path)-1])
+				}else{
+					fmt.Println("Executing command " + command + " on " + planet)
+					execCommand(connDet,command)
+				}
+			case "db":
+				fmt.Println("This Type of Connection is not yet supported.")
+				os.Exit(1)
+			case "web":
+				fmt.Println("This Type of Connection is not supported.")
+				os.Exit(1)
+			default:
+				/**
+				fmt.Println(getType(planet))
+				fmt.Println("###")
+				fmt.Println(planet)
+				*/
+		}
 	}
 }
