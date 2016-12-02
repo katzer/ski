@@ -288,10 +288,10 @@ func main() {
 					execCommand(connDet,command)
 				}
 			case "db":
-				fmt.Println("This Type of Connection is not yet supported.")
+				fmt.Fprintf(os.Stderr, "This Type of Connection is not yet supported.")
 				os.Exit(1)
 			case "web":
-				fmt.Println("This Type of Connection is not supported.")
+				fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
 				os.Exit(1)
 			default:
 				/**
