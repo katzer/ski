@@ -21,38 +21,39 @@
 # @APPPLANT_LICENSE_HEADER_END@
 
 require 'os'
+require 'go/build'
 
-Goo::Build.new('x86_64-pc-linux-gnu') do
+Go::Build.new('x86_64-pc-linux-gnu') do
   os :linux
   arch :amd64
   bintest_if OS.linux? && OS.bits == 64
 end
 
-Goo::Build.new('i686-pc-linux-gnu') do
+Go::Build.new('i686-pc-linux-gnu') do
   os :linux
   arch :'386'
   bintest_if OS.linux? && OS.bits == 32
 end
 
-Goo::Build.new('x86_64-apple-darwin14') do
+Go::Build.new('x86_64-apple-darwin14') do
   os :darwin
   arch :amd64
   bintest_if OS.mac? && OS.bits == 64
 end
 
-Goo::Build.new('i386-apple-darwin14') do
+Go::Build.new('i386-apple-darwin14') do
   os :darwin
   arch :'386'
   bintest_if OS.mac? && OS.bits == 32
 end
 
-Goo::Build.new('x86_64-w64-mingw32') do
+Go::Build.new('x86_64-w64-mingw32') do
   os :windows
   arch :amd64
   bintest_if OS.windows? && OS.bits == 64
 end
 
-Goo::Build.new('i686-w64-mingw32') do
+Go::Build.new('i686-w64-mingw32') do
   os :windows
   arch :'386'
   bintest_if OS.windows? && OS.bits == 32

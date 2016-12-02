@@ -1,0 +1,30 @@
+#!/bin/sh
+
+if [ "$1" == "-t" ]
+  then
+  if [ "$2" == "app" ] || [ "$2" == "unauthorized" ] || [ "$2" == "offline" ]
+    then
+    echo "server"
+  fi
+  if [ "$2" == "db" ]
+    then
+    echo "db"
+  fi
+  if [ "$2" == "web" ]
+    then
+    echo "web"
+  fi
+fi
+
+if [ "$1" == "app" ] || [ "$1" == "db" ] || [ "$1" == "web" ]
+  then
+  echo "root@localhost"
+fi
+if [ "$1" == "unauthorized" ]
+  then
+  echo "user@localhost"
+fi
+if [ "$1" == "offline" ]
+  then
+  echo "root@remotehost"
+fi

@@ -31,9 +31,8 @@ branches:
 clone_folder: C:\goo
 
 environment:
-  # GOROOT: C:\go
   GOPATH: C:\go\pkg
-  PATH: '%GOROOT%\bin;%GOPATH%\bin;%PATH%'
+  # PATH: '%GOROOT%\bin;%GOPATH%\bin;%PATH%'
 
 install:
   - ps: .\scripts\install.ps1

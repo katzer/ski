@@ -22,7 +22,6 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-# $env:GOROOT = "C:\go"
 $env:GOPATH = "C:\go\pkg"
 
 function Install-Deps() {
@@ -44,7 +43,12 @@ function Install-Pkgs() {
 }
 
 function Setup-Sshd() {
-
+    cd 'C:\Program Files\OpenSSH-Win64'
+    .\install-sshd.ps1
+    ssh-keygen.exe -A
+    Start-Service ssh-agent
+    ssh-keygen -q -f C:\Users\katze/.ssh/orbit_rsa -N="12345"
+    ssh-add C:\Users\katze/.ssh/orbit_rsa
 }
 
 Install-Deps

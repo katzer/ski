@@ -20,37 +20,37 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
+module Go
+  class Build
+    attr_reader :name
 
-require 'open3'
-require 'test/unit'
+    def self.builds
+      @builds ||= []
+    end
 
-BIN_PATH = ARGV.fetch(0).freeze
+    def initialize(name, &block)
+      @name = name
+      instance_exec(&block)
+      self.class.builds << self
+    end
 
-class TestGoo < Test::Unit::TestCase
-  def test_server
-    output, status = Open3.capture2(BIN_PATH, 'app', 'whoami')
+    def os(name = nil)
+      @os = name if name
+      @os
+    end
 
-    assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, 'root'
-  end
+    def arch(name = nil)
+      @arch = name if name
+      @arch
+    end
 
-  def test_web
-    _, error, status = Open3.capture3(BIN_PATH, 'web', 'whoami')
+    def bintest_if(enabled)
+      @test = enabled
+      @test
+    end
 
-    assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'not supported'
-  end
-
-  def test_not_authorized_host
-    _, status = Open3.capture2(BIN_PATH, 'unauthorized', 'whoami')
-
-    assert_false status.success?, 'Process did exit cleanly'
-  end
-
-  def test_offline_host
-    _, status = Open3.capture2(BIN_PATH, 'offline', 'whoami')
-
-    assert_false status.success?, 'Process did exit cleanly'
+    def bintest?
+      @test == true
+    end
   end
 end
-

@@ -1,8 +1,0 @@
-#!/bin/sh
-
-if [ -z $2 ]
-  then
-  echo "Connected to" $1
-  else
-  echo "Executing command" $2 "at" $1
-fi
