@@ -30,6 +30,7 @@ ENV GOROOT /usr/local/go
 ENV GOPATH /usr/local/go/pkgs
 ENV PATH $PATH:$GOROOT/bin:$GOPATH/bin
 ENV ORBIT_KEY $HOME/.ssh/orbit_rsa
+ENV ORBIT_KEY_SHORT /.ssh/orbit_rsa
 
 RUN chmod +x install.sh
 RUN ./install.sh

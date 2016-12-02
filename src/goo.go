@@ -60,10 +60,9 @@ func execCommand(connDet string, cmd string){
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:  os.Getenv("ORBORB"),
+		Key:  os.Getenv("ORBIT_KEY_SHORT"),
 		Port: "22",
 	}
-
 	// Call Run method with command you want to run on remote server.
 	out, err := ssh.Run(cmd)
 	// Handle errors
@@ -84,7 +83,7 @@ func uploadFile(connDet string, path string){
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:  os.Getenv("ORBORB"),
+		Key:  os.Getenv("ORBIT_KEY_SHORT"),
 		Port: "22",
 	}
 
@@ -94,13 +93,7 @@ func uploadFile(connDet string, path string){
 	// Handle errors
 	if err != nil {
 		throwErr(err)
-	} else {
-		fmt.Println("success")
-
-		response, _ := ssh.Run("ls -al")
-
-		fmt.Println(response)
-}
+	}
 }
 
 
@@ -265,6 +258,7 @@ func main() {
 				scriptFile := getArg(args,"scriptFile",scriptPosition)
 				uploadFile(connDet,scriptFile)
 				path := strings.Split(scriptFile,"/")
+				execCommand(connDet,"chmod +x " + path[len(path)-1])
 				execCommand(connDet,"./" + path[len(path)-1])
 			}else{
 				command := getArg(args,"command",commandsPosition)

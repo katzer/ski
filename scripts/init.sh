@@ -25,8 +25,9 @@
 export GOROOT=/usr/local/go
 export GOPATH=/usr/local/go/pkgs
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export PATH=$PATH:/go/bintest/testtools
 export ORBIT_KEY=$HOME/.ssh/orbit_rsa
-export ORBORB=/.ssh/orbit_rsa
+export ORBIT_KEY_SHORT=/.ssh/orbit_rsa
 
 /usr/sbin/sshd
 eval `ssh-agent -s`
