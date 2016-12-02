@@ -26,6 +26,8 @@ require 'test/unit'
 
 BIN_PATH = ARGV.fetch(0).freeze
 
+# TODO new tests
+
 class TestGoo < Test::Unit::TestCase
   def test_server
     output, status = Open3.capture2(BIN_PATH, 'app', 'whoami')
