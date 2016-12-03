@@ -52,5 +52,13 @@ module Go
     def bintest?
       @test == true
     end
+
+    def go_build(path)
+      if OS.windows?
+        "set GOOS=#{os}&&set GOARCH=#{arch}&&go build #{path}"
+      else
+        "GOOS=#{os} GOARCH=#{arch} go build #{path}"
+      end
+    end
   end
 end

@@ -27,16 +27,9 @@ task :compile do
   Go::Build.builds.each do |gb|
     bin_path = "#{build_path}/#{gb.name}/bin"
     goo_path = "#{src_path}/#{APP_NAME}.go"
+
     mkdir_p(bin_path)
-
-    cd(bin_path) do
-      if OS.windows?
-        sh "set GOOS=#{gb.os}&&set GOARCH=#{gb.arch}&&go build #{goo_path}"
-      else
-        sh "GOOS=#{gb.os} GOARCH=#{gb.arch} go build #{goo_path}"
-      end
-    end
-
+    cd(bin_path) { sh gb.go_build(goo_path) }
     chmod_R 'u+x', bin_path
   end
 end
