@@ -53,7 +53,7 @@ install_pkgs() {
 
 setup_sshd() {
     ssh-keygen -A
-    /usr/sbin/sshd
+    sudo /usr/sbin/sshd
     mkdir -p $HOME/.ssh
     ssh-keygen -q -f $HOME/.ssh/orbit_rsa -N ""
     cp $HOME/.ssh/orbit_rsa.pub $HOME/.ssh/authorized_keys

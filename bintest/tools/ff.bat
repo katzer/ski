@@ -11,8 +11,8 @@ IF "%param1%"=="-t" (
     IF "%param2%"=="offline"       ECHO server
 )
 
-IF "%param1%"=="app"           ECHO root@localhost
-IF "%param1%"=="web"           ECHO root@localhost
-IF "%param1%"=="db"            ECHO root@localhost
+IF "%param1%"=="app"           ECHO localhost
+IF "%param1%"=="web"           ECHO localhost
+IF "%param1%"=="db"            ECHO localhost
 IF "%param1%"=="unauthorized"  ECHO user@localhost
-IF "%param1%"=="offline"       ECHO root@remotehost
+IF "%param1%"=="offline"       ECHO user@testhost

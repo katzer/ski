@@ -23,19 +23,22 @@
 # @APPPLANT_LICENSE_HEADER_END@
 
 init_go() {
-    export GOROOT=/usr/local/go
-    export GOPATH=/go
+    [ -z "$GOROOT" ] && export GOROOT=/usr/local/go
+    [ -z "$GOPATH" ] && export GOPATH=/go
     export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 }
 
 init_orbit() {
     export ORBIT_KEY=/.ssh/orbit_rsa
-    export PATH=/code/bintest/tools:$PATH
-    chmod -R u+x /code/bintest/tools
+    export PATH=`pwd`/bintest/tools:$PATH
+    chmod -R u+x `pwd`/bintest/tools
 }
 
 init_sshd() {
-    /usr/sbin/sshd
+    if [[ `id -u` -ne 0 ]]
+        then sudo /usr/sbin/sshd
+        else /usr/sbin/sshd
+    fi
     eval `ssh-agent -s`
     ssh-add $HOME$ORBIT_KEY
 }

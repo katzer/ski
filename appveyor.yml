@@ -34,6 +34,7 @@ install:
 
 build_script:
 - cmd: cd C:\code && rake compile
+# - cmd: ssh -i $HOME\.ssh\orbit_rsa localhost "echo 123"
 
 test_script:
 - cmd: cd C:\code && rake test:bintest
