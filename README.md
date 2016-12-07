@@ -3,13 +3,13 @@
 Execute commands or collect informations on multiple servers in parallel.
 
     $ goo -h
-    usage: goo [options...] <planet>... <command>
+    usage: usage: goo [options...] <planet> [<further planets>]... -c="<command>"
     Options:
-    -s, --script     Execute script and return result
-    -p, --pretty     Pretty print output as a table
-    -t, --type       Show type of planet
-    -h, --help       This help text
-    -v, --version    Show version number
+    -s="<path/to/script>", --script="<path/to/script>"  Execute script and return result
+    -p, --pretty                                            Pretty print output as a table
+    -t, --type                                              Show type of planet
+    -h, --help                                              This help text
+    -v, --version                                           Show version number
 
 ## Prerequisites
 You'll need the following installed and in your `PATH`:
