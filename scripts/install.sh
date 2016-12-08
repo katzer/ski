@@ -33,15 +33,15 @@ install_deps() {
     # MacPorts
     if which port >/dev/null; then
         port selfupdate
-        port install go ruby23 git
+        port install go ruby23 git gnutar
     # Homebrew
     elif which brew >/dev/null; then
         brew update
-        brew install go ruby git
+        brew install go ruby git gnu-tar
     # Alpine-Linux
     elif which apk >/dev/null; then
         apk update
-        apk add --no-cache ruby openssh git
+        apk add --no-cache ruby openssh git tar
         install_glibc
     fi
 }
@@ -55,7 +55,7 @@ setup_sshd() {
     ssh-keygen -A
     sudo /usr/sbin/sshd
     mkdir -p $HOME/.ssh
-    ssh-keygen -q -f $HOME/.ssh/orbit_rsa -N ""
+    ssh-keygen -t rsa -q -f $HOME/.ssh/orbit_rsa -N ""
     cp $HOME/.ssh/orbit_rsa.pub $HOME/.ssh/authorized_keys
     ssh-keyscan -t ecdsa-sha2-nistp256 localhost > $HOME/.ssh/known_hosts
 }
