@@ -42,3 +42,8 @@ def src_path
 end
 
 Dir.chdir('lib') { Dir['tasks/*.rake'].each { |file| load file } }
+
+desc 'print version'
+task :version do
+  puts '0.0.2'
+end

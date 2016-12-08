@@ -34,6 +34,7 @@ func printHelp(){
 	fmt.Println("-t, --type       Show type of planet")
 	fmt.Println("-h, --help       This help text")
 	fmt.Println("-v, --version    Show version number")
+	fmt.Println("-d, --debug	  Show extended debug informations")
 }
 
 /**
@@ -145,7 +146,7 @@ func upAndExecScript(connDet string, scriptPath string, wg *sync.WaitGroup){
 *	command
 *	planets
 */
-func procArgs(args []string) (bool, bool, string, string, []string, bool){
+func procArgs(args []string) (bool, bool, string, string, []string, bool, bool){
 	prettyFlag := false
 	scriptFlag := false
 	typeFlag := false
@@ -185,10 +186,10 @@ func procArgs(args []string) (bool, bool, string, string, []string, bool){
 		printHelp()
 		os.Exit(0)
 	}
-	_ = typeFlag
+
 	_ = prettyFlag
 
-	return prettyFlag,scriptFlag,scriptPath,command,planets,debugFlag
+	return prettyFlag,scriptFlag,scriptPath,command,planets,debugFlag,typeFlag
 }
 
 
@@ -285,7 +286,7 @@ func main() {
 
 	var args []string = os.Args
 
-	prettyFlag,scriptFlag,scriptPath,command,planets,debugFlag := procArgs(args)
+	prettyFlag,scriptFlag,scriptPath,command,planets,debugFlag,typeFlag := procArgs(args)
 
 	_ = prettyFlag
 	if(debugFlag){
@@ -302,6 +303,9 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(len(planets))
 	for _, planet := range planets {
+		if(typeFlag){
+			fmt.Println("The type of " + planet + " is " + getType(planet))
+		}
 		switch getType(planet) {
 			case "server":
 				var connDet string = getConnDet(planet)
