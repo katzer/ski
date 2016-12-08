@@ -46,7 +46,7 @@ Get the connection by type:
 
     $ export ORBIT_FILE=/path/to/orbit.json
 
-    $ goo app-package-1 app-package-2 "hostname"
+    $ goo app-package-1 app-package-2 -c="hostname"
     $ hostname-1
     $ hostname-2
 
@@ -54,7 +54,7 @@ Get the connection by type:
 
 Execute a script:
 
-    $ goo -s app-package-1 app-package-2 scripts/hostname.sh
+    $ goo app-package-1 app-package-2 -s="scripts/hostname.sh"
     $ hostname-1
     $ hostname-2
 
