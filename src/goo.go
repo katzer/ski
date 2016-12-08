@@ -7,6 +7,7 @@ import (
 	"strings"
     "gopkg.in/hypersleep/easyssh.v0"
     "strconv"
+    "sync"
 )
 
 /**
@@ -67,7 +68,8 @@ func throwErr(err error){
 *		connDet: connection details in following form: user@hostname
 *		cmd: command to be executed
 */
-func execCommand(connDet string, cmd string){
+func execCommand(connDet string, cmd string, wg *sync.WaitGroup , wait bool){
+	fmt.Println("Executing command " + cmd + " on " + connDet)
 	user := getUser(connDet)
 	hostname := getHost(connDet)
 
@@ -84,6 +86,9 @@ func execCommand(connDet string, cmd string){
 		throwErr(err)
 	} else {
 		fmt.Println(out)
+	}
+	if (wait){
+		wg.Done()
 	}
 }
 
@@ -112,6 +117,21 @@ func uploadFile(connDet string, path string){
 
 
 /**
+*	Uploads and executes a script on a given planet
+*	@params:
+*		connDet: 	Connection details to planet
+*		scriptPath: Path to script
+*/
+func upAndExecScript(connDet string, scriptPath string, wg *sync.WaitGroup){
+	uploadFile(connDet,scriptPath)
+	path := strings.Split(scriptPath,"/")
+	execCommand(connDet,"chmod +x " + path[len(path)-1],wg,false)
+	execCommand(connDet,"./" + path[len(path)-1],wg,false)
+	wg.Done()
+}
+
+
+/**
 ################################################################################
 						Information-Retrieval-Section
 ################################################################################
@@ -125,18 +145,20 @@ func uploadFile(connDet string, path string){
 *	command
 *	planets
 */
-func procArgs(args []string) (bool, bool, string, string, []string){
+func procArgs(args []string) (bool, bool, string, string, []string, bool){
 	prettyFlag := false
 	scriptFlag := false
 	typeFlag := false
+	debugFlag := false
 	var scriptPath string = ""
 	var command string = ""
 	planets := make([]string,0)
-	fmt.Println(args)
+
+	cleanArgs := args[1:]
 
 
 
-	for _, argument := range args {
+	for _, argument := range cleanArgs {
 		if(strings.HasPrefix(argument,"-h") || strings.HasPrefix(argument,"--help")){
 			printHelp()
 			os.Exit(0)
@@ -144,6 +166,8 @@ func procArgs(args []string) (bool, bool, string, string, []string){
 			prettyFlag = true
 		}else if(strings.HasPrefix(argument,"-t") || strings.HasPrefix(argument,"--type")){
 			typeFlag = true
+		}else if(strings.HasPrefix(argument,"-d") || strings.HasPrefix(argument,"--debug")){
+			debugFlag = true
 		}else if(strings.HasPrefix(argument,"-v") || strings.HasPrefix(argument,"--version")){
 			printVersion()
 			os.Exit(0)
@@ -164,8 +188,9 @@ func procArgs(args []string) (bool, bool, string, string, []string){
 	_ = typeFlag
 	_ = prettyFlag
 
-	return prettyFlag,scriptFlag,scriptPath,command,planets
+	return prettyFlag,scriptFlag,scriptPath,command,planets,debugFlag
 }
+
 
 /**
 *	Splits the given connectiondetails and returns the hostname
@@ -260,32 +285,30 @@ func main() {
 
 	var args []string = os.Args
 
-	prettyFlag,scriptFlag,scriptPath,command,planets := procArgs(args)
+	prettyFlag,scriptFlag,scriptPath,command,planets,debugFlag := procArgs(args)
 
 	_ = prettyFlag
-
-	fmt.Println("prettyflag " + strconv.FormatBool(prettyFlag))
-	fmt.Println("scriptflag " + strconv.FormatBool(scriptFlag))
-	fmt.Println("scriptpath " + scriptPath)
-	fmt.Println("command " + command)
-	for _, planet := range planets {
-		fmt.Println("planet " + planet)
+	if(debugFlag){
+		fmt.Println(args)
+		fmt.Println("prettyflag " + strconv.FormatBool(prettyFlag))
+		fmt.Println("scriptflag " + strconv.FormatBool(scriptFlag))
+		fmt.Println("scriptpath " + scriptPath)
+		fmt.Println("command " + command)
+		for _, planet := range planets {
+			fmt.Println("planet " + planet)
+		}
 	}
 
-
+	var wg sync.WaitGroup
+	wg.Add(len(planets))
 	for _, planet := range planets {
 		switch getType(planet) {
 			case "server":
 				var connDet string = getConnDet(planet)
 				if(scriptFlag){
-					uploadFile(connDet,scriptPath)
-					path := strings.Split(scriptPath,"/")
-					fmt.Println("Executing command " + path[len(path)-1] + " on " + planet)
-					execCommand(connDet,"chmod +x " + path[len(path)-1])
-					execCommand(connDet,"./" + path[len(path)-1])
+					go upAndExecScript(connDet,scriptPath,&wg)
 				}else{
-					fmt.Println("Executing command " + command + " on " + planet)
-					execCommand(connDet,command)
+					go execCommand(connDet,command,&wg,true)
 				}
 			case "db":
 				fmt.Fprintf(os.Stderr, "This Type of Connection is not yet supported.")
@@ -294,11 +317,8 @@ func main() {
 				fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
 				os.Exit(1)
 			default:
-				/**
-				fmt.Println(getType(planet))
-				fmt.Println("###")
-				fmt.Println(planet)
-				*/
+				wg.Done()
 		}
 	}
+	wg.Wait()
 }
