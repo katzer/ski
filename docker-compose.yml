@@ -12,3 +12,6 @@ release:
 shell:
   <<: *defaults
   command: sh -l
+getversion:
+  <<: *defaults
+  command: rake version
