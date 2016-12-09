@@ -8,6 +8,7 @@ import (
     "gopkg.in/hypersleep/easyssh.v0"
     "strconv"
     "sync"
+    "github.com/mgutz/ansi"
 )
 
 /**
@@ -69,8 +70,13 @@ func throwErr(err error){
 *		connDet: connection details in following form: user@hostname
 *		cmd: command to be executed
 */
-func execCommand(connDet string, cmd string, wg *sync.WaitGroup , wait bool){
-	fmt.Println("Executing command " + cmd + " on " + connDet)
+func execCommand(connDet string, cmd string, wg *sync.WaitGroup , wait bool, prettyFlag bool){
+	if(prettyFlag){
+		fmt.Println(ansi.Color("Executing command ","241") + ansi.Color(cmd,"white+hu") + ansi.Color(" on ","241") + ansi.Color(connDet,"white+hu"))
+	}else{
+		fmt.Println("Executing command " + cmd + " on " + connDet)
+	}
+	fmt.Println("")
 	user := getUser(connDet)
 	hostname := getHost(connDet)
 
@@ -123,11 +129,11 @@ func uploadFile(connDet string, path string){
 *		connDet: 	Connection details to planet
 *		scriptPath: Path to script
 */
-func upAndExecScript(connDet string, scriptPath string, wg *sync.WaitGroup){
+func upAndExecScript(connDet string, scriptPath string, wg *sync.WaitGroup, prettyFlag bool){
 	uploadFile(connDet,scriptPath)
 	path := strings.Split(scriptPath,"/")
-	execCommand(connDet,"chmod +x " + path[len(path)-1],wg,false)
-	execCommand(connDet,"./" + path[len(path)-1],wg,false)
+	execCommand(connDet,"chmod +x " + path[len(path)-1],wg,false,prettyFlag)
+	execCommand(connDet,"./" + path[len(path)-1],wg,false,prettyFlag)
 	wg.Done()
 }
 
@@ -303,6 +309,9 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(len(planets))
 	for _, planet := range planets {
+		if(prettyFlag){
+			fmt.Println(ansi.Color("################################################################################","blue"))
+		}
 		if(typeFlag){
 			fmt.Println("The type of " + planet + " is " + getType(planet))
 		}
@@ -310,9 +319,9 @@ func main() {
 			case "server":
 				var connDet string = getConnDet(planet)
 				if(scriptFlag){
-					go upAndExecScript(connDet,scriptPath,&wg)
+					go upAndExecScript(connDet,scriptPath,&wg,prettyFlag)
 				}else{
-					go execCommand(connDet,command,&wg,true)
+					go execCommand(connDet,command,&wg,true,prettyFlag)
 				}
 			case "db":
 				fmt.Fprintf(os.Stderr, "This Type of Connection is not yet supported.")

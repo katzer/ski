@@ -45,5 +45,5 @@ Dir.chdir('lib') { Dir['tasks/*.rake'].each { |file| load file } }
 
 desc 'print version'
 task :version do
-  puts '0.9'
+  puts "0.9"
 end
