@@ -71,12 +71,7 @@ func throwErr(err error){
 *		cmd: command to be executed
 */
 func execCommand(connDet string, cmd string, wg *sync.WaitGroup , wait bool, prettyFlag bool){
-	if(prettyFlag){
-		fmt.Println(ansi.Color("Executing command ","241") + ansi.Color(cmd,"white+hu") + ansi.Color(" on ","241") + ansi.Color(connDet,"white+hu"))
-	}else{
-		fmt.Println("Executing command " + cmd + " on " + connDet)
-	}
-	fmt.Println("")
+
 	user := getUser(connDet)
 	hostname := getHost(connDet)
 
@@ -92,6 +87,13 @@ func execCommand(connDet string, cmd string, wg *sync.WaitGroup , wait bool, pre
 	if err != nil {
 		throwErr(err)
 	} else {
+		if(prettyFlag){
+			fmt.Println(ansi.Color("################################################################################","blue"))
+			fmt.Println(ansi.Color("Executing command ","241") + ansi.Color(cmd,"white+hu") + ansi.Color(" on ","241") + ansi.Color(connDet,"white+hu"))
+		}else{
+			fmt.Println("Executing command " + cmd + " on " + connDet)
+		}
+		fmt.Println("")
 		fmt.Println(out)
 	}
 	if (wait){
@@ -309,9 +311,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(len(planets))
 	for _, planet := range planets {
-		if(prettyFlag){
-			fmt.Println(ansi.Color("################################################################################","blue"))
-		}
 		if(typeFlag){
 			fmt.Println("The type of " + planet + " is " + getType(planet))
 		}
