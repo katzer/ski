@@ -30,6 +30,7 @@ WORKDIR $APP_HOME
 COPY scripts/install.sh .
 RUN sh install.sh
 RUN gem install rake os test-unit --no-ri --no-rdoc
+RUN gem update --system
 RUN go get gopkg.in/hypersleep/easyssh.v0
 RUN go get -u github.com/mgutz/ansi/cmd/ansi-mgutz
 
