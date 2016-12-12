@@ -20,6 +20,7 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
+require 'rubygems'
 require 'os'
 require 'go/build'
 
