@@ -30,7 +30,7 @@ require_relative 'build_config.rb'
 
 APP_NAME     = 'goo'.freeze
 APP_ROOT     = Dir.pwd.freeze
-APP_VERSION  = ENV.fetch('APP_VERSION', '0.0.1').freeze
+APP_VERSION  = "0.9"
 
 def release_path
   "#{APP_ROOT}/releases"
@@ -48,5 +48,5 @@ Dir.chdir('lib') { Dir['tasks/*.rake'].each { |file| load file } }
 
 desc 'print version'
 task version: [:compile] do
-  puts '0.9'
+  puts APP_VERSION
 end
