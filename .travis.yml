@@ -43,6 +43,7 @@ script:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest; fi
 
 before_deploy:
+- gem install rake os test-unit --no-ri --no-rdoc
 - docker-compose run release
 - export BUILD_VERSION=`rake version`
 - sudo chmod -R 1777 releases
