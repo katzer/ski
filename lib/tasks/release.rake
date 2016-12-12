@@ -20,6 +20,9 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
+require 'rubygems'
+require 'os'
+
 desc 'generate a release tarball'
 task release: [:compile] do
   release_dir = "#{release_path}/v#{APP_VERSION}"
