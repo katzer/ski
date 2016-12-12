@@ -20,9 +20,6 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-require 'rubygems'
-
-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
@@ -30,7 +27,7 @@ require_relative 'build_config.rb'
 
 APP_NAME     = 'goo'.freeze
 APP_ROOT     = Dir.pwd.freeze
-APP_VERSION  = "0.9"
+APP_VERSION  = '0.9'
 
 def release_path
   "#{APP_ROOT}/releases"
@@ -47,6 +44,6 @@ end
 Dir.chdir('lib') { Dir['tasks/*.rake'].each { |file| load file } }
 
 desc 'print version'
-task version: [:compile] do
+task :version  do
   puts APP_VERSION
 end
