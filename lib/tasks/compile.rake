@@ -29,7 +29,7 @@ task :compile do
     goo_path = "#{src_path}/#{APP_NAME}.go"
 
     mkdir_p(bin_path)
-    cd(bin_path) { sh gb.go_build(goo_path) }
+    cd(src_path) { sh gb.go_build(bin_path) }
     chmod_R 'u+x', bin_path
   end
 end

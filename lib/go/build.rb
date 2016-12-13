@@ -44,6 +44,11 @@ module Go
       @arch
     end
 
+    def appname(name = nil)
+      @appname = name if name
+      @appname
+    end
+
     def bintest_if(enabled)
       @test = enabled
       @test
@@ -53,11 +58,11 @@ module Go
       @test == true
     end
 
-    def go_build(path)
+    def go_build(binpath)
       if OS.windows?
-        "set GOOS=#{os}&&set GOARCH=#{arch}&&go build #{path}"
+        "set GOOS=#{os}&&set GOARCH=#{arch}&&go build -o #{binpath}/#{appname}"
       else
-        "GOOS=#{os} GOARCH=#{arch} go build #{path}"
+        "GOOS=#{os} GOARCH=#{arch} go build -o #{binpath}/#{appname}"
       end
     end
   end

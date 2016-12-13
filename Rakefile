@@ -27,7 +27,7 @@ require_relative 'build_config.rb'
 
 APP_NAME     = 'goo'.freeze
 APP_ROOT     = Dir.pwd.freeze
-APP_VERSION  = '0.9'
+APP_VERSION  = `go run #{APP_ROOT}/src/*.go -v`
 
 def release_path
   "#{APP_ROOT}/releases"

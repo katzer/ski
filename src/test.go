@@ -12,7 +12,7 @@ import (
 
 /**
 *	Prints the current Version of the goo application
-*/
-func printVersion(){
-	fmt.Println("0.0.1")
+ */
+func printVersion() {
+	fmt.Print("0.9")
 }
