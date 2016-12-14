@@ -8,7 +8,7 @@ if [ "$1" == "-t" ]
   fi
   if [ "$2" == "db" ]
     then
-    echo server
+    echo db
   fi
   if [ "$2" == "web" ]
     then

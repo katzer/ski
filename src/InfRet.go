@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"fmt"
 )
 
 /**
@@ -53,6 +54,9 @@ func procArgs(args []string) (bool, bool, string, string, []string, bool, bool) 
 		} else {
 			if(isSupported(argument)){
 				planets = append(planets, argument)
+			}else{
+				fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
+				os.Exit(1)
 			}
 		}
 	}
