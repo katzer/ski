@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"github.com/mgutz/ansi"
-	"gopkg.in/hypersleep/easyssh.v0"
-	"os"
+	//"github.com/mgutz/ansi"
 	"strings"
 	"sync"
+	"gopkg.in/hypersleep/easyssh.v0"
+	"os"
 )
 
 /**
@@ -21,11 +20,10 @@ import (
 *		connDet: connection details in following form: user@hostname
 *		cmd: command to be executed
  */
-func execCommand(connDet string, cmd string, wg *sync.WaitGroup, wait bool, prettyFlag bool) {
+func execCommand(connDet string, cmd string, wg *sync.WaitGroup, wait bool, strucOut *StructuredOuput) {
 
 	user := getUser(connDet)
 	hostname := getHost(connDet)
-
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
@@ -38,14 +36,7 @@ func execCommand(connDet string, cmd string, wg *sync.WaitGroup, wait bool, pret
 	if err != nil {
 		throwErr(err)
 	} else {
-		if prettyFlag {
-			fmt.Println(ansi.Color("################################################################################", "blue"))
-			fmt.Println(ansi.Color("Executing command ", "241") + ansi.Color(cmd, "white+hu") + ansi.Color(" on ", "241") + ansi.Color(connDet, "white+hu"))
-		} else {
-			fmt.Println("Executing command " + cmd + " on " + connDet)
-		}
-		fmt.Println("")
-		fmt.Println(out)
+		strucOut.output = out
 	}
 	if wait {
 		wg.Done()
@@ -81,11 +72,12 @@ func uploadFile(connDet string, path string) {
 *		connDet: 	Connection details to planet
 *		scriptPath: Path to script
  */
-func upAndExecScript(connDet string, scriptPath string, wg *sync.WaitGroup, prettyFlag bool) {
+func upAndExecScript(connDet string, scriptPath string, wg *sync.WaitGroup, strucOut *StructuredOuput ) {
 	uploadFile(connDet, scriptPath)
 	path := strings.Split(scriptPath, "/")
-	execCommand(connDet, "chmod +x "+path[len(path)-1], wg, false, prettyFlag)
-	execCommand(connDet, "./"+path[len(path)-1], wg, false, prettyFlag)
+	placeholder := StructuredOuput{}
+	execCommand(connDet, "chmod +x "+path[len(path)-1], wg, false,&placeholder)
+	execCommand(connDet, "./"+path[len(path)-1], wg, false,strucOut)
 	wg.Done()
 }
 

@@ -6,12 +6,16 @@ import (
 	"strconv"
 	"sync"
 )
-
 /**
 ################################################################################
 								Main-Section
 ################################################################################
 */
+
+type StructuredOuput struct{
+	planet	string
+	output	string
+}
 
 /**
 *	Main function
@@ -21,6 +25,9 @@ func main() {
 	var args []string = os.Args
 
 	prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag := procArgs(args)
+
+	//supCount := len(planets)
+	outputList := make([]StructuredOuput, len(planets))
 
 	_ = prettyFlag
 	if debugFlag {
@@ -36,17 +43,22 @@ func main() {
 
 	var wg sync.WaitGroup
 	wg.Add(len(planets))
-	for _, planet := range planets {
-		if typeFlag {
+	for i, planet := range planets {
+		if (typeFlag) {
 			fmt.Println("The type of " + planet + " is " + getType(planet))
 		}
+
 		switch getType(planet) {
 		case "server":
 			var connDet string = getConnDet(planet)
+			if(prettyFlag){
+				fmt.Print("     " + planet)
+			}
+			outputList[i].planet = planet
 			if scriptFlag {
-				go upAndExecScript(connDet, scriptPath, &wg, prettyFlag)
+				go upAndExecScript(connDet, scriptPath, &wg, &outputList[i])
 			} else {
-				go execCommand(connDet, command, &wg, true, prettyFlag)
+				go execCommand(connDet, command, &wg, true, &outputList[i])
 			}
 		case "db":
 			fmt.Fprintf(os.Stderr, "This Type of Connection is not yet supported.")
@@ -55,8 +67,11 @@ func main() {
 			fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
 			os.Exit(1)
 		default:
+			println("default did done")
 			wg.Done()
 		}
 	}
 	wg.Wait()
+	fmt.Println("**************************************formatted******************************")
+	formatAndPrint(outputList, prettyFlag, scriptFlag, scriptPath, command)
 }

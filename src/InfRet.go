@@ -51,7 +51,9 @@ func procArgs(args []string) (bool, bool, string, string, []string, bool, bool) 
 			scriptFlag = true
 			scriptPath = strings.Split(argument, "=")[1]
 		} else {
-			planets = append(planets, argument)
+			if(isSupported(argument)){
+				planets = append(planets, argument)
+			}
 		}
 	}
 	if len(args) < 3 {
@@ -115,6 +117,34 @@ func getConnDet(id string) string {
 	}
 	return strings.TrimSpace(string(out))
 }
+
+/**
+*
+*
+*
+*/
+func countSupported(planets []string) int {
+	i := 0
+	for _, planet := range planets {
+		if (getType(planet) == "server"){
+			i++;
+		}
+	}
+	return i
+}
+
+/**
+*
+*
+*/
+func isSupported (planet string) bool{
+	if(getType(planet) == "server"){
+		return true
+	}else{
+		return false
+	}
+}
+
 
 /**
 *					DEPRECATED

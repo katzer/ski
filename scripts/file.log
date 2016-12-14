@@ -1,0 +1,14 @@
++ echo hi
+hi
++ echo ihr
+ihr
++ echo da
+da
++ echo draussen
+draussen
++ echo lol
+lol
++ export LOARG=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:HALLO
++ LOARG=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:HALLO
++ go version
+go version go1.7.4 linux/amd64

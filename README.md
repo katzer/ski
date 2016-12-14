@@ -62,9 +62,9 @@ Pretty print output:
 
     $ goo -p app-package-1 app-package-1 "hostname"
     
-      NR   PLANET          hostname            
+      NR   PLANET          hostname
       ===============================
-       0   app-package-1   hostname-1         
+       0   app-package-1   hostname-1
        1   app-package-2   hostname-1
 
 ## Releases
