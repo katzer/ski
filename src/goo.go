@@ -15,6 +15,8 @@ import (
 type StructuredOuput struct{
 	planet	string
 	output	string
+	maxOutLength int
+
 }
 
 /**
@@ -24,7 +26,7 @@ func main() {
 
 	var args []string = os.Args
 
-	prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag := procArgs(args)
+	prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag, loadFlag := procArgs(args)
 
 
 	outputList := make([]StructuredOuput, len(planets))
@@ -51,14 +53,11 @@ func main() {
 		switch getType(planet) {
 			case "server":
 				var connDet string = getConnDet(planet)
-				if(prettyFlag){
-					fmt.Print("     " + planet)
-				}
 				outputList[i].planet = planet
 				if scriptFlag {
-					go upAndExecScript(connDet, scriptPath, &wg, &outputList[i])
+					go upAndExecScript(connDet, scriptPath, &wg, &outputList[i], loadFlag)
 				} else {
-					go execCommand(connDet, command, &wg, true, &outputList[i])
+					go execCommand(connDet, command, &wg, true, &outputList[i], loadFlag)
 				}
 			case "db":
 				fmt.Fprintf(os.Stderr, "This Type of Connection is not yet supported.")

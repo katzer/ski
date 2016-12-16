@@ -21,11 +21,12 @@ import (
 *	command
 *	planets
  */
-func procArgs(args []string) (bool, bool, string, string, []string, bool, bool) {
-	prettyFlag := false
-	scriptFlag := false
-	typeFlag := false
-	debugFlag := false
+func procArgs(args []string) (bool, bool, string, string, []string, bool, bool, bool) {
+	prettyFlag 	:= false
+	scriptFlag 	:= false
+	typeFlag 	:= false
+	debugFlag 	:= false
+	loadFlag 	:= false
 	var scriptPath string = ""
 	var command string = ""
 	planets := make([]string, 0)
@@ -42,6 +43,8 @@ func procArgs(args []string) (bool, bool, string, string, []string, bool, bool) 
 			typeFlag = true
 		} else if strings.HasPrefix(argument, "-d") || strings.HasPrefix(argument, "--debug") {
 			debugFlag = true
+		} else if strings.HasPrefix(argument, "-l") || strings.HasPrefix(argument, "--load") {
+			loadFlag = true
 		} else if strings.HasPrefix(argument, "-v") || strings.HasPrefix(argument, "--version") {
 			printVersion()
 			os.Exit(0)
@@ -67,7 +70,7 @@ func procArgs(args []string) (bool, bool, string, string, []string, bool, bool) 
 
 	_ = prettyFlag
 
-	return prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag
+	return prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag, loadFlag
 }
 
 /**
@@ -147,6 +150,11 @@ func isSupported (planet string) bool{
 	}else{
 		return false
 	}
+}
+
+func getMaxLength(toProcess string) int{
+	_ = toProcess
+	return 0
 }
 
 
