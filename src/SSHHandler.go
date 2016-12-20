@@ -2,10 +2,10 @@ package main
 
 import (
 	//"github.com/mgutz/ansi"
-	"strings"
-	"sync"
 	"gopkg.in/hypersleep/easyssh.v0"
 	"os"
+	"strings"
+	"sync"
 )
 
 /**
@@ -20,7 +20,7 @@ import (
 *		connDet: connection details in following form: user@hostname
 *		cmd: command to be executed
  */
-func execCommand(connDet string, cmd string, wg *sync.WaitGroup, wait bool, strucOut *StructuredOuput, loadFlag bool) {
+func execSSHCommand(connDet string, cmd string, wg *sync.WaitGroup, wait bool, strucOut *StructuredOuput, loadFlag bool) {
 
 	user := getUser(connDet)
 	hostname := getHost(connDet)
@@ -30,7 +30,7 @@ func execCommand(connDet string, cmd string, wg *sync.WaitGroup, wait bool, stru
 		Key:    os.Getenv("ORBIT_KEY"),
 		Port:   "22",
 	}
-	if(loadFlag){
+	if loadFlag {
 		cmd = "sh -lc " + cmd
 	}
 	// Call Run method with command you want to run on remote server.
@@ -77,12 +77,10 @@ func uploadFile(connDet string, path string) {
 *		connDet: 	Connection details to planet
 *		scriptPath: Path to script
  */
-func upAndExecScript(connDet string, scriptPath string, wg *sync.WaitGroup, strucOut *StructuredOuput, loadFlag bool) {
+func upAndExecSSHScript(connDet string, scriptPath string, wg *sync.WaitGroup, strucOut *StructuredOuput, loadFlag bool) {
 	uploadFile(connDet, scriptPath)
 	path := strings.Split(scriptPath, "/")
 	placeholder := StructuredOuput{}
-	execCommand(connDet, "chmod +x "+path[len(path)-1], wg, false,&placeholder, false)
-	execCommand(connDet, "./"+path[len(path)-1], wg, false,strucOut, loadFlag)
-	wg.Done()
+	execSSHCommand(connDet, "chmod +x "+path[len(path)-1], wg, false, &placeholder, false)
+	execSSHCommand(connDet, "./"+path[len(path)-1], wg, true, strucOut, loadFlag)
 }
-

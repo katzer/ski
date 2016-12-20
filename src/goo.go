@@ -6,17 +6,21 @@ import (
 	"strconv"
 	"sync"
 )
+
 /**
 ################################################################################
 								Main-Section
 ################################################################################
 */
 
-type StructuredOuput struct{
-	planet	string
-	output	string
+/**
+*	StructuredOuput:
+*	A thingy thing thing
+ */
+type StructuredOuput struct {
+	planet       string
+	output       string
 	maxOutLength int
-
 }
 
 /**
@@ -24,10 +28,9 @@ type StructuredOuput struct{
  */
 func main() {
 
-	var args []string = os.Args
+	args := os.Args
 
 	prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag, loadFlag := procArgs(args)
-
 
 	outputList := make([]StructuredOuput, len(planets))
 
@@ -46,28 +49,33 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(len(planets))
 	for i, planet := range planets {
-		if (typeFlag) {
+		if typeFlag {
 			fmt.Println("The type of " + planet + " is " + getType(planet))
 		}
 
 		switch getType(planet) {
-			case "server":
-				var connDet string = getConnDet(planet)
-				outputList[i].planet = planet
-				if scriptFlag {
-					go upAndExecScript(connDet, scriptPath, &wg, &outputList[i], loadFlag)
-				} else {
-					go execCommand(connDet, command, &wg, true, &outputList[i], loadFlag)
-				}
-			case "db":
-				fmt.Fprintf(os.Stderr, "This Type of Connection is not yet supported.")
-				os.Exit(1)
-			case "web":
-				fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
-				os.Exit(1)
-			default:
-				println("default did done")
-				wg.Done()
+		case "server":
+			connDet := getConnDet(planet)
+			outputList[i].planet = planet
+			if scriptFlag {
+				go upAndExecSSHScript(connDet, scriptPath, &wg, &outputList[i], loadFlag)
+			} else {
+				go execSSHCommand(connDet, command, &wg, true, &outputList[i], loadFlag)
+			}
+		case "db":
+			dbDet := "" //getDBDet(planet)
+			outputList[i].planet = planet
+			if scriptFlag {
+				go upAndExecDBScript(dbDet, scriptPath, &wg, &outputList[i], loadFlag)
+			} else {
+				go execDBCommand(dbDet, command, &wg, true, &outputList[i], loadFlag)
+			}
+		case "web":
+			fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
+			os.Exit(1)
+		default:
+			println("default did done")
+			wg.Done()
 		}
 	}
 	wg.Wait()

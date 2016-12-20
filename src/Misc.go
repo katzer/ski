@@ -16,6 +16,7 @@ import (
  */
 func printVersion() {
 	fmt.Print("0.9")
+	doit()
 }
 
 /**

@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"strconv"
-	"bytes"
 )
 
 /**
@@ -16,43 +16,40 @@ const planetLength int = 21
 
 /**
 *	Prints message to console with a newline.
-*/
+ */
 func println(msg string) {
 	fmt.Println(msg)
 }
 
 /**
 *	Prints message to console.
-*/
+ */
 func print(msg string) {
 	fmt.Print(msg)
 }
 
 /**
 *	Prints the given String indented by the given spaces.
-*/
+ */
 func printIndented(msg string, indent int, exceptFirst bool) {
 	charString := []rune(msg)
 	var buffer bytes.Buffer
 	_ = exceptFirst
 	toAppend := ""
-	indentCheck := 80 - indent
-	if(!exceptFirst){
+	if !exceptFirst {
 		for i := 0; i < indent; i++ {
 			buffer.WriteByte(32)
 		}
-		indentCheck = 80
 	}
 	for _, char := range charString {
-		if(buffer.Len() >= indentCheck || char == 10){
-			indentCheck = 80
+		if char == 10 {
 			println(buffer.String())
 			buffer.Reset()
 			for i := 0; i < indent; i++ {
 				buffer.WriteByte(32)
 			}
 		}
-		if(char != 10){
+		if char != 10 {
 			toAppend = fmt.Sprintf("%c", char)
 			buffer.WriteString(toAppend)
 		}
@@ -60,44 +57,52 @@ func printIndented(msg string, indent int, exceptFirst bool) {
 	println(buffer.String())
 }
 
-func printHeadline(scriptFlag bool, scriptPath string, command string, indent int){
+func printHeadline(scriptFlag bool, scriptPath string, command string, indent int) {
 	print("NR   PLANET               ")
-	if(scriptFlag){
-		printIndented(scriptPath,indent,true)
-	}else{
-		printIndented(command,indent,true)
+	if scriptFlag {
+		printIndented(scriptPath, indent, true)
+	} else {
+		printIndented(command, indent, true)
 	}
 	fmt.Println("================================================================================")
 }
 
 func printWhite(length int) {
-	for i := 0; i < length; i++{
+	for i := 0; i < length; i++ {
 		print(" ")
 	}
 }
 
 func formatAndPrint(toPrint []StructuredOuput, prettyFlag bool, scriptFlag bool, scriptPath string, command string) {
-	if(prettyFlag){
+	if prettyFlag {
 		printHeadline(scriptFlag, scriptPath, command, 26)
 	}
 	for i, planet := range toPrint {
-		if(!prettyFlag){
+		if !prettyFlag {
 			println(planet.output)
-		}else{
-			print(strconv.Itoa(i)+ "")
-			if(i/10 < 1){
+		} else {
+			print(strconv.Itoa(i) + "")
+			if i/10 < 1 {
 				print(" ")
 			}
-			if(i/100 < 1){
+			if i/100 < 1 {
 				print(" ")
 			}
-			if(i/1000 < 1){
+			if i/1000 < 1 {
 				print(" ")
 			}
 			print(" ")
 			print(planet.planet)
 			printWhite(planetLength - len(planet.planet))
-			printIndented(planet.output,26,true)
+			printIndented(planet.output, 26, true)
 		}
 	}
+}
+
+func tablePrint(toFormat string, templatePath string) {
+	pys := getPyScript()
+	ioutil.WriteFile("/tmp/textFormat", []byte(pys), 0644)
+
+	fmt.Println("DOIN IT")
+	//TODO remove
 }

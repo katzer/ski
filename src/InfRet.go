@@ -1,10 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
-	"fmt"
 )
 
 /**
@@ -22,13 +22,13 @@ import (
 *	planets
  */
 func procArgs(args []string) (bool, bool, string, string, []string, bool, bool, bool) {
-	prettyFlag 	:= false
-	scriptFlag 	:= false
-	typeFlag 	:= false
-	debugFlag 	:= false
-	loadFlag 	:= false
-	var scriptPath string = ""
-	var command string = ""
+	prettyFlag := false
+	scriptFlag := false
+	typeFlag := false
+	debugFlag := false
+	loadFlag := false
+	var scriptPath string
+	var command string
 	planets := make([]string, 0)
 
 	cleanArgs := args[1:]
@@ -55,9 +55,9 @@ func procArgs(args []string) (bool, bool, string, string, []string, bool, bool, 
 			scriptFlag = true
 			scriptPath = strings.Split(argument, "=")[1]
 		} else {
-			if(isSupported(argument)){
+			if isSupported(argument) {
 				planets = append(planets, argument)
-			}else{
+			} else {
 				fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
 				os.Exit(1)
 			}
@@ -129,12 +129,12 @@ func getConnDet(id string) string {
 *
 *
 *
-*/
+ */
 func countSupported(planets []string) int {
 	i := 0
 	for _, planet := range planets {
-		if (getType(planet) == "server"){
-			i++;
+		if getType(planet) == "server" {
+			i++
 		}
 	}
 	return i
@@ -143,45 +143,24 @@ func countSupported(planets []string) int {
 /**
 *
 *
-*/
-func isSupported (planet string) bool{
-	if(getType(planet) == "server"){
+ */
+func isSupported(planet string) bool {
+	if getType(planet) == "server" {
 		return true
-	}else{
-		return false
 	}
+	return false
+
 }
 
-func getMaxLength(toProcess string) int{
+func getMaxLength(toProcess string) int {
 	_ = toProcess
 	return 0
 }
 
-
 /**
-*					DEPRECATED
 *
-*	Extracts the desired argument from the arguments list.
-*	@params:
-*		args: Arguments to be searched in.
-*		type: Type of desired Argument (command,id)
-*		position: starting position of desired argument
-*	@return: The desired arguments
  */
-func getArg(args []string, argType string, position int) string {
-	switch argType {
-	case "command":
-		var command string = args[position]
-		var cmdArgs []string
-		if len(args) > (position + 1) {
-			cmdArgs = args[(position + 1):(len(args))]
-			for _, argument := range cmdArgs {
-				command += (" " + argument)
-			}
-		}
-		return command
-	default:
-		return args[position]
-	}
-
+func procDBDets(dbDet string) (string, string) {
+	parts := strings.Split(dbDet, ":")
+	return parts[0], parts[1]
 }

@@ -1,0 +1,6 @@
+{
+    "go.formatTool": "gofmt",
+    "go.lintOnSave": true,
+    "go.gopath": "/home/mrblati/go/",
+    "python.linting.pylintEnabled": false
+}
