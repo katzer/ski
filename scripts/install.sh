@@ -41,7 +41,7 @@ install_deps() {
     # Alpine-Linux
     elif which apk >/dev/null; then
         apk update
-        apk add --no-cache ruby openssh git tar
+        apk add --no-cache ruby openssh git tar python
         install_glibc
     fi
 }

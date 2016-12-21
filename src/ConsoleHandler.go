@@ -3,7 +3,12 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"os"
+	"os/exec"
 	"strconv"
+	"strings"
 )
 
 /**
@@ -99,10 +104,25 @@ func formatAndPrint(toPrint []StructuredOuput, prettyFlag bool, scriptFlag bool,
 	}
 }
 
-func tablePrint(toFormat string, templatePath string) {
+func tablePrint(toFormat string, filePath string, templatePath string) {
 	pys := getPyScript()
-	ioutil.WriteFile("/tmp/textFormat", []byte(pys), 0644)
+	pyScriptFile := os.Getenv("HOME") + "/tempTabFormat.py"
+	err := ioutil.WriteFile(pyScriptFile, []byte(pys), 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	cmd := exec.Command("python2", pyScriptFile, "/home/mrblati/workspace/goo/textfsm-master/examples/cisco_bgp_summary_template", "/home/mrblati/workspace/goo/textfsm-master/examples/cisco_bgp_summary_example")
+	cmd.Stdin = strings.NewReader("some input")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err = cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf(" %q\n", out.String())
 
-	fmt.Println("DOIN IT")
-	//TODO remove
+	err = os.Remove(pyScriptFile)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
