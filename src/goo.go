@@ -68,7 +68,7 @@ func main() {
 			if scriptFlag {
 				go upAndExecDBScript(dbDet, scriptPath, &wg, &outputList[i], loadFlag)
 			} else {
-				go execDBCommand(dbDet, command, &wg, true, &outputList[i], loadFlag)
+				go execDBCommand(dbDet, command, &wg, &outputList[i], loadFlag)
 			}
 		case "web":
 			fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")

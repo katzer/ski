@@ -84,7 +84,7 @@ func formatAndPrint(toPrint []StructuredOuput, prettyFlag bool, scriptFlag bool,
 	}
 	for i, planet := range toPrint {
 		if !prettyFlag {
-			println(planet.output)
+			print(planet.output)
 		} else {
 			print(strconv.Itoa(i) + "")
 			if i/10 < 1 {

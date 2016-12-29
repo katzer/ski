@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"log"
 	"strings"
 	"sync"
 	//"os"
@@ -36,7 +37,7 @@ func upAndExecDBScript(dbDet string, scriptPath string, wg *sync.WaitGroup, stru
 	uploadFile(sshAddress, scriptPath)
 	path := strings.Split(scriptPath, "/")
 	placeholder := StructuredOuput{}
-	execSSHCommand(sshAddress, "mv ~/"+path[len(path)-1]+" ~/sql/"+path[len(path)-1], wg, false, placeholder, loadFlag)
+	execSSHCommand(sshAddress, "mv ~/"+path[len(path)-1]+" ~/sql/"+path[len(path)-1], wg, false, &placeholder, loadFlag)
 	queryString := ". profiles/" + username + ".prof && pqdb_sql.out -s " + dbID + " ~/sql/" + path[len(path)-1]
 	//placeholder := StructuredOuput{}
 	execSSHCommand(sshAddress, queryString, wg, true, strucOut, loadFlag)

@@ -31,7 +31,7 @@ func execSSHCommand(connDet string, cmd string, wg *sync.WaitGroup, wait bool, s
 		Port:   "22",
 	}
 	if loadFlag {
-		cmd = "sh -lc " + cmd
+		cmd = "sh -lc \"echo -----APPPLANT-ORBIT----- && " + cmd + " \""
 	}
 	// Call Run method with command you want to run on remote server.
 	out, err := ssh.Run(cmd)
@@ -39,8 +39,13 @@ func execSSHCommand(connDet string, cmd string, wg *sync.WaitGroup, wait bool, s
 	if err != nil {
 		throwErr(err)
 	} else {
+		cleanedOut := out
+		if loadFlag {
+			splitOut := strings.Split(out, "-----APPPLANT-ORBIT-----\n")
+			cleanedOut = splitOut[len(splitOut)-1]
+		}
 		maxLength := getMaxLength(out)
-		strucOut.output = out
+		strucOut.output = cleanedOut
 		strucOut.maxOutLength = maxLength
 	}
 	if wait {
