@@ -109,6 +109,7 @@ func tablePrint(toFormat string, filePath string, templatePath string) {
 	pyScriptFile := os.Getenv("HOME") + "/tempTabFormat.py"
 	err := ioutil.WriteFile(pyScriptFile, []byte(pys), 0644)
 	if err != nil {
+		println("writing pyscript failed")
 		log.Fatal(err)
 	}
 	cmd := exec.Command("python2", pyScriptFile, "/home/mrblati/workspace/goo/textfsm-master/examples/cisco_bgp_summary_template", "/home/mrblati/workspace/goo/textfsm-master/examples/cisco_bgp_summary_example")
@@ -117,6 +118,7 @@ func tablePrint(toFormat string, filePath string, templatePath string) {
 	cmd.Stdout = &out
 	err = cmd.Run()
 	if err != nil {
+		println("executing pyscript failed")
 		log.Fatal(err)
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
@@ -124,6 +126,7 @@ func tablePrint(toFormat string, filePath string, templatePath string) {
 
 	err = os.Remove(pyScriptFile)
 	if err != nil {
+		println("removing pyscript failed")
 		log.Fatal(err)
 	}
 }

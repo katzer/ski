@@ -3,1049 +3,1052 @@ package main
 import ()
 
 func getPyScript() string {
-	pyscript := "#!/usr/bin/python2.4 #"
-	pyscript = pyscript + "\n # Copyright 2010 Google Inc. All Rights Reserved."
-	pyscript = pyscript + "\n #"
-	pyscript = pyscript + "\n # Licensed under the Apache License, Version 2.0 (the \"License\");"
-	pyscript = pyscript + "\n # you may not use this file except in compliance with the License."
-	pyscript = pyscript + "\n # You may obtain a copy of the License at"
-	pyscript = pyscript + "\n #"
-	pyscript = pyscript + "\n #      http://www.apache.org/licenses/LICENSE-2.0"
-	pyscript = pyscript + "\n #"
-	pyscript = pyscript + "\n # Unless required by applicable law or agreed to in writing, software"
-	pyscript = pyscript + "\n # distributed under the License is distributed on an \"AS IS\" BASIS,"
-	pyscript = pyscript + "\n # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or"
-	pyscript = pyscript + "\n # implied. See the License for the specific language governing"
-	pyscript = pyscript + "\n # permissions and limitations under the License."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n\"\"\"Template based text parser."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nThis module implements a parser, intended to be used for converting"
-	pyscript = pyscript + "\nhuman readable text, such as command output from a router CLI, into"
-	pyscript = pyscript + "\na list of records, containing values extracted from the input text."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nA simple template language is used to describe a state machine to"
-	pyscript = pyscript + "\nparse a specific type of text input, returning a record of values"
-	pyscript = pyscript + "\nfor each input entity."
-	pyscript = pyscript + "\n\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n__version__ = '0.2.2'"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nimport getopt"
-	pyscript = pyscript + "\nimport inspect"
-	pyscript = pyscript + "\nimport re"
-	pyscript = pyscript + "\nimport string"
-	pyscript = pyscript + "\nimport sys"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass Error(Exception):"
-	pyscript = pyscript + "\n  \"\"\"Base class for errors.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass Usage(Exception):"
-	pyscript = pyscript + "\n  \"\"\"Error in command line execution.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass TextFSMError(Error):"
-	pyscript = pyscript + "\n  \"\"\"Error in the FSM state execution.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass TextFSMTemplateError(Error):"
-	pyscript = pyscript + "\n  \"\"\"Errors while parsing templates.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n# The below exceptions are internal state change triggers"
-	pyscript = pyscript + "\n# and not used as Errors."
-	pyscript = pyscript + "\nclass FSMAction(Exception):"
-	pyscript = pyscript + "\n  \"\"\"Base class for actions raised with the FSM.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass SkipRecord(FSMAction):"
-	pyscript = pyscript + "\n  \"\"\"Indicate a record is to be skipped.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass SkipValue(FSMAction):"
-	pyscript = pyscript + "\n  \"\"\"Indicate a value is to be skipped.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass TextFSMOptions(object):"
-	pyscript = pyscript + "\n  \"\"\"Class containing all valid TextFSMValue options."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  Each nested class here represents a TextFSM option. The format"
-	pyscript = pyscript + "\n  is \"option<name>\"."
-	pyscript = pyscript + "\n  Each class may override any of the methods inside the OptionBase class."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  A user of this module can extend options by subclassing"
-	pyscript = pyscript + "\n  TextFSMOptionsBase, adding the new option class(es), then passing"
-	pyscript = pyscript + "\n  that new class to the TextFSM constructor with the 'option_class'"
-	pyscript = pyscript + "\n  argument."
-	pyscript = pyscript + "\n  \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  class OptionBase(object):"
-	pyscript = pyscript + "\n    \"\"\"Factory methods for option class."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Attributes:"
-	pyscript = pyscript + "\n      value: A TextFSMValue, the parent Value."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def __init__(self, value):"
-	pyscript = pyscript + "\n      self.value = value"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    @property"
-	pyscript = pyscript + "\n    def name(self):"
-	pyscript = pyscript + "\n      return self.__class__.__name__.replace('option', '')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnCreateOptions(self):"
-	pyscript = pyscript + "\n      \"\"\"Called after all options have been parsed for a Value.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnClearVar(self):"
-	pyscript = pyscript + "\n      \"\"\"Called when value has been cleared.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnClearAllVar(self):"
-	pyscript = pyscript + "\n      \"\"\"Called when a value has clearalled.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnAssignVar(self):"
-	pyscript = pyscript + "\n      \"\"\"Called when a matched value is being assigned.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnGetValue(self):"
-	pyscript = pyscript + "\n      \"\"\"Called when the value name is being requested.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnSaveRecord(self):"
-	pyscript = pyscript + "\n      \"\"\"Called just prior to a record being committed.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  @classmethod"
-	pyscript = pyscript + "\n  def ValidOptions(cls):"
-	pyscript = pyscript + "\n    \"\"\"Returns a list of valid option names.\"\"\""
-	pyscript = pyscript + "\n    valid_options = []"
-	pyscript = pyscript + "\n    for obj_name in dir(cls):"
-	pyscript = pyscript + "\n      obj = getattr(cls, obj_name)"
-	pyscript = pyscript + "\n      if inspect.isclass(obj) and issubclass(obj, cls.OptionBase):"
-	pyscript = pyscript + "\n        valid_options.append(obj_name)"
-	pyscript = pyscript + "\n    return valid_options"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  @classmethod"
-	pyscript = pyscript + "\n  def GetOption(cls, name):"
-	pyscript = pyscript + "\n    \"\"\"Returns the class of the requested option name.\"\"\""
-	pyscript = pyscript + "\n    return getattr(cls, name)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  class Required(OptionBase):"
-	pyscript = pyscript + "\n    \"\"\"The Value must be non-empty for the row to be recorded.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnSaveRecord(self):"
-	pyscript = pyscript + "\n      if not self.value.value:"
-	pyscript = pyscript + "\n        raise SkipRecord"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  class Filldown(OptionBase):"
-	pyscript = pyscript + "\n    \"\"\"Value defaults to the previous line's value.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnCreateOptions(self):"
-	pyscript = pyscript + "\n      self._myvar = None"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnAssignVar(self):"
-	pyscript = pyscript + "\n      self._myvar = self.value.value"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnClearVar(self):"
-	pyscript = pyscript + "\n      self.value.value = self._myvar"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnClearAllVar(self):"
-	pyscript = pyscript + "\n      self._myvar = None"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  class Fillup(OptionBase):"
-	pyscript = pyscript + "\n    \"\"\"Like Filldown, but upwards until it finds a non-empty entry.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnAssignVar(self):"
-	pyscript = pyscript + "\n      # If value is set, copy up the results table, until we"
-	pyscript = pyscript + "\n      # see a set item."
-	pyscript = pyscript + "\n      if self.value.value:"
-	pyscript = pyscript + "\n        # Get index of relevant result column."
-	pyscript = pyscript + "\n        value_idx = self.value.fsm.values.index(self.value)"
-	pyscript = pyscript + "\n        # Go up the list from the end until we see a filled value."
-	pyscript = pyscript + "\n        for result in reversed(self.value.fsm._result):"
-	pyscript = pyscript + "\n          if result[value_idx]:"
-	pyscript = pyscript + "\n            # Stop when a record has this column already."
-	pyscript = pyscript + "\n            break"
-	pyscript = pyscript + "\n          # Otherwise set the column value."
-	pyscript = pyscript + "\n          result[value_idx] = self.value.value"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  class Key(OptionBase):"
-	pyscript = pyscript + "\n    \"\"\"Value constitutes part of the Key of the record.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  class List(OptionBase):"
-	pyscript = pyscript + "\n    \"\"\"Value takes the form of a list.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnCreateOptions(self):"
-	pyscript = pyscript + "\n      self.OnClearAllVar()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnAssignVar(self):"
-	pyscript = pyscript + "\n      self._value.append(self.value.value)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnClearVar(self):"
-	pyscript = pyscript + "\n      if 'Filldown' not in self.value.OptionNames():"
-	pyscript = pyscript + "\n        self._value = []"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnClearAllVar(self):"
-	pyscript = pyscript + "\n      self._value = []"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    def OnSaveRecord(self):"
-	pyscript = pyscript + "\n      self.value.value = list(self._value)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass TextFSMValue(object):"
-	pyscript = pyscript + "\n  \"\"\"A TextFSM value."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  A value has syntax like:"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  'Value Filldown,Required helloworld (.*)'"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  Where 'Value' is a keyword."
-	pyscript = pyscript + "\n  'Filldown' and 'Required' are options."
-	pyscript = pyscript + "\n  'helloworld' is the value name."
-	pyscript = pyscript + "\n  '(.*) is the regular expression to match in the input data."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  Attributes:"
-	pyscript = pyscript + "\n    max_name_len: (int), maximum character length os a variable name."
-	pyscript = pyscript + "\n    name: (str), Name of the value."
-	pyscript = pyscript + "\n    options: (list), A list of current Value Options."
-	pyscript = pyscript + "\n    regex: (str), Regex which the value is matched on."
-	pyscript = pyscript + "\n    template: (str), regexp with named groups added."
-	pyscript = pyscript + "\n    fsm: A TextFSMBase(), the containing FSM."
-	pyscript = pyscript + "\n    value: (str), the current value."
-	pyscript = pyscript + "\n  \"\"\""
-	pyscript = pyscript + "\n  # The class which contains valid options."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __init__(self, fsm=None, max_name_len=48, options_class=None):"
-	pyscript = pyscript + "\n    \"\"\"Initialise a new TextFSMValue.\"\"\""
-	pyscript = pyscript + "\n    self.max_name_len = max_name_len"
-	pyscript = pyscript + "\n    self.name = None"
-	pyscript = pyscript + "\n    self.options = []"
-	pyscript = pyscript + "\n    self.regex = None"
-	pyscript = pyscript + "\n    self.value = None"
-	pyscript = pyscript + "\n    self.fsm = fsm"
-	pyscript = pyscript + "\n    self._options_cls = options_class"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def AssignVar(self, value):"
-	pyscript = pyscript + "\n    \"\"\"Assign a value to this Value.\"\"\""
-	pyscript = pyscript + "\n    self.value = value"
-	pyscript = pyscript + "\n    # Call OnAssignVar on options."
-	pyscript = pyscript + "\n    [option.OnAssignVar() for option in self.options]"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def ClearVar(self):"
-	pyscript = pyscript + "\n    \"\"\"Clear this Value.\"\"\""
-	pyscript = pyscript + "\n    self.value = None"
-	pyscript = pyscript + "\n    # Call OnClearVar on options."
-	pyscript = pyscript + "\n    [option.OnClearVar() for option in self.options]"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def ClearAllVar(self):"
-	pyscript = pyscript + "\n    \"\"\"Clear this Value.\"\"\""
-	pyscript = pyscript + "\n    self.value = None"
-	pyscript = pyscript + "\n    # Call OnClearAllVar on options."
-	pyscript = pyscript + "\n    [option.OnClearAllVar() for option in self.options]"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def Header(self):"
-	pyscript = pyscript + "\n    \"\"\"Fetch the header name of this Value.\"\"\""
-	pyscript = pyscript + "\n    # Call OnGetValue on options."
-	pyscript = pyscript + "\n    [option.OnGetValue() for option in self.options]"
-	pyscript = pyscript + "\n    return self.name"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def OptionNames(self):"
-	pyscript = pyscript + "\n    \"\"\"Returns a list of option names for this Value.\"\"\""
-	pyscript = pyscript + "\n    return [option.name for option in self.options]"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def Parse(self, value):"
-	pyscript = pyscript + "\n    \"\"\"Parse a 'Value' declaration."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      value: String line from a template file, must begin with 'Value '."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMTemplateError: Value declaration contains an error."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    value_line = value.split(' ')"
-	pyscript = pyscript + "\n    if len(value_line) < 3:"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError('Expect at least 3 tokens on line.')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if not value_line[2].startswith('('):"
-	pyscript = pyscript + "\n      # Options are present"
-	pyscript = pyscript + "\n      options = value_line[1]"
-	pyscript = pyscript + "\n      for option in options.split(','):"
-	pyscript = pyscript + "\n        self._AddOption(option)"
-	pyscript = pyscript + "\n      # Call option OnCreateOptions callbacks"
-	pyscript = pyscript + "\n      [option.OnCreateOptions() for option in self.options]"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      self.name = value_line[2]"
-	pyscript = pyscript + "\n      self.regex = ' '.join(value_line[3:])"
-	pyscript = pyscript + "\n    else:"
-	pyscript = pyscript + "\n      # There were no valid options, so there are no options."
-	pyscript = pyscript + "\n      # Treat this argument as the name."
-	pyscript = pyscript + "\n      self.name = value_line[1]"
-	pyscript = pyscript + "\n      self.regex = ' '.join(value_line[2:])"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if len(self.name) > self.max_name_len:"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError("
-	pyscript = pyscript + "\n          \"Invalid Value name '%s' or name too long.\" % self.name)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if (not re.match(r'^\\(.*\\)$', self.regex) or"
-	pyscript = pyscript + "\n        self.regex.count('(') != self.regex.count(')')):"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError("
-	pyscript = pyscript + "\n          \"Value '%s' must be contained within a '()' pair.\" % self.regex)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    self.template = re.sub(r'^\\(', '(?P<%s>' % self.name, self.regex)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _AddOption(self, name):"
-	pyscript = pyscript + "\n    \"\"\"Add an option to this Value."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      name: (str), the name of the Option to add."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMTemplateError: If option is already present or"
-	pyscript = pyscript + "\n        the option does not exist."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Check for duplicate option declaration"
-	pyscript = pyscript + "\n    if name in [option.name for option in self.options]:"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError('Duplicate option \"%s\"' % name)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Create the option object"
-	pyscript = pyscript + "\n    try:"
-	pyscript = pyscript + "\n      option = self._options_cls.GetOption(name)(self)"
-	pyscript = pyscript + "\n    except AttributeError:"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError('Unknown option \"%s\"' % name)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    self.options.append(option)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def OnSaveRecord(self):"
-	pyscript = pyscript + "\n    \"\"\"Called just prior to a record being committed.\"\"\""
-	pyscript = pyscript + "\n    [option.OnSaveRecord() for option in self.options]"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __str__(self):"
-	pyscript = pyscript + "\n    \"\"\"Prints out the FSM Value, mimic the input file.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if self.options:"
-	pyscript = pyscript + "\n      return 'Value %s %s %s' % ("
-	pyscript = pyscript + "\n          ','.join(self.OptionNames()),"
-	pyscript = pyscript + "\n          self.name,"
-	pyscript = pyscript + "\n          self.regex)"
-	pyscript = pyscript + "\n    else:"
-	pyscript = pyscript + "\n      return 'Value %s %s' % (self.name, self.regex)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass CopyableRegexObject(object):"
-	pyscript = pyscript + "\n  \"\"\"Like a re.RegexObject, but can be copied.\"\"\""
-	pyscript = pyscript + "\n  # pylint: disable-msg=C6409"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __init__(self, pattern):"
-	pyscript = pyscript + "\n    self.pattern = pattern"
-	pyscript = pyscript + "\n    self.regex = re.compile(pattern)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def match(self, *args, **kwargs):"
-	pyscript = pyscript + "\n    return self.regex.match(*args, **kwargs)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def sub(self, *args, **kwargs):"
-	pyscript = pyscript + "\n    return self.regex.sub(*args, **kwargs)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __copy__(self):"
-	pyscript = pyscript + "\n    return CopyableRegexObject(self.pattern)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __deepcopy__(self, unused_memo):"
-	pyscript = pyscript + "\n    return self.__copy__()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass TextFSMRule(object):"
-	pyscript = pyscript + "\n  \"\"\"A rule in each FSM state."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  A value has syntax like:"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      ^<regexp> -> Next.Record State2"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  Where '<regexp>' is a regular expression."
-	pyscript = pyscript + "\n  'Next' is a Line operator."
-	pyscript = pyscript + "\n  'Record' is a Record operator."
-	pyscript = pyscript + "\n  'State2' is the next State."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  Attributes:"
-	pyscript = pyscript + "\n    match: Regex to match this rule."
-	pyscript = pyscript + "\n    regex: match after template substitution."
-	pyscript = pyscript + "\n    line_op: Operator on input line on match."
-	pyscript = pyscript + "\n    record_op: Operator on output record on match."
-	pyscript = pyscript + "\n    new_state: Label to jump to on action"
-	pyscript = pyscript + "\n    regex_obj: Compiled regex for which the rule matches."
-	pyscript = pyscript + "\n    line_num: Integer row number of Value."
-	pyscript = pyscript + "\n  \"\"\""
-	pyscript = pyscript + "\n  # Implicit default is '(regexp) -> Next.NoRecord'"
-	pyscript = pyscript + "\n  MATCH_ACTION = re.compile('(?P<match>.*)(\\s->(?P<action>.*))')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  # The structure to the right of the '->'."
-	pyscript = pyscript + "\n  LINE_OP = ('Continue', 'Next', 'Error')"
-	pyscript = pyscript + "\n  RECORD_OP = ('Clear', 'Clearall', 'Record', 'NoRecord')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  # Line operators."
-	pyscript = pyscript + "\n  LINE_OP_RE = '(?P<ln_op>%s)' % '|'.join(LINE_OP)"
-	pyscript = pyscript + "\n  # Record operators."
-	pyscript = pyscript + "\n  RECORD_OP_RE = '(?P<rec_op>%s)' % '|'.join(RECORD_OP)"
-	pyscript = pyscript + "\n  # Line operator with optional record operator."
-	pyscript = pyscript + "\n  OPERATOR_RE = '(%s(\\.%s)?)' % (LINE_OP_RE, RECORD_OP_RE)"
-	pyscript = pyscript + "\n  # New State or 'Error' string."
-	pyscript = pyscript + "\n  NEWSTATE_RE = '(?P<new_state>\\w+|\\\".*\\\")'"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  # Compound operator (line and record) with optional new state."
-	pyscript = pyscript + "\n  ACTION_RE = re.compile('\\s+%s(\\s+%s)?$' % (OPERATOR_RE, NEWSTATE_RE))"
-	pyscript = pyscript + "\n  # Record operator with optional new state."
-	pyscript = pyscript + "\n  ACTION2_RE = re.compile('\\s+%s(\\s+%s)?$' % (RECORD_OP_RE, NEWSTATE_RE))"
-	pyscript = pyscript + "\n  # Default operators with optional new state."
-	pyscript = pyscript + "\n  ACTION3_RE = re.compile('(\\s+%s)?$' % (NEWSTATE_RE))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __init__(self, line, line_num=-1, var_map=None):"
-	pyscript = pyscript + "\n    \"\"\"Initialise a new rule object."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      line: (str), a template rule line to parse."
-	pyscript = pyscript + "\n      line_num: (int), Optional line reference included in error reporting."
-	pyscript = pyscript + "\n      var_map: Map for template (${var}) substitutions."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMTemplateError: If 'line' is not a valid format for a Value entry."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n    self.match = ''"
-	pyscript = pyscript + "\n    self.regex = ''"
-	pyscript = pyscript + "\n    self.regex_obj = None"
-	pyscript = pyscript + "\n    self.line_op = ''              # Equivalent to 'Next'."
-	pyscript = pyscript + "\n    self.record_op = ''            # Equivalent to 'NoRecord'."
-	pyscript = pyscript + "\n    self.new_state = ''            # Equivalent to current state."
-	pyscript = pyscript + "\n    self.line_num = line_num"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    line = line.strip()"
-	pyscript = pyscript + "\n    if not line:"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError('Null data in FSMRule. Line: %s'"
-	pyscript = pyscript + "\n                                 % self.line_num)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Is there '->' action present."
-	pyscript = pyscript + "\n    match_action = self.MATCH_ACTION.match(line)"
-	pyscript = pyscript + "\n    if match_action:"
-	pyscript = pyscript + "\n      self.match = match_action.group('match')"
-	pyscript = pyscript + "\n    else:"
-	pyscript = pyscript + "\n      self.match = line"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Replace ${varname} entries."
-	pyscript = pyscript + "\n    self.regex = self.match"
-	pyscript = pyscript + "\n    if var_map:"
-	pyscript = pyscript + "\n      try:"
-	pyscript = pyscript + "\n        self.regex = string.Template(self.match).substitute(var_map)"
-	pyscript = pyscript + "\n      except (ValueError, KeyError):"
-	pyscript = pyscript + "\n        raise TextFSMTemplateError("
-	pyscript = pyscript + "\n            \"Duplicate or invalid variable substitution: '%s'. Line: %s.\" %"
-	pyscript = pyscript + "\n            (self.match, self.line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    try:"
-	pyscript = pyscript + "\n      # Work around a regression in Python 2.6 that makes RE Objects uncopyable."
-	pyscript = pyscript + "\n      self.regex_obj = CopyableRegexObject(self.regex)"
-	pyscript = pyscript + "\n    except re.error:"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError("
-	pyscript = pyscript + "\n          \"Invalid regular expression: '%s'. Line: %s.\" %"
-	pyscript = pyscript + "\n          (self.regex, self.line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # No '->' present, so done."
-	pyscript = pyscript + "\n    if not match_action:"
-	pyscript = pyscript + "\n      return"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Attempt to match line.record operation."
-	pyscript = pyscript + "\n    action_re = self.ACTION_RE.match(match_action.group('action'))"
-	pyscript = pyscript + "\n    if not action_re:"
-	pyscript = pyscript + "\n      # Attempt to match record operation."
-	pyscript = pyscript + "\n      action_re = self.ACTION2_RE.match(match_action.group('action'))"
-	pyscript = pyscript + "\n      if not action_re:"
-	pyscript = pyscript + "\n        # Math implicit defaults with an optional new state."
-	pyscript = pyscript + "\n        action_re = self.ACTION3_RE.match(match_action.group('action'))"
-	pyscript = pyscript + "\n        if not action_re:"
-	pyscript = pyscript + "\n          # Last attempt, match an optional new state only."
-	pyscript = pyscript + "\n          raise TextFSMTemplateError(\"Badly formatted rule '%s'. Line: %s.\" %"
-	pyscript = pyscript + "\n                                     (line, self.line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # We have an Line operator."
-	pyscript = pyscript + "\n    if 'ln_op' in action_re.groupdict() and action_re.group('ln_op'):"
-	pyscript = pyscript + "\n      self.line_op = action_re.group('ln_op')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # We have a record operator."
-	pyscript = pyscript + "\n    if 'rec_op' in action_re.groupdict() and action_re.group('rec_op'):"
-	pyscript = pyscript + "\n      self.record_op = action_re.group('rec_op')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # A new state was specified."
-	pyscript = pyscript + "\n    if 'new_state' in action_re.groupdict() and action_re.group('new_state'):"
-	pyscript = pyscript + "\n      self.new_state = action_re.group('new_state')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Only 'Next' (or implicit 'Next') line operator can have a new_state."
-	pyscript = pyscript + "\n    # But we allow error to have one as a warning message so we are left"
-	pyscript = pyscript + "\n    # checking that Continue does not."
-	pyscript = pyscript + "\n    if (self.line_op == 'Continue' and self.new_state):"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError("
-	pyscript = pyscript + "\n          \"Action '%s' with new state %s specified. Line: %s.\""
-	pyscript = pyscript + "\n          % (self.line_op, self.new_state, self.line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Check that an error message is present only with the 'Error' operator."
-	pyscript = pyscript + "\n    if self.line_op != 'Error' and self.new_state:"
-	pyscript = pyscript + "\n      if not re.match('\\w+', self.new_state):"
-	pyscript = pyscript + "\n        raise TextFSMTemplateError("
-	pyscript = pyscript + "\n            'Alphanumeric characters only in state names. Line: %s.'"
-	pyscript = pyscript + "\n            % (self.line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __str__(self):"
-	pyscript = pyscript + "\n    \"\"\"Prints out the FSM Rule, mimic the input file.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    operation = ''"
-	pyscript = pyscript + "\n    if self.line_op and self.record_op:"
-	pyscript = pyscript + "\n      operation = '.'"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    operation = '%s%s%s' % (self.line_op, operation, self.record_op)                         "
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if operation and self.new_state:"
-	pyscript = pyscript + "\n      new_state = ' ' + self.new_state"
-	pyscript = pyscript + "\n    else:"
-	pyscript = pyscript + "\n      new_state = self.new_state"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Print with implicit defaults."
-	pyscript = pyscript + "\n    if not (operation or new_state):"
-	pyscript = pyscript + "\n      return '  %s' % self.match"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Non defaults."
-	pyscript = pyscript + "\n    return '  %s -> %s%s' % (self.match, operation, new_state)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nclass TextFSM(object):"
-	pyscript = pyscript + "\n  \"\"\"Parses template and creates Finite State Machine (FSM)."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  Attributes:                                                                                                                 "
-	pyscript = pyscript + "\n    states: (str), Dictionary of FSMState objects."
-	pyscript = pyscript + "\n    values: (str), List of FSMVariables."
-	pyscript = pyscript + "\n    value_map: (map), For substituting values for names in the expressions."
-	pyscript = pyscript + "\n    header: Ordered list of values."
-	pyscript = pyscript + "\n    state_list: Ordered list of valid states."
-	pyscript = pyscript + "\n  \"\"\""
-	pyscript = pyscript + "\n  # Variable and State name length."
-	pyscript = pyscript + "\n  MAX_NAME_LEN = 48"
-	pyscript = pyscript + "\n  comment_regex = re.compile('^\\s*#')"
-	pyscript = pyscript + "\n  state_name_re = re.compile('^(\\w+)$')"
-	pyscript = pyscript + "\n  _DEFAULT_OPTIONS = TextFSMOptions"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __init__(self, template, options_class=_DEFAULT_OPTIONS):"
-	pyscript = pyscript + "\n    \"\"\"Initialises and also parses the template file.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    self._options_cls = options_class"
-	pyscript = pyscript + "\n    self.states = {}"
-	pyscript = pyscript + "\n    # Track order of state definitions."
-	pyscript = pyscript + "\n    self.state_list = []"
-	pyscript = pyscript + "\n    self.values = []"
-	pyscript = pyscript + "\n    self.value_map = {}"
-	pyscript = pyscript + "\n    # Track where we are for error reporting."
-	pyscript = pyscript + "\n    self._line_num = 0"
-	pyscript = pyscript + "\n    # Run FSM in this state"
-	pyscript = pyscript + "\n    self._cur_state = None"
-	pyscript = pyscript + "\n    # Name of the current state."
-	pyscript = pyscript + "\n    self._cur_state_name = None"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Read and parse FSM definition."
-	pyscript = pyscript + "\n    # Restore the file pointer once done."
-	pyscript = pyscript + "\n    try:"
-	pyscript = pyscript + "\n      self._Parse(template)"
-	pyscript = pyscript + "\n    finally:"
-	pyscript = pyscript + "\n      template.seek(0)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Initialise starting data."
-	pyscript = pyscript + "\n    self.Reset()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def __str__(self):"
-	pyscript = pyscript + "\n    \"\"\"Returns the FSM template, mimic the input file.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    result = '\\n'.join([str(value) for value in self.values])"
-	pyscript = pyscript + "\n    result += '\\n'"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    for state in self.state_list:"
-	pyscript = pyscript + "\n      result += '\\n%s\\n' % state"
-	pyscript = pyscript + "\n      state_rules = '\\n'.join([str(rule) for rule in self.states[state]])"
-	pyscript = pyscript + "\n      if state_rules:"
-	pyscript = pyscript + "\n        result += state_rules + '\\n'"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    return result"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def Reset(self):"
-	pyscript = pyscript + "\n    \"\"\"Preserves FSM but resets starting state and current record.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Current state is Start state."
-	pyscript = pyscript + "\n    self._cur_state = self.states['Start']"
-	pyscript = pyscript + "\n    self._cur_state_name = 'Start'"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Clear table of results and current record."
-	pyscript = pyscript + "\n    self._result = []"
-	pyscript = pyscript + "\n    self._ClearAllRecord()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  @property"
-	pyscript = pyscript + "\n  def header(self):"
-	pyscript = pyscript + "\n    \"\"\"Returns header.\"\"\""
-	pyscript = pyscript + "\n    return self._GetHeader()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _GetHeader(self):"
-	pyscript = pyscript + "\n    \"\"\"Returns header.\"\"\""
-	pyscript = pyscript + "\n    header = []"
-	pyscript = pyscript + "\n    for value in self.values:"
-	pyscript = pyscript + "\n      try:"
-	pyscript = pyscript + "\n        header.append(value.Header())"
-	pyscript = pyscript + "\n      except SkipValue:"
-	pyscript = pyscript + "\n        continue"
-	pyscript = pyscript + "\n    return header"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _GetValue(self, name):"
-	pyscript = pyscript + "\n    \"\"\"Returns the TextFSMValue object natching the requested name.\"\"\""
-	pyscript = pyscript + "\n    for value in self.values:"
-	pyscript = pyscript + "\n      if value.name == name:"
-	pyscript = pyscript + "\n        return value"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _AppendRecord(self):"
-	pyscript = pyscript + "\n    \"\"\"Adds current record to result if well formed.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # If no Values then don't output."
-	pyscript = pyscript + "\n    if not self.values:"
-	pyscript = pyscript + "\n      return"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    cur_record = []"
-	pyscript = pyscript + "\n    for value in self.values:"
-	pyscript = pyscript + "\n      try:"
-	pyscript = pyscript + "\n        value.OnSaveRecord()"
-	pyscript = pyscript + "\n      except SkipRecord:"
-	pyscript = pyscript + "\n        self._ClearRecord()"
-	pyscript = pyscript + "\n        return"
-	pyscript = pyscript + "\n      except SkipValue:"
-	pyscript = pyscript + "\n        continue"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      # Build current record into a list."
-	pyscript = pyscript + "\n      cur_record.append(value.value)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # If no Values in template or whole record is empty then don't output."
-	pyscript = pyscript + "\n    if len(cur_record) == (cur_record.count(None) + cur_record.count([])):"
-	pyscript = pyscript + "\n      return"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Replace any 'None' entries with null string ''."
-	pyscript = pyscript + "\n    while None in cur_record:"
-	pyscript = pyscript + "\n      cur_record[cur_record.index(None)] = ''"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    self._result.append(cur_record)"
-	pyscript = pyscript + "\n    self._ClearRecord()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _Parse(self, template):"
-	pyscript = pyscript + "\n    \"\"\"Parses template file for FSM structure."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      template: Valid template file."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMTemplateError: If template file syntax is invalid."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if not template:"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError('Null template.')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Parse header with Variables."
-	pyscript = pyscript + "\n    self._ParseFSMVariables(template)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Parse States."
-	pyscript = pyscript + "\n    while self._ParseFSMState(template):"
-	pyscript = pyscript + "\n      pass"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Validate destination states."
-	pyscript = pyscript + "\n    self._ValidateFSM()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _ParseFSMVariables(self, template):"
-	pyscript = pyscript + "\n    \"\"\"Extracts Variables from start of template file."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Values are expected as a contiguous block at the head of the file."
-	pyscript = pyscript + "\n    These will be line separated from the State definitions that follow."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      template: Valid template file, with Value definitions at the top."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMTemplateError: If syntax or semantic errors are found."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    self.values = []"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    for line in template:"
-	pyscript = pyscript + "\n      self._line_num += 1"
-	pyscript = pyscript + "\n      line = line.rstrip()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      # Blank line signifies end of Value definitions."
-	pyscript = pyscript + "\n      if not line:"
-	pyscript = pyscript + "\n        return"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      # Skip commented lines."
-	pyscript = pyscript + "\n      if self.comment_regex.match(line):"
-	pyscript = pyscript + "\n        continue"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      if line.startswith('Value '):"
-	pyscript = pyscript + "\n        try:"
-	pyscript = pyscript + "\n          value = TextFSMValue("
-	pyscript = pyscript + "\n              fsm=self, max_name_len=self.MAX_NAME_LEN,"
-	pyscript = pyscript + "\n              options_class=self._options_cls)"
-	pyscript = pyscript + "\n          value.Parse(line)"
-	pyscript = pyscript + "\n        except TextFSMTemplateError, error:"
-	pyscript = pyscript + "\n          raise TextFSMTemplateError('%s Line %s.' % (error, self._line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n        if value.name in self.header:"
-	pyscript = pyscript + "\n          raise TextFSMTemplateError("
-	pyscript = pyscript + "\n              \"Duplicate declarations for Value '%s'. Line: %s.\""
-	pyscript = pyscript + "\n              % (value.name, self._line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n        try:"
-	pyscript = pyscript + "\n          self._ValidateOptions(value)"
-	pyscript = pyscript + "\n        except TextFSMTemplateError, error:"
-	pyscript = pyscript + "\n          raise TextFSMTemplateError('%s Line %s.' % (error, self._line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n        self.values.append(value)"
-	pyscript = pyscript + "\n        self.value_map[value.name] = value.template"
-	pyscript = pyscript + "\n      # The line has text but without the 'Value ' prefix."
-	pyscript = pyscript + "\n      elif not self.values:"
-	pyscript = pyscript + "\n        raise TextFSMTemplateError('No Value definitions found.')"
-	pyscript = pyscript + "\n      else:"
-	pyscript = pyscript + "\n        raise TextFSMTemplateError("
-	pyscript = pyscript + "\n            'Expected blank line after last Value entry. Line: %s.'"
-	pyscript = pyscript + "\n            % (self._line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _ValidateOptions(self, value):"
-	pyscript = pyscript + "\n    \"\"\"Checks that combination of Options is valid.\"\"\""
-	pyscript = pyscript + "\n    # Always passes in base class."
-	pyscript = pyscript + "\n    pass"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _ParseFSMState(self, template):"
-	pyscript = pyscript + "\n    \"\"\"Extracts State and associated Rules from body of template file."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    After the Value definitions the remainder of the template is"
-	pyscript = pyscript + "\n    state definitions. The routine is expected to be called iteratively"
-	pyscript = pyscript + "\n    until no more states remain - indicated by returning None."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    The routine checks that the state names are a well formed string, do"
-	pyscript = pyscript + "\n    not clash with reserved names and are unique."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      template: Valid template file after Value definitions"
-	pyscript = pyscript + "\n      have already been read."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Returns:"
-	pyscript = pyscript + "\n      Name of the state parsed from file. None otherwise."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMTemplateError: If any state definitions are invalid."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if not template:"
-	pyscript = pyscript + "\n      return"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    state_name = ''"
-	pyscript = pyscript + "\n    # Strip off extra white space lines (including comments)."
-	pyscript = pyscript + "\n    for line in template:"
-	pyscript = pyscript + "\n      self._line_num += 1"
-	pyscript = pyscript + "\n      line = line.rstrip()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      # First line is state definition"
-	pyscript = pyscript + "\n      if line and not self.comment_regex.match(line):"
-	pyscript = pyscript + "\n         # Ensure statename has valid syntax and is not a reserved word."
-	pyscript = pyscript + "\n        if (not self.state_name_re.match(line) or"
-	pyscript = pyscript + "\n            len(line) > self.MAX_NAME_LEN or"
-	pyscript = pyscript + "\n            line in TextFSMRule.LINE_OP or"
-	pyscript = pyscript + "\n            line in TextFSMRule.RECORD_OP):"
-	pyscript = pyscript + "\n          raise TextFSMTemplateError(\"Invalid state name: '%s'. Line: %s\""
-	pyscript = pyscript + "\n                                     % (line, self._line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n        state_name = line"
-	pyscript = pyscript + "\n        if state_name in self.states:"
-	pyscript = pyscript + "\n          raise TextFSMTemplateError(\"Duplicate state name: '%s'. Line: %s\""
-	pyscript = pyscript + "\n                                     % (line, self._line_num))"
-	pyscript = pyscript + "\n        self.states[state_name] = []"
-	pyscript = pyscript + "\n        self.state_list.append(state_name)"
-	pyscript = pyscript + "\n        break"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Parse each rule in the state."
-	pyscript = pyscript + "\n    for line in template:"
-	pyscript = pyscript + "\n      self._line_num += 1"
-	pyscript = pyscript + "\n      line = line.rstrip()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      # Finish rules processing on blank line."
-	pyscript = pyscript + "\n      if not line:"
-	pyscript = pyscript + "\n        break"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      if self.comment_regex.match(line):"
-	pyscript = pyscript + "\n        continue"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      # A rule within a state, starts with whitespace"
-	pyscript = pyscript + "\n      if not (line.startswith('  ^') or line.startswith('\\t^')):"
-	pyscript = pyscript + "\n        raise TextFSMTemplateError("
-	pyscript = pyscript + "\n            \"Missing white space or carat ('^') before rule. Line: %s\" %"
-	pyscript = pyscript + "\n            self._line_num)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      self.states[state_name].append("
-	pyscript = pyscript + "\n          TextFSMRule(line, self._line_num, self.value_map))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    return state_name"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _ValidateFSM(self):"
-	pyscript = pyscript + "\n    \"\"\"Checks state names and destinations for validity."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Each destination state must exist, be a valid name and"
-	pyscript = pyscript + "\n    not be a reserved name."
-	pyscript = pyscript + "\n    There must be a 'Start' state and if 'EOF' or 'End' states are specified,"
-	pyscript = pyscript + "\n    they must be empty."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Returns:"
-	pyscript = pyscript + "\n      True if FSM is valid."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMTemplateError: If any state definitions are invalid."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Must have 'Start' state."
-	pyscript = pyscript + "\n    if 'Start' not in self.states:"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError(\"Missing state 'Start'.\")"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # 'End/EOF' state (if specified) must be empty."
-	pyscript = pyscript + "\n    if self.states.get('End'):"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError(\"Non-Empty 'End' state.\")"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if self.states.get('EOF'):"
-	pyscript = pyscript + "\n      raise TextFSMTemplateError(\"Non-Empty 'EOF' state.\")"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Remove 'End' state."
-	pyscript = pyscript + "\n    if 'End' in self.states:"
-	pyscript = pyscript + "\n      del(self.states['End'])"
-	pyscript = pyscript + "\n      self.state_list.remove('End')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Ensure jump states are all valid."
-	pyscript = pyscript + "\n    for state in self.states:"
-	pyscript = pyscript + "\n      for rule in self.states[state]:"
-	pyscript = pyscript + "\n        if rule.line_op == 'Error':"
-	pyscript = pyscript + "\n          continue"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n        if not rule.new_state or rule.new_state in ('End', 'EOF'):"
-	pyscript = pyscript + "\n          continue"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n        if rule.new_state not in self.states:"
-	pyscript = pyscript + "\n          raise TextFSMTemplateError("
-	pyscript = pyscript + "\n              \"State '%s' not found, referenced in state '%s'\" %"
-	pyscript = pyscript + "\n              (rule.new_state, state))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    return True"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def ParseText(self, text, eof=True):"
-	pyscript = pyscript + "\n    \"\"\"Passes CLI output through FSM and returns list of tuples."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    First tuple is the header, every subsequent tuple is a row."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      text: (str), Text to parse with embedded newlines."
-	pyscript = pyscript + "\n      eof: (boolean), Set to False if we are parsing only part of the file."
-	pyscript = pyscript + "\n            Suppresses triggering EOF state."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMError: An error occurred within the FSM."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Returns:"
-	pyscript = pyscript + "\n      List of Lists."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    lines = []"
-	pyscript = pyscript + "\n    if text:"
-	pyscript = pyscript + "\n      lines = text.splitlines()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    for line in lines:"
-	pyscript = pyscript + "\n      self._CheckLine(line)"
-	pyscript = pyscript + "\n      if self._cur_state_name in ('End', 'EOF'):"
-	pyscript = pyscript + "\n        break"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if self._cur_state_name != 'End' and 'EOF' not in self.states and eof:"
-	pyscript = pyscript + "\n      # Implicit EOF performs Next.Record operation."
-	pyscript = pyscript + "\n      # Suppressed if Null EOF state is instantiated."
-	pyscript = pyscript + "\n      self._AppendRecord()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    return self._result"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _CheckLine(self, line):"
-	pyscript = pyscript + "\n    \"\"\"Passes the line through each rule until a match is made."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      line: A string, the current input line."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n    for rule in self._cur_state:"
-	pyscript = pyscript + "\n      matched = self._CheckRule(rule, line)"
-	pyscript = pyscript + "\n      if matched:"
-	pyscript = pyscript + "\n        for value in matched.groupdict():"
-	pyscript = pyscript + "\n          self._AssignVar(matched, value)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n        if self._Operations(rule):"
-	pyscript = pyscript + "\n          # Not a Continue so check for state transition."
-	pyscript = pyscript + "\n          if rule.new_state:"
-	pyscript = pyscript + "\n            if rule.new_state not in ('End', 'EOF'):"
-	pyscript = pyscript + "\n              self._cur_state = self.states[rule.new_state]"
-	pyscript = pyscript + "\n            self._cur_state_name = rule.new_state"
-	pyscript = pyscript + "\n          break"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _CheckRule(self, rule, line):"
-	pyscript = pyscript + "\n    \"\"\"Check a line against the given rule."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    This is a separate method so that it can be overridden by"
-	pyscript = pyscript + "\n    a debugging tool."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      rule: A TextFSMRule(), the rule to check."
-	pyscript = pyscript + "\n      line: A str, the line to check."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Returns:"
-	pyscript = pyscript + "\n      A regex match object."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n    return rule.regex_obj.match(line)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _AssignVar(self, matched, value):"
-	pyscript = pyscript + "\n    \"\"\"Assigns variable into current record from a matched rule."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    If a record entry is a list then append, otherwise values are replaced."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      matched: (regexp.match) Named group for each matched value."
-	pyscript = pyscript + "\n      value: (str) The matched value."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n    self._GetValue(value).AssignVar(matched.group(value))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _Operations(self, rule):"
-	pyscript = pyscript + "\n    \"\"\"Operators on the data record."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Operators come in two parts and are a '.' separated pair:"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      Operators that effect the input line or the current state (line_op)."
-	pyscript = pyscript + "\n        'Next'      Get next input line and restart parsing (default)."
-	pyscript = pyscript + "\n        'Continue'  Keep current input line and continue resume parsing."
-	pyscript = pyscript + "\n        'Error'     Unrecoverable input discard result and raise Error."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      Operators that affect the record being built for output (record_op)."
-	pyscript = pyscript + "\n        'NoRecord'  Does nothing (default)"
-	pyscript = pyscript + "\n        'Record'    Adds the current record to the result."
-	pyscript = pyscript + "\n        'Clear'     Clears non-Filldown data from the record."
-	pyscript = pyscript + "\n        'Clearall'  Clears all data from the record."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Args:"
-	pyscript = pyscript + "\n      rule: FSMRule object."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Returns:"
-	pyscript = pyscript + "\n      True if state machine should restart state with new line."
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    Raises:"
-	pyscript = pyscript + "\n      TextFSMError: If Error state is encountered."
-	pyscript = pyscript + "\n    \"\"\""
-	pyscript = pyscript + "\n    # First process the Record operators."
-	pyscript = pyscript + "\n    if rule.record_op == 'Record':"
-	pyscript = pyscript + "\n      self._AppendRecord()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    elif rule.record_op == 'Clear':"
-	pyscript = pyscript + "\n      # Clear record."
-	pyscript = pyscript + "\n      self._ClearRecord()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    elif rule.record_op == 'Clearall':"
-	pyscript = pyscript + "\n      # Clear all record entries."
-	pyscript = pyscript + "\n      self._ClearAllRecord()"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Lastly process line operators."
-	pyscript = pyscript + "\n    if rule.line_op == 'Error':"
-	pyscript = pyscript + "\n      if rule.new_state:"
-	pyscript = pyscript + "\n        raise TextFSMError('Error: %s. Line: %s.'"
-	pyscript = pyscript + "\n                           % (rule.new_state, rule.line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n      raise TextFSMError('State Error raised. Line: %s.'"
-	pyscript = pyscript + "\n                         % (rule.line_num))"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    elif rule.line_op == 'Continue':"
-	pyscript = pyscript + "\n      # Continue with current line without returning to the start of the state."
-	pyscript = pyscript + "\n      return False"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    # Back to start of current state with a new line."
-	pyscript = pyscript + "\n    return True"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _ClearRecord(self):"
-	pyscript = pyscript + "\n    \"\"\"Remove non 'Filldown' record entries.\"\"\""
-	pyscript = pyscript + "\n    [value.ClearVar() for value in self.values]"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def _ClearAllRecord(self):"
-	pyscript = pyscript + "\n    \"\"\"Remove all record entries.\"\"\""
-	pyscript = pyscript + "\n    [value.ClearAllVar() for value in self.values]"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  def GetValuesByAttrib(self, attribute):"
-	pyscript = pyscript + "\n    \"\"\"Returns the list of values that have a particular attribute.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    if attribute not in self._options_cls.ValidOptions():"
-	pyscript = pyscript + "\n      raise ValueError(\"'%s': Not a valid attribute.\" % attribute)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    result = []"
-	pyscript = pyscript + "\n    for value in self.values:"
-	pyscript = pyscript + "\n      if attribute in value.OptionNames():"
-	pyscript = pyscript + "\n        result.append(value.name)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n    return result"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\ndef main(argv=None):"
-	pyscript = pyscript + "\n  \"\"\"Validate text parsed with FSM or validate an FSM via command line.\"\"\""
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  if argv is None:"
-	pyscript = pyscript + "\n    argv = sys.argv"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  try:"
-	pyscript = pyscript + "\n    opts, args = getopt.getopt(argv[1:], 'h', ['help'])"
-	pyscript = pyscript + "\n  except getopt.error, msg:"
-	pyscript = pyscript + "\n    raise Usage(msg)"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  for opt, _ in opts:"
-	pyscript = pyscript + "\n    if opt in ('-h', '--help'):"
-	pyscript = pyscript + "\n      print __doc__"
-	pyscript = pyscript + "\n      print help_msg"
-	pyscript = pyscript + "\n      return 0"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  if not args or len(args) > 4:"
-	pyscript = pyscript + "\n    raise Usage('Invalid arguments.')"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  # If we have an argument, parse content of file and display as a template."
-	pyscript = pyscript + "\n  # Template displayed will match input template, minus any comment lines."
-	pyscript = pyscript + "\n  template = open(args[0], 'r')"
-	pyscript = pyscript + "\n  fsm = TextFSM(template)"
-	pyscript = pyscript + "\n  print 'FSM Template:\\n%s\\n' % fsm"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  if len(args) > 1:"
-	pyscript = pyscript + "\n    # Second argument is file with example cli input."
-	pyscript = pyscript + "\n    # Prints parsed tabular result."
-	pyscript = pyscript + "\n    cli_input = open(args[1], 'r').read()"
-	pyscript = pyscript + "\n    table = fsm.ParseText(cli_input)"
-	pyscript = pyscript + "\n    print 'FSM Table:'"
-	pyscript = pyscript + "\n    result = str(fsm.header) + '\\n'"
-	pyscript = pyscript + "\n    for line in table:"
-	pyscript = pyscript + "\n      result += str(line) + '\\n'"
-	pyscript = pyscript + "\n    print result,"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n  if len(args) > 2:"
-	pyscript = pyscript + "\n    # Compare tabular result with data in third file argument."
-	pyscript = pyscript + "\n    # Exit value indicates if processed data matched expected result."
-	pyscript = pyscript + "\n    ref_table = open(args[2], 'r').read()"
-	pyscript = pyscript + "\n    if ref_table != result:"
-	pyscript = pyscript + "\n      print 'Data mis-match!'"
-	pyscript = pyscript + "\n      return 1"
-	pyscript = pyscript + "\n    else:"
-	pyscript = pyscript + "\n      print 'Data match!'"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\n"
-	pyscript = pyscript + "\nif __name__ == '__main__':"
-	pyscript = pyscript + "\n  help_msg = '%s [--help] template [input_file [output_file]]\\n' % sys.argv[0]"
-	pyscript = pyscript + "\n  try:"
-	pyscript = pyscript + "\n    sys.exit(main())"
-	pyscript = pyscript + "\n  except Usage, err:"
-	pyscript = pyscript + "\n    print >>sys.stderr, err"
-	pyscript = pyscript + "\n    print >>sys.stderr, 'For help use --help'"
-	pyscript = pyscript + "\n    sys.exit(2)"
-	pyscript = pyscript + "\n  except (IOError, TextFSMError, TextFSMTemplateError), err:"
-	pyscript = pyscript + "\n    print >>sys.stderr, err"
-	pyscript = pyscript + "\n    sys.exit(2)"
+	pyscript := `#!/usr/bin/python2.4
+#
+# Copyright 2010 Google Inc. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+"""Template based text parser.
+
+This module implements a parser, intended to be used for converting
+human readable text, such as command output from a router CLI, into
+a list of records, containing values extracted from the input text.
+
+A simple template language is used to describe a state machine to
+parse a specific type of text input, returning a record of values
+for each input entity.
+"""
+
+__version__ = '0.2.2'
+
+import getopt
+import inspect
+import re
+import string
+import sys
+
+
+class Error(Exception):
+  """Base class for errors."""
+
+
+class Usage(Exception):
+  """Error in command line execution."""
+
+
+class TextFSMError(Error):
+  """Error in the FSM state execution."""
+
+
+class TextFSMTemplateError(Error):
+  """Errors while parsing templates."""
+
+
+# The below exceptions are internal state change triggers
+# and not used as Errors.
+class FSMAction(Exception):
+  """Base class for actions raised with the FSM."""
+
+
+class SkipRecord(FSMAction):
+  """Indicate a record is to be skipped."""
+
+
+class SkipValue(FSMAction):
+  """Indicate a value is to be skipped."""
+
+
+class TextFSMOptions(object):
+  """Class containing all valid TextFSMValue options.
+
+  Each nested class here represents a TextFSM option. The format
+  is "option<name>".
+  Each class may override any of the methods inside the OptionBase class.
+
+  A user of this module can extend options by subclassing
+  TextFSMOptionsBase, adding the new option class(es), then passing
+  that new class to the TextFSM constructor with the 'option_class'
+  argument.
+  """
+
+  class OptionBase(object):
+    """Factory methods for option class.
+
+    Attributes:
+      value: A TextFSMValue, the parent Value.
+    """
+
+    def __init__(self, value):
+      self.value = value
+
+    @property
+    def name(self):
+      return self.__class__.__name__.replace('option', '')
+
+    def OnCreateOptions(self):
+      """Called after all options have been parsed for a Value."""
+
+    def OnClearVar(self):
+      """Called when value has been cleared."""
+
+    def OnClearAllVar(self):
+      """Called when a value has clearalled."""
+
+    def OnAssignVar(self):
+      """Called when a matched value is being assigned."""
+
+    def OnGetValue(self):
+      """Called when the value name is being requested."""
+
+    def OnSaveRecord(self):
+      """Called just prior to a record being committed."""
+
+  @classmethod
+  def ValidOptions(cls):
+    """Returns a list of valid option names."""
+    valid_options = []
+    for obj_name in dir(cls):
+      obj = getattr(cls, obj_name)
+      if inspect.isclass(obj) and issubclass(obj, cls.OptionBase):
+        valid_options.append(obj_name)
+    return valid_options
+
+  @classmethod
+  def GetOption(cls, name):
+    """Returns the class of the requested option name."""
+    return getattr(cls, name)
+
+  class Required(OptionBase):
+    """The Value must be non-empty for the row to be recorded."""
+
+    def OnSaveRecord(self):
+      if not self.value.value:
+        raise SkipRecord
+
+  class Filldown(OptionBase):
+    """Value defaults to the previous line's value."""
+
+    def OnCreateOptions(self):
+      self._myvar = None
+
+    def OnAssignVar(self):
+      self._myvar = self.value.value
+
+    def OnClearVar(self):
+      self.value.value = self._myvar
+
+    def OnClearAllVar(self):
+      self._myvar = None
+
+  class Fillup(OptionBase):
+    """Like Filldown, but upwards until it finds a non-empty entry."""
+
+    def OnAssignVar(self):
+      # If value is set, copy up the results table, until we
+      # see a set item.
+      if self.value.value:
+        # Get index of relevant result column.
+        value_idx = self.value.fsm.values.index(self.value)
+        # Go up the list from the end until we see a filled value.
+        for result in reversed(self.value.fsm._result):
+          if result[value_idx]:
+            # Stop when a record has this column already.
+            break
+          # Otherwise set the column value.
+          result[value_idx] = self.value.value
+
+  class Key(OptionBase):
+    """Value constitutes part of the Key of the record."""
+
+  class List(OptionBase):
+    """Value takes the form of a list."""
+
+    def OnCreateOptions(self):
+      self.OnClearAllVar()
+
+    def OnAssignVar(self):
+      self._value.append(self.value.value)
+
+    def OnClearVar(self):
+      if 'Filldown' not in self.value.OptionNames():
+        self._value = []
+
+    def OnClearAllVar(self):
+      self._value = []
+
+    def OnSaveRecord(self):
+      self.value.value = list(self._value)
+
+
+class TextFSMValue(object):
+  """A TextFSM value.
+
+  A value has syntax like:
+
+  'Value Filldown,Required helloworld (.*)'
+
+  Where 'Value' is a keyword.
+  'Filldown' and 'Required' are options.
+  'helloworld' is the value name.
+  '(.*) is the regular expression to match in the input data.
+
+  Attributes:
+    max_name_len: (int), maximum character length os a variable name.
+    name: (str), Name of the value.
+    options: (list), A list of current Value Options.
+    regex: (str), Regex which the value is matched on.
+    template: (str), regexp with named groups added.
+    fsm: A TextFSMBase(), the containing FSM.
+    value: (str), the current value.
+  """
+  # The class which contains valid options.
+
+  def __init__(self, fsm=None, max_name_len=48, options_class=None):
+    """Initialise a new TextFSMValue."""
+    self.max_name_len = max_name_len
+    self.name = None
+    self.options = []
+    self.regex = None
+    self.value = None
+    self.fsm = fsm
+    self._options_cls = options_class
+
+  def AssignVar(self, value):
+    """Assign a value to this Value."""
+    self.value = value
+    # Call OnAssignVar on options.
+    [option.OnAssignVar() for option in self.options]
+
+  def ClearVar(self):
+    """Clear this Value."""
+    self.value = None
+    # Call OnClearVar on options.
+    [option.OnClearVar() for option in self.options]
+
+  def ClearAllVar(self):
+    """Clear this Value."""
+    self.value = None
+    # Call OnClearAllVar on options.
+    [option.OnClearAllVar() for option in self.options]
+
+  def Header(self):
+    """Fetch the header name of this Value."""
+    # Call OnGetValue on options.
+    [option.OnGetValue() for option in self.options]
+    return self.name
+
+  def OptionNames(self):
+    """Returns a list of option names for this Value."""
+    return [option.name for option in self.options]
+
+  def Parse(self, value):
+    """Parse a 'Value' declaration.
+
+    Args:
+      value: String line from a template file, must begin with 'Value '.
+
+    Raises:
+      TextFSMTemplateError: Value declaration contains an error.
+
+    """
+
+    value_line = value.split(' ')
+    if len(value_line) < 3:
+      raise TextFSMTemplateError('Expect at least 3 tokens on line.')
+
+    if not value_line[2].startswith('('):
+      # Options are present
+      options = value_line[1]
+      for option in options.split(','):
+        self._AddOption(option)
+      # Call option OnCreateOptions callbacks
+      [option.OnCreateOptions() for option in self.options]
+
+      self.name = value_line[2]
+      self.regex = ' '.join(value_line[3:])
+    else:
+      # There were no valid options, so there are no options.
+      # Treat this argument as the name.
+      self.name = value_line[1]
+      self.regex = ' '.join(value_line[2:])
+
+    if len(self.name) > self.max_name_len:
+      raise TextFSMTemplateError(
+          "Invalid Value name '%s' or name too long." % self.name)
+
+    if (not re.match(r'^\(.*\)$', self.regex) or
+        self.regex.count('(') != self.regex.count(')')):
+      raise TextFSMTemplateError(
+          "Value '%s' must be contained within a '()' pair." % self.regex)
+
+    self.template = re.sub(r'^\(', '(?P<%s>' % self.name, self.regex)
+
+  def _AddOption(self, name):
+    """Add an option to this Value.
+
+    Args:
+      name: (str), the name of the Option to add.
+
+    Raises:
+      TextFSMTemplateError: If option is already present or
+        the option does not exist.
+    """
+
+    # Check for duplicate option declaration
+    if name in [option.name for option in self.options]:
+      raise TextFSMTemplateError('Duplicate option "%s"' % name)
+
+    # Create the option object
+    try:
+      option = self._options_cls.GetOption(name)(self)
+    except AttributeError:
+      raise TextFSMTemplateError('Unknown option "%s"' % name)
+
+    self.options.append(option)
+
+  def OnSaveRecord(self):
+    """Called just prior to a record being committed."""
+    [option.OnSaveRecord() for option in self.options]
+
+  def __str__(self):
+    """Prints out the FSM Value, mimic the input file."""
+
+    if self.options:
+      return 'Value %s %s %s' % (
+          ','.join(self.OptionNames()),
+          self.name,
+          self.regex)
+    else:
+      return 'Value %s %s' % (self.name, self.regex)
+
+
+class CopyableRegexObject(object):
+  """Like a re.RegexObject, but can be copied."""
+  # pylint: disable-msg=C6409
+
+  def __init__(self, pattern):
+    self.pattern = pattern
+    self.regex = re.compile(pattern)
+
+  def match(self, *args, **kwargs):
+    return self.regex.match(*args, **kwargs)
+
+  def sub(self, *args, **kwargs):
+    return self.regex.sub(*args, **kwargs)
+
+  def __copy__(self):
+    return CopyableRegexObject(self.pattern)
+
+  def __deepcopy__(self, unused_memo):
+    return self.__copy__()
+
+
+class TextFSMRule(object):
+  """A rule in each FSM state.
+
+  A value has syntax like:
+
+      ^<regexp> -> Next.Record State2
+
+  Where '<regexp>' is a regular expression.
+  'Next' is a Line operator.
+  'Record' is a Record operator.
+  'State2' is the next State.
+
+  Attributes:
+    match: Regex to match this rule.
+    regex: match after template substitution.
+    line_op: Operator on input line on match.
+    record_op: Operator on output record on match.
+    new_state: Label to jump to on action
+    regex_obj: Compiled regex for which the rule matches.
+    line_num: Integer row number of Value.
+  """
+  # Implicit default is '(regexp) -> Next.NoRecord'
+  MATCH_ACTION = re.compile('(?P<match>.*)(\s->(?P<action>.*))')
+
+  # The structure to the right of the '->'.
+  LINE_OP = ('Continue', 'Next', 'Error')
+  RECORD_OP = ('Clear', 'Clearall', 'Record', 'NoRecord')
+
+  # Line operators.
+  LINE_OP_RE = '(?P<ln_op>%s)' % '|'.join(LINE_OP)
+  # Record operators.
+  RECORD_OP_RE = '(?P<rec_op>%s)' % '|'.join(RECORD_OP)
+  # Line operator with optional record operator.
+  OPERATOR_RE = '(%s(\.%s)?)' % (LINE_OP_RE, RECORD_OP_RE)
+  # New State or 'Error' string.
+  NEWSTATE_RE = '(?P<new_state>\w+|\".*\")'
+
+  # Compound operator (line and record) with optional new state.
+  ACTION_RE = re.compile('\s+%s(\s+%s)?$' % (OPERATOR_RE, NEWSTATE_RE))
+  # Record operator with optional new state.
+  ACTION2_RE = re.compile('\s+%s(\s+%s)?$' % (RECORD_OP_RE, NEWSTATE_RE))
+  # Default operators with optional new state.
+  ACTION3_RE = re.compile('(\s+%s)?$' % (NEWSTATE_RE))
+
+  def __init__(self, line, line_num=-1, var_map=None):
+    """Initialise a new rule object.
+
+    Args:
+      line: (str), a template rule line to parse.
+      line_num: (int), Optional line reference included in error reporting.
+      var_map: Map for template (${var}) substitutions.
+
+    Raises:
+      TextFSMTemplateError: If 'line' is not a valid format for a Value entry.
+    """
+    self.match = ''
+    self.regex = ''
+    self.regex_obj = None
+    self.line_op = ''              # Equivalent to 'Next'.
+    self.record_op = ''            # Equivalent to 'NoRecord'.
+    self.new_state = ''            # Equivalent to current state.
+    self.line_num = line_num
+
+    line = line.strip()
+    if not line:
+      raise TextFSMTemplateError('Null data in FSMRule. Line: %s'
+                                 % self.line_num)
+
+    # Is there '->' action present.
+    match_action = self.MATCH_ACTION.match(line)
+    if match_action:
+      self.match = match_action.group('match')
+    else:
+      self.match = line
+
+    # Replace ${varname} entries.
+    self.regex = self.match
+    if var_map:
+      try:
+        self.regex = string.Template(self.match).substitute(var_map)
+      except (ValueError, KeyError):
+        raise TextFSMTemplateError(
+            "Duplicate or invalid variable substitution: '%s'. Line: %s." %
+            (self.match, self.line_num))
+
+    try:
+      # Work around a regression in Python 2.6 that makes RE Objects uncopyable.
+      self.regex_obj = CopyableRegexObject(self.regex)
+    except re.error:
+      raise TextFSMTemplateError(
+          "Invalid regular expression: '%s'. Line: %s." %
+          (self.regex, self.line_num))
+
+    # No '->' present, so done.
+    if not match_action:
+      return
+
+    # Attempt to match line.record operation.
+    action_re = self.ACTION_RE.match(match_action.group('action'))
+    if not action_re:
+      # Attempt to match record operation.
+      action_re = self.ACTION2_RE.match(match_action.group('action'))
+      if not action_re:
+        # Math implicit defaults with an optional new state.
+        action_re = self.ACTION3_RE.match(match_action.group('action'))
+        if not action_re:
+          # Last attempt, match an optional new state only.
+          raise TextFSMTemplateError("Badly formatted rule '%s'. Line: %s." %
+                                     (line, self.line_num))
+
+    # We have an Line operator.
+    if 'ln_op' in action_re.groupdict() and action_re.group('ln_op'):
+      self.line_op = action_re.group('ln_op')
+
+    # We have a record operator.
+    if 'rec_op' in action_re.groupdict() and action_re.group('rec_op'):
+      self.record_op = action_re.group('rec_op')
+
+    # A new state was specified.
+    if 'new_state' in action_re.groupdict() and action_re.group('new_state'):
+      self.new_state = action_re.group('new_state')
+
+    # Only 'Next' (or implicit 'Next') line operator can have a new_state.
+    # But we allow error to have one as a warning message so we are left
+    # checking that Continue does not.
+    if (self.line_op == 'Continue' and self.new_state):
+      raise TextFSMTemplateError(
+          "Action '%s' with new state %s specified. Line: %s."
+          % (self.line_op, self.new_state, self.line_num))
+
+    # Check that an error message is present only with the 'Error' operator.
+    if self.line_op != 'Error' and self.new_state:
+      if not re.match('\w+', self.new_state):
+        raise TextFSMTemplateError(
+            'Alphanumeric characters only in state names. Line: %s.'
+            % (self.line_num))
+
+  def __str__(self):
+    """Prints out the FSM Rule, mimic the input file."""
+
+    operation = ''
+    if self.line_op and self.record_op:
+      operation = '.'
+
+    operation = '%s%s%s' % (self.line_op, operation, self.record_op)
+
+    if operation and self.new_state:
+      new_state = ' ' + self.new_state
+    else:
+      new_state = self.new_state
+
+    # Print with implicit defaults.
+    if not (operation or new_state):
+      return '  %s' % self.match
+
+    # Non defaults.
+    return '  %s -> %s%s' % (self.match, operation, new_state)
+
+
+class TextFSM(object):
+  """Parses template and creates Finite State Machine (FSM).
+
+  Attributes:
+    states: (str), Dictionary of FSMState objects.
+    values: (str), List of FSMVariables.
+    value_map: (map), For substituting values for names in the expressions.
+    header: Ordered list of values.
+    state_list: Ordered list of valid states.
+  """
+  # Variable and State name length.
+  MAX_NAME_LEN = 48
+  comment_regex = re.compile('^\s*#')
+  state_name_re = re.compile('^(\w+)$')
+  _DEFAULT_OPTIONS = TextFSMOptions
+
+  def __init__(self, template, options_class=_DEFAULT_OPTIONS):
+    """Initialises and also parses the template file."""
+
+    self._options_cls = options_class
+    self.states = {}
+    # Track order of state definitions.
+    self.state_list = []
+    self.values = []
+    self.value_map = {}
+    # Track where we are for error reporting.
+    self._line_num = 0
+    # Run FSM in this state
+    self._cur_state = None
+    # Name of the current state.
+    self._cur_state_name = None
+
+    # Read and parse FSM definition.
+    # Restore the file pointer once done.
+    try:
+      self._Parse(template)
+    finally:
+      template.seek(0)
+
+    # Initialise starting data.
+    self.Reset()
+
+  def __str__(self):
+    """Returns the FSM template, mimic the input file."""
+
+    result = '\n'.join([str(value) for value in self.values])
+    result += '\n'
+
+    for state in self.state_list:
+      result += '\n%s\n' % state
+      state_rules = '\n'.join([str(rule) for rule in self.states[state]])
+      if state_rules:
+        result += state_rules + '\n'
+
+    return result
+
+  def Reset(self):
+    """Preserves FSM but resets starting state and current record."""
+
+    # Current state is Start state.
+    self._cur_state = self.states['Start']
+    self._cur_state_name = 'Start'
+
+    # Clear table of results and current record.
+    self._result = []
+    self._ClearAllRecord()
+
+  @property
+  def header(self):
+    """Returns header."""
+    return self._GetHeader()
+
+  def _GetHeader(self):
+    """Returns header."""
+    header = []
+    for value in self.values:
+      try:
+        header.append(value.Header())
+      except SkipValue:
+        continue
+    return header
+
+  def _GetValue(self, name):
+    """Returns the TextFSMValue object natching the requested name."""
+    for value in self.values:
+      if value.name == name:
+        return value
+
+  def _AppendRecord(self):
+    """Adds current record to result if well formed."""
+
+    # If no Values then don't output.
+    if not self.values:
+      return
+
+    cur_record = []
+    for value in self.values:
+      try:
+        value.OnSaveRecord()
+      except SkipRecord:
+        self._ClearRecord()
+        return
+      except SkipValue:
+        continue
+
+      # Build current record into a list.
+      cur_record.append(value.value)
+
+    # If no Values in template or whole record is empty then don't output.
+    if len(cur_record) == (cur_record.count(None) + cur_record.count([])):
+      return
+
+    # Replace any 'None' entries with null string ''.
+    while None in cur_record:
+      cur_record[cur_record.index(None)] = ''
+
+    self._result.append(cur_record)
+    self._ClearRecord()
+
+  def _Parse(self, template):
+    """Parses template file for FSM structure.
+
+    Args:
+      template: Valid template file.
+
+    Raises:
+      TextFSMTemplateError: If template file syntax is invalid.
+    """
+
+    if not template:
+      raise TextFSMTemplateError('Null template.')
+
+    # Parse header with Variables.
+    self._ParseFSMVariables(template)
+
+    # Parse States.
+    while self._ParseFSMState(template):
+      pass
+
+    # Validate destination states.
+    self._ValidateFSM()
+
+  def _ParseFSMVariables(self, template):
+    """Extracts Variables from start of template file.
+
+    Values are expected as a contiguous block at the head of the file.
+    These will be line separated from the State definitions that follow.
+
+    Args:
+      template: Valid template file, with Value definitions at the top.
+
+    Raises:
+      TextFSMTemplateError: If syntax or semantic errors are found.
+    """
+
+    self.values = []
+
+    for line in template:
+      self._line_num += 1
+      line = line.rstrip()
+
+      # Blank line signifies end of Value definitions.
+      if not line:
+        return
+
+      # Skip commented lines.
+      if self.comment_regex.match(line):
+        continue
+
+      if line.startswith('Value '):
+        try:
+          value = TextFSMValue(
+              fsm=self, max_name_len=self.MAX_NAME_LEN,
+              options_class=self._options_cls)
+          value.Parse(line)
+        except TextFSMTemplateError, error:
+          raise TextFSMTemplateError('%s Line %s.' % (error, self._line_num))
+
+        if value.name in self.header:
+          raise TextFSMTemplateError(
+              "Duplicate declarations for Value '%s'. Line: %s."
+              % (value.name, self._line_num))
+
+        try:
+          self._ValidateOptions(value)
+        except TextFSMTemplateError, error:
+          raise TextFSMTemplateError('%s Line %s.' % (error, self._line_num))
+
+        self.values.append(value)
+        self.value_map[value.name] = value.template
+      # The line has text but without the 'Value ' prefix.
+      elif not self.values:
+        raise TextFSMTemplateError('No Value definitions found.')
+      else:
+        raise TextFSMTemplateError(
+            'Expected blank line after last Value entry. Line: %s.'
+            % (self._line_num))
+
+  def _ValidateOptions(self, value):
+    """Checks that combination of Options is valid."""
+    # Always passes in base class.
+    pass
+
+  def _ParseFSMState(self, template):
+    """Extracts State and associated Rules from body of template file.
+
+    After the Value definitions the remainder of the template is
+    state definitions. The routine is expected to be called iteratively
+    until no more states remain - indicated by returning None.
+
+    The routine checks that the state names are a well formed string, do
+    not clash with reserved names and are unique.
+
+    Args:
+      template: Valid template file after Value definitions
+      have already been read.
+
+    Returns:
+      Name of the state parsed from file. None otherwise.
+
+    Raises:
+      TextFSMTemplateError: If any state definitions are invalid.
+    """
+
+    if not template:
+      return
+
+    state_name = ''
+    # Strip off extra white space lines (including comments).
+    for line in template:
+      self._line_num += 1
+      line = line.rstrip()
+
+      # First line is state definition
+      if line and not self.comment_regex.match(line):
+         # Ensure statename has valid syntax and is not a reserved word.
+        if (not self.state_name_re.match(line) or
+            len(line) > self.MAX_NAME_LEN or
+            line in TextFSMRule.LINE_OP or
+            line in TextFSMRule.RECORD_OP):
+          raise TextFSMTemplateError("Invalid state name: '%s'. Line: %s"
+                                     % (line, self._line_num))
+
+        state_name = line
+        if state_name in self.states:
+          raise TextFSMTemplateError("Duplicate state name: '%s'. Line: %s"
+                                     % (line, self._line_num))
+        self.states[state_name] = []
+        self.state_list.append(state_name)
+        break
+
+    # Parse each rule in the state.
+    for line in template:
+      self._line_num += 1
+      line = line.rstrip()
+
+      # Finish rules processing on blank line.
+      if not line:
+        break
+
+      if self.comment_regex.match(line):
+        continue
+
+      # A rule within a state, starts with whitespace
+      if not (line.startswith('  ^') or line.startswith('\t^')):
+        raise TextFSMTemplateError(
+            "Missing white space or carat ('^') before rule. Line: %s" %
+            self._line_num)
+
+      self.states[state_name].append(
+          TextFSMRule(line, self._line_num, self.value_map))
+
+    return state_name
+
+  def _ValidateFSM(self):
+    """Checks state names and destinations for validity.
+
+    Each destination state must exist, be a valid name and
+    not be a reserved name.
+    There must be a 'Start' state and if 'EOF' or 'End' states are specified,
+    they must be empty.
+
+    Returns:
+      True if FSM is valid.
+
+    Raises:
+      TextFSMTemplateError: If any state definitions are invalid.
+    """
+
+    # Must have 'Start' state.
+    if 'Start' not in self.states:
+      raise TextFSMTemplateError("Missing state 'Start'.")
+
+    # 'End/EOF' state (if specified) must be empty.
+    if self.states.get('End'):
+      raise TextFSMTemplateError("Non-Empty 'End' state.")
+
+    if self.states.get('EOF'):
+      raise TextFSMTemplateError("Non-Empty 'EOF' state.")
+
+    # Remove 'End' state.
+    if 'End' in self.states:
+      del(self.states['End'])
+      self.state_list.remove('End')
+
+    # Ensure jump states are all valid.
+    for state in self.states:
+      for rule in self.states[state]:
+        if rule.line_op == 'Error':
+          continue
+
+        if not rule.new_state or rule.new_state in ('End', 'EOF'):
+          continue
+
+        if rule.new_state not in self.states:
+          raise TextFSMTemplateError(
+              "State '%s' not found, referenced in state '%s'" %
+              (rule.new_state, state))
+
+    return True
+
+  def ParseText(self, text, eof=True):
+    """Passes CLI output through FSM and returns list of tuples.
+
+    First tuple is the header, every subsequent tuple is a row.
+
+    Args:
+      text: (str), Text to parse with embedded newlines.
+      eof: (boolean), Set to False if we are parsing only part of the file.
+            Suppresses triggering EOF state.
+
+    Raises:
+      TextFSMError: An error occurred within the FSM.
+
+    Returns:
+      List of Lists.
+    """
+
+    lines = []
+    if text:
+      lines = text.splitlines()
+
+    for line in lines:
+      self._CheckLine(line)
+      if self._cur_state_name in ('End', 'EOF'):
+        break
+
+    if self._cur_state_name != 'End' and 'EOF' not in self.states and eof:
+      # Implicit EOF performs Next.Record operation.
+      # Suppressed if Null EOF state is instantiated.
+      self._AppendRecord()
+
+    return self._result
+
+  def _CheckLine(self, line):
+    """Passes the line through each rule until a match is made.
+
+    Args:
+      line: A string, the current input line.
+    """
+    for rule in self._cur_state:
+      matched = self._CheckRule(rule, line)
+      if matched:
+        for value in matched.groupdict():
+          self._AssignVar(matched, value)
+
+        if self._Operations(rule):
+          # Not a Continue so check for state transition.
+          if rule.new_state:
+            if rule.new_state not in ('End', 'EOF'):
+              self._cur_state = self.states[rule.new_state]
+            self._cur_state_name = rule.new_state
+          break
+
+
+  def _CheckRule(self, rule, line):
+    """Check a line against the given rule.
+
+    This is a separate method so that it can be overridden by
+    a debugging tool.
+
+    Args:
+      rule: A TextFSMRule(), the rule to check.
+      line: A str, the line to check.
+
+    Returns:
+      A regex match object.
+    """
+    return rule.regex_obj.match(line)
+
+  def _AssignVar(self, matched, value):
+    """Assigns variable into current record from a matched rule.
+
+    If a record entry is a list then append, otherwise values are replaced.
+
+    Args:
+      matched: (regexp.match) Named group for each matched value.
+      value: (str) The matched value.
+    """
+    self._GetValue(value).AssignVar(matched.group(value))
+
+  def _Operations(self, rule):
+    """Operators on the data record.
+
+    Operators come in two parts and are a '.' separated pair:
+
+      Operators that effect the input line or the current state (line_op).
+        'Next'      Get next input line and restart parsing (default).
+        'Continue'  Keep current input line and continue resume parsing.
+        'Error'     Unrecoverable input discard result and raise Error.
+
+      Operators that affect the record being built for output (record_op).
+        'NoRecord'  Does nothing (default)
+        'Record'    Adds the current record to the result.
+        'Clear'     Clears non-Filldown data from the record.
+        'Clearall'  Clears all data from the record.
+
+    Args:
+      rule: FSMRule object.
+
+    Returns:
+      True if state machine should restart state with new line.
+
+    Raises:
+      TextFSMError: If Error state is encountered.
+    """
+    # First process the Record operators.
+    if rule.record_op == 'Record':
+      self._AppendRecord()
+
+    elif rule.record_op == 'Clear':
+      # Clear record.
+      self._ClearRecord()
+
+    elif rule.record_op == 'Clearall':
+      # Clear all record entries.
+      self._ClearAllRecord()
+
+    # Lastly process line operators.
+    if rule.line_op == 'Error':
+      if rule.new_state:
+        raise TextFSMError('Error: %s. Line: %s.'
+                           % (rule.new_state, rule.line_num))
+
+      raise TextFSMError('State Error raised. Line: %s.'
+                         % (rule.line_num))
+
+    elif rule.line_op == 'Continue':
+      # Continue with current line without returning to the start of the state.
+      return False
+
+    # Back to start of current state with a new line.
+    return True
+
+  def _ClearRecord(self):
+    """Remove non 'Filldown' record entries."""
+    [value.ClearVar() for value in self.values]
+
+  def _ClearAllRecord(self):
+    """Remove all record entries."""
+    [value.ClearAllVar() for value in self.values]
+
+  def GetValuesByAttrib(self, attribute):
+    """Returns the list of values that have a particular attribute."""
+
+    if attribute not in self._options_cls.ValidOptions():
+      raise ValueError("'%s': Not a valid attribute." % attribute)
+
+    result = []
+    for value in self.values:
+      if attribute in value.OptionNames():
+        result.append(value.name)
+
+    return result
+
+
+def main(argv=None):
+  """Validate text parsed with FSM or validate an FSM via command line."""
+
+  if argv is None:
+    argv = sys.argv
+
+  try:
+    opts, args = getopt.getopt(argv[1:], 'h', ['help'])
+  except getopt.error, msg:
+    raise Usage(msg)
+
+  for opt, _ in opts:
+    if opt in ('-h', '--help'):
+      print __doc__
+      print help_msg
+      return 0
+
+  if not args or len(args) > 4:
+    raise Usage('Invalid arguments.')
+
+  # If we have an argument, parse content of file and display as a template.
+  # Template displayed will match input template, minus any comment lines.
+  template = open(args[0], 'r')
+  fsm = TextFSM(template)
+  print 'FSM Template:\n%s\n' % fsm
+
+  if len(args) > 1:
+    # Second argument is file with example cli input.
+    # Prints parsed tabular result.
+    cli_input = open(args[1], 'r').read()
+    table = fsm.ParseText(cli_input)
+    print 'FSM Table:'
+    result = str(fsm.header) + '\n'
+    for line in table:
+      result += str(line) + '\n'
+    print result,
+
+  if len(args) > 2:
+    # Compare tabular result with data in third file argument.
+    # Exit value indicates if processed data matched expected result.
+    ref_table = open(args[2], 'r').read()
+    if ref_table != result:
+      print 'Data mis-match!'
+      return 1
+    else:
+      print 'Data match!'
+
+
+if __name__ == '__main__':
+  help_msg = '%s [--help] template [input_file [output_file]]\n' % sys.argv[0]
+  try:
+    sys.exit(main())
+  except Usage, err:
+    print >>sys.stderr, err
+    print >>sys.stderr, 'For help use --help'
+    sys.exit(2)
+  except (IOError, TextFSMError, TextFSMTemplateError), err:
+    print >>sys.stderr, err
+    sys.exit(2)
+
+`
 	return pyscript
 }
