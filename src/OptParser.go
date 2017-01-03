@@ -69,7 +69,7 @@ func (opts *Opts) procArgs(args []string) {
 			}
 		}
 	}
-	if len(args) < 3 {
+	if len(args) < 3 && !opts.versionFlag {
 		printHelp()
 		os.Exit(0)
 	}

@@ -55,5 +55,19 @@ class TestGoo < Test::Unit::TestCase
 
     assert_false status.success?, 'Process did exit cleanly'
   end
+
+  def test_help
+    output, status = Open3.capture2(PATH, BIN, '-h')
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, 'usage: goo'
+  end
+
+  def test_version
+    output, status = Open3.capture2(PATH, BIN, '-v')
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, '0.9'
+  end
 end
 
