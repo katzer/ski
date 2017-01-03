@@ -13,6 +13,22 @@ import (
 ################################################################################
 */
 
+type Opts struct {
+	prettyFlag   bool
+	scriptFlag   bool
+	typeFlag     bool
+	debugFlag    bool
+	loadFlag     bool
+	helpFlag     bool
+	versionFlag  bool
+	scriptPath   string
+	command      string
+	planets      []string
+	planetsCount int
+	currentDet   string
+	currentDBDet string
+}
+
 /**
 *	Returns the contents of args in following order:
 *	prettyprint flag
@@ -21,42 +37,32 @@ import (
 *	command
 *	planets
  */
-func procArgs(args []string) (bool, bool, string, string, []string, bool, bool, bool) {
-	prettyFlag := false
-	scriptFlag := false
-	typeFlag := false
-	debugFlag := false
-	loadFlag := false
-	var scriptPath string
-	var command string
-	planets := make([]string, 0)
+func (opts *Opts) procArgs(args []string) {
 
 	cleanArgs := args[1:]
 
 	for _, argument := range cleanArgs {
 		if strings.HasPrefix(argument, "-h") || strings.HasPrefix(argument, "--help") {
-			printHelp()
-			os.Exit(0)
+			opts.helpFlag = true
 		} else if strings.HasPrefix(argument, "-p") || strings.HasPrefix(argument, "--pretty") {
-			prettyFlag = true
+			opts.prettyFlag = true
 		} else if strings.HasPrefix(argument, "-t") || strings.HasPrefix(argument, "--type") {
-			typeFlag = true
+			opts.typeFlag = true
 		} else if strings.HasPrefix(argument, "-d") || strings.HasPrefix(argument, "--debug") {
-			debugFlag = true
+			opts.debugFlag = true
 		} else if strings.HasPrefix(argument, "-l") || strings.HasPrefix(argument, "--load") {
-			loadFlag = true
+			opts.loadFlag = true
 		} else if strings.HasPrefix(argument, "-v") || strings.HasPrefix(argument, "--version") {
-			printVersion()
-			os.Exit(0)
+			opts.versionFlag = true
 		} else if strings.HasPrefix(argument, "-c") || strings.HasPrefix(argument, "--command") {
 			// TODO what if theres a = in the command itself?
-			command = strings.TrimSuffix(strings.TrimPrefix(strings.Split(argument, "=")[1], "\""), "\"")
+			opts.command = strings.TrimSuffix(strings.TrimPrefix(strings.Split(argument, "=")[1], "\""), "\"")
 		} else if strings.HasPrefix(argument, "-s") || strings.HasPrefix(argument, "--script") {
-			scriptFlag = true
-			scriptPath = strings.Split(argument, "=")[1]
+			opts.scriptFlag = true
+			opts.scriptPath = strings.Split(argument, "=")[1]
 		} else {
 			if isSupported(argument) {
-				planets = append(planets, argument)
+				opts.planets = append(opts.planets, argument)
 			} else {
 				fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
 				os.Exit(1)
@@ -68,9 +74,7 @@ func procArgs(args []string) (bool, bool, string, string, []string, bool, bool, 
 		os.Exit(0)
 	}
 
-	_ = prettyFlag
-
-	return prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag, loadFlag
+	//return prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag, loadFlag
 }
 
 /**
@@ -116,7 +120,7 @@ func getType(id string) string {
 *		id: The planets id
 *	@return: The connection details to the planet
  */
-func getConnDet(id string) string {
+func (opts Opts) getConnDet(id string) string {
 	cmd := exec.Command("ff", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {

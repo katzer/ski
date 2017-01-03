@@ -78,12 +78,12 @@ func printWhite(length int) {
 	}
 }
 
-func formatAndPrint(toPrint []StructuredOuput, prettyFlag bool, scriptFlag bool, scriptPath string, command string) {
-	if prettyFlag {
-		printHeadline(scriptFlag, scriptPath, command, 26)
+func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
+	if opts.prettyFlag {
+		printHeadline(opts.scriptFlag, opts.scriptPath, opts.command, 26)
 	}
 	for i, planet := range toPrint {
-		if !prettyFlag {
+		if !opts.prettyFlag {
 			print(planet.output)
 		} else {
 			print(strconv.Itoa(i) + "")
@@ -119,7 +119,8 @@ func tablePrint(toFormat string, filePath string, templatePath string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf(" %q\n", out.String())
+	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
+	fmt.Printf(" %q\n", formattedString)
 
 	err = os.Remove(pyScriptFile)
 	if err != nil {

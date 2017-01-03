@@ -16,7 +16,6 @@ import (
  */
 func printVersion() {
 	fmt.Print("0.9")
-	tablePrint("aa", "bb", "cc")
 }
 
 /**

@@ -4,10 +4,8 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
-	"sync"
 	//"os"
 	//"strconv"
-	//"sync"
 	"os"
 )
 
@@ -17,29 +15,33 @@ import (
 ################################################################################
 */
 
-func execDBCommand(dbDet string, command string, wg *sync.WaitGroup, strucOut *StructuredOuput, loadFlag bool) {
+type DBHandler struct {
+}
+
+func execDBCommand(dbDet string, strucOut *StructuredOuput, opts *Opts) {
 	tmpDBFile := os.Getenv("HOME") + "/orbit.sql"
-	err := ioutil.WriteFile(tmpDBFile, []byte(command), 0644)
+	err := ioutil.WriteFile(tmpDBFile, []byte(opts.command), 0644)
 	if err != nil {
 		println("writefile failed!")
 		os.Exit(1)
 	}
-	upAndExecDBScript(dbDet, tmpDBFile, wg, strucOut, loadFlag)
+	opts.scriptPath = tmpDBFile
+	upAndExecDBScript(dbDet, strucOut, opts)
 	err = os.Remove(tmpDBFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func upAndExecDBScript(dbDet string, scriptPath string, wg *sync.WaitGroup, strucOut *StructuredOuput, loadFlag bool) {
+func upAndExecDBScript(dbDet string, strucOut *StructuredOuput, opts *Opts) {
 	dbID, sshAddress := procDBDets(dbDet)
 	username := getUser(sshAddress)
-	uploadFile(sshAddress, scriptPath)
-	path := strings.Split(scriptPath, "/")
+	uploadFile(sshAddress, opts)
+	path := strings.Split(opts.scriptPath, "/")
 	placeholder := StructuredOuput{}
-	execSSHCommand(sshAddress, "mv ~/"+path[len(path)-1]+" ~/sql/"+path[len(path)-1], wg, false, &placeholder, loadFlag)
+	execSSHCommand(sshAddress, "mv ~/"+path[len(path)-1]+" ~/sql/"+path[len(path)-1], &placeholder, opts)
 	queryString := ". profiles/" + username + ".prof && pqdb_sql.out -s " + dbID + " ~/sql/" + path[len(path)-1]
 	//placeholder := StructuredOuput{}
-	execSSHCommand(sshAddress, queryString, wg, true, strucOut, loadFlag)
+	execSSHCommand(sshAddress, queryString, strucOut, opts)
 
 }
