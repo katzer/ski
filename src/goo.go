@@ -29,6 +29,12 @@ func main() {
 	exec := Executor{}
 
 	opts.procArgs(args)
+	if opts.helpFlag {
+		printHelp()
+	}
+	if opts.versionFlag {
+		printVersion()
+	}
 	exec.execMain(&opts)
 
 }
