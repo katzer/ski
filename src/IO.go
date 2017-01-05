@@ -104,15 +104,20 @@ func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
 	}
 }
 
-func tablePrint(toFormat string, filePath string, templatePath string) {
+func tablePrint(templatePath string, filePath string) {
 	pys := getPyScript()
-	pyScriptFile := os.Getenv("HOME") + "/tempTabFormat.py"
+	pyScriptFile := ""
+	if runtime.GOOS == "windows" {
+		pyScriptFile = os.Getenv("TEMP") + "\\tempTabFormat.py"
+	} else {
+		pyScriptFile = os.Getenv("HOME") + "/tempTabFormat.py"
+	}
 	err := ioutil.WriteFile(pyScriptFile, []byte(pys), 0644)
 	if err != nil {
 		println("writing pyscript failed")
 		log.Fatal(err)
 	}
-	cmd := exec.Command("python2", pyScriptFile, "/home/mrblati/workspace/goo/textfsm-master/examples/cisco_bgp_summary_template", "/home/mrblati/workspace/goo/textfsm-master/examples/cisco_bgp_summary_example")
+	cmd := exec.Command("python2", pyScriptFile, templatePath, filePath)
 	cmd.Stdin = strings.NewReader("some input")
 	var out bytes.Buffer
 	cmd.Stdout = &out
