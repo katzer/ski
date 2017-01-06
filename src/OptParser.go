@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -21,6 +22,7 @@ type Opts struct {
 	loadFlag     bool
 	helpFlag     bool
 	versionFlag  bool
+	tableFlag    bool
 	scriptPath   string
 	command      string
 	planets      []string
@@ -39,42 +41,30 @@ type Opts struct {
  */
 func (opts *Opts) procArgs(args []string) {
 
-	cleanArgs := args[1:]
+	flag.BoolVar(&opts.helpFlag, "h", false, "help")
+	flag.BoolVar(&opts.prettyFlag, "pp", false, "prettyprint")
+	flag.BoolVar(&opts.typeFlag, "t", false, "type")
+	flag.BoolVar(&opts.debugFlag, "d", false, "verbose")
+	flag.BoolVar(&opts.loadFlag, "l", false, "ssh profile loading")
+	flag.BoolVar(&opts.versionFlag, "v", false, "version")
+	flag.BoolVar(&opts.tableFlag, "tp", false, "tablePrint")
+	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
+	flag.StringVar(&opts.scriptPath, "s", "", "path to script file to be uploaded and executed")
+	flag.Parse()
+	opts.scriptFlag = !(opts.scriptPath == "")
 
-	for _, argument := range cleanArgs {
-		if strings.HasPrefix(argument, "-h") || strings.HasPrefix(argument, "--help") {
-			opts.helpFlag = true
-		} else if strings.HasPrefix(argument, "-p") || strings.HasPrefix(argument, "--pretty") {
-			opts.prettyFlag = true
-		} else if strings.HasPrefix(argument, "-t") || strings.HasPrefix(argument, "--type") {
-			opts.typeFlag = true
-		} else if strings.HasPrefix(argument, "-d") || strings.HasPrefix(argument, "--debug") {
-			opts.debugFlag = true
-		} else if strings.HasPrefix(argument, "-l") || strings.HasPrefix(argument, "--load") {
-			opts.loadFlag = true
-		} else if strings.HasPrefix(argument, "-v") || strings.HasPrefix(argument, "--version") {
-			opts.versionFlag = true
-		} else if strings.HasPrefix(argument, "-c") || strings.HasPrefix(argument, "--command") {
-			// TODO what if theres a = in the command itself?
-			opts.command = strings.TrimSuffix(strings.TrimPrefix(strings.Split(argument, "=")[1], "\""), "\"")
-		} else if strings.HasPrefix(argument, "-s") || strings.HasPrefix(argument, "--script") {
-			opts.scriptFlag = true
-			opts.scriptPath = strings.Split(argument, "=")[1]
+	planets := flag.Args()
+	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
+	for _, argument := range planets {
+		if isSupported(argument) {
+			opts.planets = append(opts.planets, argument)
+			opts.planetsCount++
 		} else {
-			if isSupported(argument) {
-				opts.planets = append(opts.planets, argument)
-			} else {
-				fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
-				os.Exit(1)
-			}
+			fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
+			os.Exit(1)
 		}
 	}
-	if len(args) < 3 && !opts.versionFlag {
-		printHelp()
-		os.Exit(0)
-	}
 
-	//return prettyFlag, scriptFlag, scriptPath, command, planets, debugFlag, typeFlag, loadFlag
 }
 
 /**

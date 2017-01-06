@@ -31,27 +31,28 @@ PATH = { 'PATH' => "#{File.expand_path('tools', __dir__)}:#{ENV['PATH']}"  }
 
 class TestGoo < Test::Unit::TestCase
   def test_server
-    output, status = Open3.capture2(PATH, BIN, 'app', '-c="echo 123"')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"','-d', 'app')
+
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, '123'
   end
 
   def test_web
-    _, error, status = Open3.capture3(PATH, BIN, 'web', '-c="echo 123"')
+    _, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', 'web')
 
     assert_false status.success?, 'Process did exit cleanly'
     assert_include error, 'not supported'
   end
 
   def test_not_authorized_host
-    _, status = Open3.capture2(PATH, BIN, 'unauthorized', '-c="echo 123"')
+    _, status = Open3.capture2(PATH, BIN, '-c="echo 123"', 'unauthorized')
 
     assert_false status.success?, 'Process did exit cleanly'
   end
 
   def test_offline_host
-    _, status = Open3.capture2(PATH, BIN, 'offline', '-c="echo 123"')
+    _, status = Open3.capture2(PATH, BIN, '-c="echo 123"', 'offline')
 
     assert_false status.success?, 'Process did exit cleanly'
   end

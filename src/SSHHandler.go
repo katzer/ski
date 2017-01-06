@@ -2,6 +2,7 @@ package main
 
 import (
 	//"github.com/mgutz/ansi"
+	"fmt"
 	"gopkg.in/hypersleep/easyssh.v0"
 	"os"
 	"strings"
@@ -42,7 +43,53 @@ func execSSHCommand(connDet string, command string, strucOut *StructuredOuput, o
 	out, err := ssh.Run(cmd)
 	// Handle errors
 	if err != nil {
-		throwErr(err)
+		if opts.debugFlag {
+			fmt.Println("#####SSH DEBUG#####")
+			fmt.Println("conndet:")
+			fmt.Println(connDet)
+			fmt.Println("user:")
+			fmt.Println(user)
+			fmt.Println("hostname:")
+			fmt.Println(hostname)
+			fmt.Println("orbit key:")
+			fmt.Println(os.Getenv("ORBIT_KEY"))
+			fmt.Println("command:")
+			fmt.Println(command)
+			fmt.Println("strucOut:")
+			fmt.Println(strucOut)
+			fmt.Println("opts:")
+			fmt.Print("prettyFlag: ")
+			fmt.Println(opts.prettyFlag)
+			fmt.Print("scriptFlag: ")
+			fmt.Println(opts.scriptFlag)
+			fmt.Print("typeFlag: ")
+			fmt.Println(opts.typeFlag)
+			fmt.Print("debugFlag: ")
+			fmt.Println(opts.debugFlag)
+			fmt.Print("loadFlag: ")
+			fmt.Println(opts.loadFlag)
+			fmt.Print("helpFlag: ")
+			fmt.Println(opts.helpFlag)
+			fmt.Print("versionFlag: ")
+			fmt.Println(opts.versionFlag)
+			fmt.Print("tableFlag: ")
+			fmt.Println(opts.tableFlag)
+			fmt.Print("scriptPath: ")
+			fmt.Println(opts.scriptPath)
+			fmt.Print("command: ")
+			fmt.Println(opts.command)
+			fmt.Print("planets: ")
+			fmt.Println(opts.planets)
+			fmt.Print("planetsCount: ")
+			fmt.Println(opts.planetsCount)
+			fmt.Print("currentDet: ")
+			fmt.Println(opts.currentDet)
+			fmt.Print("currentDBDet: ")
+			fmt.Println(opts.currentDBDet)
+
+			fmt.Println("#####SSH DEBUG END#####")
+		}
+		throwErrExt(err, "called from exesSSHCommand ")
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
