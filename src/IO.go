@@ -21,20 +21,6 @@ import (
 const planetLength int = 21
 
 /**
-*	Prints message to console with a newline.
- */
-func println(msg string) {
-	fmt.Println(msg)
-}
-
-/**
-*	Prints message to console.
- */
-func print(msg string) {
-	fmt.Print(msg)
-}
-
-/**
 *	Prints the given String indented by the given spaces.
  */
 func printIndented(msg string, indent int, exceptFirst bool) {
@@ -49,7 +35,7 @@ func printIndented(msg string, indent int, exceptFirst bool) {
 	}
 	for _, char := range charString {
 		if char == 10 {
-			println(buffer.String())
+			fmt.Println(buffer.String())
 			buffer.Reset()
 			for i := 0; i < indent; i++ {
 				buffer.WriteByte(32)
@@ -60,7 +46,7 @@ func printIndented(msg string, indent int, exceptFirst bool) {
 			buffer.WriteString(toAppend)
 		}
 	}
-	println(buffer.String())
+	fmt.Println(buffer.String())
 }
 
 func printHeadline(scriptFlag bool, scriptPath string, command string, indent int) {
@@ -115,7 +101,7 @@ func tablePrint(templatePath string, filePath string) {
 	}
 	err := ioutil.WriteFile(pyScriptFile, []byte(pys), 0644)
 	if err != nil {
-		println("writing pyscript failed")
+		fmt.Println("writing pyscript failed")
 		log.Fatal(err)
 	}
 	cmd := exec.Command("python2", pyScriptFile, templatePath, filePath)
@@ -124,7 +110,7 @@ func tablePrint(templatePath string, filePath string) {
 	cmd.Stdout = &out
 	err = cmd.Run()
 	if err != nil {
-		println("executing pyscript failed")
+		fmt.Println("executing pyscript failed")
 		log.Fatal(err)
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
@@ -132,7 +118,7 @@ func tablePrint(templatePath string, filePath string) {
 
 	err = os.Remove(pyScriptFile)
 	if err != nil {
-		println("removing pyscript failed")
+		fmt.Println("removing pyscript failed")
 		log.Fatal(err)
 	}
 }

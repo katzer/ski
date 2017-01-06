@@ -15,7 +15,7 @@ import (
 *	Prints the current Version of the goo application
  */
 func printVersion() {
-	println("0.9")
+	os.Stdout.WriteString("0.9")
 }
 
 /**

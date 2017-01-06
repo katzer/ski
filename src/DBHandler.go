@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -20,7 +21,7 @@ func execDBCommand(dbDet string, strucOut *StructuredOuput, opts *Opts) {
 	tmpDBFile := os.Getenv("HOME") + "/orbit.sql"
 	err := ioutil.WriteFile(tmpDBFile, []byte(opts.command), 0644)
 	if err != nil {
-		println("writefile failed!")
+		fmt.Println("writefile failed!")
 		os.Exit(1)
 	}
 	opts.scriptPath = tmpDBFile

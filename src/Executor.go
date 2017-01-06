@@ -15,20 +15,20 @@ func (exec *Executor) execMain(opts *Opts) {
 	var wg sync.WaitGroup
 
 	if opts.debugFlag {
-		//println(args)
-		println("prettyflag " + strconv.FormatBool(opts.prettyFlag))
-		println("scriptflag " + strconv.FormatBool(opts.scriptFlag))
-		println("scriptpath " + opts.scriptPath)
-		println("command " + opts.command)
+		//fmt.Println(args)
+		fmt.Println("prettyflag " + strconv.FormatBool(opts.prettyFlag))
+		fmt.Println("scriptflag " + strconv.FormatBool(opts.scriptFlag))
+		fmt.Println("scriptpath " + opts.scriptPath)
+		fmt.Println("command " + opts.command)
 		for _, planet := range opts.planets {
-			println("planet " + planet)
+			fmt.Println("planet " + planet)
 		}
 	}
 
 	wg.Add(len(opts.planets))
 	for i, planet := range opts.planets {
 		if opts.typeFlag {
-			println("The type of " + planet + " is " + getType(planet))
+			fmt.Println("The type of " + planet + " is " + getType(planet))
 		}
 
 		switch getType(planet) {
@@ -54,7 +54,7 @@ func (exec *Executor) execMain(opts *Opts) {
 			fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
 			os.Exit(1)
 		default:
-			println("default did done")
+			fmt.Println("default did done")
 			wg.Done()
 		}
 	}
