@@ -134,7 +134,7 @@ func uploadFile(connDet string, opts *Opts) {
 func upAndExecSSHScript(connDet string, strucOut *StructuredOuput, opts *Opts) {
 	uploadFile(connDet, opts)
 	path := strings.Split(opts.scriptPath, "/")
-	placeholder := StructuredOuput{}
 	scriptName := path[len(path)-1]
-	execSSHCommand(connDet, "chmod +x "+scriptName+" && "+"./"+scriptName, &placeholder, opts)
+	command := fmt.Sprintf(`chmod +x %s && ./%s`, scriptName, scriptName)
+	execSSHCommand(connDet, command, strucOut, opts)
 }

@@ -18,7 +18,7 @@ type DBHandler struct {
 }
 
 func execDBCommand(dbDet string, strucOut *StructuredOuput, opts *Opts) {
-	tmpDBFile := os.Getenv("HOME") + "/orbit.sql"
+	tmpDBFile := fmt.Sprintf("%s/orbit.sql", os.Getenv("HOME"))
 	err := ioutil.WriteFile(tmpDBFile, []byte(opts.command), 0644)
 	if err != nil {
 		fmt.Println("writefile failed!")
@@ -38,9 +38,10 @@ func upAndExecDBScript(dbDet string, strucOut *StructuredOuput, opts *Opts) {
 	uploadFile(sshAddress, opts)
 	path := strings.Split(opts.scriptPath, "/")
 	placeholder := StructuredOuput{}
-	execSSHCommand(sshAddress, "mv ~/"+path[len(path)-1]+" ~/sql/"+path[len(path)-1], &placeholder, opts)
-	queryString := ". profiles/" + username + ".prof && pqdb_sql.out -s " + dbID + " ~/sql/" + path[len(path)-1]
-	//placeholder := StructuredOuput{}
+	scriptName := path[len(path)-1]
+	command := fmt.Sprintf("mv ~/%s ~/sql/%s", scriptName, scriptName)
+	execSSHCommand(sshAddress, command, &placeholder, opts)
+	queryString := fmt.Sprintf(". profiles/%s.prof && pqdb_sql.out -s %s ~/sql/%s", username, dbID, scriptName)
 	execSSHCommand(sshAddress, queryString, strucOut, opts)
 
 }
