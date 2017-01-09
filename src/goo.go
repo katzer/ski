@@ -4,16 +4,7 @@ import (
 	"os"
 )
 
-/**
-################################################################################
-								Main-Section
-################################################################################
-*/
-
-/**
-*	StructuredOuput:
-*	A thingy thing thing
- */
+// StructuredOuput ...
 type StructuredOuput struct {
 	planet       string
 	output       string
