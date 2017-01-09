@@ -22,14 +22,14 @@ func printVersion() {
 *	Prints the help dialog
  */
 func printHelp() {
-	fmt.Println("usage: goo [options...] <planet>... -c=\"<command>\"")
-	fmt.Println("Options:")
-	fmt.Println("-s=\"<path/to/script>\", --script=\"<path/to/script>\"  Execute script and return result")
-	fmt.Println("-p, --pretty     Pretty print output as a table")
-	fmt.Println("-t, --type       Show type of planet")
-	fmt.Println("-h, --help       This help text")
-	fmt.Println("-v, --version    Show version number")
-	fmt.Println("-d, --debug	  Show extended debug informations")
+	fmt.Println(`usage: goo [options...] <planet>... -c="<command>"`)
+	fmt.Println(`Options:`)
+	fmt.Println(`-s="<path/to/script>", --script="<path/to/script>"  Execute script and return result`)
+	fmt.Println(`-p, --pretty     Pretty print output as a table`)
+	fmt.Println(`-t, --type       Show type of planet`)
+	fmt.Println(`-h, --help       This help text`)
+	fmt.Println(`-v, --version    Show version number`)
+	fmt.Println(`-d, --debug	  Show extended debug informations`)
 }
 
 /**
