@@ -64,6 +64,9 @@ func (opts *Opts) procArgs(args []string) {
 			os.Exit(1)
 		}
 	}
+	if len(args) == 1 {
+		opts.helpFlag = true
+	}
 
 }
 
