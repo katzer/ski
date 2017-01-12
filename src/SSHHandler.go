@@ -3,13 +3,11 @@ package main
 import (
 	//"github.com/mgutz/ansi"
 	"fmt"
-	"gopkg.in/hypersleep/easyssh.v0"
 	"os"
 	"strings"
-)
 
-type SSHHandler struct {
-}
+	"gopkg.in/hypersleep/easyssh.v0"
+)
 
 /**
 *	Executes a command on a remote ssh server
@@ -17,10 +15,8 @@ type SSHHandler struct {
 *		connDet: connection details in following form: user@hostname
 *		cmd: command to be executed
  */
-func execSSHCommand(connDet string, command string, strucOut *StructuredOuput, opts *Opts) {
+func execCommand(user string, hostname string, command string, strucOut *StructuredOuput, opts *Opts) {
 
-	user := getUser(opts.currentDet)
-	hostname := getHost(opts.currentDet)
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
@@ -39,7 +35,7 @@ func execSSHCommand(connDet string, command string, strucOut *StructuredOuput, o
 	if err != nil {
 		if opts.debugFlag {
 			fmt.Println("#####SSH DEBUG#####")
-			fmt.Printf("conndet: %s\n", connDet)
+			//fmt.Printf("conndet: %s\n", connDet)
 			fmt.Printf("user: %s\n", user)
 			fmt.Printf("hostname: %s\n", hostname)
 			fmt.Printf("orbit key: %s\n", os.Getenv("ORBIT_KEY"))
@@ -67,22 +63,25 @@ func execSSHCommand(connDet string, command string, strucOut *StructuredOuput, o
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
-			splitOut := strings.Split(out, "-----APPPLANT-ORBIT-----\n")
-			cleanedOut = splitOut[len(splitOut)-1]
+			//splitOut := strings.Split(out, "-----APPPLANT-ORBIT-----\n")
+			//cleanedOut = splitOut[len(splitOut)-1]
 		}
 		maxLength := getMaxLength(out)
 		strucOut.output = cleanedOut
 		strucOut.maxOutLength = maxLength
+	}
+	if opts.debugFlag {
+		fmt.Println("### execCommand complete ###")
+		fmt.Printf("strucOut: %v\n", strucOut)
+		fmt.Printf("out: %s\n", out)
+		fmt.Println("### execCommand complete ###")
 	}
 }
 
 /**
 *	Uploads a file to the remote server
  */
-func uploadFile(connDet string, opts *Opts) {
-	user := getUser(opts.currentDet)
-	hostname := getHost(opts.currentDet)
-
+func uploadFile(user string, hostname string, opts *Opts) {
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
@@ -105,14 +104,13 @@ func uploadFile(connDet string, opts *Opts) {
 *		connDet: 	Connection details to planet
 *		scriptPath: Path to script
  */
-func upAndExecSSHScript(connDet string, strucOut *StructuredOuput, opts *Opts) {
-	opts.loadFlag = true
-	uploadFile(connDet, opts)
+func execScript(user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
+	uploadFile(user, hostname, opts)
 	path := strings.Split(opts.scriptPath, "/")
 	placeholder := StructuredOuput{}
 	scriptName := path[len(path)-1]
-	execCommand := fmt.Sprintf("chmod u+x %s && ./%s",scriptName,scriptName)
-	delCommand := fmt.Sprintf("rm %s",scriptName)
-	execSSHCommand(connDet, execCommand, strucOut, opts)
-	execSSHCommand(connDet, delCommand, &placeholder, opts)
+	executionCommand := fmt.Sprintf("chmod u+x %s && ./%s", scriptName, scriptName)
+	delCommand := fmt.Sprintf("rm %s", scriptName)
+	execCommand(user, hostname, executionCommand, strucOut, opts)
+	execCommand(user, hostname, delCommand, &placeholder, opts)
 }

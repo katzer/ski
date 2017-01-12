@@ -16,9 +16,13 @@ if [ "$1" == "-t" ]
   fi
 fi
 
-if [ "$1" == "app" ] || [ "$1" == "db" ] || [ "$1" == "web" ]
+if [ "$1" == "app" ] || [ "$1" == "web" ]
   then
   echo `whoami`@localhost
+fi
+if  [ "$1" == "db" ]
+  then
+  echo dbdb:`whoami`@localhost
 fi
 if [ "$1" == "unauthorized" ]
   then

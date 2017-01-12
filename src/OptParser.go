@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// Opts ...
 type Opts struct {
 	prettyFlag   bool
 	scriptFlag   bool
@@ -107,7 +108,7 @@ func getType(id string) string {
 *		id: The planets id
 *	@return: The connection details to the planet
  */
-func (opts Opts) getConnDet(id string) string {
+func getConnDet(id string) string {
 	cmd := exec.Command("ff", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -136,10 +137,17 @@ func countSupported(planets []string) int {
 *
  */
 func isSupported(planet string) bool {
-	if getType(planet) == "server" {
+	switch getType(planet) {
+	case "server":
 		return true
+	case "db":
+		return true
+	case "web":
+		return false
+	default:
+		return false
+
 	}
-	return false
 
 }
 
