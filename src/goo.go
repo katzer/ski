@@ -28,6 +28,7 @@ func main() {
 	}
 
 	exec := makeExecutor(&opts)
+	debugPrintPlanets(exec.planets)
 	exec.execMain(&opts)
 
 }
@@ -58,7 +59,7 @@ func makeExecutor(opts *Opts) Executor {
 			fmt.Printf("Unkown Type of target %s: %s\n", entry, planet.planetType)
 			continue
 		}
-		executor.planets = append(executor.planets, &planet)
+		executor.planets = append(executor.planets, planet)
 
 	}
 	return executor

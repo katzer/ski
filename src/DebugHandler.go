@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func printOptsDebug(opts *Opts) {
+func debugPrintOpts(opts *Opts) {
 	fmt.Printf("opts:\n")
 	fmt.Printf("prettyFlag: %t\n", opts.prettyFlag)
 	fmt.Printf("scriptFlag: %t\n", opts.scriptFlag)
@@ -22,15 +22,21 @@ func printOptsDebug(opts *Opts) {
 	fmt.Printf("currentDBDet: %s\n", opts.currentDBDet)
 }
 
-func printStructuredOutputDebug(strucOut *StructuredOuput) {
+func debugPrintStructuredOutput(strucOut *StructuredOuput) {
 
 	fmt.Printf("strucOut: %v\n", strucOut)
 	fmt.Printf("planet: %s\n", strucOut.planet)
 	fmt.Printf("out: %s\n", strucOut.output)
-	fmt.Printf("maxLineLength", strucOut.maxOutLength)
+	fmt.Printf("maxLineLength: %d\n", strucOut.maxOutLength)
 
 }
 
-func printDebugString(message string) {
+func debugPrintPlanets(planets []Planet) {
+	for _, planet := range planets {
+		fmt.Println(planet)
+	}
+}
+
+func debugPrintString(message string) {
 	fmt.Printf(message)
 }

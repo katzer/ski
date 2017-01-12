@@ -34,14 +34,14 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 	// Handle errors
 	if err != nil {
 		if opts.debugFlag {
-			printDebugString("#####SSH DEBUG#####")
-			printDebugString(fmt.Sprintf("user: %s\n", user))
-			printDebugString(fmt.Sprintf("hostname: %s\n", hostname))
-			printDebugString(fmt.Sprintf("orbit key: %s\n", os.Getenv("ORBIT_KEY")))
-			printDebugString(fmt.Sprintf("command: %s\n", command))
-			printDebugString(fmt.Sprintf("strucOut: %v\n", strucOut))
-			printOptsDebug(opts)
-			printDebugString("#####SSH DEBUG END#####")
+			debugPrintString("#####SSH DEBUG#####")
+			debugPrintString(fmt.Sprintf("user: %s\n", user))
+			debugPrintString(fmt.Sprintf("hostname: %s\n", hostname))
+			debugPrintString(fmt.Sprintf("orbit key: %s\n", os.Getenv("ORBIT_KEY")))
+			debugPrintString(fmt.Sprintf("command: %s\n", command))
+			debugPrintString(fmt.Sprintf("strucOut: %v\n", strucOut))
+			debugPrintOpts(opts)
+			debugPrintString("#####SSH DEBUG END#####")
 		}
 		throwErrExt(err, "called from exesSSHCommand ")
 	} else {
@@ -55,10 +55,9 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 		strucOut.maxOutLength = maxLength
 	}
 	if opts.debugFlag {
-		printDebugString("### execCommand complete ###")
-		printStructuredOutputDebug(strucOut)
-		printDebugString("### execCommand complete ###")
-
+		debugPrintString("### execCommand complete ###")
+		debugPrintStructuredOutput(strucOut)
+		debugPrintString("### execCommand complete ###")
 	}
 }
 
