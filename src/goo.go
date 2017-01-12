@@ -28,7 +28,7 @@ func main() {
 	}
 
 	exec := makeExecutor(&opts)
-	debugPrintPlanets(exec.planets)
+
 	exec.execMain(&opts)
 
 }
