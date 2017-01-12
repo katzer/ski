@@ -118,9 +118,7 @@ func getConnDet(id string) string {
 }
 
 /**
-*
-*
-*
+*	counts the supported planets in a list of planets
  */
 func countSupported(planets []string) int {
 	i := 0
@@ -133,8 +131,7 @@ func countSupported(planets []string) int {
 }
 
 /**
-*
-*
+*	checks, wether a planet is supported by goo or not
  */
 func isSupported(planet string) bool {
 	switch getType(planet) {
@@ -157,7 +154,7 @@ func getMaxLength(toProcess string) int {
 }
 
 /**
-*
+*	splits db details (dbID:user@host) and returns them as dbID,user@host
  */
 func procDBDets(dbDet string) (string, string) {
 	parts := strings.Split(dbDet, ":")

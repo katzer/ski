@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// Planet ...
+// Planet contains all Informations of one server
 type Planet struct {
 	id           string
 	user         string
@@ -12,7 +12,7 @@ type Planet struct {
 	outputStruct StructuredOuput
 }
 
-func (planet *Planet) execute(opts *Opts) { //, wg *sync.WaitGroup, outStruct *StructuredOuput) {
+func (planet *Planet) execute(opts *Opts) {
 	if planet.planetType == "db" {
 		if opts.scriptFlag {
 			execDBCommand(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
@@ -46,15 +46,4 @@ func (planet *Planet) execute(opts *Opts) { //, wg *sync.WaitGroup, outStruct *S
 	} else {
 
 	}
-	//wg.Done()
 }
-
-/*func (planet *Planet) printContent(opts *Opts) {
-	if opts.debugFlag {
-		fmt.Println("### planet.printcontent debug ###")
-		fmt.Println(planet)
-		fmt.Println(opts)
-		fmt.Println("### planet.printcontent debug ###")
-	}
-	formatAndPrint(planet.outputStruct, opts)
-}*/

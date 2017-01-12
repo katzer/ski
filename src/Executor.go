@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-// Executor ...
+// Executor This struct ensures the parallel execution of all command executions
 type Executor struct {
 	planets []*Planet
 }
