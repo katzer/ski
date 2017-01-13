@@ -108,7 +108,7 @@ func getType(id string) string {
 *		id: The planets id
 *	@return: The connection details to the planet
  */
-func getConnDet(id string) string {
+func getPlanetDetails(id string) string {
 	cmd := exec.Command("ff", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {

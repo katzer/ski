@@ -43,7 +43,7 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 			debugPrintOpts(opts)
 			debugPrintString("#####SSH DEBUG END#####")
 		}
-		throwErrExt(err, "called from exesSSHCommand ")
+		throwErrExt(err, "called from execCommand ")
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
