@@ -37,21 +37,22 @@ func makeExecutor(opts *Opts) Executor {
 	executor := Executor{}
 	var planet Planet
 	for _, entry := range opts.planets {
-		planet = Planet{}
-		connDet := getConnDet(entry)
+		var user string
+		var host string
+		var dbID string
+		connDet := getPlanetDetails(entry)
 		planet.outputStruct.planet = entry
-		planet.id = entry
-		planet.planetType = getType(entry)
-		switch planet.planetType {
+		id := entry
+		planetType := getType(entry)
+		switch planetType {
 		case "server":
-			planet.user = getUser(connDet)
-			planet.host = getHost(connDet)
+			user = getUser(connDet)
+			host = getHost(connDet)
+			dbID = ""
 		case "db":
-			var dbID string
 			dbID, connDet = procDBDets(connDet)
-			planet.user = getUser(connDet)
-			planet.host = getHost(connDet)
-			planet.dbID = dbID
+			user = getUser(connDet)
+			host = getHost(connDet)
 		case "web":
 			fmt.Println("Usage of goo with web servers is not implemented")
 			continue
@@ -59,7 +60,7 @@ func makeExecutor(opts *Opts) Executor {
 			fmt.Printf("Unkown Type of target %s: %s\n", entry, planet.planetType)
 			continue
 		}
-		executor.planets = append(executor.planets, planet)
+		executor.planets = append(executor.planets, Planet{id, user, host, planetType, dbID, StructuredOuput{id, "", 0}})
 
 	}
 	return executor
