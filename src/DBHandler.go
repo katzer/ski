@@ -24,13 +24,14 @@ func execDBCommand(dbID string, user string, hostname string, strucOut *Structur
 }
 
 func execDBScript(dbID string, user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
+	const dbCommand = ". profiles/%s.prof && pqdb_sql.out -s %s ~/sql/%s"
 	uploadFile(user, hostname, opts)
 	path := strings.Split(opts.scriptPath, "/")
 	placeholder := StructuredOuput{}
 	scriptName := path[len(path)-1]
 	command := fmt.Sprintf("mv ~/%s ~/sql/%s", scriptName, scriptName)
 	execCommand(user, hostname, command, &placeholder, opts)
-	queryString := fmt.Sprintf(". profiles/%s.prof && pqdb_sql.out -s %s ~/sql/%s", user, dbID, scriptName)
+	queryString := fmt.Sprintf(dbCommand, user, dbID, scriptName)
 	execCommand(user, hostname, queryString, strucOut, opts)
 
 }
