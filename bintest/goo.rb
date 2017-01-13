@@ -72,9 +72,10 @@ class TestGoo < Test::Unit::TestCase
   end
 
   def test_empty_return
-    output, status = Open3.capture2(PATH, BIN, '-c="ls -a"', 'app')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo "', 'app')
 
-    assert_equal output, "", 'return was not empty'
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_equal output, "\n", 'return was not empty'
   end
 end
 
