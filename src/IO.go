@@ -44,7 +44,7 @@ func printIndented(msg string, indent int, exceptFirst bool) {
 }
 
 func printHeadline(scriptFlag bool, scriptPath string, command string, indent int) {
-	print("NR   PLANET               ")
+	fmt.Print("NR   PLANET               ")
 	if scriptFlag {
 		printIndented(scriptPath, indent, true)
 	} else {
@@ -55,7 +55,7 @@ func printHeadline(scriptFlag bool, scriptPath string, command string, indent in
 
 func printWhite(length int) {
 	for i := 0; i < length; i++ {
-		print(" ")
+		fmt.Print(" ")
 	}
 }
 
@@ -65,20 +65,20 @@ func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
 	}
 	for i, planet := range toPrint {
 		if !opts.prettyFlag {
-			print(planet.output)
+			fmt.Print(planet.output)
 		} else {
-			print(strconv.Itoa(i) + "")
+			fmt.Print(strconv.Itoa(i) + "")
 			if i/10 < 1 {
-				print(" ")
+				fmt.Print(" ")
 			}
 			if i/100 < 1 {
-				print(" ")
+				fmt.Print(" ")
 			}
 			if i/1000 < 1 {
-				print(" ")
+				fmt.Print(" ")
 			}
-			print(" ")
-			print(planet.planet)
+			fmt.Print(" ")
+			fmt.Print(planet.planet)
 			printWhite(planetLength - len(planet.planet))
 			printIndented(planet.output, 26, true)
 		}
