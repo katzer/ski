@@ -1,0 +1,9 @@
+Value List Id (\d+)
+Value List AlClass (\d+)
+Value List Nodes (\d+)
+
+Start
+  ^\s${Id}\s+${AlClass}\s+${Nodes} -> Record
+
+
+EOF
