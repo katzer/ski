@@ -13,9 +13,10 @@ type StructuredOuput struct {
 	maxOutLength int
 }
 
-/**
-*	Main function
- */
+const server = "server"
+const webServer = "web"
+const database = "db"
+
 func main() {
 	args := os.Args
 	opts := Opts{}
@@ -66,15 +67,15 @@ func makeExecutor(opts *Opts) Executor {
 		id := entry
 		planetType := getType(entry)
 		switch planetType {
-		case "server":
+		case server:
 			user = getUser(connDet)
 			host = getHost(connDet)
 			dbID = ""
-		case "db":
+		case database:
 			dbID, connDet = procDBDets(connDet)
 			user = getUser(connDet)
 			host = getHost(connDet)
-		case "web":
+		case webServer:
 			fmt.Println("Usage of goo with web servers is not implemented")
 			continue
 		default:
