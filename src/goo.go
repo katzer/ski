@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -26,10 +27,30 @@ func main() {
 	if opts.versionFlag {
 		printVersion()
 	}
+	// if this was moved to any function other than main, the logger wouldn't function as the file it writes to would be closed after the init function was finished
+	if opts.debugFlag {
+		// open a file
+		f, err := os.OpenFile("testlog.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+		if err != nil {
+			fmt.Printf("error opening file: %v", err)
+		}
+
+		// don't forget to close it
+		defer f.Close()
+
+		// Output to stderr instead of stdout, could also be a file.
+		log.SetOutput(f)
+
+		printDebugStart()
+	}
 
 	exec := makeExecutor(&opts)
 
 	exec.execMain(&opts)
+
+	if opts.debugFlag {
+		printDebugEnd()
+	}
 
 }
 

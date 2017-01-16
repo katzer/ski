@@ -1,42 +1,74 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"log"
+)
+
+var (
+	buf    bytes.Buffer
+	logger *log.Logger
 )
 
 func debugPrintOpts(opts *Opts) {
-	fmt.Printf("opts:\n")
-	fmt.Printf("prettyFlag: %t\n", opts.prettyFlag)
-	fmt.Printf("scriptFlag: %t\n", opts.scriptFlag)
-	fmt.Printf("typeFlag: %t\n", opts.typeFlag)
-	fmt.Printf("debugFlag: %t\n", opts.debugFlag)
-	fmt.Printf("loadFlag: %t\n", opts.loadFlag)
-	fmt.Printf("helpFlag: %t\n", opts.helpFlag)
-	fmt.Printf("versionFlag: %t\n", opts.versionFlag)
-	fmt.Printf("tableFlag: %t\n", opts.tableFlag)
-	fmt.Printf("scriptPath: %s\n", opts.scriptPath)
-	fmt.Printf("command: %s\n", opts.command)
-	fmt.Printf("planets: %v\n", opts.planets)
-	fmt.Printf("planetsCount: %d\n", opts.planetsCount)
-	fmt.Printf("currentDet: %s\n", opts.currentDet)
-	fmt.Printf("currentDBDet: %s\n", opts.currentDBDet)
+	debugString := ""
+	debugString = fmt.Sprintf("%sopts:\n", debugString)
+	debugString = fmt.Sprintf("%sprettyFlag: %t\n", debugString, opts.prettyFlag)
+	debugString = fmt.Sprintf("%sscriptFlag: %t\n", debugString, opts.scriptFlag)
+	debugString = fmt.Sprintf("%stypeFlag: %t\n", debugString, opts.typeFlag)
+	debugString = fmt.Sprintf("%sdebugFlag: %t\n", debugString, opts.debugFlag)
+	debugString = fmt.Sprintf("%sloadFlag: %t\n", debugString, opts.loadFlag)
+	debugString = fmt.Sprintf("%shelpFlag: %t\n", debugString, opts.helpFlag)
+	debugString = fmt.Sprintf("%sversionFlag: %t\n", debugString, opts.versionFlag)
+	debugString = fmt.Sprintf("%stableFlag: %t\n", debugString, opts.tableFlag)
+	debugString = fmt.Sprintf("%sscriptPath: %s\n", debugString, opts.scriptPath)
+	debugString = fmt.Sprintf("%scommand: %s\n", debugString, opts.command)
+	debugString = fmt.Sprintf("%splanets: %v\n", debugString, opts.planets)
+	debugString = fmt.Sprintf("%splanetsCount: %d\n", debugString, opts.planetsCount)
+	debugString = fmt.Sprintf("%scurrentDet: %s\n", debugString, opts.currentDet)
+	debugString = fmt.Sprintf("%scurrentDBDet: %s\n", debugString, opts.currentDBDet)
+	fmt.Print(debugString)
+	log.Output(1, debugString)
 }
 
 func debugPrintStructuredOutput(strucOut *StructuredOuput) {
-
-	fmt.Printf("strucOut: %v\n", strucOut)
-	fmt.Printf("planet: %s\n", strucOut.planet)
-	fmt.Printf("out: %s\n", strucOut.output)
-	fmt.Printf("maxLineLength: %d\n", strucOut.maxOutLength)
+	debugString := ""
+	debugString = fmt.Sprintf("%sstrucOut: %v\n", debugString, strucOut)
+	debugString = fmt.Sprintf("%splanet: %s\n", debugString, strucOut.planet)
+	debugString = fmt.Sprintf("%sout: %s\n", debugString, strucOut.output)
+	debugString = fmt.Sprintf("%smaxLineLength: %d\n", debugString, strucOut.maxOutLength)
+	fmt.Print(debugString)
+	log.Output(1, debugString)
 
 }
 
 func debugPrintPlanets(planets []Planet) {
+	debugString := ""
 	for _, planet := range planets {
-		fmt.Println(planet)
+		debugString = fmt.Sprintf("%s%s\n", debugString, planet)
 	}
+	fmt.Print(debugString)
+	log.Output(1, debugString)
 }
 
 func debugPrintString(message string) {
-	fmt.Printf(message)
+	debugString := ""
+	debugString = fmt.Sprintf("%s", message)
+	fmt.Print(debugString)
+	log.Output(1, debugString)
+}
+
+func printDebugStart() {
+	debugString := ""
+	debugString = fmt.Sprintf("###################################### Program Start ######################################\n")
+	fmt.Print(debugString)
+	log.Output(1, debugString)
+}
+
+func printDebugEnd() {
+	debugString := ""
+	debugString = fmt.Sprintf("###################################### Program End ######################################\n")
+	fmt.Print(debugString)
+	log.Output(1, debugString)
 }

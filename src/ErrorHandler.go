@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -9,8 +10,11 @@ import (
 *	Formats and prints the given output and error.
  */
 func throwErrOut(out []byte, err error) {
-	fmt.Print(fmt.Sprint(err) + " output is: " + string(out) + "called from ErrOut. ")
-	os.Stderr.WriteString(fmt.Sprint(err) + " output is: " + string(out) + "called from ErrOut. ")
+	errorString := fmt.Sprintf("%s output is: %s called from ErrOut.\n", fmt.Sprint(err), string(out))
+	os.Stderr.WriteString(errorString)
+	log.Output(2, `#################### ERROR ####################`)
+	log.Output(2, errorString)
+	log.Output(2, `#################### \ERROR ####################`)
 	os.Exit(1)
 }
 
@@ -18,8 +22,11 @@ func throwErrOut(out []byte, err error) {
 *	Formats and prints the given error.
  */
 func throwErr(err error) {
-	fmt.Print(fmt.Sprint(err) + " called from Err. ")
-	os.Stderr.WriteString(fmt.Sprint(err) + " called from Err. ")
+	errorString := fmt.Sprintf("%s called from Err.\n", fmt.Sprint(err))
+	os.Stderr.WriteString(errorString)
+	log.Output(2, `#################### ERROR ####################`)
+	log.Output(2, errorString)
+	log.Output(2, `#################### \ERROR ####################`)
 	os.Exit(1)
 }
 
@@ -27,7 +34,10 @@ func throwErr(err error) {
 *
  */
 func throwErrExt(err error, addInf string) {
-	fmt.Print(fmt.Sprint(err) + " AddInf: " + addInf)
-	os.Stderr.WriteString(fmt.Sprint(err) + " AddInf: " + addInf)
+	errorString := fmt.Sprintf("%s AddInf: %s\n", fmt.Sprint(err), addInf)
+	os.Stderr.WriteString(errorString)
+	log.Output(2, `#################### ERROR ####################`)
+	log.Output(2, errorString)
+	log.Output(2, `#################### \ERROR ####################`)
 	os.Exit(1)
 }
