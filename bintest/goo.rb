@@ -83,11 +83,16 @@ class TestGoo < Test::Unit::TestCase
     toolsPath = File.expand_path('tools', __dir__)
     output, error, status = Open3.capture3(PATH, BIN,"-tp=\"#{toolsPath}\"", "-s=\"#{toolsPath}/exampleData.sh\"", "-tn=\"exampleTemplate\"", "app")
 
-    puts '#############'
-    puts error
-    puts '#############'
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, "['Id', 'AlClass', 'Nodes']\n['261722320', '5', '8038']\n['395033868', '2', '11968']", 'return was not right'
+  end
+
+  def test_script_execution
+    toolsPath = File.expand_path('tools', __dir__)
+    output, error, status = Open3.capture3(PATH, BIN, "-s=\"#{toolsPath}/test.sh\"", 'app')
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_equal output, "bang\n", 'return was not correct'
   end
 end
 
