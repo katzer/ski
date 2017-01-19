@@ -27,6 +27,7 @@ require 'test/unit'
 BIN  = ARGV.fetch(0).freeze
 PATH = { 'PATH' => "#{File.expand_path('tools', __dir__)}:#{ENV['PATH']}"  }
 
+
 # TODO new tests
 
 class TestGoo < Test::Unit::TestCase
@@ -76,6 +77,17 @@ class TestGoo < Test::Unit::TestCase
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_equal output, "\n", 'return was not empty'
+  end
+
+  def test_tablePrint
+    toolsPath = File.expand_path('tools', __dir__)
+    output, error, status = Open3.capture3(PATH, BIN,"-tp=\"#{toolsPath}\"", "-s=\"#{toolsPath}/exampleData.sh\"", "-tn=\"exampleTemplate\"", "app")
+
+    puts '#############'
+    puts error
+    puts '#############'
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, "['Id', 'AlClass', 'Nodes']\n['261722320', '5', '8038']\n['395033868', '2', '11968']", 'return was not right'
   end
 end
 

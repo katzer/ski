@@ -75,6 +75,10 @@ func (opts *Opts) procArgs(args []string) {
 
 	planets := flag.Args()
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
+	opts.templateName = strings.TrimSuffix(strings.TrimPrefix(opts.templateName, "\""), "\"")
+	opts.templatePath = strings.TrimSuffix(strings.TrimPrefix(opts.templatePath, "\""), "\"")
+	opts.scriptPath = strings.TrimSuffix(strings.TrimPrefix(opts.scriptPath, "\""), "\"")
+	opts.scriptName = strings.TrimSuffix(strings.TrimPrefix(opts.scriptName, "\""), "\"")
 	for _, argument := range planets {
 		if isSupported(argument) {
 			opts.planets = append(opts.planets, argument)
