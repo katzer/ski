@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"os"
 )
 
 var (
@@ -14,20 +15,28 @@ var (
 func debugPrintOpts(opts *Opts) {
 	debugString := ""
 	debugString = fmt.Sprintf("%sopts:\n", debugString)
+	debugString = fmt.Sprintf("%sdebugFlag: %t\n", debugString, opts.debugFlag)
+	debugString = fmt.Sprintf("%shelpFlag: %t\n", debugString, opts.helpFlag)
+	debugString = fmt.Sprintf("%sloadFlag: %t\n", debugString, opts.loadFlag)
 	debugString = fmt.Sprintf("%sprettyFlag: %t\n", debugString, opts.prettyFlag)
 	debugString = fmt.Sprintf("%sscriptFlag: %t\n", debugString, opts.scriptFlag)
-	debugString = fmt.Sprintf("%stypeFlag: %t\n", debugString, opts.typeFlag)
-	debugString = fmt.Sprintf("%sdebugFlag: %t\n", debugString, opts.debugFlag)
-	debugString = fmt.Sprintf("%sloadFlag: %t\n", debugString, opts.loadFlag)
-	debugString = fmt.Sprintf("%shelpFlag: %t\n", debugString, opts.helpFlag)
-	debugString = fmt.Sprintf("%sversionFlag: %t\n", debugString, opts.versionFlag)
 	debugString = fmt.Sprintf("%stableFlag: %t\n", debugString, opts.tableFlag)
-	debugString = fmt.Sprintf("%sscriptPath: %s\n", debugString, opts.scriptPath)
-	debugString = fmt.Sprintf("%scommand: %s\n", debugString, opts.command)
-	debugString = fmt.Sprintf("%splanets: %v\n", debugString, opts.planets)
+	debugString = fmt.Sprintf("%stypeFlag: %t\n", debugString, opts.typeFlag)
+	debugString = fmt.Sprintf("%sversionFlag: %t\n", debugString, opts.versionFlag)
 	debugString = fmt.Sprintf("%splanetsCount: %d\n", debugString, opts.planetsCount)
-	debugString = fmt.Sprintf("%scurrentDet: %s\n", debugString, opts.currentDet)
+	debugString = fmt.Sprintf("%sbashScriptName: %s\n", debugString, opts.bashScriptName)
+	debugString = fmt.Sprintf("%sbashScriptPath: %s\n", debugString, opts.bashScriptPath)
+	debugString = fmt.Sprintf("%scommand: %s\n", debugString, opts.command)
 	debugString = fmt.Sprintf("%scurrentDBDet: %s\n", debugString, opts.currentDBDet)
+	debugString = fmt.Sprintf("%scurrentDet: %s\n", debugString, opts.currentDet)
+	debugString = fmt.Sprintf("%sdbScriptPath: %s\n", debugString, opts.dbScriptName)
+	debugString = fmt.Sprintf("%sdbScriptName: %s\n", debugString, opts.dbScriptPath)
+	debugString = fmt.Sprintf("%spyScriptName: %s\n", debugString, opts.pyScriptName)
+	debugString = fmt.Sprintf("%spyScriptPath: %s\n", debugString, opts.bashScriptName)
+	debugString = fmt.Sprintf("%sscriptName: %s\n", debugString, opts.scriptName)
+	debugString = fmt.Sprintf("%sscriptPath: %s\n", debugString, opts.scriptPath)
+	debugString = fmt.Sprintf("%stemplateName: %s\n", debugString, opts.templateName)
+	debugString = fmt.Sprintf("%stemplatePath: %s\n", debugString, opts.templatePath)
 	fmt.Print(debugString)
 	log.Output(1, debugString)
 }
@@ -62,6 +71,7 @@ func debugPrintString(message string) {
 func printDebugStart() {
 	debugString := ""
 	debugString = fmt.Sprintf("###################################### Program Start ######################################\n")
+	debugString = fmt.Sprintf("%s%v\n", debugString, os.Args)
 	fmt.Print(debugString)
 	log.Output(1, debugString)
 }
