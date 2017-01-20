@@ -37,8 +37,8 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
-			//splitOut := strings.Split(out, "-----APPPLANT-ORBIT-----\n")
-			//cleanedOut = splitOut[len(splitOut)-1]
+			splitOut := strings.Split(out, "-----APPPLANT-ORBIT-----\n")
+			cleanedOut = splitOut[len(splitOut)-1]
 		}
 		maxLength := getMaxLength(out)
 		strucOut.output = cleanedOut
@@ -51,7 +51,7 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 		debugPrintString(fmt.Sprintf("orbit key: %s\n", os.Getenv("ORBIT_KEY")))
 		debugPrintString(fmt.Sprintf("command: %s\n", command))
 		debugPrintString(fmt.Sprintf("strucOut: %v\n", strucOut))
-		debugPrintOpts(opts)
+		//debugPrintOpts(opts)
 		debugPrintStructuredOutput(strucOut)
 		debugPrintString("### execCommand complete ###")
 	}
@@ -73,7 +73,7 @@ func uploadFile(user string, hostname string, opts *Opts) {
 
 	// Handle errors
 	if err != nil {
-		throwErr(err)
+		throwErrExt(err, "called from uploadFile")
 	}
 }
 

@@ -43,6 +43,7 @@ func main() {
 		log.SetOutput(f)
 
 		printDebugStart()
+		debugPrintOpts(&opts)
 	}
 
 	exec := makeExecutor(&opts)
@@ -92,7 +93,7 @@ func makeExecutor(opts *Opts) Executor {
 *	Prints the current Version of the goo application
  */
 func printVersion() {
-	os.Stdout.WriteString("0.9")
+	os.Stdout.WriteString("0.9\n")
 }
 
 /**

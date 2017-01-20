@@ -138,7 +138,7 @@ func getType(id string) string {
 *	@return: The connection details to the planet
  */
 func getPlanetDetails(id string) string {
-	cmd := exec.Command("ff", id)
+	cmd := exec.Command("ff", id, "-f=pqdb")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		throwErrOut(out, err)

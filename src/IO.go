@@ -137,3 +137,8 @@ func tablePrint(templatePath string, filePath string) {
 		log.Fatal(err)
 	}
 }
+
+func trimDBMetaInformations(strucOut *StructuredOuput) {
+	cleaned := strings.Split(strucOut.output, "\n")
+	strucOut.output = strings.Join(cleaned[0:len(cleaned)-3], "")
+}

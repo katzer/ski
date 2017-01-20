@@ -5,15 +5,21 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 )
 
 func execDBCommand(dbID string, user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
-	tmpDBFile := fmt.Sprintf("%s/orbit.sql", os.Getenv("HOME"))
+	tmpDBFile := ""
+	if runtime.GOOS == "windows" {
+		tmpDBFile = os.Getenv("TEMP") + "\\orbit.sql"
+	} else {
+		tmpDBFile = os.Getenv("HOME") + "/orbit.sql"
+	}
 	err := ioutil.WriteFile(tmpDBFile, []byte(opts.command), 0644)
 	if err != nil {
-		fmt.Println("writefile failed!")
-		os.Exit(1)
+		fmt.Println("writing temporary sql script failed")
+		log.Fatal(err)
 	}
 	opts.scriptPath = tmpDBFile
 	execDBScript(dbID, user, hostname, strucOut, opts)
@@ -30,8 +36,9 @@ func execDBScript(dbID string, user string, hostname string, strucOut *Structure
 	placeholder := StructuredOuput{}
 	scriptName := path[len(path)-1]
 	command := fmt.Sprintf("mv ~/%s ~/sql/%s", scriptName, scriptName)
+	removeCommand := fmt.Sprintf("rm ~/sql/%s", scriptName)
 	execCommand(user, hostname, command, &placeholder, opts)
 	queryString := fmt.Sprintf(dbCommand, user, dbID, scriptName)
 	execCommand(user, hostname, queryString, strucOut, opts)
-
+	execCommand(user, hostname, removeCommand, &placeholder, opts)
 }

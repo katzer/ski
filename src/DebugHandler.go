@@ -37,6 +37,7 @@ func debugPrintOpts(opts *Opts) {
 	debugString = fmt.Sprintf("%sscriptPath: %s\n", debugString, opts.scriptPath)
 	debugString = fmt.Sprintf("%stemplateName: %s\n", debugString, opts.templateName)
 	debugString = fmt.Sprintf("%stemplatePath: %s\n", debugString, opts.templatePath)
+	debugString = fmt.Sprintf("%splanets: %v\n", debugString, opts.planets)
 	fmt.Print(debugString)
 	log.Output(1, debugString)
 }

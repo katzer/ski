@@ -15,10 +15,11 @@ type Planet struct {
 func (planet *Planet) execute(opts *Opts) {
 	if planet.planetType == "db" {
 		if opts.scriptFlag {
-			execDBCommand(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
-		} else {
 			execDBScript(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
+		} else {
+			execDBCommand(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
 		}
+		trimDBMetaInformations(&planet.outputStruct)
 	} else if planet.planetType == "server" {
 		if opts.scriptFlag {
 			execScript(planet.user, planet.host, &planet.outputStruct, opts)
