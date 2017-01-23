@@ -1,6 +1,6 @@
 Value Id (\d+)
 Value AlClass (\d+)
-Value Nodes (\d+)
+Value Nodes (.+$)
 
 Start
   ^\s${Id}\s+${AlClass}\s+${Nodes} -> Record
