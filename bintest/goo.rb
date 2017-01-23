@@ -81,10 +81,10 @@ class TestGoo < Test::Unit::TestCase
 
   def test_tablePrint
     toolsPath = File.expand_path('tools', __dir__)
-    output, error, status = Open3.capture3(PATH, BIN,"-tp=\"#{toolsPath}\"", "-s=\"#{toolsPath}/exampleData.sh\"", "-tn=\"exampleTemplate\"", "app")
+    output, error, status = Open3.capture3(PATH, BIN,"-tp=\"#{toolsPath}\"", "-s=\"#{toolsPath}/exampleData.sh\"", "-tn=\"exampleTemplate\"","-pyp=\"#{toolsPath}/pyscripts\"", "app")
 
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, "['Id', 'AlClass', 'Nodes']\n['261722320', '5', '8038']\n['395033868', '2', '11968']", 'return was not right'
+    assert_include output, "['Id', 'AlClass', 'Nodes']\n['261722320', '5', \"80','38\"]\n['395033868', '2', '11\"9\\'68\\'']\n['405086926', '10', \"9', '531\"]\n['395033870', '6', '11978']", 'return was not right'
   end
 
   def test_script_execution

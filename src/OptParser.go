@@ -79,6 +79,7 @@ func (opts *Opts) procArgs(args []string) {
 	opts.templatePath = strings.TrimSuffix(strings.TrimPrefix(opts.templatePath, "\""), "\"")
 	opts.scriptPath = strings.TrimSuffix(strings.TrimPrefix(opts.scriptPath, "\""), "\"")
 	opts.scriptName = strings.TrimSuffix(strings.TrimPrefix(opts.scriptName, "\""), "\"")
+	opts.pyScriptPath = strings.TrimSuffix(strings.TrimPrefix(opts.pyScriptPath, "\""), "\"")
 	for _, argument := range planets {
 		if isSupported(argument) {
 			opts.planets = append(opts.planets, argument)

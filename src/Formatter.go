@@ -17,7 +17,8 @@ func format(toPrint StructuredOuput, counter int, opts *Opts) string {
 		}
 	} else {
 		if opts.tableFlag {
-			fmt.Println(`tableprint and prettyprint are not compatible`)
+			var formatter PrettyTableFormatter
+			formatted = formatter.format(toPrint.output, opts)
 		} else {
 			fmt.Print(strconv.Itoa(counter) + "")
 			if counter/10 < 1 {
