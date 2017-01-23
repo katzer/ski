@@ -87,6 +87,7 @@ class TestGoo < Test::Unit::TestCase
     assert_include output, "['Id', 'AlClass', 'Nodes']\n['261722320', '5', \"80','38\"]\n['395033868', '2', '11\"9\\'68\\'']\n['405086926', '10', \"9', '531\"]\n['395033870', '6', '11978']", 'return was not right'
   end
 
+=begin
   def test_script_execution
     toolsPath = File.expand_path('tools', __dir__)
     output, error, status = Open3.capture3(PATH, BIN, "-s=\"#{toolsPath}/test.sh\"", 'app')
@@ -94,5 +95,6 @@ class TestGoo < Test::Unit::TestCase
     assert_true status.success?, 'Process did not exit cleanly'
     assert_equal output, "bang\n", 'return was not correct'
   end
+=end
 end
 
