@@ -1,5 +1,5 @@
-# IPS-T version check 2.1
-# -----------------------
+IPS-T version check 2.1
+-----------------------
 
 IPS-T MCV Werk Leipzig Testsystem
 -[binaries]---------------------------------------------------------------------
@@ -26,7 +26,7 @@ IPS-T MCV Werk Leipzig Testsystem
  ipst_sap_v4.6.1.1.lpx 4.6.1.1 2016-06-09
 
 -[system]-----------------------------------------------------------------------
- OS              Linux lt07ipstivm 3.0.101-0.7.40-xen 1 SMP Tue May 10 15:38:20 UTC 2016 (151b869) x86_64 x86_64 x86_64 GNU/Linux
+ OS              Linux lt07ipstivm 3.0.101-0.7.40-xen #1 SMP Tue May 10 15:38:20 UTC 2016 (151b869) x86_64 x86_64 x86_64 GNU/Linux
 
 -[unix]-------------------------------------------------------------------------
  SUSE Linux Enterprise Server 11 (x86_64)
@@ -50,11 +50,12 @@ The import path cannot be accessed. Check the database entry and the rights for 
  mls-config-adaptor.pl 1.2
  showver.pl      2.1
 
- -[FAST components]--------------------------------------------------------------
- i | pcs_16.1_sles11_ora11204 | adm                 | 2.8.5-3                | i386  
- i | pcs_16.1_sles11_ora11204 | km                  | 4.12.5-1               | i386  
- i | pcs_16.1_sles11_ora11204 | lfv                 | 1.7.2-1                | i386  
- i | pcs_16.1_sles11_ora11204 | mls                 | 4.6.11-1               | i386  
- i | pcs_16.1_sles11_ora11204 | nedit               | 5.5.0-1                | i386  
- i | pcs_16.1_sles11_ora11204 | qca                 | 4.3.1-1                | i386  
- i | pcs_16.1_sles11_ora11204 | qxx                 | 9.4.10-2               | i386
+-[FAST components]--------------------------------------------------------------
+i | pcs_16.1_sles11_ora11204 | adm                 | 2.8.5-3                | i386
+i | pcs_16.1_sles11_ora11204 | km                  | 4.12.5-1               | i386
+i | pcs_16.1_sles11_ora11204 | lfv                 | 1.7.2-1                | i386
+i | pcs_16.1_sles11_ora11204 | mls                 | 4.6.11-1               | i386
+i | pcs_16.1_sles11_ora11204 | nedit               | 5.5.0-1                | i386
+i | pcs_16.1_sles11_ora11204 | qca                 | 4.3.1-1                | i386
+i | pcs_16.1_sles11_ora11204 | qxx                 | 9.4.10-2               | i386
+

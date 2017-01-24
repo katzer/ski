@@ -103,5 +103,5 @@ func tablePrint(templatePath string, filePath string) {
 
 func trimDBMetaInformations(strucOut *StructuredOuput) {
 	cleaned := strings.Split(strucOut.output, "\n")
-	strucOut.output = strings.Join(cleaned[0:len(cleaned)-3], "")
+	strucOut.output = strings.Join(cleaned[:len(cleaned)-3], "")
 }

@@ -4,11 +4,14 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-ACTION2_RE	bintest/tools/pyscripts/textfsm.py	/^  ACTION2_RE = re.compile('\\s+%s(\\s+%s)?$' % (RECORD_OP_RE, NEWSTATE_RE))$/;"	kind:variable	line:392
+ACTION2_RE	bintest/testFolder/pythonScripts/textfsm.py	/^  ACTION2_RE = re.compile('\\s+%s(\\s+%s)?$' % (RECORD_OP_RE, NEWSTATE_RE))$/;"	kind:variable	line:392
+ACTION2_RE	scripts/pyscripts/textfsm.py	/^  ACTION2_RE = re.compile('\\s+%s(\\s+%s)?$' % (RECORD_OP_RE, NEWSTATE_RE))$/;"	kind:variable	line:392
 ACTION2_RE	textfsm-master/textfsm.py	/^  ACTION2_RE = re.compile('\\s+%s(\\s+%s)?$' % (RECORD_OP_RE, NEWSTATE_RE))$/;"	kind:variable	line:392
-ACTION3_RE	bintest/tools/pyscripts/textfsm.py	/^  ACTION3_RE = re.compile('(\\s+%s)?$' % (NEWSTATE_RE))$/;"	kind:variable	line:394
+ACTION3_RE	bintest/testFolder/pythonScripts/textfsm.py	/^  ACTION3_RE = re.compile('(\\s+%s)?$' % (NEWSTATE_RE))$/;"	kind:variable	line:394
+ACTION3_RE	scripts/pyscripts/textfsm.py	/^  ACTION3_RE = re.compile('(\\s+%s)?$' % (NEWSTATE_RE))$/;"	kind:variable	line:394
 ACTION3_RE	textfsm-master/textfsm.py	/^  ACTION3_RE = re.compile('(\\s+%s)?$' % (NEWSTATE_RE))$/;"	kind:variable	line:394
-ACTION_RE	bintest/tools/pyscripts/textfsm.py	/^  ACTION_RE = re.compile('\\s+%s(\\s+%s)?$' % (OPERATOR_RE, NEWSTATE_RE))$/;"	kind:variable	line:390
+ACTION_RE	bintest/testFolder/pythonScripts/textfsm.py	/^  ACTION_RE = re.compile('\\s+%s(\\s+%s)?$' % (OPERATOR_RE, NEWSTATE_RE))$/;"	kind:variable	line:390
+ACTION_RE	scripts/pyscripts/textfsm.py	/^  ACTION_RE = re.compile('\\s+%s(\\s+%s)?$' % (OPERATOR_RE, NEWSTATE_RE))$/;"	kind:variable	line:390
 ACTION_RE	textfsm-master/textfsm.py	/^  ACTION_RE = re.compile('\\s+%s(\\s+%s)?$' % (OPERATOR_RE, NEWSTATE_RE))$/;"	kind:variable	line:390
 ANSI_END	bintest/tools/pyscripts/terminal.py	/^ANSI_END = '\\002'$/;"	kind:variable	line:95
 ANSI_END	scripts/pyscripts/terminal.py	/^ANSI_END = '\\002'$/;"	kind:variable	line:95
@@ -22,23 +25,27 @@ AnsiText	bintest/tools/pyscripts/terminal.py	/^def AnsiText(text, command_list=N
 AnsiText	scripts/pyscripts/terminal.py	/^def AnsiText(text, command_list=None, reset=True):$/;"	kind:function	line:136
 Append	bintest/tools/pyscripts/texttable.py	/^  def Append(self, new_values):$/;"	kind:member	line:962
 Append	scripts/pyscripts/texttable.py	/^  def Append(self, new_values):$/;"	kind:member	line:962
-AssignVar	bintest/tools/pyscripts/textfsm.py	/^  def AssignVar(self, value):$/;"	kind:member	line:222
+AssignVar	bintest/testFolder/pythonScripts/textfsm.py	/^  def AssignVar(self, value):$/;"	kind:member	line:222
+AssignVar	scripts/pyscripts/textfsm.py	/^  def AssignVar(self, value):$/;"	kind:member	line:222
 AssignVar	textfsm-master/textfsm.py	/^  def AssignVar(self, value):$/;"	kind:member	line:222
 BG_COLOR_WORDS	bintest/tools/pyscripts/terminal.py	/^BG_COLOR_WORDS = {'black': ['bg_black'],$/;"	kind:variable	line:82
 BG_COLOR_WORDS	scripts/pyscripts/terminal.py	/^BG_COLOR_WORDS = {'black': ['bg_black'],$/;"	kind:variable	line:82
 Clear	bintest/tools/pyscripts/terminal.py	/^  def Clear(self):$/;"	kind:member	line:312
 Clear	scripts/pyscripts/terminal.py	/^  def Clear(self):$/;"	kind:member	line:312
-ClearAllVar	bintest/tools/pyscripts/textfsm.py	/^  def ClearAllVar(self):$/;"	kind:member	line:234
+ClearAllVar	bintest/testFolder/pythonScripts/textfsm.py	/^  def ClearAllVar(self):$/;"	kind:member	line:234
+ClearAllVar	scripts/pyscripts/textfsm.py	/^  def ClearAllVar(self):$/;"	kind:member	line:234
 ClearAllVar	textfsm-master/textfsm.py	/^  def ClearAllVar(self):$/;"	kind:member	line:234
-ClearVar	bintest/tools/pyscripts/textfsm.py	/^  def ClearVar(self):$/;"	kind:member	line:228
+ClearVar	bintest/testFolder/pythonScripts/textfsm.py	/^  def ClearVar(self):$/;"	kind:member	line:228
+ClearVar	scripts/pyscripts/textfsm.py	/^  def ClearVar(self):$/;"	kind:member	line:228
 ClearVar	textfsm-master/textfsm.py	/^  def ClearVar(self):$/;"	kind:member	line:228
 CliTable	bintest/tools/pyscripts/clitable.py	/^class CliTable(texttable.TextTable):$/;"	kind:class	line:126
 CliTable	scripts/pyscripts/clitable.py	/^class CliTable(texttable.TextTable):$/;"	kind:class	line:126
 CliTableError	bintest/tools/pyscripts/clitable.py	/^class CliTableError(Error):$/;"	kind:class	line:45
 CliTableError	scripts/pyscripts/clitable.py	/^class CliTableError(Error):$/;"	kind:class	line:45
+CopyableRegexObject	bintest/testFolder/pythonScripts/textfsm.py	/^class CopyableRegexObject(object):$/;"	kind:class	line:331
 CopyableRegexObject	bintest/tools/pyscripts/copyable_regex_object.py	/^class CopyableRegexObject(object):$/;"	kind:class	line:22
-CopyableRegexObject	bintest/tools/pyscripts/textfsm.py	/^class CopyableRegexObject(object):$/;"	kind:class	line:331
 CopyableRegexObject	scripts/pyscripts/copyable_regex_object.py	/^class CopyableRegexObject(object):$/;"	kind:class	line:22
+CopyableRegexObject	scripts/pyscripts/textfsm.py	/^class CopyableRegexObject(object):$/;"	kind:class	line:331
 CopyableRegexObject	textfsm-master/textfsm.py	/^class CopyableRegexObject(object):$/;"	kind:class	line:331
 CopyableRegexObjectTest	bintest/tools/pyscripts/copyable_regex_object_test.py	/^class CopyableRegexObjectTest(unittest.TestCase):$/;"	kind:class	line:24
 CopyableRegexObjectTest	scripts/pyscripts/copyable_regex_object_test.py	/^class CopyableRegexObjectTest(unittest.TestCase):$/;"	kind:class	line:24
@@ -48,35 +55,42 @@ CsvToTable	bintest/tools/pyscripts/texttable.py	/^  def CsvToTable(self, buf, he
 CsvToTable	scripts/pyscripts/texttable.py	/^  def CsvToTable(self, buf, header=True, separator=','):$/;"	kind:member	line:992
 EncloseAnsiText	bintest/tools/pyscripts/terminal.py	/^def EncloseAnsiText(text):$/;"	kind:function	line:160
 EncloseAnsiText	scripts/pyscripts/terminal.py	/^def EncloseAnsiText(text):$/;"	kind:function	line:160
+Error	bintest/testFolder/pythonScripts/textfsm.py	/^class Error(Exception):$/;"	kind:class	line:37
 Error	bintest/tools/pyscripts/clitable.py	/^class Error(Exception):$/;"	kind:class	line:37
 Error	bintest/tools/pyscripts/terminal.py	/^class Error(Exception):$/;"	kind:class	line:102
-Error	bintest/tools/pyscripts/textfsm.py	/^class Error(Exception):$/;"	kind:class	line:37
 Error	bintest/tools/pyscripts/texttable.py	/^class Error(Exception):$/;"	kind:class	line:31
 Error	scripts/pyscripts/clitable.py	/^class Error(Exception):$/;"	kind:class	line:37
 Error	scripts/pyscripts/terminal.py	/^class Error(Exception):$/;"	kind:class	line:102
+Error	scripts/pyscripts/textfsm.py	/^class Error(Exception):$/;"	kind:class	line:37
 Error	scripts/pyscripts/texttable.py	/^class Error(Exception):$/;"	kind:class	line:31
 Error	textfsm-master/textfsm.py	/^class Error(Exception):$/;"	kind:class	line:37
 FG_COLOR_WORDS	bintest/tools/pyscripts/terminal.py	/^FG_COLOR_WORDS = {'black': ['black'],$/;"	kind:variable	line:65
 FG_COLOR_WORDS	scripts/pyscripts/terminal.py	/^FG_COLOR_WORDS = {'black': ['black'],$/;"	kind:variable	line:65
-FSMAction	bintest/tools/pyscripts/textfsm.py	/^class FSMAction(Exception):$/;"	kind:class	line:55
+FSMAction	bintest/testFolder/pythonScripts/textfsm.py	/^class FSMAction(Exception):$/;"	kind:class	line:55
+FSMAction	scripts/pyscripts/textfsm.py	/^class FSMAction(Exception):$/;"	kind:class	line:55
 FSMAction	textfsm-master/textfsm.py	/^class FSMAction(Exception):$/;"	kind:class	line:55
 FakeTerminal	bintest/tools/pyscripts/terminal_test.py	/^class FakeTerminal(object):$/;"	kind:class	line:120
 FakeTerminal	scripts/pyscripts/terminal_test.py	/^class FakeTerminal(object):$/;"	kind:class	line:120
-Filldown	bintest/tools/pyscripts/textfsm.py	/^  class Filldown(OptionBase):$/;"	kind:class	line:134
+Filldown	bintest/testFolder/pythonScripts/textfsm.py	/^  class Filldown(OptionBase):$/;"	kind:class	line:134
+Filldown	scripts/pyscripts/textfsm.py	/^  class Filldown(OptionBase):$/;"	kind:class	line:134
 Filldown	textfsm-master/textfsm.py	/^  class Filldown(OptionBase):$/;"	kind:class	line:134
-Fillup	bintest/tools/pyscripts/textfsm.py	/^  class Fillup(OptionBase):$/;"	kind:class	line:149
+Fillup	bintest/testFolder/pythonScripts/textfsm.py	/^  class Fillup(OptionBase):$/;"	kind:class	line:149
+Fillup	scripts/pyscripts/textfsm.py	/^  class Fillup(OptionBase):$/;"	kind:class	line:149
 Fillup	textfsm-master/textfsm.py	/^  class Fillup(OptionBase):$/;"	kind:class	line:149
 Filter	bintest/tools/pyscripts/texttable.py	/^  def Filter(self, function=None):$/;"	kind:member	line:371
 Filter	scripts/pyscripts/texttable.py	/^  def Filter(self, function=None):$/;"	kind:member	line:371
 FormattedTable	bintest/tools/pyscripts/texttable.py	/^  def FormattedTable(self, width=80, force_display=False, ml_delimiter=True,$/;"	kind:member	line:672
 FormattedTable	scripts/pyscripts/texttable.py	/^  def FormattedTable(self, width=80, force_display=False, ml_delimiter=True,$/;"	kind:member	line:672
-GetOption	bintest/tools/pyscripts/textfsm.py	/^  def GetOption(cls, name):$/;"	kind:member	line:123
+GetOption	bintest/testFolder/pythonScripts/textfsm.py	/^  def GetOption(cls, name):$/;"	kind:member	line:123
+GetOption	scripts/pyscripts/textfsm.py	/^  def GetOption(cls, name):$/;"	kind:member	line:123
 GetOption	textfsm-master/textfsm.py	/^  def GetOption(cls, name):$/;"	kind:member	line:123
 GetRowMatch	bintest/tools/pyscripts/clitable.py	/^  def GetRowMatch(self, attributes):$/;"	kind:member	line:109
 GetRowMatch	scripts/pyscripts/clitable.py	/^  def GetRowMatch(self, attributes):$/;"	kind:member	line:109
-GetValuesByAttrib	bintest/tools/pyscripts/textfsm.py	/^  def GetValuesByAttrib(self, attribute):$/;"	kind:member	line:973
+GetValuesByAttrib	bintest/testFolder/pythonScripts/textfsm.py	/^  def GetValuesByAttrib(self, attribute):$/;"	kind:member	line:973
+GetValuesByAttrib	scripts/pyscripts/textfsm.py	/^  def GetValuesByAttrib(self, attribute):$/;"	kind:member	line:973
 GetValuesByAttrib	textfsm-master/textfsm.py	/^  def GetValuesByAttrib(self, attribute):$/;"	kind:member	line:973
-Header	bintest/tools/pyscripts/textfsm.py	/^  def Header(self):$/;"	kind:member	line:240
+Header	bintest/testFolder/pythonScripts/textfsm.py	/^  def Header(self):$/;"	kind:member	line:240
+Header	scripts/pyscripts/textfsm.py	/^  def Header(self):$/;"	kind:member	line:240
 Header	textfsm-master/textfsm.py	/^  def Header(self):$/;"	kind:member	line:240
 INDEX	bintest/tools/pyscripts/clitable.py	/^  INDEX = {}$/;"	kind:variable	line:145
 INDEX	scripts/pyscripts/clitable.py	/^  INDEX = {}$/;"	kind:variable	line:145
@@ -86,13 +100,16 @@ IndexTableError	bintest/tools/pyscripts/clitable.py	/^class IndexTableError(Erro
 IndexTableError	scripts/pyscripts/clitable.py	/^class IndexTableError(Error):$/;"	kind:class	line:41
 Insert	bintest/tools/pyscripts/texttable.py	/^  def Insert(self, key, value, row_index):$/;"	kind:member	line:260
 Insert	scripts/pyscripts/texttable.py	/^  def Insert(self, key, value, row_index):$/;"	kind:member	line:260
-Key	bintest/tools/pyscripts/textfsm.py	/^  class Key(OptionBase):$/;"	kind:class	line:166
+Key	bintest/testFolder/pythonScripts/textfsm.py	/^  class Key(OptionBase):$/;"	kind:class	line:166
+Key	scripts/pyscripts/textfsm.py	/^  class Key(OptionBase):$/;"	kind:class	line:166
 Key	textfsm-master/textfsm.py	/^  class Key(OptionBase):$/;"	kind:class	line:166
 KeyValue	bintest/tools/pyscripts/clitable.py	/^  def KeyValue(self, row=None):$/;"	kind:member	line:350
 KeyValue	scripts/pyscripts/clitable.py	/^  def KeyValue(self, row=None):$/;"	kind:member	line:350
-LINE_OP	bintest/tools/pyscripts/textfsm.py	/^  LINE_OP = ('Continue', 'Next', 'Error')$/;"	kind:variable	line:377
+LINE_OP	bintest/testFolder/pythonScripts/textfsm.py	/^  LINE_OP = ('Continue', 'Next', 'Error')$/;"	kind:variable	line:377
+LINE_OP	scripts/pyscripts/textfsm.py	/^  LINE_OP = ('Continue', 'Next', 'Error')$/;"	kind:variable	line:377
 LINE_OP	textfsm-master/textfsm.py	/^  LINE_OP = ('Continue', 'Next', 'Error')$/;"	kind:variable	line:377
-LINE_OP_RE	bintest/tools/pyscripts/textfsm.py	/^  LINE_OP_RE = '(?P<ln_op>%s)' % '|'.join(LINE_OP)$/;"	kind:variable	line:381
+LINE_OP_RE	bintest/testFolder/pythonScripts/textfsm.py	/^  LINE_OP_RE = '(?P<ln_op>%s)' % '|'.join(LINE_OP)$/;"	kind:variable	line:381
+LINE_OP_RE	scripts/pyscripts/textfsm.py	/^  LINE_OP_RE = '(?P<ln_op>%s)' % '|'.join(LINE_OP)$/;"	kind:variable	line:381
 LINE_OP_RE	textfsm-master/textfsm.py	/^  LINE_OP_RE = '(?P<ln_op>%s)' % '|'.join(LINE_OP)$/;"	kind:variable	line:381
 LabelValueTable	bintest/tools/pyscripts/clitable.py	/^  def LabelValueTable(self, keys=None):$/;"	kind:member	line:306
 LabelValueTable	bintest/tools/pyscripts/texttable.py	/^  def LabelValueTable(self, label_list=None):$/;"	kind:member	line:867
@@ -100,11 +117,14 @@ LabelValueTable	scripts/pyscripts/clitable.py	/^  def LabelValueTable(self, keys
 LabelValueTable	scripts/pyscripts/texttable.py	/^  def LabelValueTable(self, label_list=None):$/;"	kind:member	line:867
 LineWrap	bintest/tools/pyscripts/terminal.py	/^def LineWrap(text, omit_sgr=False):$/;"	kind:function	line:179
 LineWrap	scripts/pyscripts/terminal.py	/^def LineWrap(text, omit_sgr=False):$/;"	kind:function	line:179
-List	bintest/tools/pyscripts/textfsm.py	/^  class List(OptionBase):$/;"	kind:class	line:169
+List	bintest/testFolder/pythonScripts/textfsm.py	/^  class List(OptionBase):$/;"	kind:class	line:169
+List	scripts/pyscripts/textfsm.py	/^  class List(OptionBase):$/;"	kind:class	line:169
 List	textfsm-master/textfsm.py	/^  class List(OptionBase):$/;"	kind:class	line:169
-MATCH_ACTION	bintest/tools/pyscripts/textfsm.py	/^  MATCH_ACTION = re.compile('(?P<match>.*)(\\s->(?P<action>.*))')$/;"	kind:variable	line:374
+MATCH_ACTION	bintest/testFolder/pythonScripts/textfsm.py	/^  MATCH_ACTION = re.compile('(?P<match>.*)(\\s->(?P<action>.*))')$/;"	kind:variable	line:374
+MATCH_ACTION	scripts/pyscripts/textfsm.py	/^  MATCH_ACTION = re.compile('(?P<match>.*)(\\s->(?P<action>.*))')$/;"	kind:variable	line:374
 MATCH_ACTION	textfsm-master/textfsm.py	/^  MATCH_ACTION = re.compile('(?P<match>.*)(\\s->(?P<action>.*))')$/;"	kind:variable	line:374
-MAX_NAME_LEN	bintest/tools/pyscripts/textfsm.py	/^  MAX_NAME_LEN = 48$/;"	kind:variable	line:522
+MAX_NAME_LEN	bintest/testFolder/pythonScripts/textfsm.py	/^  MAX_NAME_LEN = 48$/;"	kind:variable	line:522
+MAX_NAME_LEN	scripts/pyscripts/textfsm.py	/^  MAX_NAME_LEN = 48$/;"	kind:variable	line:522
 MAX_NAME_LEN	textfsm-master/textfsm.py	/^  MAX_NAME_LEN = 48$/;"	kind:variable	line:522
 Maketable	bintest/tools/pyscripts/texttable_test.py	/^    def Maketable():$/;"	kind:function	line:718
 Maketable	scripts/pyscripts/texttable_test.py	/^    def Maketable():$/;"	kind:function	line:718
@@ -112,51 +132,73 @@ Map	bintest/tools/pyscripts/texttable.py	/^  def Map(self, function):$/;"	kind:m
 Map	scripts/pyscripts/texttable.py	/^  def Map(self, function):$/;"	kind:member	line:396
 MyRow	bintest/tools/pyscripts/texttable_test.py	/^class MyRow(texttable.Row):$/;"	kind:class	line:155
 MyRow	scripts/pyscripts/texttable_test.py	/^class MyRow(texttable.Row):$/;"	kind:class	line:155
-NEWSTATE_RE	bintest/tools/pyscripts/textfsm.py	/^  NEWSTATE_RE = '(?P<new_state>\\w+|\\".*\\")'$/;"	kind:variable	line:387
+NEWSTATE_RE	bintest/testFolder/pythonScripts/textfsm.py	/^  NEWSTATE_RE = '(?P<new_state>\\w+|\\".*\\")'$/;"	kind:variable	line:387
+NEWSTATE_RE	scripts/pyscripts/textfsm.py	/^  NEWSTATE_RE = '(?P<new_state>\\w+|\\".*\\")'$/;"	kind:variable	line:387
 NEWSTATE_RE	textfsm-master/textfsm.py	/^  NEWSTATE_RE = '(?P<new_state>\\w+|\\".*\\")'$/;"	kind:variable	line:387
 NewRow	bintest/tools/pyscripts/texttable.py	/^  def NewRow(self, value=''):$/;"	kind:member	line:975
 NewRow	scripts/pyscripts/texttable.py	/^  def NewRow(self, value=''):$/;"	kind:member	line:975
-OPERATOR_RE	bintest/tools/pyscripts/textfsm.py	/^  OPERATOR_RE = '(%s(\\.%s)?)' % (LINE_OP_RE, RECORD_OP_RE)$/;"	kind:variable	line:385
+OPERATOR_RE	bintest/testFolder/pythonScripts/textfsm.py	/^  OPERATOR_RE = '(%s(\\.%s)?)' % (LINE_OP_RE, RECORD_OP_RE)$/;"	kind:variable	line:385
+OPERATOR_RE	scripts/pyscripts/textfsm.py	/^  OPERATOR_RE = '(%s(\\.%s)?)' % (LINE_OP_RE, RECORD_OP_RE)$/;"	kind:variable	line:385
 OPERATOR_RE	textfsm-master/textfsm.py	/^  OPERATOR_RE = '(%s(\\.%s)?)' % (LINE_OP_RE, RECORD_OP_RE)$/;"	kind:variable	line:385
-OnAssignVar	bintest/tools/pyscripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:103
-OnAssignVar	bintest/tools/pyscripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:140
-OnAssignVar	bintest/tools/pyscripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:152
-OnAssignVar	bintest/tools/pyscripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:175
+OnAssignVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:103
+OnAssignVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:140
+OnAssignVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:152
+OnAssignVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:175
+OnAssignVar	scripts/pyscripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:103
+OnAssignVar	scripts/pyscripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:140
+OnAssignVar	scripts/pyscripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:152
+OnAssignVar	scripts/pyscripts/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:175
 OnAssignVar	textfsm-master/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:103
 OnAssignVar	textfsm-master/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:140
 OnAssignVar	textfsm-master/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:152
 OnAssignVar	textfsm-master/textfsm.py	/^    def OnAssignVar(self):$/;"	kind:member	line:175
-OnClearAllVar	bintest/tools/pyscripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:100
-OnClearAllVar	bintest/tools/pyscripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:146
-OnClearAllVar	bintest/tools/pyscripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:182
+OnClearAllVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:100
+OnClearAllVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:146
+OnClearAllVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:182
+OnClearAllVar	scripts/pyscripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:100
+OnClearAllVar	scripts/pyscripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:146
+OnClearAllVar	scripts/pyscripts/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:182
 OnClearAllVar	textfsm-master/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:100
 OnClearAllVar	textfsm-master/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:146
 OnClearAllVar	textfsm-master/textfsm.py	/^    def OnClearAllVar(self):$/;"	kind:member	line:182
-OnClearVar	bintest/tools/pyscripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:143
-OnClearVar	bintest/tools/pyscripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:178
-OnClearVar	bintest/tools/pyscripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:97
+OnClearVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:143
+OnClearVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:178
+OnClearVar	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:97
+OnClearVar	scripts/pyscripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:143
+OnClearVar	scripts/pyscripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:178
+OnClearVar	scripts/pyscripts/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:97
 OnClearVar	textfsm-master/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:143
 OnClearVar	textfsm-master/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:178
 OnClearVar	textfsm-master/textfsm.py	/^    def OnClearVar(self):$/;"	kind:member	line:97
-OnCreateOptions	bintest/tools/pyscripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:137
-OnCreateOptions	bintest/tools/pyscripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:172
-OnCreateOptions	bintest/tools/pyscripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:94
+OnCreateOptions	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:137
+OnCreateOptions	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:172
+OnCreateOptions	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:94
+OnCreateOptions	scripts/pyscripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:137
+OnCreateOptions	scripts/pyscripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:172
+OnCreateOptions	scripts/pyscripts/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:94
 OnCreateOptions	textfsm-master/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:137
 OnCreateOptions	textfsm-master/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:172
 OnCreateOptions	textfsm-master/textfsm.py	/^    def OnCreateOptions(self):$/;"	kind:member	line:94
-OnGetValue	bintest/tools/pyscripts/textfsm.py	/^    def OnGetValue(self):$/;"	kind:member	line:106
+OnGetValue	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnGetValue(self):$/;"	kind:member	line:106
+OnGetValue	scripts/pyscripts/textfsm.py	/^    def OnGetValue(self):$/;"	kind:member	line:106
 OnGetValue	textfsm-master/textfsm.py	/^    def OnGetValue(self):$/;"	kind:member	line:106
-OnSaveRecord	bintest/tools/pyscripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:109
-OnSaveRecord	bintest/tools/pyscripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:130
-OnSaveRecord	bintest/tools/pyscripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:185
-OnSaveRecord	bintest/tools/pyscripts/textfsm.py	/^  def OnSaveRecord(self):$/;"	kind:member	line:315
+OnSaveRecord	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:109
+OnSaveRecord	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:130
+OnSaveRecord	bintest/testFolder/pythonScripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:185
+OnSaveRecord	bintest/testFolder/pythonScripts/textfsm.py	/^  def OnSaveRecord(self):$/;"	kind:member	line:315
+OnSaveRecord	scripts/pyscripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:109
+OnSaveRecord	scripts/pyscripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:130
+OnSaveRecord	scripts/pyscripts/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:185
+OnSaveRecord	scripts/pyscripts/textfsm.py	/^  def OnSaveRecord(self):$/;"	kind:member	line:315
 OnSaveRecord	textfsm-master/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:109
 OnSaveRecord	textfsm-master/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:130
 OnSaveRecord	textfsm-master/textfsm.py	/^    def OnSaveRecord(self):$/;"	kind:member	line:185
 OnSaveRecord	textfsm-master/textfsm.py	/^  def OnSaveRecord(self):$/;"	kind:member	line:315
-OptionBase	bintest/tools/pyscripts/textfsm.py	/^  class OptionBase(object):$/;"	kind:class	line:80
+OptionBase	bintest/testFolder/pythonScripts/textfsm.py	/^  class OptionBase(object):$/;"	kind:class	line:80
+OptionBase	scripts/pyscripts/textfsm.py	/^  class OptionBase(object):$/;"	kind:class	line:80
 OptionBase	textfsm-master/textfsm.py	/^  class OptionBase(object):$/;"	kind:class	line:80
-OptionNames	bintest/tools/pyscripts/textfsm.py	/^  def OptionNames(self):$/;"	kind:member	line:246
+OptionNames	bintest/testFolder/pythonScripts/textfsm.py	/^  def OptionNames(self):$/;"	kind:member	line:246
+OptionNames	scripts/pyscripts/textfsm.py	/^  def OptionNames(self):$/;"	kind:member	line:246
 OptionNames	textfsm-master/textfsm.py	/^  def OptionNames(self):$/;"	kind:member	line:246
 Page	bintest/tools/pyscripts/terminal.py	/^  def Page(self, text=None, show_percent=None):$/;"	kind:member	line:317
 Page	scripts/pyscripts/terminal.py	/^  def Page(self, text=None, show_percent=None):$/;"	kind:member	line:317
@@ -164,26 +206,32 @@ Pager	bintest/tools/pyscripts/terminal.py	/^class Pager(object):$/;"	kind:class	
 Pager	scripts/pyscripts/terminal.py	/^class Pager(object):$/;"	kind:class	line:241
 PagerTest	bintest/tools/pyscripts/terminal_test.py	/^class PagerTest(unittest.TestCase):$/;"	kind:class	line:136
 PagerTest	scripts/pyscripts/terminal_test.py	/^class PagerTest(unittest.TestCase):$/;"	kind:class	line:136
-Parse	bintest/tools/pyscripts/textfsm.py	/^  def Parse(self, value):$/;"	kind:member	line:250
+Parse	bintest/testFolder/pythonScripts/textfsm.py	/^  def Parse(self, value):$/;"	kind:member	line:250
+Parse	scripts/pyscripts/textfsm.py	/^  def Parse(self, value):$/;"	kind:member	line:250
 Parse	textfsm-master/textfsm.py	/^  def Parse(self, value):$/;"	kind:member	line:250
 ParseCmd	bintest/tools/pyscripts/clitable.py	/^  def ParseCmd(self, cmd_input, attributes=None, templates=None):$/;"	kind:member	line:211
 ParseCmd	scripts/pyscripts/clitable.py	/^  def ParseCmd(self, cmd_input, attributes=None, templates=None):$/;"	kind:member	line:211
-ParseText	bintest/tools/pyscripts/textfsm.py	/^  def ParseText(self, text, eof=True):$/;"	kind:member	line:832
+ParseText	bintest/testFolder/pythonScripts/textfsm.py	/^  def ParseText(self, text, eof=True):$/;"	kind:member	line:832
+ParseText	scripts/pyscripts/textfsm.py	/^  def ParseText(self, text, eof=True):$/;"	kind:member	line:832
 ParseText	textfsm-master/textfsm.py	/^  def ParseText(self, text, eof=True):$/;"	kind:member	line:832
-RECORD_OP	bintest/tools/pyscripts/textfsm.py	/^  RECORD_OP = ('Clear', 'Clearall', 'Record', 'NoRecord')$/;"	kind:variable	line:378
+RECORD_OP	bintest/testFolder/pythonScripts/textfsm.py	/^  RECORD_OP = ('Clear', 'Clearall', 'Record', 'NoRecord')$/;"	kind:variable	line:378
+RECORD_OP	scripts/pyscripts/textfsm.py	/^  RECORD_OP = ('Clear', 'Clearall', 'Record', 'NoRecord')$/;"	kind:variable	line:378
 RECORD_OP	textfsm-master/textfsm.py	/^  RECORD_OP = ('Clear', 'Clearall', 'Record', 'NoRecord')$/;"	kind:variable	line:378
-RECORD_OP_RE	bintest/tools/pyscripts/textfsm.py	/^  RECORD_OP_RE = '(?P<rec_op>%s)' % '|'.join(RECORD_OP)$/;"	kind:variable	line:383
+RECORD_OP_RE	bintest/testFolder/pythonScripts/textfsm.py	/^  RECORD_OP_RE = '(?P<rec_op>%s)' % '|'.join(RECORD_OP)$/;"	kind:variable	line:383
+RECORD_OP_RE	scripts/pyscripts/textfsm.py	/^  RECORD_OP_RE = '(?P<rec_op>%s)' % '|'.join(RECORD_OP)$/;"	kind:variable	line:383
 RECORD_OP_RE	textfsm-master/textfsm.py	/^  RECORD_OP_RE = '(?P<rec_op>%s)' % '|'.join(RECORD_OP)$/;"	kind:variable	line:383
 ReadIndex	bintest/tools/pyscripts/clitable.py	/^  def ReadIndex(self, index_file=None):$/;"	kind:member	line:178
 ReadIndex	scripts/pyscripts/clitable.py	/^  def ReadIndex(self, index_file=None):$/;"	kind:member	line:178
 Remove	bintest/tools/pyscripts/texttable.py	/^  def Remove(self, row):$/;"	kind:member	line:497
 Remove	scripts/pyscripts/texttable.py	/^  def Remove(self, row):$/;"	kind:member	line:497
-Required	bintest/tools/pyscripts/textfsm.py	/^  class Required(OptionBase):$/;"	kind:class	line:127
+Required	bintest/testFolder/pythonScripts/textfsm.py	/^  class Required(OptionBase):$/;"	kind:class	line:127
+Required	scripts/pyscripts/textfsm.py	/^  class Required(OptionBase):$/;"	kind:class	line:127
 Required	textfsm-master/textfsm.py	/^  class Required(OptionBase):$/;"	kind:class	line:127
+Reset	bintest/testFolder/pythonScripts/textfsm.py	/^  def Reset(self):$/;"	kind:member	line:567
 Reset	bintest/tools/pyscripts/terminal.py	/^  def Reset(self):$/;"	kind:member	line:290
-Reset	bintest/tools/pyscripts/textfsm.py	/^  def Reset(self):$/;"	kind:member	line:567
 Reset	bintest/tools/pyscripts/texttable.py	/^  def Reset(self):$/;"	kind:member	line:314
 Reset	scripts/pyscripts/terminal.py	/^  def Reset(self):$/;"	kind:member	line:290
+Reset	scripts/pyscripts/textfsm.py	/^  def Reset(self):$/;"	kind:member	line:567
 Reset	scripts/pyscripts/texttable.py	/^  def Reset(self):$/;"	kind:member	line:314
 Reset	textfsm-master/textfsm.py	/^  def Reset(self):$/;"	kind:member	line:567
 Row	bintest/tools/pyscripts/texttable.py	/^class Row(dict):$/;"	kind:class	line:39
@@ -194,9 +242,11 @@ SGR	bintest/tools/pyscripts/terminal.py	/^SGR = {$/;"	kind:variable	line:35
 SGR	scripts/pyscripts/terminal.py	/^SGR = {$/;"	kind:variable	line:35
 SetLines	bintest/tools/pyscripts/terminal.py	/^  def SetLines(self, lines):$/;"	kind:member	line:297
 SetLines	scripts/pyscripts/terminal.py	/^  def SetLines(self, lines):$/;"	kind:member	line:297
-SkipRecord	bintest/tools/pyscripts/textfsm.py	/^class SkipRecord(FSMAction):$/;"	kind:class	line:59
+SkipRecord	bintest/testFolder/pythonScripts/textfsm.py	/^class SkipRecord(FSMAction):$/;"	kind:class	line:59
+SkipRecord	scripts/pyscripts/textfsm.py	/^class SkipRecord(FSMAction):$/;"	kind:class	line:59
 SkipRecord	textfsm-master/textfsm.py	/^class SkipRecord(FSMAction):$/;"	kind:class	line:59
-SkipValue	bintest/tools/pyscripts/textfsm.py	/^class SkipValue(FSMAction):$/;"	kind:class	line:63
+SkipValue	bintest/testFolder/pythonScripts/textfsm.py	/^class SkipValue(FSMAction):$/;"	kind:class	line:63
+SkipValue	scripts/pyscripts/textfsm.py	/^class SkipValue(FSMAction):$/;"	kind:class	line:63
 SkipValue	textfsm-master/textfsm.py	/^class SkipValue(FSMAction):$/;"	kind:class	line:63
 StringIO	bintest/tools/pyscripts/texttable_test.py	/^import StringIO$/;"	kind:namespace	line:19
 StringIO	scripts/pyscripts/texttable_test.py	/^import StringIO$/;"	kind:namespace	line:19
@@ -210,17 +260,23 @@ TerminalSize	bintest/tools/pyscripts/terminal.py	/^def TerminalSize():$/;"	kind:
 TerminalSize	scripts/pyscripts/terminal.py	/^def TerminalSize():$/;"	kind:function	line:165
 TerminalTest	bintest/tools/pyscripts/terminal_test.py	/^class TerminalTest(unittest.TestCase):$/;"	kind:class	line:26
 TerminalTest	scripts/pyscripts/terminal_test.py	/^class TerminalTest(unittest.TestCase):$/;"	kind:class	line:26
-TextFSM	bintest/tools/pyscripts/textfsm.py	/^class TextFSM(object):$/;"	kind:class	line:511
+TextFSM	bintest/testFolder/pythonScripts/textfsm.py	/^class TextFSM(object):$/;"	kind:class	line:511
+TextFSM	scripts/pyscripts/textfsm.py	/^class TextFSM(object):$/;"	kind:class	line:511
 TextFSM	textfsm-master/textfsm.py	/^class TextFSM(object):$/;"	kind:class	line:511
-TextFSMError	bintest/tools/pyscripts/textfsm.py	/^class TextFSMError(Error):$/;"	kind:class	line:45
+TextFSMError	bintest/testFolder/pythonScripts/textfsm.py	/^class TextFSMError(Error):$/;"	kind:class	line:45
+TextFSMError	scripts/pyscripts/textfsm.py	/^class TextFSMError(Error):$/;"	kind:class	line:45
 TextFSMError	textfsm-master/textfsm.py	/^class TextFSMError(Error):$/;"	kind:class	line:45
-TextFSMOptions	bintest/tools/pyscripts/textfsm.py	/^class TextFSMOptions(object):$/;"	kind:class	line:67
+TextFSMOptions	bintest/testFolder/pythonScripts/textfsm.py	/^class TextFSMOptions(object):$/;"	kind:class	line:67
+TextFSMOptions	scripts/pyscripts/textfsm.py	/^class TextFSMOptions(object):$/;"	kind:class	line:67
 TextFSMOptions	textfsm-master/textfsm.py	/^class TextFSMOptions(object):$/;"	kind:class	line:67
-TextFSMRule	bintest/tools/pyscripts/textfsm.py	/^class TextFSMRule(object):$/;"	kind:class	line:352
+TextFSMRule	bintest/testFolder/pythonScripts/textfsm.py	/^class TextFSMRule(object):$/;"	kind:class	line:352
+TextFSMRule	scripts/pyscripts/textfsm.py	/^class TextFSMRule(object):$/;"	kind:class	line:352
 TextFSMRule	textfsm-master/textfsm.py	/^class TextFSMRule(object):$/;"	kind:class	line:352
-TextFSMTemplateError	bintest/tools/pyscripts/textfsm.py	/^class TextFSMTemplateError(Error):$/;"	kind:class	line:49
+TextFSMTemplateError	bintest/testFolder/pythonScripts/textfsm.py	/^class TextFSMTemplateError(Error):$/;"	kind:class	line:49
+TextFSMTemplateError	scripts/pyscripts/textfsm.py	/^class TextFSMTemplateError(Error):$/;"	kind:class	line:49
 TextFSMTemplateError	textfsm-master/textfsm.py	/^class TextFSMTemplateError(Error):$/;"	kind:class	line:49
-TextFSMValue	bintest/tools/pyscripts/textfsm.py	/^class TextFSMValue(object):$/;"	kind:class	line:189
+TextFSMValue	bintest/testFolder/pythonScripts/textfsm.py	/^class TextFSMValue(object):$/;"	kind:class	line:189
+TextFSMValue	scripts/pyscripts/textfsm.py	/^class TextFSMValue(object):$/;"	kind:class	line:189
 TextFSMValue	textfsm-master/textfsm.py	/^class TextFSMValue(object):$/;"	kind:class	line:189
 TextTable	bintest/tools/pyscripts/texttable.py	/^class TextTable(object):$/;"	kind:class	line:292
 TextTable	scripts/pyscripts/texttable.py	/^class TextTable(object):$/;"	kind:class	line:292
@@ -234,39 +290,49 @@ UnitTestRow	bintest/tools/pyscripts/texttable_test.py	/^class UnitTestRow(unitte
 UnitTestRow	scripts/pyscripts/texttable_test.py	/^class UnitTestRow(unittest.TestCase):$/;"	kind:class	line:25
 UnitTestTextTable	bintest/tools/pyscripts/texttable_test.py	/^class UnitTestTextTable(unittest.TestCase):$/;"	kind:class	line:159
 UnitTestTextTable	scripts/pyscripts/texttable_test.py	/^class UnitTestTextTable(unittest.TestCase):$/;"	kind:class	line:159
+Usage	bintest/testFolder/pythonScripts/textfsm.py	/^class Usage(Exception):$/;"	kind:class	line:41
 Usage	bintest/tools/pyscripts/terminal.py	/^class Usage(Error):$/;"	kind:class	line:106
-Usage	bintest/tools/pyscripts/textfsm.py	/^class Usage(Exception):$/;"	kind:class	line:41
 Usage	scripts/pyscripts/terminal.py	/^class Usage(Error):$/;"	kind:class	line:106
+Usage	scripts/pyscripts/textfsm.py	/^class Usage(Exception):$/;"	kind:class	line:41
 Usage	textfsm-master/textfsm.py	/^class Usage(Exception):$/;"	kind:class	line:41
-ValidOptions	bintest/tools/pyscripts/textfsm.py	/^  def ValidOptions(cls):$/;"	kind:member	line:113
+ValidOptions	bintest/testFolder/pythonScripts/textfsm.py	/^  def ValidOptions(cls):$/;"	kind:member	line:113
+ValidOptions	scripts/pyscripts/textfsm.py	/^  def ValidOptions(cls):$/;"	kind:member	line:113
 ValidOptions	textfsm-master/textfsm.py	/^  def ValidOptions(cls):$/;"	kind:member	line:113
 Wrapper	bintest/tools/pyscripts/clitable.py	/^    def Wrapper(main_obj, *args, **kwargs):$/;"	kind:function	line:152
 Wrapper	scripts/pyscripts/clitable.py	/^    def Wrapper(main_obj, *args, **kwargs):$/;"	kind:function	line:152
-_AddOption	bintest/tools/pyscripts/textfsm.py	/^  def _AddOption(self, name):$/;"	kind:member	line:292
+_AddOption	bintest/testFolder/pythonScripts/textfsm.py	/^  def _AddOption(self, name):$/;"	kind:member	line:292
+_AddOption	scripts/pyscripts/textfsm.py	/^  def _AddOption(self, name):$/;"	kind:member	line:292
 _AddOption	textfsm-master/textfsm.py	/^  def _AddOption(self, name):$/;"	kind:member	line:292
 _AnsiCmd	bintest/tools/pyscripts/terminal.py	/^def _AnsiCmd(command_list):$/;"	kind:function	line:110
 _AnsiCmd	scripts/pyscripts/terminal.py	/^def _AnsiCmd(command_list):$/;"	kind:function	line:110
-_AppendRecord	bintest/tools/pyscripts/textfsm.py	/^  def _AppendRecord(self):$/;"	kind:member	line:599
+_AppendRecord	bintest/testFolder/pythonScripts/textfsm.py	/^  def _AppendRecord(self):$/;"	kind:member	line:599
+_AppendRecord	scripts/pyscripts/textfsm.py	/^  def _AppendRecord(self):$/;"	kind:member	line:599
 _AppendRecord	textfsm-master/textfsm.py	/^  def _AppendRecord(self):$/;"	kind:member	line:599
 _AskUser	bintest/tools/pyscripts/terminal.py	/^  def _AskUser(self):$/;"	kind:member	line:394
 _AskUser	scripts/pyscripts/terminal.py	/^  def _AskUser(self):$/;"	kind:member	line:394
-_AssignVar	bintest/tools/pyscripts/textfsm.py	/^  def _AssignVar(self, matched, value):$/;"	kind:member	line:901
+_AssignVar	bintest/testFolder/pythonScripts/textfsm.py	/^  def _AssignVar(self, matched, value):$/;"	kind:member	line:901
+_AssignVar	scripts/pyscripts/textfsm.py	/^  def _AssignVar(self, matched, value):$/;"	kind:member	line:901
 _AssignVar	textfsm-master/textfsm.py	/^  def _AssignVar(self, matched, value):$/;"	kind:member	line:901
 _BasicTable	bintest/tools/pyscripts/texttable_test.py	/^  def _BasicTable(self):$/;"	kind:member	line:161
 _BasicTable	scripts/pyscripts/texttable_test.py	/^  def _BasicTable(self):$/;"	kind:member	line:161
 _BuildIndex	bintest/tools/pyscripts/texttable.py	/^  def _BuildIndex(self):$/;"	kind:member	line:59
 _BuildIndex	scripts/pyscripts/texttable.py	/^  def _BuildIndex(self):$/;"	kind:member	line:59
-_CheckLine	bintest/tools/pyscripts/textfsm.py	/^  def _CheckLine(self, line):$/;"	kind:member	line:865
+_CheckLine	bintest/testFolder/pythonScripts/textfsm.py	/^  def _CheckLine(self, line):$/;"	kind:member	line:865
+_CheckLine	scripts/pyscripts/textfsm.py	/^  def _CheckLine(self, line):$/;"	kind:member	line:865
 _CheckLine	textfsm-master/textfsm.py	/^  def _CheckLine(self, line):$/;"	kind:member	line:865
-_CheckRule	bintest/tools/pyscripts/textfsm.py	/^  def _CheckRule(self, rule, line):$/;"	kind:member	line:886
+_CheckRule	bintest/testFolder/pythonScripts/textfsm.py	/^  def _CheckRule(self, rule, line):$/;"	kind:member	line:886
+_CheckRule	scripts/pyscripts/textfsm.py	/^  def _CheckRule(self, rule, line):$/;"	kind:member	line:886
 _CheckRule	textfsm-master/textfsm.py	/^  def _CheckRule(self, rule, line):$/;"	kind:member	line:886
-_ClearAllRecord	bintest/tools/pyscripts/textfsm.py	/^  def _ClearAllRecord(self):$/;"	kind:member	line:969
+_ClearAllRecord	bintest/testFolder/pythonScripts/textfsm.py	/^  def _ClearAllRecord(self):$/;"	kind:member	line:969
+_ClearAllRecord	scripts/pyscripts/textfsm.py	/^  def _ClearAllRecord(self):$/;"	kind:member	line:969
 _ClearAllRecord	textfsm-master/textfsm.py	/^  def _ClearAllRecord(self):$/;"	kind:member	line:969
-_ClearRecord	bintest/tools/pyscripts/textfsm.py	/^  def _ClearRecord(self):$/;"	kind:member	line:965
+_ClearRecord	bintest/testFolder/pythonScripts/textfsm.py	/^  def _ClearRecord(self):$/;"	kind:member	line:965
+_ClearRecord	scripts/pyscripts/textfsm.py	/^  def _ClearRecord(self):$/;"	kind:member	line:965
 _ClearRecord	textfsm-master/textfsm.py	/^  def _ClearRecord(self):$/;"	kind:member	line:965
 _Completion	bintest/tools/pyscripts/clitable.py	/^  def _Completion(self, match):$/;"	kind:member	line:289
 _Completion	scripts/pyscripts/clitable.py	/^  def _Completion(self, match):$/;"	kind:member	line:289
-_DEFAULT_OPTIONS	bintest/tools/pyscripts/textfsm.py	/^  _DEFAULT_OPTIONS = TextFSMOptions$/;"	kind:variable	line:525
+_DEFAULT_OPTIONS	bintest/testFolder/pythonScripts/textfsm.py	/^  _DEFAULT_OPTIONS = TextFSMOptions$/;"	kind:variable	line:525
+_DEFAULT_OPTIONS	scripts/pyscripts/textfsm.py	/^  _DEFAULT_OPTIONS = TextFSMOptions$/;"	kind:variable	line:525
 _DEFAULT_OPTIONS	textfsm-master/textfsm.py	/^  _DEFAULT_OPTIONS = TextFSMOptions$/;"	kind:variable	line:525
 _DefaultKey	bintest/tools/pyscripts/texttable.py	/^    def _DefaultKey(value):$/;"	kind:function	line:428
 _DefaultKey	scripts/pyscripts/texttable.py	/^    def _DefaultKey(value):$/;"	kind:function	line:428
@@ -276,8 +342,9 @@ _GetCh	bintest/tools/pyscripts/terminal.py	/^  def _GetCh(self):$/;"	kind:member
 _GetCh	scripts/pyscripts/terminal.py	/^  def _GetCh(self):$/;"	kind:member	line:416
 _GetColour	bintest/tools/pyscripts/texttable.py	/^  def _GetColour(self):$/;"	kind:member	line:211
 _GetColour	scripts/pyscripts/texttable.py	/^  def _GetColour(self):$/;"	kind:member	line:211
-_GetHeader	bintest/tools/pyscripts/textfsm.py	/^  def _GetHeader(self):$/;"	kind:member	line:583
+_GetHeader	bintest/testFolder/pythonScripts/textfsm.py	/^  def _GetHeader(self):$/;"	kind:member	line:583
 _GetHeader	bintest/tools/pyscripts/texttable.py	/^  def _GetHeader(self):$/;"	kind:member	line:180
+_GetHeader	scripts/pyscripts/textfsm.py	/^  def _GetHeader(self):$/;"	kind:member	line:583
 _GetHeader	scripts/pyscripts/texttable.py	/^  def _GetHeader(self):$/;"	kind:member	line:180
 _GetHeader	textfsm-master/textfsm.py	/^  def _GetHeader(self):$/;"	kind:member	line:583
 _GetRow	bintest/tools/pyscripts/texttable.py	/^  def _GetRow(self, columns=None):$/;"	kind:member	line:522
@@ -288,21 +355,26 @@ _GetSize	bintest/tools/pyscripts/texttable.py	/^  def _GetSize(self):$/;"	kind:m
 _GetSize	scripts/pyscripts/texttable.py	/^  def _GetSize(self):$/;"	kind:member	line:574
 _GetTable	bintest/tools/pyscripts/texttable.py	/^  def _GetTable(self):$/;"	kind:member	line:581
 _GetTable	scripts/pyscripts/texttable.py	/^  def _GetTable(self):$/;"	kind:member	line:581
-_GetValue	bintest/tools/pyscripts/textfsm.py	/^  def _GetValue(self, name):$/;"	kind:member	line:593
+_GetValue	bintest/testFolder/pythonScripts/textfsm.py	/^  def _GetValue(self, name):$/;"	kind:member	line:593
+_GetValue	scripts/pyscripts/textfsm.py	/^  def _GetValue(self, name):$/;"	kind:member	line:593
 _GetValue	textfsm-master/textfsm.py	/^  def _GetValue(self, name):$/;"	kind:member	line:593
 _GetValues	bintest/tools/pyscripts/texttable.py	/^  def _GetValues(self):$/;"	kind:member	line:176
 _GetValues	scripts/pyscripts/texttable.py	/^  def _GetValues(self):$/;"	kind:member	line:176
 _Header	bintest/tools/pyscripts/texttable.py	/^  def _Header(self):$/;"	kind:member	line:518
 _Header	scripts/pyscripts/texttable.py	/^  def _Header(self):$/;"	kind:member	line:518
-_Operations	bintest/tools/pyscripts/textfsm.py	/^  def _Operations(self, rule):$/;"	kind:member	line:912
+_Operations	bintest/testFolder/pythonScripts/textfsm.py	/^  def _Operations(self, rule):$/;"	kind:member	line:912
+_Operations	scripts/pyscripts/textfsm.py	/^  def _Operations(self, rule):$/;"	kind:member	line:912
 _Operations	textfsm-master/textfsm.py	/^  def _Operations(self, rule):$/;"	kind:member	line:912
-_Parse	bintest/tools/pyscripts/textfsm.py	/^  def _Parse(self, template):$/;"	kind:member	line:630
+_Parse	bintest/testFolder/pythonScripts/textfsm.py	/^  def _Parse(self, template):$/;"	kind:member	line:630
+_Parse	scripts/pyscripts/textfsm.py	/^  def _Parse(self, template):$/;"	kind:member	line:630
 _Parse	textfsm-master/textfsm.py	/^  def _Parse(self, template):$/;"	kind:member	line:630
 _ParseCmdItem	bintest/tools/pyscripts/clitable.py	/^  def _ParseCmdItem(self, cmd_input, template_file=None):$/;"	kind:member	line:248
 _ParseCmdItem	scripts/pyscripts/clitable.py	/^  def _ParseCmdItem(self, cmd_input, template_file=None):$/;"	kind:member	line:248
-_ParseFSMState	bintest/tools/pyscripts/textfsm.py	/^  def _ParseFSMState(self, template):$/;"	kind:member	line:714
+_ParseFSMState	bintest/testFolder/pythonScripts/textfsm.py	/^  def _ParseFSMState(self, template):$/;"	kind:member	line:714
+_ParseFSMState	scripts/pyscripts/textfsm.py	/^  def _ParseFSMState(self, template):$/;"	kind:member	line:714
 _ParseFSMState	textfsm-master/textfsm.py	/^  def _ParseFSMState(self, template):$/;"	kind:member	line:714
-_ParseFSMVariables	bintest/tools/pyscripts/textfsm.py	/^  def _ParseFSMVariables(self, template):$/;"	kind:member	line:653
+_ParseFSMVariables	bintest/testFolder/pythonScripts/textfsm.py	/^  def _ParseFSMVariables(self, template):$/;"	kind:member	line:653
+_ParseFSMVariables	scripts/pyscripts/textfsm.py	/^  def _ParseFSMVariables(self, template):$/;"	kind:member	line:653
 _ParseFSMVariables	textfsm-master/textfsm.py	/^  def _ParseFSMVariables(self, template):$/;"	kind:member	line:653
 _ParseIndex	bintest/tools/pyscripts/clitable.py	/^  def _ParseIndex(self, preread, precompile):$/;"	kind:member	line:80
 _ParseIndex	scripts/pyscripts/clitable.py	/^  def _ParseIndex(self, preread, precompile):$/;"	kind:member	line:80
@@ -340,9 +412,11 @@ _TextJustify	bintest/tools/pyscripts/texttable.py	/^  def _TextJustify(self, tex
 _TextJustify	scripts/pyscripts/texttable.py	/^  def _TextJustify(self, text, col_size):$/;"	kind:member	line:625
 _ToStr	bintest/tools/pyscripts/texttable.py	/^    def _ToStr(value):$/;"	kind:function	line:227
 _ToStr	scripts/pyscripts/texttable.py	/^    def _ToStr(value):$/;"	kind:function	line:227
-_ValidateFSM	bintest/tools/pyscripts/textfsm.py	/^  def _ValidateFSM(self):$/;"	kind:member	line:785
+_ValidateFSM	bintest/testFolder/pythonScripts/textfsm.py	/^  def _ValidateFSM(self):$/;"	kind:member	line:785
+_ValidateFSM	scripts/pyscripts/textfsm.py	/^  def _ValidateFSM(self):$/;"	kind:member	line:785
 _ValidateFSM	textfsm-master/textfsm.py	/^  def _ValidateFSM(self):$/;"	kind:member	line:785
-_ValidateOptions	bintest/tools/pyscripts/textfsm.py	/^  def _ValidateOptions(self, value):$/;"	kind:member	line:709
+_ValidateOptions	bintest/testFolder/pythonScripts/textfsm.py	/^  def _ValidateOptions(self, value):$/;"	kind:member	line:709
+_ValidateOptions	scripts/pyscripts/textfsm.py	/^  def _ValidateOptions(self, value):$/;"	kind:member	line:709
 _ValidateOptions	textfsm-master/textfsm.py	/^  def _ValidateOptions(self, value):$/;"	kind:member	line:709
 __add__	bintest/tools/pyscripts/texttable.py	/^  def __add__(self, other):$/;"	kind:member	line:353
 __add__	scripts/pyscripts/texttable.py	/^  def __add__(self, other):$/;"	kind:member	line:353
@@ -350,15 +424,17 @@ __contains__	bintest/tools/pyscripts/texttable.py	/^  def __contains__(self, nam
 __contains__	bintest/tools/pyscripts/texttable.py	/^  def __contains__(self, value):$/;"	kind:member	line:97
 __contains__	scripts/pyscripts/texttable.py	/^  def __contains__(self, name):$/;"	kind:member	line:329
 __contains__	scripts/pyscripts/texttable.py	/^  def __contains__(self, value):$/;"	kind:member	line:97
+__copy__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __copy__(self):$/;"	kind:member	line:345
 __copy__	bintest/tools/pyscripts/copyable_regex_object.py	/^  def __copy__(self):$/;"	kind:member	line:36
-__copy__	bintest/tools/pyscripts/textfsm.py	/^  def __copy__(self):$/;"	kind:member	line:345
 __copy__	bintest/tools/pyscripts/texttable.py	/^  def __copy__(self):$/;"	kind:member	line:362
 __copy__	scripts/pyscripts/copyable_regex_object.py	/^  def __copy__(self):$/;"	kind:member	line:36
+__copy__	scripts/pyscripts/textfsm.py	/^  def __copy__(self):$/;"	kind:member	line:345
 __copy__	scripts/pyscripts/texttable.py	/^  def __copy__(self):$/;"	kind:member	line:362
 __copy__	textfsm-master/textfsm.py	/^  def __copy__(self):$/;"	kind:member	line:345
+__deepcopy__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __deepcopy__(self, unused_memo):$/;"	kind:member	line:348
 __deepcopy__	bintest/tools/pyscripts/copyable_regex_object.py	/^  def __deepcopy__(self, unused_memo):$/;"	kind:member	line:39
-__deepcopy__	bintest/tools/pyscripts/textfsm.py	/^  def __deepcopy__(self, unused_memo):$/;"	kind:member	line:348
 __deepcopy__	scripts/pyscripts/copyable_regex_object.py	/^  def __deepcopy__(self, unused_memo):$/;"	kind:member	line:39
+__deepcopy__	scripts/pyscripts/textfsm.py	/^  def __deepcopy__(self, unused_memo):$/;"	kind:member	line:348
 __deepcopy__	textfsm-master/textfsm.py	/^  def __deepcopy__(self, unused_memo):$/;"	kind:member	line:348
 __getitem__	bintest/tools/pyscripts/texttable.py	/^  def __getitem__(self, column):$/;"	kind:member	line:65
 __getitem__	bintest/tools/pyscripts/texttable.py	/^  def __getitem__(self, row):$/;"	kind:member	line:333
@@ -366,16 +442,16 @@ __getitem__	scripts/pyscripts/texttable.py	/^  def __getitem__(self, column):$/;
 __getitem__	scripts/pyscripts/texttable.py	/^  def __getitem__(self, row):$/;"	kind:member	line:333
 __incr__	bintest/tools/pyscripts/texttable.py	/^  def __incr__(self, incr=1):$/;"	kind:member	line:326
 __incr__	scripts/pyscripts/texttable.py	/^  def __incr__(self, incr=1):$/;"	kind:member	line:326
+__init__	bintest/testFolder/pythonScripts/textfsm.py	/^    def __init__(self, value):$/;"	kind:member	line:87
+__init__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __init__(self, fsm=None, max_name_len=48, options_class=None):$/;"	kind:member	line:212
+__init__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __init__(self, line, line_num=-1, var_map=None):$/;"	kind:member	line:396
+__init__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __init__(self, pattern):$/;"	kind:member	line:335
+__init__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __init__(self, template, options_class=_DEFAULT_OPTIONS):$/;"	kind:member	line:527
 __init__	bintest/tools/pyscripts/clitable.py	/^  def __init__(self, index_file=None, template_dir=None):$/;"	kind:member	line:162
 __init__	bintest/tools/pyscripts/clitable.py	/^  def __init__(self, preread=None, precompile=None, file_path=None):$/;"	kind:member	line:61
 __init__	bintest/tools/pyscripts/copyable_regex_object.py	/^  def __init__(self, pattern):$/;"	kind:member	line:26
 __init__	bintest/tools/pyscripts/terminal.py	/^  def __init__(self, text=None, delay=None):$/;"	kind:member	line:272
 __init__	bintest/tools/pyscripts/terminal_test.py	/^  def __init__(self):$/;"	kind:member	line:121
-__init__	bintest/tools/pyscripts/textfsm.py	/^    def __init__(self, value):$/;"	kind:member	line:87
-__init__	bintest/tools/pyscripts/textfsm.py	/^  def __init__(self, fsm=None, max_name_len=48, options_class=None):$/;"	kind:member	line:212
-__init__	bintest/tools/pyscripts/textfsm.py	/^  def __init__(self, line, line_num=-1, var_map=None):$/;"	kind:member	line:396
-__init__	bintest/tools/pyscripts/textfsm.py	/^  def __init__(self, pattern):$/;"	kind:member	line:335
-__init__	bintest/tools/pyscripts/textfsm.py	/^  def __init__(self, template, options_class=_DEFAULT_OPTIONS):$/;"	kind:member	line:527
 __init__	bintest/tools/pyscripts/texttable.py	/^  def __init__(self, *args, **kwargs):$/;"	kind:member	line:50
 __init__	bintest/tools/pyscripts/texttable.py	/^  def __init__(self, row_class=Row):$/;"	kind:member	line:303
 __init__	scripts/pyscripts/clitable.py	/^  def __init__(self, index_file=None, template_dir=None):$/;"	kind:member	line:162
@@ -383,6 +459,11 @@ __init__	scripts/pyscripts/clitable.py	/^  def __init__(self, preread=None, prec
 __init__	scripts/pyscripts/copyable_regex_object.py	/^  def __init__(self, pattern):$/;"	kind:member	line:26
 __init__	scripts/pyscripts/terminal.py	/^  def __init__(self, text=None, delay=None):$/;"	kind:member	line:272
 __init__	scripts/pyscripts/terminal_test.py	/^  def __init__(self):$/;"	kind:member	line:121
+__init__	scripts/pyscripts/textfsm.py	/^    def __init__(self, value):$/;"	kind:member	line:87
+__init__	scripts/pyscripts/textfsm.py	/^  def __init__(self, fsm=None, max_name_len=48, options_class=None):$/;"	kind:member	line:212
+__init__	scripts/pyscripts/textfsm.py	/^  def __init__(self, line, line_num=-1, var_map=None):$/;"	kind:member	line:396
+__init__	scripts/pyscripts/textfsm.py	/^  def __init__(self, pattern):$/;"	kind:member	line:335
+__init__	scripts/pyscripts/textfsm.py	/^  def __init__(self, template, options_class=_DEFAULT_OPTIONS):$/;"	kind:member	line:527
 __init__	scripts/pyscripts/texttable.py	/^  def __init__(self, *args, **kwargs):$/;"	kind:member	line:50
 __init__	scripts/pyscripts/texttable.py	/^  def __init__(self, row_class=Row):$/;"	kind:member	line:303
 __init__	textfsm-master/textfsm.py	/^    def __init__(self, value):$/;"	kind:member	line:87
@@ -404,19 +485,23 @@ __repr__	scripts/pyscripts/texttable.py	/^  def __repr__(self):$/;"	kind:member	
 __repr__	scripts/pyscripts/texttable.py	/^  def __repr__(self):$/;"	kind:member	line:319
 __setitem__	bintest/tools/pyscripts/texttable.py	/^  def __setitem__(self, column, value):$/;"	kind:member	line:100
 __setitem__	scripts/pyscripts/texttable.py	/^  def __setitem__(self, column, value):$/;"	kind:member	line:100
-__str__	bintest/tools/pyscripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:319
-__str__	bintest/tools/pyscripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:489
-__str__	bintest/tools/pyscripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:553
+__str__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:319
+__str__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:489
+__str__	bintest/testFolder/pythonScripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:553
 __str__	bintest/tools/pyscripts/texttable.py	/^  def __str__(self):$/;"	kind:member	line:116
 __str__	bintest/tools/pyscripts/texttable.py	/^  def __str__(self):$/;"	kind:member	line:322
+__str__	scripts/pyscripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:319
+__str__	scripts/pyscripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:489
+__str__	scripts/pyscripts/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:553
 __str__	scripts/pyscripts/texttable.py	/^  def __str__(self):$/;"	kind:member	line:116
 __str__	scripts/pyscripts/texttable.py	/^  def __str__(self):$/;"	kind:member	line:322
 __str__	textfsm-master/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:319
 __str__	textfsm-master/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:489
 __str__	textfsm-master/textfsm.py	/^  def __str__(self):$/;"	kind:member	line:553
+__version__	bintest/testFolder/pythonScripts/textfsm.py	/^__version__ = '0.2.2'$/;"	kind:variable	line:28
 __version__	bintest/tools/pyscripts/terminal.py	/^__version__ = '0.1.1'$/;"	kind:variable	line:20
-__version__	bintest/tools/pyscripts/textfsm.py	/^__version__ = '0.2.2'$/;"	kind:variable	line:28
 __version__	scripts/pyscripts/terminal.py	/^__version__ = '0.1.1'$/;"	kind:variable	line:20
+__version__	scripts/pyscripts/textfsm.py	/^__version__ = '0.2.2'$/;"	kind:variable	line:28
 __version__	textfsm-master/textfsm.py	/^__version__ = '0.2.2'$/;"	kind:variable	line:28
 _lock	bintest/tools/pyscripts/clitable.py	/^  _lock = threading.Lock()$/;"	kind:variable	line:144
 _lock	scripts/pyscripts/clitable.py	/^  _lock = threading.Lock()$/;"	kind:variable	line:144
@@ -434,7 +519,8 @@ clitable_test.py	bintest/tools/pyscripts/clitable_test.py	1;"	kind:file	line:1
 clitable_test.py	scripts/pyscripts/clitable_test.py	1;"	kind:file	line:1
 color	bintest/tools/pyscripts/texttable.py	/^  color = property(_GetColour, _SetColour, doc='Colour spec of this row')$/;"	kind:variable	line:287
 color	scripts/pyscripts/texttable.py	/^  color = property(_GetColour, _SetColour, doc='Colour spec of this row')$/;"	kind:variable	line:287
-comment_regex	bintest/tools/pyscripts/textfsm.py	/^  comment_regex = re.compile('^\\s*#')$/;"	kind:variable	line:523
+comment_regex	bintest/testFolder/pythonScripts/textfsm.py	/^  comment_regex = re.compile('^\\s*#')$/;"	kind:variable	line:523
+comment_regex	scripts/pyscripts/textfsm.py	/^  comment_regex = re.compile('^\\s*#')$/;"	kind:variable	line:523
 comment_regex	textfsm-master/textfsm.py	/^  comment_regex = re.compile('^\\s*#')$/;"	kind:variable	line:523
 compare	bintest/tools/pyscripts/texttable_test.py	/^    def compare(a, b):$/;"	kind:function	line:748
 compare	scripts/pyscripts/texttable_test.py	/^    def compare(a, b):$/;"	kind:function	line:748
@@ -464,25 +550,29 @@ flush	bintest/tools/pyscripts/terminal_test.py	/^  def flush(self):$/;"	kind:mem
 flush	scripts/pyscripts/terminal_test.py	/^  def flush(self):$/;"	kind:member	line:132
 get	bintest/tools/pyscripts/texttable.py	/^  def get(self, column, default_value=None):$/;"	kind:member	line:126
 get	scripts/pyscripts/texttable.py	/^  def get(self, column, default_value=None):$/;"	kind:member	line:126
+getopt	bintest/testFolder/pythonScripts/textfsm.py	/^import getopt$/;"	kind:namespace	line:30
 getopt	bintest/tools/pyscripts/terminal.py	/^import getopt$/;"	kind:namespace	line:24
-getopt	bintest/tools/pyscripts/textfsm.py	/^import getopt$/;"	kind:namespace	line:30
 getopt	scripts/pyscripts/terminal.py	/^import getopt$/;"	kind:namespace	line:24
+getopt	scripts/pyscripts/textfsm.py	/^import getopt$/;"	kind:namespace	line:30
 getopt	textfsm-master/textfsm.py	/^import getopt$/;"	kind:namespace	line:30
-header	bintest/tools/pyscripts/textfsm.py	/^  def header(self):$/;"	kind:member	line:579
+header	bintest/testFolder/pythonScripts/textfsm.py	/^  def header(self):$/;"	kind:member	line:579
 header	bintest/tools/pyscripts/texttable.py	/^  header = property(_GetHeader, _SetHeader, doc="List of row's headers.")$/;"	kind:variable	line:288
 header	bintest/tools/pyscripts/texttable.py	/^  header = property(_Header, _SetHeader, doc='List of header entries.')$/;"	kind:variable	line:917
+header	scripts/pyscripts/textfsm.py	/^  def header(self):$/;"	kind:member	line:579
 header	scripts/pyscripts/texttable.py	/^  header = property(_GetHeader, _SetHeader, doc="List of row's headers.")$/;"	kind:variable	line:288
 header	scripts/pyscripts/texttable.py	/^  header = property(_Header, _SetHeader, doc='List of header entries.')$/;"	kind:variable	line:917
 header	textfsm-master/textfsm.py	/^  def header(self):$/;"	kind:member	line:579
+help_msg	bintest/testFolder/pythonScripts/textfsm.py	/^  help_msg = '%s [--help] template [input_file [output_file]]\\n' % sys.argv[0]$/;"	kind:variable	line:1036
 help_msg	bintest/tools/pyscripts/terminal.py	/^  help_msg = '%s [--help] [--size] [--nodelay] [input_file]\\n' % sys.argv[0]$/;"	kind:variable	line:474
-help_msg	bintest/tools/pyscripts/textfsm.py	/^  help_msg = '%s [--help] template [input_file [output_file]]\\n' % sys.argv[0]$/;"	kind:variable	line:1036
 help_msg	scripts/pyscripts/terminal.py	/^  help_msg = '%s [--help] [--size] [--nodelay] [input_file]\\n' % sys.argv[0]$/;"	kind:variable	line:474
+help_msg	scripts/pyscripts/textfsm.py	/^  help_msg = '%s [--help] template [input_file [output_file]]\\n' % sys.argv[0]$/;"	kind:variable	line:1036
 help_msg	textfsm-master/textfsm.py	/^  help_msg = '%s [--help] template [input_file [output_file]]\\n' % sys.argv[0]$/;"	kind:variable	line:1036
 index	bintest/tools/pyscripts/texttable.py	/^  def index(self, column):  # pylint: disable=C6409$/;"	kind:member	line:152
 index	bintest/tools/pyscripts/texttable.py	/^  def index(self, name=None):  # pylint: disable=C6409$/;"	kind:member	line:1060
 index	scripts/pyscripts/texttable.py	/^  def index(self, column):  # pylint: disable=C6409$/;"	kind:member	line:152
 index	scripts/pyscripts/texttable.py	/^  def index(self, name=None):  # pylint: disable=C6409$/;"	kind:member	line:1060
-inspect	bintest/tools/pyscripts/textfsm.py	/^import inspect$/;"	kind:namespace	line:31
+inspect	bintest/testFolder/pythonScripts/textfsm.py	/^import inspect$/;"	kind:namespace	line:31
+inspect	scripts/pyscripts/textfsm.py	/^import inspect$/;"	kind:namespace	line:31
 inspect	textfsm-master/textfsm.py	/^import inspect$/;"	kind:namespace	line:31
 items	bintest/tools/pyscripts/texttable.py	/^  def items(self):$/;"	kind:member	line:172
 items	scripts/pyscripts/texttable.py	/^  def items(self):$/;"	kind:member	line:172
@@ -490,19 +580,22 @@ iterkeys	bintest/tools/pyscripts/texttable.py	/^  def iterkeys(self):$/;"	kind:m
 iterkeys	scripts/pyscripts/texttable.py	/^  def iterkeys(self):$/;"	kind:member	line:169
 license	bintest/tools/pyscripts/setup.py	/^      license='Apache License, Version 2.0',$/;"	kind:variable	line:27
 license	scripts/pyscripts/setup.py	/^      license='Apache License, Version 2.0',$/;"	kind:variable	line:27
+main	bintest/testFolder/pythonScripts/textfsm.py	/^def main(argv=None):$/;"	kind:function	line:987
 main	bintest/tools/pyscripts/terminal.py	/^def main(argv=None):$/;"	kind:function	line:435
-main	bintest/tools/pyscripts/textfsm.py	/^def main(argv=None):$/;"	kind:function	line:987
 main	scripts/pyscripts/terminal.py	/^def main(argv=None):$/;"	kind:function	line:435
+main	scripts/pyscripts/textfsm.py	/^def main(argv=None):$/;"	kind:function	line:987
 main	textfsm-master/textfsm.py	/^def main(argv=None):$/;"	kind:function	line:987
 maintainer	bintest/tools/pyscripts/setup.py	/^      maintainer='Google',$/;"	kind:variable	line:23
 maintainer	scripts/pyscripts/setup.py	/^      maintainer='Google',$/;"	kind:variable	line:23
 maintainer_email	bintest/tools/pyscripts/setup.py	/^      maintainer_email='textfsm-dev@googlegroups.com',$/;"	kind:variable	line:24
 maintainer_email	scripts/pyscripts/setup.py	/^      maintainer_email='textfsm-dev@googlegroups.com',$/;"	kind:variable	line:24
+match	bintest/testFolder/pythonScripts/textfsm.py	/^  def match(self, *args, **kwargs):$/;"	kind:member	line:339
 match	bintest/tools/pyscripts/copyable_regex_object.py	/^  def match(self, *args, **kwargs):$/;"	kind:member	line:30
-match	bintest/tools/pyscripts/textfsm.py	/^  def match(self, *args, **kwargs):$/;"	kind:member	line:339
 match	scripts/pyscripts/copyable_regex_object.py	/^  def match(self, *args, **kwargs):$/;"	kind:member	line:30
+match	scripts/pyscripts/textfsm.py	/^  def match(self, *args, **kwargs):$/;"	kind:member	line:339
 match	textfsm-master/textfsm.py	/^  def match(self, *args, **kwargs):$/;"	kind:member	line:339
-name	bintest/tools/pyscripts/textfsm.py	/^    def name(self):$/;"	kind:member	line:91
+name	bintest/testFolder/pythonScripts/textfsm.py	/^    def name(self):$/;"	kind:member	line:91
+name	scripts/pyscripts/textfsm.py	/^    def name(self):$/;"	kind:member	line:91
 name	textfsm-master/textfsm.py	/^    def name(self):$/;"	kind:member	line:91
 next	bintest/tools/pyscripts/texttable.py	/^  def next(self):$/;"	kind:member	line:341
 next	scripts/pyscripts/texttable.py	/^  def next(self):$/;"	kind:member	line:341
@@ -514,15 +607,16 @@ os	scripts/pyscripts/clitable_test.py	/^import os$/;"	kind:namespace	line:23
 os	scripts/pyscripts/terminal.py	/^import os$/;"	kind:namespace	line:25
 py_modules	bintest/tools/pyscripts/setup.py	/^      py_modules=['clitable', 'textfsm', 'copyable_regex_object',$/;"	kind:variable	line:35
 py_modules	scripts/pyscripts/setup.py	/^      py_modules=['clitable', 'textfsm', 'copyable_regex_object',$/;"	kind:variable	line:35
+re	bintest/testFolder/pythonScripts/textfsm.py	/^import re$/;"	kind:namespace	line:32
 re	bintest/tools/pyscripts/clitable.py	/^import re$/;"	kind:namespace	line:30
 re	bintest/tools/pyscripts/clitable_test.py	/^import re$/;"	kind:namespace	line:24
 re	bintest/tools/pyscripts/copyable_regex_object.py	/^import re$/;"	kind:namespace	line:19
 re	bintest/tools/pyscripts/terminal.py	/^import re$/;"	kind:namespace	line:26
-re	bintest/tools/pyscripts/textfsm.py	/^import re$/;"	kind:namespace	line:32
 re	scripts/pyscripts/clitable.py	/^import re$/;"	kind:namespace	line:30
 re	scripts/pyscripts/clitable_test.py	/^import re$/;"	kind:namespace	line:24
 re	scripts/pyscripts/copyable_regex_object.py	/^import re$/;"	kind:namespace	line:19
 re	scripts/pyscripts/terminal.py	/^import re$/;"	kind:namespace	line:26
+re	scripts/pyscripts/textfsm.py	/^import re$/;"	kind:namespace	line:32
 re	textfsm-master/textfsm.py	/^import re$/;"	kind:namespace	line:32
 requires	bintest/tools/pyscripts/setup.py	/^      requires=['terminal'],$/;"	kind:variable	line:34
 requires	scripts/pyscripts/setup.py	/^      requires=['terminal'],$/;"	kind:variable	line:34
@@ -550,25 +644,29 @@ sort	bintest/tools/pyscripts/clitable.py	/^  def sort(self, cmp=None, key=None, 
 sort	bintest/tools/pyscripts/texttable.py	/^  def sort(self, cmp=None, key=None, reverse=False):$/;"	kind:member	line:419
 sort	scripts/pyscripts/clitable.py	/^  def sort(self, cmp=None, key=None, reverse=False):$/;"	kind:member	line:313
 sort	scripts/pyscripts/texttable.py	/^  def sort(self, cmp=None, key=None, reverse=False):$/;"	kind:member	line:419
-state_name_re	bintest/tools/pyscripts/textfsm.py	/^  state_name_re = re.compile('^(\\w+)$')$/;"	kind:variable	line:524
+state_name_re	bintest/testFolder/pythonScripts/textfsm.py	/^  state_name_re = re.compile('^(\\w+)$')$/;"	kind:variable	line:524
+state_name_re	scripts/pyscripts/textfsm.py	/^  state_name_re = re.compile('^(\\w+)$')$/;"	kind:variable	line:524
 state_name_re	textfsm-master/textfsm.py	/^  state_name_re = re.compile('^(\\w+)$')$/;"	kind:variable	line:524
-string	bintest/tools/pyscripts/textfsm.py	/^import string$/;"	kind:namespace	line:33
+string	bintest/testFolder/pythonScripts/textfsm.py	/^import string$/;"	kind:namespace	line:33
+string	scripts/pyscripts/textfsm.py	/^import string$/;"	kind:namespace	line:33
 string	textfsm-master/textfsm.py	/^import string$/;"	kind:namespace	line:33
 struct	bintest/tools/pyscripts/terminal.py	/^import struct$/;"	kind:namespace	line:27
 struct	scripts/pyscripts/terminal.py	/^import struct$/;"	kind:namespace	line:27
+sub	bintest/testFolder/pythonScripts/textfsm.py	/^  def sub(self, *args, **kwargs):$/;"	kind:member	line:342
 sub	bintest/tools/pyscripts/copyable_regex_object.py	/^  def sub(self, *args, **kwargs):$/;"	kind:member	line:33
-sub	bintest/tools/pyscripts/textfsm.py	/^  def sub(self, *args, **kwargs):$/;"	kind:member	line:342
 sub	scripts/pyscripts/copyable_regex_object.py	/^  def sub(self, *args, **kwargs):$/;"	kind:member	line:33
+sub	scripts/pyscripts/textfsm.py	/^  def sub(self, *args, **kwargs):$/;"	kind:member	line:342
 sub	textfsm-master/textfsm.py	/^  def sub(self, *args, **kwargs):$/;"	kind:member	line:342
 superkey	bintest/tools/pyscripts/clitable.py	/^  def superkey(self):$/;"	kind:member	line:342
 superkey	scripts/pyscripts/clitable.py	/^  def superkey(self):$/;"	kind:member	line:342
 synchronised	bintest/tools/pyscripts/clitable.py	/^  def synchronised(func):$/;"	kind:member	line:148
 synchronised	scripts/pyscripts/clitable.py	/^  def synchronised(func):$/;"	kind:member	line:148
+sys	bintest/testFolder/pythonScripts/textfsm.py	/^import sys$/;"	kind:namespace	line:34
 sys	bintest/tools/pyscripts/terminal.py	/^import sys$/;"	kind:namespace	line:28
 sys	bintest/tools/pyscripts/terminal_test.py	/^import sys$/;"	kind:namespace	line:21
-sys	bintest/tools/pyscripts/textfsm.py	/^import sys$/;"	kind:namespace	line:34
 sys	scripts/pyscripts/terminal.py	/^import sys$/;"	kind:namespace	line:28
 sys	scripts/pyscripts/terminal_test.py	/^import sys$/;"	kind:namespace	line:21
+sys	scripts/pyscripts/textfsm.py	/^import sys$/;"	kind:namespace	line:34
 sys	textfsm-master/textfsm.py	/^import sys$/;"	kind:namespace	line:34
 table	bintest/tools/pyscripts/texttable.py	/^  table = property(_GetTable, _SetTable, doc='Whole table')$/;"	kind:variable	line:915
 table	scripts/pyscripts/texttable.py	/^  table = property(_GetTable, _SetTable, doc='Whole table')$/;"	kind:variable	line:915
@@ -776,7 +874,8 @@ textfsm	bintest/tools/pyscripts/textfsm_test.py	/^import textfsm$/;"	kind:namesp
 textfsm	scripts/pyscripts/clitable.py	/^import textfsm$/;"	kind:namespace	line:33
 textfsm	scripts/pyscripts/setup.py	/^import textfsm$/;"	kind:namespace	line:19
 textfsm	scripts/pyscripts/textfsm_test.py	/^import textfsm$/;"	kind:namespace	line:24
-textfsm.py	bintest/tools/pyscripts/textfsm.py	1;"	kind:file	line:1
+textfsm.py	bintest/testFolder/pythonScripts/textfsm.py	1;"	kind:file	line:1
+textfsm.py	scripts/pyscripts/textfsm.py	1;"	kind:file	line:1
 textfsm.py	textfsm-master/textfsm.py	1;"	kind:file	line:1
 textfsm_test.py	bintest/tools/pyscripts/textfsm_test.py	1;"	kind:file	line:1
 textfsm_test.py	scripts/pyscripts/textfsm_test.py	1;"	kind:file	line:1

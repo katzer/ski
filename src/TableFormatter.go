@@ -8,7 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"runtime"
+	//"runtime"
 	"strings"
 )
 
@@ -19,11 +19,7 @@ type TableFormatter struct {
 
 func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string {
 	tmpTableFile := ""
-	if runtime.GOOS == "windows" {
-		tmpTableFile = path.Join(os.Getenv("TEMP"), "orbitTable.txt")
-	} else {
-		tmpTableFile = path.Join(os.Getenv("HOME"), "orbitTable.txt")
-	}
+	tmpTableFile = path.Join(os.Getenv("ORBIT_HOME"), "orbitTable.txt")
 
 	err := ioutil.WriteFile(tmpTableFile, []byte(toFormat), 0644)
 	if err != nil {
@@ -50,8 +46,9 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 		throwErrExt(err, "thrown from tableFormatter.format->exec pythonscript")
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
-	formattedString = strings.TrimSpace(formattedString)
-	cleanString := tableFormatter.cleanEntries(formattedString)
+	jsonString := convertToJson(formattedString)
+	//formattedString = strings.TrimSpace(formattedString)
+	//cleanString := tableFormatter.cleanEntries(formattedString)
 
 	err = os.Remove(tmpTableFile)
 	if err != nil {
@@ -59,11 +56,11 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 	}
 
 	//################################# temporaray hardocode##############################################
-	cleanString = cleanifyTable(cleanString)
-	cleanString = fmt.Sprintf("[\n%s]\n", strings.Replace(cleanString, "]\n[", "],\n[", -1))
+	//cleanString = cleanifyTable(cleanString)
+	//cleanString = fmt.Sprintf("[\n%s]\n", strings.Replace(formattedString, "]\n[", "],\n[", -1))
 	//################################# temporaray hardocode##############################################
 
-	return cleanString
+	return jsonString
 
 }
 
@@ -120,4 +117,8 @@ func cleanifyTable(toclean string) string {
 		cleaned = fmt.Sprintf("%s%s, %s\n", cleaned, row[0], row[1])
 	}
 	return cleaned
+}
+
+func convertToJson(toConvert string) string {
+	return fmt.Sprintf("[\n%s]\n", strings.Replace(toConvert, "]\n[", "],\n[", -1))
 }
