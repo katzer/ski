@@ -32,7 +32,7 @@ func debugPrintOpts(opts *Opts) {
 	debugString = fmt.Sprintf("%sdbScriptPath: %s\n", debugString, opts.dbScriptName)
 	debugString = fmt.Sprintf("%sdbScriptName: %s\n", debugString, opts.dbScriptPath)
 	debugString = fmt.Sprintf("%spyScriptName: %s\n", debugString, opts.pyScriptName)
-	debugString = fmt.Sprintf("%spyScriptPath: %s\n", debugString, opts.bashScriptName)
+	debugString = fmt.Sprintf("%spyScriptPath: %s\n", debugString, opts.pyScriptPath)
 	debugString = fmt.Sprintf("%sscriptName: %s\n", debugString, opts.scriptName)
 	debugString = fmt.Sprintf("%sscriptPath: %s\n", debugString, opts.scriptPath)
 	debugString = fmt.Sprintf("%stemplateName: %s\n", debugString, opts.templateName)
@@ -44,9 +44,9 @@ func debugPrintOpts(opts *Opts) {
 
 func debugPrintStructuredOutput(strucOut *StructuredOuput) {
 	debugString := ""
-	debugString = fmt.Sprintf("%sstrucOut: %v\n", debugString, strucOut)
+	//debugString = fmt.Sprintf("%sstrucOut: %v\n", debugString, strucOut)
 	debugString = fmt.Sprintf("%splanet: %s\n", debugString, strucOut.planet)
-	debugString = fmt.Sprintf("%sout: %s\n", debugString, strucOut.output)
+	//debugString = fmt.Sprintf("%sout: %s\n", debugString, strucOut.output)
 	debugString = fmt.Sprintf("%smaxLineLength: %d\n", debugString, strucOut.maxOutLength)
 	fmt.Print(debugString)
 	log.Output(1, debugString)

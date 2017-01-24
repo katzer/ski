@@ -1,7 +1,0 @@
-Value Key (^\s+\S+)
-Value Value (.+$)
-
-Start
-  ^${Key} ${Value} -> Record
-
-EOF

@@ -36,10 +36,10 @@ type Opts struct {
 	planets        []string
 }
 
-const templatePath = `templates`
-const dbScriptPath = `dbScripts`
-const bashScriptPath = `bashScripts`
-const pyScriptPath = `pythonScripts`
+const templatePath = "templates"
+const dbScriptPath = "dbScripts"
+const bashScriptPath = "bashScripts"
+const pyScriptPath = "pythonScripts"
 
 /**
 *	Returns the contents of args in following order:
@@ -50,11 +50,13 @@ const pyScriptPath = `pythonScripts`
 *	planets
  */
 func (opts *Opts) procArgs(args []string) {
-	currentDir, err := os.Getwd()
-	rootDir := path.Dir(currentDir)
-	if err != nil {
-		throwErr(err)
-	}
+
+	rootDir := os.Getenv("ORBIT_HOME")
+	fmt.Println(rootDir)
+	//templatePath := ""
+	//bashScriptPath := ""
+	//dbScriptPath := ""
+	//pyScriptPath := ""
 	flag.BoolVar(&opts.helpFlag, "h", false, "help")
 	flag.BoolVar(&opts.prettyFlag, "pp", false, "prettyprint")
 	flag.BoolVar(&opts.typeFlag, "t", false, "type")
