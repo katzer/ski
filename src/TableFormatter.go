@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"runtime"
 	"strings"
 )
 
@@ -17,10 +18,17 @@ type TableFormatter struct {
 }
 
 func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string {
-	tmpTableFile := fmt.Sprintf("%s/orbitTable.txt", os.Getenv("HOME"))
+	tmpTableFile := ""
+	if runtime.GOOS == "windows" {
+		tmpTableFile = path.Join(os.Getenv("TEMP"), "orbitTable.txt")
+	} else {
+		tmpTableFile = path.Join(os.Getenv("HOME"), "orbitTable.txt")
+	}
+
 	err := ioutil.WriteFile(tmpTableFile, []byte(toFormat), 0644)
 	if err != nil {
 		fmt.Println("writefile failed!")
+		fmt.Printf("Tried to write temporary file for textfsm execution: %s\n", tmpTableFile)
 		os.Exit(1)
 	}
 	templateFile := path.Join(opts.templatePath, opts.templateName)

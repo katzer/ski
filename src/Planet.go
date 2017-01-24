@@ -19,7 +19,7 @@ func (planet *Planet) execute(opts *Opts) {
 		} else {
 			execDBCommand(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
 		}
-		trimDBMetaInformations(&planet.outputStruct)
+		//trimDBMetaInformations(&planet.outputStruct)
 	} else if planet.planetType == "server" {
 		if opts.scriptFlag {
 			execScript(planet.user, planet.host, &planet.outputStruct, opts)

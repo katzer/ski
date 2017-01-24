@@ -52,11 +52,6 @@ const pyScriptPath = "pythonScripts"
 func (opts *Opts) procArgs(args []string) {
 
 	rootDir := os.Getenv("ORBIT_HOME")
-	fmt.Println(rootDir)
-	//templatePath := ""
-	//bashScriptPath := ""
-	//dbScriptPath := ""
-	//pyScriptPath := ""
 	flag.BoolVar(&opts.helpFlag, "h", false, "help")
 	flag.BoolVar(&opts.prettyFlag, "pp", false, "prettyprint")
 	flag.BoolVar(&opts.typeFlag, "t", false, "type")
