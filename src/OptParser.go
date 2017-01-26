@@ -131,7 +131,7 @@ func getPlanetDetails(id string) string {
 func countSupported(planets []string) int {
 	i := 0
 	for _, planet := range planets {
-		if getType(planet) == "server" {
+		if getType(planet) == linuxServer {
 			i++
 		}
 	}
@@ -143,11 +143,11 @@ func countSupported(planets []string) int {
  */
 func isSupported(planet string) bool {
 	switch getType(planet) {
-	case "server":
+	case linuxServer:
 		return true
-	case "db":
+	case database:
 		return true
-	case "web":
+	case webServer:
 		return false
 	default:
 		return false

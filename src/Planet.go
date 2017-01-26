@@ -13,14 +13,14 @@ type Planet struct {
 }
 
 func (planet *Planet) execute(opts *Opts) {
-	if planet.planetType == "db" {
+	if planet.planetType == database {
 		if opts.scriptFlag {
 			execDBScript(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
 		} else {
 			execDBCommand(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
 		}
 		//trimDBMetaInformations(&planet.outputStruct)
-	} else if planet.planetType == "server" {
+	} else if planet.planetType == linuxServer {
 		if opts.scriptFlag {
 			execScript(planet.user, planet.host, &planet.outputStruct, opts)
 		} else {

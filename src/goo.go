@@ -13,10 +13,6 @@ type StructuredOuput struct {
 	maxOutLength int
 }
 
-const server = "server"
-const webServer = "web"
-const database = "db"
-
 func main() {
 	args := os.Args
 	opts := Opts{}
@@ -68,7 +64,7 @@ func makeExecutor(opts *Opts) Executor {
 		id := entry
 		planetType := getType(entry)
 		switch planetType {
-		case server:
+		case linuxServer:
 			user = getUser(connDet)
 			host = getHost(connDet)
 			dbID = ""

@@ -12,4 +12,6 @@ const textFSMDirectory = "textfsm"
 
 const textFSMName = "textfsm.py"
 
-const dbServer = "db"
+const database = "db"
+const linuxServer = "server"
+const webServer = "web"
