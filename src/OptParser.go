@@ -5,41 +5,27 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path"
 	"strings"
 )
 
 // Opts ...
 type Opts struct {
-	debugFlag      bool
-	helpFlag       bool
-	loadFlag       bool
-	prettyFlag     bool
-	scriptFlag     bool
-	tableFlag      bool
-	typeFlag       bool
-	versionFlag    bool
-	planetsCount   int
-	bashScriptName string
-	bashScriptPath string
-	command        string
-	currentDBDet   string
-	currentDet     string
-	dbScriptName   string
-	dbScriptPath   string
-	pyScriptName   string
-	pyScriptPath   string
-	scriptName     string
-	scriptPath     string
-	templateName   string
-	templatePath   string
-	planets        []string
+	debugFlag    bool
+	helpFlag     bool
+	loadFlag     bool
+	prettyFlag   bool
+	scriptFlag   bool
+	tableFlag    bool
+	typeFlag     bool
+	versionFlag  bool
+	planetsCount int
+	command      string
+	currentDBDet string
+	currentDet   string
+	scriptName   string
+	template     string
+	planets      []string
 }
-
-const templatePath = "templates"
-const dbScriptPath = "dbScripts"
-const bashScriptPath = "bashScripts"
-const pyScriptPath = "pythonScripts"
 
 /**
 *	Returns the contents of args in following order:
@@ -50,33 +36,28 @@ const pyScriptPath = "pythonScripts"
 *	planets
  */
 func (opts *Opts) procArgs(args []string) {
-
-	rootDir := os.Getenv("ORBIT_HOME")
 	flag.BoolVar(&opts.helpFlag, "h", false, "help")
 	flag.BoolVar(&opts.prettyFlag, "pp", false, "prettyprint")
 	flag.BoolVar(&opts.typeFlag, "t", false, "type")
 	flag.BoolVar(&opts.debugFlag, "d", false, "verbose")
 	flag.BoolVar(&opts.loadFlag, "l", false, "ssh profile loading")
 	flag.BoolVar(&opts.versionFlag, "v", false, "version")
-	flag.StringVar(&opts.templatePath, "tp", path.Join(rootDir, templatePath), "path to template directory")
-	flag.StringVar(&opts.templateName, "tn", "", "filename of template")
-	flag.StringVar(&opts.bashScriptPath, "bp", path.Join(rootDir, bashScriptPath), "path to bash-script directory")
-	flag.StringVar(&opts.dbScriptPath, "dp", path.Join(rootDir, dbScriptPath), "path to db-Script directory")
-	flag.StringVar(&opts.pyScriptPath, "pyp", path.Join(rootDir, pyScriptPath), "path to python-Script directory")
-	flag.StringVar(&opts.scriptName, "sn", "", "name of the script(regardless wether db or bash) to be executed")
+	flag.StringVar(&opts.template, "tp", "", "filename of template")
+	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
-	flag.StringVar(&opts.scriptPath, "s", "", "path to script file to be uploaded and executed")
 	flag.Parse()
-	opts.scriptFlag = !(opts.scriptPath == "")
-	opts.tableFlag = !(opts.templateName == "")
+	opts.scriptFlag = !(opts.scriptName == "")
+	opts.tableFlag = !(opts.template == "")
+	if opts.scriptFlag && !(opts.command == "") {
+		var err error
+		throwErrExt(err, "providing both a script AND a command is not possible")
+	}
 
 	planets := flag.Args()
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
-	opts.templateName = strings.TrimSuffix(strings.TrimPrefix(opts.templateName, "\""), "\"")
-	opts.templatePath = strings.TrimSuffix(strings.TrimPrefix(opts.templatePath, "\""), "\"")
-	opts.scriptPath = strings.TrimSuffix(strings.TrimPrefix(opts.scriptPath, "\""), "\"")
+	opts.template = strings.TrimSuffix(strings.TrimPrefix(opts.template, "\""), "\"")
 	opts.scriptName = strings.TrimSuffix(strings.TrimPrefix(opts.scriptName, "\""), "\"")
-	opts.pyScriptPath = strings.TrimSuffix(strings.TrimPrefix(opts.pyScriptPath, "\""), "\"")
+
 	for _, argument := range planets {
 		if isSupported(argument) {
 			opts.planets = append(opts.planets, argument)

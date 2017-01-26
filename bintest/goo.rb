@@ -91,8 +91,7 @@ class TestGoo < Test::Unit::TestCase
 
 
   def test_script_execution
-    toolsPath = File.expand_path('tools', __dir__)
-    output, error, status = Open3.capture3(PATH, BIN, "-s=\"#{toolsPath}/test.sh\"", 'app')
+    output, error, status = Open3.capture3(PATH, BIN, "-s=\"test.sh\"", 'app')
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_equal output, "bang\n", 'return was not correct'

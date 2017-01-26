@@ -27,9 +27,9 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 		fmt.Printf("Tried to write temporary file for textfsm execution: %s\n", tmpTableFile)
 		os.Exit(1)
 	}
-	templateFile := path.Join(opts.templatePath, opts.templateName)
+	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
 
-	pyScriptFile := path.Join(opts.pyScriptPath, pythonScriptName)
+	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, textFSMName)
 	/**
 	if runtime.GOOS == "windows" {
 		pyScriptFile = os.Getenv("TEMP") + "\\tempTabFormat.py"

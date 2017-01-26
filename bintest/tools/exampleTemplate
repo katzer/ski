@@ -1,9 +1,0 @@
-Value Id (\d+)
-Value AlClass (\d+)
-Value Nodes (.+$)
-
-Start
-  ^\s${Id}\s+${AlClass}\s+${Nodes} -> Record
-
-
-EOF

@@ -37,10 +37,10 @@ func printIndented(msg string, indent int, exceptFirst bool) {
 	fmt.Println(buffer.String())
 }
 
-func printHeadline(scriptFlag bool, scriptPath string, command string, indent int) {
+func printHeadline(scriptFlag bool, scriptName string, command string, indent int) {
 	fmt.Print("NR   PLANET               ")
 	if scriptFlag {
-		printIndented(scriptPath, indent, true)
+		printIndented(scriptName, indent, true)
 	} else {
 		printIndented(command, indent, true)
 	}
@@ -55,7 +55,7 @@ func printWhite(length int) {
 
 func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
 	if opts.prettyFlag {
-		printHeadline(opts.scriptFlag, opts.scriptPath, opts.command, 26)
+		printHeadline(opts.scriptFlag, opts.scriptName, opts.command, 26)
 	}
 	for i, entry := range toPrint {
 		formatted := format(entry, i, opts)

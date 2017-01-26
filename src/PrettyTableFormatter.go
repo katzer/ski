@@ -23,15 +23,10 @@ func (prettyTableFormatter *PrettyTableFormatter) format(toFormat string, opts *
 		fmt.Println("writefile failed!")
 		os.Exit(1)
 	}
-	templateFile := path.Join(opts.templatePath, opts.templateName)
+	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
 
-	pyScriptFile := path.Join(opts.pyScriptPath, prettyPythonScriptName)
-	/**
-	if runtime.GOOS == "windows" {
-		pyScriptFile = os.Getenv("TEMP") + "\\tempTabFormat.py"
-	} else {
-		pyScriptFile = os.Getenv("HOME") + "/tempTabFormat.py"
-	}*/
+	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, prettyPythonScriptName)
+
 	cmd := exec.Command("python2", pyScriptFile, templateFile, tmpTableFile)
 	cmd.Stdin = strings.NewReader("some input")
 	var out bytes.Buffer

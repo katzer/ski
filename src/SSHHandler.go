@@ -4,6 +4,7 @@ import (
 	//"github.com/mgutz/ansi"
 	"fmt"
 	"os"
+	"path"
 	"strings"
 
 	"gopkg.in/hypersleep/easyssh.v0"
@@ -69,7 +70,7 @@ func uploadFile(user string, hostname string, opts *Opts) {
 	}
 
 	// Call Scp method with file you want to upload to remote server.
-	err := ssh.Scp(opts.scriptPath)
+	err := ssh.Scp(path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.scriptName))
 
 	// Handle errors
 	if err != nil {
@@ -85,9 +86,8 @@ func uploadFile(user string, hostname string, opts *Opts) {
  */
 func execScript(user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
 	uploadFile(user, hostname, opts)
-	path := strings.Split(opts.scriptPath, "/")
 	placeholder := StructuredOuput{}
-	scriptName := path[len(path)-1]
+	scriptName := opts.scriptName
 	executionCommand := fmt.Sprintf("chmod u+x %s && ./%s", scriptName, scriptName)
 	delCommand := fmt.Sprintf("rm %s", scriptName)
 	execCommand(user, hostname, executionCommand, strucOut, opts)

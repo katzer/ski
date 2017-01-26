@@ -18,7 +18,6 @@ func (executor *Executor) execMain(opts *Opts) {
 	if opts.debugFlag {
 		fmt.Println("prettyflag " + strconv.FormatBool(opts.prettyFlag))
 		fmt.Println("scriptflag " + strconv.FormatBool(opts.scriptFlag))
-		fmt.Println("scriptpath " + opts.scriptPath)
 		fmt.Println("command " + opts.command)
 		for _, planet := range opts.planets {
 			fmt.Printf("planet %s", planet)
