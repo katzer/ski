@@ -17,8 +17,10 @@ func format(toPrint StructuredOuput, counter int, opts *Opts) string {
 		}
 	} else {
 		if opts.tableFlag {
+			var preFormatter TableFormatter
+			preFormatted := preFormatter.format(toPrint.output, opts)
 			var formatter PrettyTableFormatter
-			formatted = formatter.format(toPrint.output, opts)
+			formatted = formatter.format(preFormatted, opts)
 		} else {
 			fmt.Print(strconv.Itoa(counter) + "")
 			if counter/10 < 1 {

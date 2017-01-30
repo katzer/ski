@@ -1,13 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io/ioutil"
-	"log"
-	"os"
-	"os/exec"
-	"path"
+	"math"
 	"strings"
 )
 
@@ -16,34 +11,28 @@ const prettyPythonScriptName = "texttable.py"
 type PrettyTableFormatter struct {
 }
 
+type Entry struct {
+	key   string
+	value string
+}
+
 func (prettyTableFormatter *PrettyTableFormatter) format(toFormat string, opts *Opts) string {
-	tmpTableFile := fmt.Sprintf("%s/orbitTable.txt", os.Getenv("HOME"))
-	err := ioutil.WriteFile(tmpTableFile, []byte(toFormat), 0644)
-	if err != nil {
-		fmt.Println("writefile failed!")
-		os.Exit(1)
+	var decodedJSON = make([][]string, 0)
+	decodedJSON = decode(toFormat)
+	normalizedTable := prettyTableFormatter.normalizeTable(decodedJSON)
+	keys := ""
+	seperator := ""
+	values := ""
+	for _, entry := range normalizedTable {
+		maxLength := int(math.Max(float64(len(entry.key)), float64(len(entry.value))))
+		keys = fmt.Sprintf("%s| %s%s ", keys, entry.key, strings.Repeat(" ", maxLength-len(entry.key)))
+		values = fmt.Sprintf("%s| %s%s ", values, entry.value, strings.Repeat(" ", maxLength-len(entry.value)))
+		seperator = fmt.Sprintf("%s--%s-", seperator, strings.Repeat("-", maxLength))
 	}
-	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
-
-	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, prettyPythonScriptName)
-
-	cmd := exec.Command("python2", pyScriptFile, templateFile, tmpTableFile)
-	cmd.Stdin = strings.NewReader("some input")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err = cmd.Run()
-	if err != nil {
-		fmt.Printf("toFormat: %s\n", toFormat)
-		throwErrExt(err, "thrown from tableFormatter.format->exec pythonscript")
-	}
-	//formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
-	formattedString := strings.TrimSpace(out.String())
-
-	err = os.Remove(tmpTableFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return formattedString
+	keys = fmt.Sprintf("%s|", keys)
+	values = fmt.Sprintf("%s|", values)
+	seperator = fmt.Sprintf("%s-", seperator)
+	return fmt.Sprintf("%s\n%s\n%s\n", keys, seperator, values)
 
 }
 
@@ -58,4 +47,28 @@ func (prettyTableFormatter *PrettyTableFormatter) parseFSMOutput(toParse string)
 	}
 
 	return parsed
+
+}
+
+func (prettyTableFormatter *PrettyTableFormatter) normalizeTable(toNormalize [][]string) []Entry {
+	var toReturn = make([]Entry, 0)
+	keys := toNormalize[0][:]
+	values := toNormalize[1:][:]
+	skip := false
+	for _, entry := range values {
+		for i, value := range entry {
+			if skip {
+				skip = false
+				continue
+			} else if value != "" {
+				if strings.Contains(keys[i], "Key") {
+					toReturn = append(toReturn, Entry{value, entry[i+1]})
+					skip = true
+				} else if !strings.Contains(keys[i], "Value") {
+					toReturn = append(toReturn, Entry{keys[i], value})
+				}
+			}
+		}
+	}
+	return toReturn
 }
