@@ -23,7 +23,7 @@
 FROM golang:alpine
 MAINTAINER Sebastian Katzer "katzer@appplant.de"
 
-ENV APP_HOME /code
+ENV APP_HOME /root/code
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
