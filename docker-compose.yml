@@ -1,7 +1,7 @@
 compile: &defaults
   build: .
   volumes:
-    - .:/root/code:rw
+    - .:/code:rw
   command: rake compile
 bintest:
   <<: *defaults

@@ -32,6 +32,5 @@ task :compile do
     cd(src_path) { sh gb.go_build(bin_path) }
     chmod_R 'u+x', bin_path
   end
-  #sh "cp #{ENV['HOME']}/.ssh/orbit_rsa #{APP_ROOT}/bintest/testFolder/config/ssh/orbit_rsa"
-  #sh "cp #{ENV['HOME']}/.ssh/orbit_rsa.pub #{APP_ROOT}/bintest/testFolder/config/ssh/orbit_rsa.pub"
+  
 end

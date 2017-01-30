@@ -43,12 +43,6 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 	out, err := ssh.Run(cmd)
 	// Handle errors
 
-	fmt.Printf("command: \n %s \n", command)
-	fmt.Printf("user: \n %s \n", user)
-	fmt.Printf("hostname: \n %s \n", hostname)
-	fmt.Printf("keypath: \n %s \n", keyPath)
-	fmt.Printf("ssh object : \n %s \n", ssh)
-
 	if err != nil {
 		throwErrExt(err, "called from execCommand. Keypath: "+keyPath)
 	} else {
@@ -96,11 +90,6 @@ func uploadFile(user string, hostname string, opts *Opts) {
 
 	// Call Scp method with file you want to upload to remote server.
 	err := ssh.Scp(path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.scriptName))
-
-	fmt.Printf("user: \n %s \n", user)
-	fmt.Printf("hostname: \n %s \n", hostname)
-	fmt.Printf("keypath: \n %s \n", keyPath)
-	fmt.Printf("ssh object : \n %s \n", ssh)
 
 	// Handle errors
 	if err != nil {
