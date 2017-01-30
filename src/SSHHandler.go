@@ -43,7 +43,9 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 	out, err := ssh.Run(cmd)
 	// Handle errors
 	if err != nil {
-		throwErrExt(err, "called from execCommand ")
+		fmt.Println(ssh)
+		fmt.Println(cmd)
+		throwErrExt(err, "called from execCommand. Keypath: "+keyPath)
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
@@ -92,7 +94,8 @@ func uploadFile(user string, hostname string, opts *Opts) {
 
 	// Handle errors
 	if err != nil {
-		throwErrExt(err, "called from uploadFile")
+		fmt.Println(ssh)
+		throwErrExt(err, "called from uploadFile. Keypath: "+keyPath)
 	}
 }
 
