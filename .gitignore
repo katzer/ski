@@ -14,7 +14,7 @@ releases/
 .vendor/
 textfsm/
 .vscode/
-testScripts
+# testScripts
 
 # Architecture specific extensions/prefixes
 *.[568vq]
