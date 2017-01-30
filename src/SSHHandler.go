@@ -3,11 +3,11 @@ package main
 import (
 	//"github.com/mgutz/ansi"
 	"fmt"
+	"gopkg.in/hypersleep/easyssh.v0"
 	"os"
 	"path"
+	"runtime"
 	"strings"
-
-	"gopkg.in/hypersleep/easyssh.v0"
 )
 
 /**
@@ -18,10 +18,19 @@ import (
  */
 func execCommand(user string, hostname string, command string, strucOut *StructuredOuput, opts *Opts) {
 
+	keyPath := os.Getenv("ORBIT_KEY")
+	if keyPath == "" {
+		if runtime.GOOS == "windows" {
+			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
+		} else {
+			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit_rsa"), os.Getenv("HOME"))
+		}
+	}
+
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:    os.Getenv("ORBIT_KEY"),
+		Key:    keyPath,
 		Port:   "22",
 	}
 	var cmd string
@@ -62,10 +71,19 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 *	Uploads a file to the remote server
  */
 func uploadFile(user string, hostname string, opts *Opts) {
+	keyPath := os.Getenv("ORBIT_KEY")
+	if keyPath == "" {
+		if runtime.GOOS == "windows" {
+			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
+		} else {
+			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit_rsa"), os.Getenv("HOME"))
+		}
+	}
+
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:    os.Getenv("ORBIT_KEY"),
+		Key:    keyPath,
 		Port:   "22",
 	}
 

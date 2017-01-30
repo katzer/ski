@@ -60,7 +60,7 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 	//cleanString = fmt.Sprintf("[\n%s]\n", strings.Replace(formattedString, "]\n[", "],\n[", -1))
 	//################################# temporaray hardocode##############################################
 
-	return jsonString
+	return strings.Replace(jsonString, "'", "\"", -1)
 
 }
 
