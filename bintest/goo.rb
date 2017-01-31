@@ -93,6 +93,11 @@ class TestGoo < Test::Unit::TestCase
   def test_script_execution
     output, error, status = Open3.capture3(PATH, BIN, "-s=\"test.sh\"", 'app')
 
+    if error != nil
+      puts "output: #{output}"
+      puts "error: #{error}"
+    end
+
     assert_true status.success?, 'Process did not exit cleanly'
     assert_equal output, "bang\n", 'return was not correct'
   end

@@ -49,7 +49,6 @@ install_deps() {
 install_pkgs() {
     gem install rake os test-unit --no-ri --no-rdoc
     go get gopkg.in/hypersleep/easyssh.v0
-    go get -u github.com/mgutz/ansi/cmd/ansi-mgutz
 }
 
 setup_sshd() {

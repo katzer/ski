@@ -32,6 +32,6 @@ RUN sh install.sh
 RUN gem install rake os test-unit --no-ri --no-rdoc
 RUN gem update --system --no-ri --no-rdoc
 RUN go get gopkg.in/hypersleep/easyssh.v0
-RUN go get -u github.com/mgutz/ansi/cmd/ansi-mgutz
+RUN git -C $GOPATH/src/golang.org/x/crypto reset --hard abc5fa7ad02123a41f02bf1391c9760f7586e608
 
 COPY scripts/init.sh /etc/profile.d

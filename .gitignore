@@ -3,6 +3,7 @@
 *.a
 *.so
 *.log
+tags
 
 # Folders
 _obj
