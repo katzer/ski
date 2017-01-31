@@ -18,7 +18,7 @@ import (
  */
 func execCommand(user string, hostname string, command string, strucOut *StructuredOuput, opts *Opts) {
 
-	keyPath := os.Getenv("ORBIT_KEY")
+	keyPath := ""
 	if keyPath == "" {
 		if runtime.GOOS == "windows" {
 			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
@@ -80,7 +80,6 @@ func uploadFile(user string, hostname string, opts *Opts) {
 			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit_rsa"), os.Getenv("HOME"))
 		}
 	}
-	fmt.Println("keyfile: " + keyPath)
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
