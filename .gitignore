@@ -4,6 +4,7 @@
 *.so
 *.log
 tags
+orbit_rsa
 
 # Folders
 _obj

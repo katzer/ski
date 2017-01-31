@@ -23,6 +23,14 @@
 namespace :test do
   desc 'run integration tests'
   task bintest: [:compile] do
+    if !Dir.exist? "#{APP_ROOT}/bintest/testFolder/config"
+      sh "mkdir #{APP_ROOT}/bintest/testFolder/config"
+    end
+    if !Dir.exist? "#{APP_ROOT}/bintest/testFolder/config/ssh"
+      sh "mkdir #{APP_ROOT}/bintest/testFolder/config/ssh"
+    end
+    sh "cp $HOME/.ssh/orbit_rsa #{APP_ROOT}/bintest/testFolder/config/ssh"
+    
     Go::Build.builds.each do |gb|
       next unless gb.bintest?
 
