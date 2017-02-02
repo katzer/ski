@@ -44,7 +44,7 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 	// Handle errors
 
 	if err != nil {
-		throwErrExt(err, "called from execCommand. Keypath: "+keyPath)
+		throwErrExt(err, fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd))
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
