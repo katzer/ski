@@ -16,7 +16,6 @@ type Opts struct {
 	prettyFlag   bool
 	scriptFlag   bool
 	tableFlag    bool
-	typeFlag     bool
 	versionFlag  bool
 	planetsCount int
 	command      string
@@ -38,7 +37,6 @@ type Opts struct {
 func (opts *Opts) procArgs(args []string) {
 	flag.BoolVar(&opts.helpFlag, "h", false, "help")
 	flag.BoolVar(&opts.prettyFlag, "p", false, "prettyprint")
-	flag.BoolVar(&opts.typeFlag, "t", false, "type")
 	flag.BoolVar(&opts.debugFlag, "d", false, "verbose")
 	flag.BoolVar(&opts.loadFlag, "l", false, "ssh profile loading")
 	flag.BoolVar(&opts.versionFlag, "v", false, "version")
