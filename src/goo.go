@@ -96,12 +96,16 @@ func printVersion() {
 *	Prints the help dialog
  */
 func printHelp() {
-	fmt.Println(`usage: goo [options...] <planet>... -c="<command>"`)
+	fmt.Println(`usage: goo [options...] -c="<command>" <planets>... `)
 	fmt.Println(`Options:`)
-	fmt.Println(`-s="<path/to/script>", --script="<path/to/script>"  Execute script and return result`)
-	fmt.Println(`-p, --pretty     Pretty print output as a table`)
-	fmt.Println(`-t, --type       Show type of planet`)
-	fmt.Println(`-h, --help       This help text`)
-	fmt.Println(`-v, --version    Show version number`)
-	fmt.Println(`-d, --debug	  Show extended debug informations`)
+	fmt.Println(`-s="<scriptname>"   Execute script and return result`)
+	fmt.Println(`-c="<command>"  	 Execute script and return result`)
+	fmt.Println(`-t=<"templatename>" Templatefile to be applied `)
+	fmt.Println(`-p    	Pretty print output as a table`)
+	fmt.Println(`-l    	Load bash profiles on Server`)
+	fmt.Println(`-t    	Show type of planet`)
+	fmt.Println(`-h    	Display this help text`)
+	fmt.Println(`-v    	Show version number`)
+	fmt.Println(`-d		Show extended debug informations`)
+
 }
