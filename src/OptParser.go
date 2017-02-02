@@ -37,12 +37,12 @@ type Opts struct {
  */
 func (opts *Opts) procArgs(args []string) {
 	flag.BoolVar(&opts.helpFlag, "h", false, "help")
-	flag.BoolVar(&opts.prettyFlag, "pp", false, "prettyprint")
+	flag.BoolVar(&opts.prettyFlag, "p", false, "prettyprint")
 	flag.BoolVar(&opts.typeFlag, "t", false, "type")
 	flag.BoolVar(&opts.debugFlag, "d", false, "verbose")
 	flag.BoolVar(&opts.loadFlag, "l", false, "ssh profile loading")
 	flag.BoolVar(&opts.versionFlag, "v", false, "version")
-	flag.StringVar(&opts.template, "tp", "", "filename of template")
+	flag.StringVar(&opts.template, "t", "", "filename of template")
 	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
 	flag.Parse()
