@@ -32,20 +32,26 @@ PATH = { 'PATH' => "#{File.expand_path('tools', __dir__)}:#{ENV['PATH']}"  }
 
 class TestGoo < Test::Unit::TestCase
   def test_server
-    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"','-d', 'app')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', 'app')
 
+    checkError(output,error)
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, '123'
   end
-
+=begin
   def test_web
     _, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', 'web')
+
+    if error = nil
+      puts "output: #{output}"
+      puts "error: #{error}"
+    end
 
     assert_false status.success?, 'Process did exit cleanly'
     assert_include error, 'not supported'
   end
-
+=end
   def test_not_authorized_host
     _, status = Open3.capture2(PATH, BIN, '-c="echo 123"', 'unauthorized')
 
@@ -54,6 +60,7 @@ class TestGoo < Test::Unit::TestCase
 
   def test_offline_host
     _, status = Open3.capture2(PATH, BIN, '-c="echo 123"', 'offline')
+
 
     assert_false status.success?, 'Process did exit cleanly'
   end
@@ -75,6 +82,8 @@ class TestGoo < Test::Unit::TestCase
   def test_empty_return
     output, error, status = Open3.capture3(PATH, BIN, '-c="echo "', 'app')
 
+    checkError(output,error)
+
     assert_true status.success?, 'Process did not exit cleanly'
     assert_equal output, "\n", 'return was not empty'
   end
@@ -93,13 +102,16 @@ class TestGoo < Test::Unit::TestCase
   def test_script_execution
     output, error, status = Open3.capture3(PATH, BIN, "-s=\"test.sh\"", 'app')
 
-    if error != nil
-      puts "output: #{output}"
-      puts "error: #{error}"
-    end
+    checkError(output,error)
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_equal output, "bang\n", 'return was not correct'
   end
 end
 
+def checkError(output,error)
+  if error != nil
+      puts "output: #{output}"
+      puts "error: #{error}"
+  end
+end

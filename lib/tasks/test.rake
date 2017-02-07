@@ -26,12 +26,15 @@ namespace :test do
     Go::Build.builds.each do |gb|
       next unless gb.bintest?
 
-      testBinPath = "#{APP_ROOT}/bintest/testFolder/bin/goo"
+      testBinPath = "#{testFolderPath}/bin/goo"
       bin_path = "#{build_path}/#{gb.name}/bin/goo"
       bin_path << '.exe' if File.exist? "#{bin_path}.exe"
       testBinPath << '.exe' if File.exist? "#{bin_path}.exe"
 
-      sh "cp #{bin_path} #{testBinPath}"
+      if !Dir.exist? "#{testFolderPath}/bin"
+        sh "mkdir #{testFolderPath}/bin"
+      end
+      sh "cp #{bin_path} #{testFolderPath}/bin"
       sh "ruby #{APP_ROOT}/bintest/goo.rb #{testBinPath}"
     end
   end
