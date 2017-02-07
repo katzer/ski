@@ -23,7 +23,7 @@
 require 'os'
 
 desc 'compile binary'
-task :compile do
+task :compile => :init do
   Go::Build.builds.each do |gb|
     bin_path = "#{build_path}/#{gb.name}/bin"
     goo_path = "#{src_path}/#{APP_NAME}.go"
@@ -32,5 +32,5 @@ task :compile do
     cd(src_path) { sh gb.go_build(bin_path) }
     chmod_R 'u+x', bin_path
   end
-  
+
 end
