@@ -35,6 +35,7 @@ namespace :test do
       next unless gb.bintest?
 
       testBinPath = "#{APP_ROOT}/bintest/testFolder/bin/goo"
+      testFolderPath = "#{APP_ROOT}/bintest/testFolder"
       bin_path = "#{build_path}/#{gb.name}/bin/goo"
       bin_path << '.exe' if File.exist? "#{bin_path}.exe"
       testBinPath << '.exe' if File.exist? "#{bin_path}.exe"
