@@ -41,6 +41,10 @@ def src_path
   "#{APP_ROOT}/src"
 end
 
+def testFolderPath
+  "#{APP_ROOT}/bintest/testFolder"
+end
+
 Dir.chdir('lib') { Dir['tasks/*.rake'].each { |file| load file } }
 
 desc 'print version'

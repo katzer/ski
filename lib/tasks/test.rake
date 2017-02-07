@@ -30,7 +30,6 @@ namespace :test do
       sh "mkdir #{APP_ROOT}/bintest/testFolder/config/ssh"
     end
     sh "cp $HOME/.ssh/orbit.key #{APP_ROOT}/bintest/testFolder/config/ssh"
-    sh "chmod 777 #{APP_ROOT}/bintest/testFolder/config/ssh/orbit.key"
     Go::Build.builds.each do |gb|
       next unless gb.bintest?
 
@@ -43,7 +42,6 @@ namespace :test do
        if !Dir.exist? "#{testFolderPath}/bin"
         sh "mkdir #{testFolderPath}/bin"
       end
-
       sh "cp #{bin_path} #{testFolderPath}/bin"
       sh "ruby #{APP_ROOT}/bintest/goo.rb #{testBinPath}"
     end
