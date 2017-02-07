@@ -29,9 +29,9 @@ func execDBScript(dbID string, user string, hostname string, strucOut *Structure
 	placeholder := StructuredOuput{}
 	scriptName := opts.scriptName
 	command := fmt.Sprintf("mv ~/%s ~/sql/%s", scriptName, scriptName)
-	removeCommand := fmt.Sprintf("rm ~/sql/%s", scriptName)
 	execCommand(user, hostname, command, &placeholder, opts)
 	queryString := fmt.Sprintf(dbCommand, user, dbID, scriptName)
+	removeCommand := fmt.Sprintf("rm ~/sql/%s", scriptName)
 	execCommand(user, hostname, queryString, strucOut, opts)
 	execCommand(user, hostname, removeCommand, &placeholder, opts)
 }

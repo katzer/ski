@@ -21,7 +21,6 @@ func debugPrintOpts(opts *Opts) {
 	debugString = fmt.Sprintf("%sprettyFlag: %t\n", debugString, opts.prettyFlag)
 	debugString = fmt.Sprintf("%sscriptFlag: %t\n", debugString, opts.scriptFlag)
 	debugString = fmt.Sprintf("%stableFlag: %t\n", debugString, opts.tableFlag)
-	debugString = fmt.Sprintf("%stypeFlag: %t\n", debugString, opts.typeFlag)
 	debugString = fmt.Sprintf("%sversionFlag: %t\n", debugString, opts.versionFlag)
 	debugString = fmt.Sprintf("%splanetsCount: %d\n", debugString, opts.planetsCount)
 	debugString = fmt.Sprintf("%scommand: %s\n", debugString, opts.command)

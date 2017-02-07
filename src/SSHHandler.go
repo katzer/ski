@@ -18,12 +18,12 @@ import (
  */
 func execCommand(user string, hostname string, command string, strucOut *StructuredOuput, opts *Opts) {
 
-	keyPath := os.Getenv("ORBIT_KEY")
+	keyPath := ""
 	if keyPath == "" {
 		if runtime.GOOS == "windows" {
 			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
 		} else {
-			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit_rsa"), os.Getenv("HOME"))
+			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key"), os.Getenv("HOME"))
 		}
 	}
 
@@ -44,7 +44,7 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 	// Handle errors
 
 	if err != nil {
-		throwErrExt(err, "called from execCommand. Keypath: "+keyPath)
+		throwErrExt(err, fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd))
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
@@ -72,15 +72,14 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 *	Uploads a file to the remote server
  */
 func uploadFile(user string, hostname string, opts *Opts) {
-	keyPath := os.Getenv("ORBIT_KEY")
+	keyPath := ""
 	if keyPath == "" {
 		if runtime.GOOS == "windows" {
 			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
 		} else {
-			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit_rsa"), os.Getenv("HOME"))
+			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key"), os.Getenv("HOME"))
 		}
 	}
-
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
