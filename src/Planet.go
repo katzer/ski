@@ -17,9 +17,6 @@ type Planet struct {
 func (planet *Planet) execute(opts *Opts) {
 	if planet.planetType == database {
 		if opts.scriptFlag {
-			if !strings.HasSuffix(opts.scriptName, ".sql") {
-				opts.scriptName = fmt.Sprintf("%s.sql", opts.scriptName)
-			}
 			execDBScript(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
 		} else {
 			execDBCommand(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
@@ -27,9 +24,6 @@ func (planet *Planet) execute(opts *Opts) {
 		//trimDBMetaInformations(&planet.outputStruct)
 	} else if planet.planetType == linuxServer {
 		if opts.scriptFlag {
-			if !strings.HasSuffix(opts.scriptName, ".sh") {
-				opts.scriptName = fmt.Sprintf("%s.sh", opts.scriptName)
-			}
 			execScript(planet.user, planet.host, &planet.outputStruct, opts)
 		} else {
 			planet.planetInfo(opts)
