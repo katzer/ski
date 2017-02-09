@@ -4,15 +4,17 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	log "github.com/Sirupsen/logrus"
 	"os"
 	"os/exec"
 	"path"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 const pythonScriptName = "textfsm.py"
 
+// TableFormatter prints input in tabular format
 type TableFormatter struct {
 }
 
@@ -43,7 +45,7 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 		throwErrExt(err, "thrown from tableFormatter.format->exec pythonscript")
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
-	jsonString := convertToJson(formattedString)
+	jsonString := convertToJSON(formattedString)
 	//formattedString = strings.TrimSpace(formattedString)
 	//cleanString := tableFormatter.cleanEntries(formattedString)
 
@@ -116,6 +118,6 @@ func cleanifyTable(toclean string) string {
 	return cleaned
 }
 
-func convertToJson(toConvert string) string {
+func convertToJSON(toConvert string) string {
 	return fmt.Sprintf("[\n%s]\n", strings.Replace(toConvert, "]\n[", "],\n[", -1))
 }

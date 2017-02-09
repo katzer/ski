@@ -8,9 +8,11 @@ import (
 
 const prettyPythonScriptName = "texttable.py"
 
+// PrettyTableFormatter prints input in tabular format
 type PrettyTableFormatter struct {
 }
 
+// Entry a key value pair
 type Entry struct {
 	key   string
 	value string

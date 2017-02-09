@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+
 	log "github.com/Sirupsen/logrus"
 )
 
@@ -13,7 +14,8 @@ type StructuredOuput struct {
 	maxOutLength int
 }
 
-const LogFile string = "testlog.log"
+// Default logfile path
+const logFile string = "testlog.log"
 
 func main() {
 	args := os.Args
@@ -34,20 +36,20 @@ func main() {
 		level = log.DebugLevel
 	}
 
-	file, err := SetupLogger(LogFile, level )
+	file, err := setupLogger(logFile, level)
 	// No error -> a file was opened for writing, arange for closing the file
 	if err == nil {
 		defer closeFile(file)
 	}
 
 	log.Debugln("Started with args: %v", os.Args)
-	log.Debugln( &opts)
+	log.Debugln(&opts)
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
 	log.Debugln("Ended with args: %v", os.Args)
 }
 
-func closeFile (file *os.File) {
+func closeFile(file *os.File) {
 	file.Sync()
 	file.Close()
 }

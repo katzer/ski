@@ -2,10 +2,11 @@ package main
 
 import (
 	"os"
+
 	"github.com/Sirupsen/logrus"
 )
 
-func SetupLogger (destination string, level logrus.Level ) (*os.File, error) {
+func setupLogger(destination string, level logrus.Level) (*os.File, error) {
 	logFile, err := os.OpenFile(destination, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		logrus.Warnf("logrus will write to stderr. Bad file name: %s", destination)
@@ -15,7 +16,7 @@ func SetupLogger (destination string, level logrus.Level ) (*os.File, error) {
 
 	formatter := new(logrus.TextFormatter)
 	formatter.DisableSorting = true
-	formatter.ForceColors  = true
+	formatter.ForceColors = true
 	formatter.TimestampFormat = "2006-01-02 15:04:05"
 	formatter.FullTimestamp = true
 	logrus.SetFormatter(formatter)
