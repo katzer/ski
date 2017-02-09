@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"sync"
+	log "github.com/Sirupsen/logrus"
 )
 
 // Executor This struct ensures the parallel execution of all command executions
@@ -15,14 +15,13 @@ func (executor *Executor) execMain(opts *Opts) {
 	outputList := make([]StructuredOuput, len(executor.planets))
 	var wg sync.WaitGroup
 
-	if opts.debugFlag {
-		fmt.Println("prettyflag " + strconv.FormatBool(opts.prettyFlag))
-		fmt.Println("scriptflag " + strconv.FormatBool(opts.scriptFlag))
-		fmt.Println("command " + opts.command)
-		for _, planet := range opts.planets {
-			fmt.Printf("planet %s", planet)
-		}
+	log.Debugln("prettyflag " + strconv.FormatBool(opts.prettyFlag))
+	log.Debugln("scriptflag " + strconv.FormatBool(opts.scriptFlag))
+	log.Debugln("command " + opts.command)
+	for _, planet := range opts.planets {
+		log.Debugf("planet %s", planet)
 	}
+
 
 	wg.Add(len(executor.planets))
 	for i, planet := range executor.planets {

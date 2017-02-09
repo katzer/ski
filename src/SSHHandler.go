@@ -1,13 +1,13 @@
 package main
 
 import (
-	//"github.com/mgutz/ansi"
 	"fmt"
 	"gopkg.in/hypersleep/easyssh.v0"
 	"os"
 	"path"
 	"runtime"
 	"strings"
+	log "github.com/Sirupsen/logrus"
 )
 
 /**
@@ -56,15 +56,14 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 		strucOut.maxOutLength = maxLength
 	}
 	if opts.debugFlag {
-		debugPrintString("### execCommand complete ###")
-		debugPrintString(fmt.Sprintf("user: %s\n", user))
-		debugPrintString(fmt.Sprintf("hostname: %s\n", hostname))
-		debugPrintString(fmt.Sprintf("orbit key: %s\n", os.Getenv("ORBIT_KEY")))
-		debugPrintString(fmt.Sprintf("command: %s\n", command))
-		debugPrintString(fmt.Sprintf("strucOut: %v\n", strucOut))
-		//debugPrintOpts(opts)
-		debugPrintStructuredOutput(strucOut)
-		debugPrintString("### execCommand complete ###")
+		log.Debugln("### execCommand complete ###")
+		log.Debugln(fmt.Sprintf("user: %s\n", user))
+		log.Debugln(fmt.Sprintf("hostname: %s\n", hostname))
+		log.Debugln(fmt.Sprintf("orbit key: %s\n", os.Getenv("ORBIT_KEY")))
+		log.Debugln(fmt.Sprintf("command: %s\n", command))
+		log.Debugln(fmt.Sprintf("strucOut: %v\n", strucOut))
+		log.Debugln(fmt.Sprintf("planet: %s\n maxLineLength: %d\n", strucOut.planet, strucOut.maxOutLength))
+		log.Debugln("### execCommand complete ###")
 	}
 }
 

@@ -26,6 +26,24 @@ type Opts struct {
 	planets      []string
 }
 
+func (opts *Opts) String() string {
+	retval := fmt.Sprintf("opts:\n")
+	retval = fmt.Sprintf("%sdebugFlag: %t\n",    retval, opts.debugFlag)
+	retval = fmt.Sprintf("%shelpFlag: %t\n",     retval, opts.helpFlag)
+	retval = fmt.Sprintf("%sloadFlag: %t\n",     retval, opts.loadFlag)
+	retval = fmt.Sprintf("%sprettyFlag: %t\n",   retval, opts.prettyFlag)
+	retval = fmt.Sprintf("%sscriptFlag: %t\n",   retval, opts.scriptFlag)
+	retval = fmt.Sprintf("%stableFlag: %t\n",    retval, opts.tableFlag)
+	retval = fmt.Sprintf("%sversionFlag: %t\n",  retval, opts.versionFlag)
+	retval = fmt.Sprintf("%splanetsCount: %d\n", retval, opts.planetsCount)
+	retval = fmt.Sprintf("%scommand: %s\n",      retval, opts.command)
+	retval = fmt.Sprintf("%scurrentDBDet: %s\n", retval, opts.currentDBDet)
+	retval = fmt.Sprintf("%scurrentDet: %s\n",   retval, opts.currentDet)
+	retval = fmt.Sprintf("%sscriptName: %s\n",   retval, opts.scriptName)
+	retval = fmt.Sprintf("%splanets: %v\n",      retval, opts.planets)
+	return retval
+}
+
 /**
 *	Returns the contents of args in following order:
 *	prettyprint flag
@@ -72,25 +90,15 @@ func (opts *Opts) procArgs(args []string) {
 }
 
 /**
-*	Splits the given connectiondetails and returns the hostname
-*	@params:
-*		connDet: Connection details in following form: user@hostname
-*	@return: hostname
- */
-func getHost(connDet string) string {
-	toReturn := strings.Split(connDet, "@")
-	return toReturn[1]
-}
-
-/**
 *	Splits the given connectiondetails and returns the user
 *	@params:
 *		connDet: Connection details in following form: user@hostname
 *	@return: user
  */
-func getUser(connDet string) string {
+func getUserAndHost(connDet string) (string, string) {
+	// TODO: error handling or remove the func completely
 	toReturn := strings.Split(connDet, "@")
-	return toReturn[0]
+	return toReturn[0], toReturn[1]
 }
 
 /**
@@ -124,34 +132,13 @@ func getPlanetDetails(id string) string {
 }
 
 /**
-*	counts the supported planets in a list of planets
- */
-func countSupported(planets []string) int {
-	i := 0
-	for _, planet := range planets {
-		if getType(planet) == linuxServer {
-			i++
-		}
-	}
-	return i
-}
-
-/**
 *	checks, wether a planet is supported by goo or not
  */
 func isSupported(planet string) bool {
-	switch getType(planet) {
-	case linuxServer:
-		return true
-	case database:
-		return true
-	case webServer:
-		return false
-	default:
-		return false
-
-	}
-
+	supported := map[string]bool{database : true ,	linuxServer : true,	webServer: false}
+	// TODO: what if the type is camel case or all capital
+	planetType := getType(planet)
+	return supported[planetType]
 }
 
 func getMaxLength(toProcess string) int {

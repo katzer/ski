@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
+	log "github.com/Sirupsen/logrus"
 	"os"
 	"path"
 )
@@ -12,8 +12,7 @@ func execDBCommand(dbID string, user string, hostname string, strucOut *Structur
 	tmpDBFile := path.Join(os.Getenv("ORBIT_HOME"), "scripts", "orbit.sql")
 	err := ioutil.WriteFile(tmpDBFile, []byte(opts.command), 0644)
 	if err != nil {
-		fmt.Println("writing temporary sql script failed")
-		log.Fatal(err)
+		log.Fatalf("writing temporary sql script failed : %v", err)
 	}
 	opts.scriptName = "orbit.sql"
 	execDBScript(dbID, user, hostname, strucOut, opts)

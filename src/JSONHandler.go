@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	log "github.com/Sirupsen/logrus"
 )
 
 func decode(jsonObject string) [][]string {
@@ -10,7 +10,7 @@ func decode(jsonObject string) [][]string {
 	var toReturn = make([][]string, 0)
 	err := json.Unmarshal(jsonBlob, &toReturn)
 	if err != nil {
-		fmt.Println("error:", err)
+		log.Errorln(err)
 	}
 	return toReturn
 }

@@ -4,11 +4,10 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
+	log "github.com/Sirupsen/logrus"
 	"os"
 	"os/exec"
 	"path"
-	//"runtime"
 	"strings"
 )
 
@@ -23,9 +22,7 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 
 	err := ioutil.WriteFile(tmpTableFile, []byte(toFormat), 0644)
 	if err != nil {
-		fmt.Println("writefile failed!")
-		fmt.Printf("Tried to write temporary file for textfsm execution: %s\n", tmpTableFile)
-		os.Exit(1)
+		log.Fatalf("Attempt to write a temporary file for textfsm execution failed: %s\n", tmpTableFile)
 	}
 	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
 

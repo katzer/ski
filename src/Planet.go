@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "strings"
+import log "github.com/Sirupsen/logrus"
 
 // Planet contains all Informations of one server
 type Planet struct {
@@ -31,27 +32,21 @@ func (planet *Planet) execute(opts *Opts) {
 			}
 			execScript(planet.user, planet.host, &planet.outputStruct, opts)
 		} else {
-			if opts.debugFlag {
-				fmt.Println("###planet.execute-->execcommand###")
-				fmt.Printf("planet.user: %s\n", planet.user)
-				fmt.Printf("planet.host: %s\n", planet.host)
-				fmt.Printf("opts.command: %s\n", opts.command)
-				fmt.Printf("planet.outputStruct: %v\n", planet.outputStruct)
-				fmt.Printf("opts: %v\n", opts)
-				fmt.Println("###planet.execute-->execcommand###")
-			}
+			planet.planetInfo(opts)
 			execCommand(planet.user, planet.host, opts.command, &(planet.outputStruct), opts)
-			if opts.debugFlag {
-				fmt.Println("###planet.execute execcommand-->###")
-				fmt.Printf("planet.user: %s\n", planet.user)
-				fmt.Printf("planet.host: %s\n", planet.host)
-				fmt.Printf("opts.command: %s\n", opts.command)
-				fmt.Printf("planet.outputStruct: %v\n", planet.outputStruct)
-				fmt.Printf("opts: %v\n", opts)
-				fmt.Println("###planet.execute execcommand-->###")
-			}
+			planet.planetInfo(opts)
 		}
 	} else {
-
+		// TODO: Huh?
 	}
+}
+
+func (planet *Planet) planetInfo(opts *Opts){
+	log.Debugln("###planet.execute-->execcommand###")
+	log.Debugln("planet.user: %s", planet.user)
+	log.Debugln("planet.host: %s", planet.host)
+	log.Debugln("opts.command: %s", opts.command)
+	log.Debugln("planet.outputStruct: %v", planet.outputStruct)
+	log.Debugln("opts: %v\n", opts)
+	log.Debugln("###planet.execute-->execcommand###")
 }

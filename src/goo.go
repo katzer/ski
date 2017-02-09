@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
+	log "github.com/Sirupsen/logrus"
 )
 
 // StructuredOuput ...
@@ -13,74 +13,68 @@ type StructuredOuput struct {
 	maxOutLength int
 }
 
+const LogFile string = "testlog.log"
+
 func main() {
 	args := os.Args
 	opts := Opts{}
-
 	opts.procArgs(args)
+
 	if opts.helpFlag {
-		printHelp()
+		printUsage()
+		os.Exit(0)
 	}
 	if opts.versionFlag {
 		printVersion()
+		os.Exit(0)
 	}
-	// if this was moved to any function other than main, the logger wouldn't function as the file it writes to would be closed after the init function was finished
+
+	level := log.InfoLevel
 	if opts.debugFlag {
-		// open a file
-		f, err := os.OpenFile("testlog.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
-		if err != nil {
-			fmt.Printf("error opening file: %v", err)
-		}
-
-		// don't forget to close it
-		defer f.Close()
-
-		// Output to stderr instead of stdout, could also be a file.
-		log.SetOutput(f)
-
-		printDebugStart()
-		debugPrintOpts(&opts)
+		level = log.DebugLevel
 	}
 
+	file, err := SetupLogger(LogFile, level )
+	// No error -> a file was opened for writing, arange for closing the file
+	if err == nil {
+		defer closeFile(file)
+	}
+
+	log.Debugln("Started with args: %v", os.Args)
+	log.Debugln( &opts)
 	exec := makeExecutor(&opts)
-
 	exec.execMain(&opts)
+	log.Debugln("Ended with args: %v", os.Args)
+}
 
-	if opts.debugFlag {
-		printDebugEnd()
-	}
-
+func closeFile (file *os.File) {
+	file.Sync()
+	file.Close()
 }
 
 func makeExecutor(opts *Opts) Executor {
 	executor := Executor{}
 	var planet Planet
 	for _, entry := range opts.planets {
-		var user string
-		var host string
-		var dbID string
+		var user, host, dbID string
 		connDet := getPlanetDetails(entry)
 		planet.outputStruct.planet = entry
 		id := entry
 		planetType := getType(entry)
+		user, host = getUserAndHost(connDet)
 		switch planetType {
 		case linuxServer:
-			user = getUser(connDet)
-			host = getHost(connDet)
 			dbID = ""
 		case database:
 			dbID, connDet = procDBDets(connDet)
-			user = getUser(connDet)
-			host = getHost(connDet)
 		case webServer:
-			fmt.Println("Usage of goo with web servers is not implemented")
+			log.Warnln("Usage of goo with web servers is not implemented")
 			continue
 		default:
-			fmt.Printf("Unkown Type of target %s: %s\n", entry, planet.planetType)
+			log.Warnln("Unkown Type of target %s: %s\n", entry, planet.planetType)
 			continue
 		}
 		executor.planets = append(executor.planets, Planet{id, user, host, planetType, dbID, StructuredOuput{id, "", 0}})
-
 	}
 	return executor
 }
@@ -89,13 +83,14 @@ func makeExecutor(opts *Opts) Executor {
 *	Prints the current Version of the goo application
  */
 func printVersion() {
+	// TODO: Read it from a config file
 	os.Stdout.WriteString("0.9\n")
 }
 
 /**
 *	Prints the help dialog
  */
-func printHelp() {
+func printUsage() {
 	fmt.Println(`usage: goo [options...] -c="<command>" <planets>... `)
 	fmt.Println(`Options:`)
 	fmt.Println(`-s="<scriptname>"   Execute script and return result`)
