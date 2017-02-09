@@ -30,7 +30,7 @@ Go::Build.new('x86_64-pc-linux-gnu') do
   appname :goo
   bintest_if OS.linux? && OS.bits == 64
 end
-=begin
+
 Go::Build.new('i686-pc-linux-gnu') do
   os :linux
   arch :'386'
@@ -65,4 +65,3 @@ Go::Build.new('i686-w64-mingw32') do
   appname :"goo.exe"
   bintest_if OS.windows? && OS.bits == 32
 end
-=end

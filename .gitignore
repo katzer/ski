@@ -36,3 +36,4 @@ _testmain.go
 *.prof
 todo.txt
 src/debug
+.idea/

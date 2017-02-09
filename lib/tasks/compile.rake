@@ -23,7 +23,7 @@
 require 'os'
 
 desc 'compile binary'
-task :compile => :init do
+task compile: [:init] do
   Go::Build.builds.each do |gb|
     bin_path = "#{build_path}/#{gb.name}/bin"
     goo_path = "#{src_path}/#{APP_NAME}.go"
