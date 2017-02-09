@@ -39,6 +39,7 @@ function Install-Pkgs() {
     gem install rake os test-unit --no-ri --no-rdoc
     if (-not (Test-Path env:GOPATH)) { $env:GOPATH = "$HOME\goms" }
     go get gopkg.in/hypersleep/easyssh.v0
+    go get github.com/Sirupsen/logrus
 }
 
 function Setup-Sshd() {
