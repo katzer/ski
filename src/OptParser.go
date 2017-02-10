@@ -1,11 +1,14 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
 	"os/exec"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // Opts ...
@@ -27,21 +30,37 @@ type Opts struct {
 }
 
 func (opts *Opts) String() string {
-	retval := fmt.Sprintf("opts:\n")
-	retval = fmt.Sprintf("%sdebugFlag: %t\n",    retval, opts.debugFlag)
-	retval = fmt.Sprintf("%shelpFlag: %t\n",     retval, opts.helpFlag)
-	retval = fmt.Sprintf("%sloadFlag: %t\n",     retval, opts.loadFlag)
-	retval = fmt.Sprintf("%sprettyFlag: %t\n",   retval, opts.prettyFlag)
-	retval = fmt.Sprintf("%sscriptFlag: %t\n",   retval, opts.scriptFlag)
-	retval = fmt.Sprintf("%stableFlag: %t\n",    retval, opts.tableFlag)
-	retval = fmt.Sprintf("%sversionFlag: %t\n",  retval, opts.versionFlag)
-	retval = fmt.Sprintf("%splanetsCount: %d\n", retval, opts.planetsCount)
-	retval = fmt.Sprintf("%scommand: %s\n",      retval, opts.command)
-	retval = fmt.Sprintf("%scurrentDBDet: %s\n", retval, opts.currentDBDet)
-	retval = fmt.Sprintf("%scurrentDet: %s\n",   retval, opts.currentDet)
-	retval = fmt.Sprintf("%sscriptName: %s\n",   retval, opts.scriptName)
-	retval = fmt.Sprintf("%splanets: %v\n",      retval, opts.planets)
-	return retval
+	template := `opts : {
+	debugFlag: %t
+	helpFlag: %t
+	loadFlag: %t
+	prettyFlag: %t
+	scriptFlag: %t
+	tableFlag: %t
+	versionFlag: %t
+	planetsCount: %d
+	command: %s
+	currentDBDet: %s
+	currentDet: %s
+	scriptName: %s
+	planets: %v
+}
+`
+
+	return fmt.Sprintf(template,
+		opts.debugFlag,
+		opts.helpFlag,
+		opts.loadFlag,
+		opts.prettyFlag,
+		opts.scriptFlag,
+		opts.tableFlag,
+		opts.versionFlag,
+		opts.planetsCount,
+		opts.command,
+		opts.currentDBDet,
+		opts.currentDet,
+		opts.scriptName,
+		opts.planets)
 }
 
 /**
@@ -65,8 +84,8 @@ func (opts *Opts) procArgs(args []string) {
 	opts.scriptFlag = !(opts.scriptName == "")
 	opts.tableFlag = !(opts.template == "")
 	if opts.scriptFlag && !(opts.command == "") {
-		var err error
-		throwErrExt(err, "providing both a script AND a command is not possible")
+		err := errors.New("providing both a script AND a command is not possible")
+		log.Fatal(err)
 	}
 
 	planets := flag.Args()
@@ -111,7 +130,7 @@ func getType(id string) string {
 	cmd := exec.Command("ff", "-t", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		throwErrOut(out, err)
+		log.Fatalf("%s\nAdditional info: %s\n", err, out)
 	}
 	return strings.TrimSpace(string(out))
 }
@@ -126,7 +145,7 @@ func getPlanetDetails(id string) string {
 	cmd := exec.Command("ff", id, "-f=pqdb")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		throwErrOut(out, err)
+		log.Fatalf("%s output is: %s called from ErrOut.\n", err, out)
 	}
 	return strings.TrimSpace(string(out))
 }
@@ -135,7 +154,7 @@ func getPlanetDetails(id string) string {
 *	checks, wether a planet is supported by goo or not
  */
 func isSupported(planet string) bool {
-	supported := map[string]bool{database : true ,	linuxServer : true,	webServer: false}
+	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
 	// TODO: what if the type is camel case or all capital
 	planetType := getType(planet)
 	return supported[planetType]

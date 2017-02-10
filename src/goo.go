@@ -42,11 +42,11 @@ func main() {
 		defer closeFile(file)
 	}
 
-	log.Debugln("Started with args: %v", os.Args)
+	log.Infof("Started with args: %v\n", os.Args)
 	log.Debugln(&opts)
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
-	log.Debugln("Ended with args: %v", os.Args)
+	log.Infof("Ended with args: %v\n", os.Args)
 }
 
 func closeFile(file *os.File) {
@@ -93,16 +93,17 @@ func printVersion() {
 *	Prints the help dialog
  */
 func printUsage() {
-	fmt.Println(`usage: goo [options...] -c="<command>" <planets>... `)
-	fmt.Println(`Options:`)
-	fmt.Println(`-s="<scriptname>"   Execute script and return result`)
-	fmt.Println(`-c="<command>"  	 Execute script and return result`)
-	fmt.Println(`-t=<"templatename>" Templatefile to be applied `)
-	fmt.Println(`-p    	Pretty print output as a table`)
-	fmt.Println(`-l    	Load bash profiles on Server`)
-	fmt.Println(`-t    	Show type of planet`)
-	fmt.Println(`-h    	Display this help text`)
-	fmt.Println(`-v    	Show version number`)
-	fmt.Println(`-d		Show extended debug informations`)
-
+	usage := `usage: goo [options...] <planets>...
+	Options:
+	-s="<scriptname>"   Execute script and return result
+	-c="<command>"      Execute script and return result
+	-t=<"templatename>" Templatefile to be applied
+	-p    Pretty print output as a table
+	-l    Load bash profiles on Server
+	-t    Show type of planet
+	-h    Display this help text
+	-v    Show version number
+	-d    Show extended debug informations, set logging level to debug
+`
+	fmt.Println(usage)
 }

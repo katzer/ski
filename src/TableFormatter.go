@@ -41,8 +41,9 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 	cmd.Stdout = &out
 	err = cmd.Run()
 	if err != nil {
-		fmt.Printf("toFormat: %s\n", toFormat)
-		throwErrExt(err, "thrown from tableFormatter.format->exec pythonscript")
+		message := "thrown from tableFormatter.format->exec pythonscript"
+		log.Fatalf("%s\nAdditional info: %s\n", err, message)
+		log.Fatalf("Format: %s\n", toFormat)
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
 	jsonString := convertToJSON(formattedString)

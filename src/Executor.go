@@ -3,6 +3,7 @@ package main
 import (
 	"strconv"
 	"sync"
+
 	log "github.com/Sirupsen/logrus"
 )
 
@@ -21,7 +22,6 @@ func (executor *Executor) execMain(opts *Opts) {
 	for _, planet := range opts.planets {
 		log.Debugf("planet %s", planet)
 	}
-
 
 	wg.Add(len(executor.planets))
 	for i, planet := range executor.planets {

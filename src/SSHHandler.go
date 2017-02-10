@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/hypersleep/easyssh.v0"
 	"os"
 	"path"
 	"runtime"
 	"strings"
+
 	log "github.com/Sirupsen/logrus"
+	"gopkg.in/hypersleep/easyssh.v0"
 )
 
 /**
@@ -44,7 +45,8 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 	// Handle errors
 
 	if err != nil {
-		throwErrExt(err, fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd))
+		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
+		log.Fatalf("%s\nAdditional info: %s\n", err, message)
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
@@ -55,16 +57,13 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 		strucOut.output = cleanedOut
 		strucOut.maxOutLength = maxLength
 	}
-	if opts.debugFlag {
-		log.Debugln("### execCommand complete ###")
-		log.Debugln(fmt.Sprintf("user: %s\n", user))
-		log.Debugln(fmt.Sprintf("hostname: %s\n", hostname))
-		log.Debugln(fmt.Sprintf("orbit key: %s\n", os.Getenv("ORBIT_KEY")))
-		log.Debugln(fmt.Sprintf("command: %s\n", command))
-		log.Debugln(fmt.Sprintf("strucOut: %v\n", strucOut))
-		log.Debugln(fmt.Sprintf("planet: %s\n maxLineLength: %d\n", strucOut.planet, strucOut.maxOutLength))
-		log.Debugln("### execCommand complete ###")
-	}
+	log.Debugln("### execCommand complete ###")
+	log.Debugln(fmt.Sprintf("user: %s", user))
+	log.Debugln(fmt.Sprintf("hostname: %s", hostname))
+	log.Debugln(fmt.Sprintf("orbit key: %s", os.Getenv("ORBIT_KEY")))
+	log.Debugln(fmt.Sprintf("command: %s", command))
+	log.Debugln(fmt.Sprintf("strucOut: %v", strucOut))
+	log.Debugln(fmt.Sprintf("planet: %s\n maxLineLength: %d", strucOut.planet, strucOut.maxOutLength))
 }
 
 /**
@@ -91,7 +90,8 @@ func uploadFile(user string, hostname string, opts *Opts) {
 
 	// Handle errors
 	if err != nil {
-		throwErrExt(err, "called from uploadFile. Keypath: "+keyPath)
+		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
+		log.Fatalf("%s\nAdditional info: %s\n", err, message)
 	}
 }
 

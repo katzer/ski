@@ -11,7 +11,6 @@ func format(toPrint StructuredOuput, counter int, opts *Opts) string {
 		if opts.tableFlag {
 			var formatter TableFormatter
 			formatted = formatter.format(toPrint.output, opts)
-
 		} else {
 			formatted = toPrint.output
 		}

@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	log "github.com/Sirupsen/logrus"
 	"os"
 	"path"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 func execDBCommand(dbID string, user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
