@@ -49,10 +49,10 @@ function Setup-Sshd() {
     ssh-keygen -A
     ntrights.exe -u "NT SERVICE\SSHD" +r SeAssignPrimaryTokenPrivilege
     mkdir -f $HOME\.ssh
-    Remove-Item $HOME\.ssh\orbit_rsa -ErrorAction Ignore
+    Remove-Item $HOME\.ssh\orbit.key -ErrorAction Ignore
     cd 'C:\Program Files\Git\usr\bin'
-    .\ssh-keygen -q -f $HOME\.ssh\orbit_rsa -N "''"
-    cp $HOME\.ssh\orbit_rsa.pub $HOME\.ssh\authorized_keys
+    .\ssh-keygen -q -f $HOME\.ssh\orbit.key -N "''"
+    cp $HOME\.ssh\orbit.key.pub $HOME\.ssh\authorized_keys
     Start-Service sshd
     .\ssh-keyscan -t ecdsa-sha2-nistp256 localhost 2> $NULL > $HOME\.ssh\known_hosts
     # New-NetFirewallRule -Protocol TCP -LocalPort 22 -Direction Inbound -Action Allow -DisplayName SSH

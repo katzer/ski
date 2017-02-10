@@ -29,7 +29,7 @@ init_go() {
 }
 
 init_orbit() {
-    export ORBIT_KEY=/.ssh/orbit_rsa
+    export ORBIT_KEY=/.ssh/orbit.key
     export ORBIT_HOME=`pwd`/bintest/testFolder
     export PATH=`pwd`/bintest/tools:$PATH
     chmod -R u+x `pwd`/bintest/tools
