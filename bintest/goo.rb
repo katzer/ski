@@ -34,46 +34,52 @@ class TestGoo < Test::Unit::TestCase
   def test_server
     output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', 'app')
 
-    checkError(output,error)
+    checkError(output,error,"test_server")
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, '123'
   end
-=begin
+
   def test_web
-    _, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', 'web')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', 'web')
 
-    if error = nil
-      puts "output: #{output}"
-      puts "error: #{error}"
-    end
+    checkNoError(output,error,"test_web")
 
-    assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'not supported'
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include error, 'Usage of goo with web servers is not implemented'
   end
-=end
+
   def test_not_authorized_host
-    _, status = Open3.capture2(PATH, BIN, '-c="echo 123"', 'unauthorized')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', 'unauthorized')
+
+    checkNoError(output,error,"test_not_authorized_host")
 
     assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, 'ssh: unable to authenticate'
   end
 
   def test_offline_host
-    _, status = Open3.capture2(PATH, BIN, '-c="echo 123"', 'offline')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', 'offline')
 
+    checkNoError(output,error,"test_offline_host")
 
     assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, 'no such host'
   end
 
   def test_help
-    output, status = Open3.capture2(PATH, BIN, '-h')
+    output, error, status = Open3.capture3(PATH, BIN, '-h')
+
+    checkError(output,error,"test_help")
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, 'usage: goo'
   end
 
   def test_version
-    output, status = Open3.capture2(PATH, BIN, '-v')
+    output, error, status = Open3.capture3(PATH, BIN, '-v')
+
+    checkError(output,error,"test_version")
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, '0.9'
@@ -82,36 +88,170 @@ class TestGoo < Test::Unit::TestCase
   def test_empty_return
     output, error, status = Open3.capture3(PATH, BIN, '-c="echo "', 'app')
 
-    checkError(output,error)
+    checkError(output,error,"test_empty_return")
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_equal output, "\n", 'return was not empty'
   end
 
-=begin
+
   def test_tablePrint
     toolsPath = File.expand_path('tools', __dir__)
-    output, error, status = Open3.capture3(PATH, BIN,"-tp=\"#{toolsPath}\"", "-s=\"#{toolsPath}/exampleData.sh\"", "-tn=\"exampleTemplate\"","-pyp=\"#{toolsPath}/pyscripts\"", "app")
+    output, error, status = Open3.capture3(PATH, BIN,"-s=\"showver.sh\"", "-t=\"perlver_template\"", "app")
+
+    checkError(output,error,"test_tablePrint")
 
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, "['Id', 'AlClass', 'Nodes']\n['261722320', '5', \"80','38\"]\n['395033868', '2', '11\"9\\'68\\'']\n['405086926', '10', \"9', '531\"]\n['395033870', '6', '11978']", 'return was not right'
+    assert_include output, "\n[\"IPST_Version\", \"Section\", \"Suse\", \"UnixVersion\", \"UnixPatch\", \"Key\", \"Value\", \"Key2\", \"Value2\", \"Os\", \"OracleDb\"],\n", 'return was not right'
   end
-=end
+
+  def test_pretty_tablePrint
+    toolsPath = File.expand_path('tools', __dir__)
+    output, error, status = Open3.capture3(PATH, BIN,"-s=\"showver.sh\"", "-t=\"perlver_template\"","-p", "app")
+
+    checkError(output,error,"test_pretty_tablePrint")
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, "| IPST_Version | Section  | gateway                                   | telhandlerkm                              |", 'return was not right'
+  end
+
 
 
   def test_script_execution
     output, error, status = Open3.capture3(PATH, BIN, "-s=\"test.sh\"", 'app')
 
-    checkError(output,error)
+    checkError(output,error,"test_script_execution")
 
     assert_true status.success?, 'Process did not exit cleanly'
     assert_equal output, "bang\n", 'return was not correct'
   end
+
+  def test_no_such_script
+    output, error, status = Open3.capture3(PATH, BIN, "-s=\"nonExistent.sh\"", 'app')
+
+    checkNoError(output,error,"no_such_script")
+
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_equal output, "", 'return was not correct'
+    assert_include error, "no such file or directory", 'error was not correct'
+  end
+
+  def test_bad_script
+    output, error, status = Open3.capture3(PATH, BIN, "-s=\"badscript.sh\"", 'app')
+
+    checkNoError(output,error,"bad_script")
+
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, "Process exited with status 127", 'return was not correct'
+  end
+
+  def test_bad_command
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"yabeda baba\"", 'app')
+
+    checkNoError(output,error,"bad_command")
+
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, "Process exited with status 127", 'return was not correct'
+  end
+
+  def test_pretty_print
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"","-p", 'app')
+
+    checkError(output,error,"pretty_print")
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, "0    app                  ", 'return was not correct'
+  end
+
+  def test_multiple_pretty_print
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"","-p", 'app','app','app')
+
+    checkError(output,error,"pretty_print")
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, "0    app", 'return was not correct'
+    assert_include output, "1    app", 'return was not correct'
+    assert_include output, "2    app", 'return was not correct'
+  end
+
+  def test_malformed_flag
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"","-zz", 'app')
+
+    checkNoError(output,error,"malformed_flag")
+
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, "Usage of", 'return was not correct'
+  end
+
+  def test_wrong_flag_order
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"", 'app', "-p")
+
+    checkNoError(output,error,"wrong_flag_order")
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, "total", 'return was not correct'
+    assert_include error, "Unkown Type of target", 'error was not correct'
+  end
+
+  def test_nonexistent_planet
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"", 'pep')
+
+    checkNoError(output,error,"nonexistent_planet")
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include error, "Unkown Type of target", 'error was not correct'
+  end
+
+  def test_not_enough_args
+    output, error, status = Open3.capture3(PATH, BIN, "-p", 'app')
+
+    checkError(output,error,"not_enough_args")
+
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, "usage:", 'return was not correct'
+  end
+
+  def test_no_template
+    output, error, status = Open3.capture3(PATH, BIN,"-s=\"showver.sh\"", "-t=\"no_template\"","-p", "app")
+
+    checkNoError(output,error,"no_template")
+
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, "exit status 2", 'wrong error'
+  end
+
+  def test_malformed_template
+    output, error, status = Open3.capture3(PATH, BIN,"-s=\"showver.sh\"", "-t=\"useless_template\"","-p", "app")
+
+    checkNoError(output,error,"malformed_template")
+
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, "exit status 2", 'wrong error'
+  end
+
+  def test_copy_failed
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"touch test && cp test ./test/test\"","-p", "app")
+
+    checkNoError(output,error,"copy_failed")
+
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, "Process exited with status 1", 'wrong error'
+  end
+
 end
 
-def checkError(output,error)
-  if error != nil
-      puts "output: #{output}"
-      puts "error: #{error}"
-  end
+
+
+def checkError(output,error,testName)
+  return if error.empty?
+  puts "test: #{testName}"
+  puts "output: #{output}"
+  puts "error: #{error}"
+end
+
+def checkNoError(output,error,testName)
+  return unless error.empty?
+  puts "test: #{testName}"
+  puts "output: #{output}"
+  puts "error: #{error.inspect}"
 end
