@@ -1,5 +1,3 @@
-#!/usr/bin/env sh
-
 cat <<EOF
 IPS-T version check 2.1
 -----------------------
