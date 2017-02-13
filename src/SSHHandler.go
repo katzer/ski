@@ -46,6 +46,8 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 
 	if err != nil {
 		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
+		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
+		os.Stderr.WriteString(errorString)
 		log.Fatalf("%s\nAdditional info: %s\n", err, message)
 	} else {
 		cleanedOut := out
@@ -58,12 +60,12 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 		strucOut.maxOutLength = maxLength
 	}
 	log.Debugln("### execCommand complete ###")
-	log.Debugln(fmt.Sprintf("user: %s", user))
-	log.Debugln(fmt.Sprintf("hostname: %s", hostname))
-	log.Debugln(fmt.Sprintf("orbit key: %s", os.Getenv("ORBIT_KEY")))
-	log.Debugln(fmt.Sprintf("command: %s", command))
-	log.Debugln(fmt.Sprintf("strucOut: %v", strucOut))
-	log.Debugln(fmt.Sprintf("planet: %s\n maxLineLength: %d", strucOut.planet, strucOut.maxOutLength))
+	log.Debugf("user: %s\n", user)
+	log.Debugf("hostname: %s\n", hostname)
+	log.Debugf("orbit key: %s\n", os.Getenv("ORBIT_KEY"))
+	log.Debugf("command: %s\n", command)
+	log.Debugf("strucOut: %v\n", strucOut)
+	log.Debugf("planet: %s\n maxLineLength: %d\n", strucOut.planet, strucOut.maxOutLength)
 	// debugPrintStructuredOutput(strucOut)
 	// debugPrintString("### execCommand complete ###")
 }
@@ -93,6 +95,8 @@ func uploadFile(user string, hostname string, opts *Opts) {
 	// Handle errors
 	if err != nil {
 		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
+		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
+		os.Stderr.WriteString(errorString)
 		log.Fatalf("%s\nAdditional info: %s\n", err, message)
 	}
 }

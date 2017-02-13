@@ -70,10 +70,14 @@ func makeExecutor(opts *Opts) Executor {
 		case database:
 			dbID, connDet = procDBDets(connDet)
 		case webServer:
-			log.Warnln("Usage of goo with web servers is not implemented")
+			message := "Usage of goo with web servers is not implemented"
+			os.Stderr.WriteString(message)
+			log.Warnln(message)
 			continue
 		default:
-			log.Warnln("Unkown Type of target %s: %s\n", entry, planet.planetType)
+			message := fmt.Sprintf("Unkown Type of target %s: %s\n", entry, planet.planetType)
+			os.Stderr.WriteString(message)
+			log.Warnln(message)
 			continue
 		}
 		executor.planets = append(executor.planets, Planet{id, user, host, planetType, dbID, StructuredOuput{id, "", 0}})

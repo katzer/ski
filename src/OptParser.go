@@ -4,6 +4,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -83,7 +84,9 @@ func (opts *Opts) procArgs(args []string) {
 	opts.scriptFlag = !(opts.scriptName == "")
 	opts.tableFlag = !(opts.template == "")
 	if opts.scriptFlag && !(opts.command == "") {
-		err := errors.New("providing both a script AND a command is not possible")
+		message := "providing both a script AND a command is not possible"
+		err := errors.New(message)
+		os.Stderr.WriteString(fmt.Sprintf("%s\nAddInf: %s\n", err, message))
 		log.Fatal(err)
 	}
 
@@ -138,7 +141,10 @@ func getType(id string) string {
 	cmd := exec.Command("ff", "-t", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Fatalf("%s\nAdditional info: %s\n", err, out)
+		// Old. throwErrOut(out, err)
+		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
+		os.Stderr.WriteString(message)
+		log.Fatalln(message)
 	}
 	return strings.TrimSpace(string(out))
 }
@@ -153,7 +159,10 @@ func getPlanetDetails(id string) string {
 	cmd := exec.Command("ff", id, "-f=pqdb")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Fatalf("%s output is: %s called from ErrOut.\n", err, out)
+		// Old. throwErrOut(out, err)
+		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
+		os.Stderr.WriteString(message)
+		log.Fatalln(message)
 	}
 	return strings.TrimSpace(string(out))
 }

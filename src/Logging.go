@@ -7,7 +7,7 @@ import (
 )
 
 func setupLogger(destination string, level logrus.Level) (*os.File, error) {
-	logFile, err := os.OpenFile(destination, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+	logFile, err := os.OpenFile(destination, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		logrus.Warnf("logrus will write to stderr. Bad file name: %s", destination)
 	} else {
