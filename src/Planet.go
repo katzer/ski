@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-import "strings"
 import log "github.com/Sirupsen/logrus"
 
 // Planet contains all Informations of one server
@@ -35,7 +33,7 @@ func (planet *Planet) execute(opts *Opts) {
 	}
 }
 
-func (planet *Planet) planetInfo(opts *Opts){
+func (planet *Planet) planetInfo(opts *Opts) {
 	log.Debugln("###planet.execute-->execcommand###")
 	log.Debugln("planet.user: %s", planet.user)
 	log.Debugln("planet.host: %s", planet.host)
