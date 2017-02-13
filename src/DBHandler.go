@@ -24,7 +24,7 @@ func execDBCommand(dbID string, user string, hostname string, strucOut *Structur
 }
 
 func execDBScript(dbID string, user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
-	const dbCommand = ". profiles/%s.prof && pqdb_sql.out -s %s ~/sql/%s"
+	const dbCommand = ". profiles/%s.prof && pqdb_sql.out -x -s %s ~/sql/%s"
 	uploadFile(user, hostname, opts)
 	placeholder := StructuredOuput{}
 	scriptName := opts.scriptName

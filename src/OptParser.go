@@ -94,18 +94,27 @@ func (opts *Opts) procArgs(args []string) {
 	opts.scriptName = strings.TrimSuffix(strings.TrimPrefix(opts.scriptName, "\""), "\"")
 
 	for _, argument := range planets {
-		if isSupported(argument) {
-			opts.planets = append(opts.planets, argument)
-			opts.planetsCount++
-		} else {
-			fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
-			os.Exit(1)
-		}
+		opts.planets = append(opts.planets, argument)
+		opts.planetsCount++
 	}
 	if len(args) == 1 {
 		opts.helpFlag = true
 	}
+	if !opts.helpFlag && !opts.scriptFlag && !opts.versionFlag && opts.command == "" {
+		opts.helpFlag = true
+	}
 
+}
+
+/**
+*	Splits the given connectiondetails and returns the hostname
+*	@params:
+*		connDet: Connection details in following form: user@hostname
+*	@return: hostname
+ */
+func getHost(connDet string) string {
+	toReturn := strings.Split(connDet, "@")
+	return toReturn[1]
 }
 
 /**
@@ -148,6 +157,19 @@ func getPlanetDetails(id string) string {
 		log.Fatalf("%s output is: %s called from ErrOut.\n", err, out)
 	}
 	return strings.TrimSpace(string(out))
+}
+
+/**
+*	counts the supported planets in a list of planets
+ */
+func countSupported(planets []string) int {
+	i := 0
+	for _, planet := range planets {
+		if getType(planet) == linuxServer {
+			i++
+		}
+	}
+	return i
 }
 
 /**

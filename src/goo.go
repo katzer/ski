@@ -100,7 +100,6 @@ func printUsage() {
 	-t=<"templatename>" Templatefile to be applied
 	-p    Pretty print output as a table
 	-l    Load bash profiles on Server
-	-t    Show type of planet
 	-h    Display this help text
 	-v    Show version number
 	-d    Show extended debug informations, set logging level to debug

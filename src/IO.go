@@ -54,8 +54,8 @@ func printWhite(length int) {
 }
 
 func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
-	if opts.prettyFlag {
-		//printHeadline(opts.scriptFlag, opts.scriptName, opts.command, 26)
+	if opts.prettyFlag && !opts.tableFlag {
+		printHeadline(opts.scriptFlag, opts.scriptName, opts.command, 80)
 	}
 	for i, entry := range toPrint {
 		formatted := format(entry, i, opts)

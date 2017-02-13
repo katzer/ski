@@ -19,7 +19,7 @@ import (
  */
 func execCommand(user string, hostname string, command string, strucOut *StructuredOuput, opts *Opts) {
 
-	keyPath := ""
+	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
 		if runtime.GOOS == "windows" {
 			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
@@ -70,7 +70,7 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 *	Uploads a file to the remote server
  */
 func uploadFile(user string, hostname string, opts *Opts) {
-	keyPath := ""
+	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
 		if runtime.GOOS == "windows" {
 			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
@@ -105,7 +105,7 @@ func execScript(user string, hostname string, strucOut *StructuredOuput, opts *O
 	uploadFile(user, hostname, opts)
 	placeholder := StructuredOuput{}
 	scriptName := opts.scriptName
-	executionCommand := fmt.Sprintf("chmod u+x %s && ./%s", scriptName, scriptName)
+	executionCommand := fmt.Sprintf("sh %s", scriptName)
 	delCommand := fmt.Sprintf("rm %s", scriptName)
 	execCommand(user, hostname, executionCommand, strucOut, opts)
 	execCommand(user, hostname, delCommand, &placeholder, opts)
