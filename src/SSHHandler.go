@@ -64,6 +64,8 @@ func execCommand(user string, hostname string, command string, strucOut *Structu
 	log.Debugln(fmt.Sprintf("command: %s", command))
 	log.Debugln(fmt.Sprintf("strucOut: %v", strucOut))
 	log.Debugln(fmt.Sprintf("planet: %s\n maxLineLength: %d", strucOut.planet, strucOut.maxOutLength))
+	// debugPrintStructuredOutput(strucOut)
+	// debugPrintString("### execCommand complete ###")
 }
 
 /**
