@@ -55,10 +55,10 @@ end
 
 desc 'create missing directories'
 task :init do
-  FileUtils::mkdir_p "#{APP_ROOT}/bintest/testFolder/bin"
+  FileUtils::mkdir_p "#{testFolderPath}/bin"
 end
 
 desc 'removes artifacts and folders not becessary for a distribution.'
 task :clean do
-  FileUtils::rm_rf "#{APP_ROOT}/bintest/testFolder/bin"
+  FileUtils::rm_rf "#{testFolderPath}/bin"
 end
