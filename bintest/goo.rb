@@ -83,20 +83,20 @@ class TestGoo < Test::Unit::TestCase
     assert_equal output, '\n', 'return was not empty'
   end
 
-  def test_tablePrint
-    toolsPath = File.expand_path('tools', __dir__)
-    output, error, status = Open3.capture3(PATH, BIN,'-s="showver.sh"',
-                                           '-t="perlver_template"', 
+  def test_table_print
+    tools_path = File.expand_path('tools', __dir__)
+    output, error, status = Open3.capture3(PATH, BIN, '-s="showver.sh"',
+                                           '-t="perlver_template"',
                                            '-d=true', 'app')
     check_error(output, error, 'test_tablePrint')
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, '\n["willywonka_version",', 'return was not right'
   end
 
-  def test_pretty_tablePrint
-    toolsPath = File.expand_path('tools', __dir__)
-    output, error, status = Open3.capture3(PATH, BIN,'-s="showver.sh"',
-                                           '-t="perlver_template"','-p',
+  def test_pretty_table_print
+    tools_path = File.expand_path('tools', __dir__)
+    output, error, status = Open3.capture3(PATH, BIN, '-s="showver.sh"',
+                                           '-t="perlver_template"', '-p',
                                            '-d=true', 'app')
     check_error(output, error, 'test_pretty_tablePrint')
     assert_true status.success?, 'Process did not exit cleanly'
@@ -125,7 +125,8 @@ class TestGoo < Test::Unit::TestCase
                                            'app')
     check_no_error(output, error, 'bad_script')
     assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'Process exited with status 127', 'return was not correct'
+    assert_include error, 'Process exited with status 127',
+                          'return was not correct'
   end
 
   def test_bad_command
