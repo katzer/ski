@@ -42,7 +42,9 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 	err = cmd.Run()
 	if err != nil {
 		message := "thrown from tableFormatter.format->exec pythonscript"
-		log.Fatalf("%s\nAdditional info: %s\n", err, message)
+		full := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
+		os.Stderr.WriteString(full)
+		log.Errorln(full)
 		log.Fatalf("Format: %s\n", toFormat)
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
