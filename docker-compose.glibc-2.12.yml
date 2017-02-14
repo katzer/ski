@@ -1,0 +1,11 @@
+compile: &defaults
+  dockerfile: Dockerfile.glibc-2.12
+  build: .
+  volumes:
+    - .:/code:rw
+  command: rake compile
+
+bintest:
+  <<: *defaults
+  dockerfile: Dockerfile.glibc-2.12
+  command: /bin/sh -lc "rake test:bintest"
