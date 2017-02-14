@@ -25,12 +25,12 @@ require 'open3'
 require 'test/unit'
 
 BIN  = ARGV.fetch(0).freeze
-PATH = { 'PATH' => '#{File.expand_path('tools', __dir__)}:#{ENV['PATH']}'  }
+PATH = { 'PATH' => "#{File.expand_path('tools', __dir__)}:#{ENV['PATH']}"  }
 
 
 class TestGoo < Test::Unit::TestCase
   def test_server
-    output, error, status = Open3.capture3(PATH, BIN, '-c='echo 123'', '-d=true', 'app')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', '-d=true', 'app')
 
     checkError(output,error,'test_server')
 
@@ -38,7 +38,7 @@ class TestGoo < Test::Unit::TestCase
     assert_include output, '123'
   end
   def test_web
-    output, error, status = Open3.capture3(PATH, BIN, '-c='echo 123'', '-d=true', 'web')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', '-d=true', 'web')
 
     checkNoError(output,error,'test_web')
 
@@ -46,7 +46,7 @@ class TestGoo < Test::Unit::TestCase
     assert_include error, 'Usage of goo with web servers is not implemented'
   end
   def test_not_authorized_host
-    output, error, status = Open3.capture3(PATH, BIN, '-c='echo 123'', '-d=true', 'unauthorized')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', '-d=true', 'unauthorized')
 
     checkNoError(output,error,'test_not_authorized_host')
 
@@ -54,7 +54,7 @@ class TestGoo < Test::Unit::TestCase
     assert_include error, 'ssh: unable to authenticate'
   end
   def test_offline_host
-    output, error, status = Open3.capture3(PATH, BIN, '-c='echo 123'', '-d=true', 'offline')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', '-d=true', 'offline')
   
     checkNoError(output,error,'test_offline_host')
   
@@ -78,7 +78,7 @@ class TestGoo < Test::Unit::TestCase
     assert_include output, '0.9'
   end
   def test_empty_return
-    output, error, status = Open3.capture3(PATH, BIN, '-c='echo '', '-d=true', 'app')
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo "', '-d=true', 'app')
 
     checkError(output,error,'test_empty_return')
 

@@ -23,9 +23,11 @@
 namespace :test do
   desc 'run integration tests'
   task bintest: [:compile] do
-    sh "mkdir #{APP_ROOT}/bintest/testFolder/config" unless Dir.exist? "#{APP_ROOT}/bintest/testFolder/config"
-    sh "mkdir #{APP_ROOT}/bintest/testFolder/config/ssh" unless Dir.exist? "#{APP_ROOT}/bintest/testFolder/config/ssh"
-    sh "cp $HOME/.ssh/orbit.key #{APP_ROOT}/bintest/testFolder/config/ssh"
+    config_path = "#{APP_ROOT}/bintest/testFolder/config"
+    ssh_path = "#{APP_ROOT}/bintest/testFolder/config/ssh"
+    sh "mkdir #{config_path}" unless Dir.exist? "#{config_path}"
+    sh "mkdir #{ssh_path}" unless Dir.exist? "#{ssh_path}"
+    sh "cp $HOME/.ssh/orbit.key #{ssh_path}"
     Go::Build.builds.each do |gb|
       next unless gb.bintest?
       test_bin_path = "#{APP_ROOT}/bintest/testFolder/bin/goo"
