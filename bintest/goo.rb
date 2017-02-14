@@ -84,7 +84,6 @@ class TestGoo < Test::Unit::TestCase
   end
 
   def test_table_print
-    tools_path = File.expand_path('tools', __dir__)
     output, error, status = Open3.capture3(PATH, BIN, '-s="showver.sh"',
                                            '-t="perlver_template"',
                                            '-d=true', 'app')
@@ -94,7 +93,6 @@ class TestGoo < Test::Unit::TestCase
   end
 
   def test_pretty_table_print
-    tools_path = File.expand_path('tools', __dir__)
     output, error, status = Open3.capture3(PATH, BIN, '-s="showver.sh"',
                                            '-t="perlver_template"', '-p',
                                            '-d=true', 'app')
@@ -205,8 +203,8 @@ class TestGoo < Test::Unit::TestCase
   end
 
   def test_copy_failed
-    output, error, status = Open3.capture3(PATH, BIN, 
-                                           '-c="touch test && cp test ./test/test"',
+    command = '-c="touch test && cp test ./test/test"'
+    output, error, status = Open3.capture3(PATH, BIN, command,
                                            '-p', '-d=true', 'app')
     check_no_error(output, error, 'copy_failed')
     assert_false status.success?, 'Process did exit cleanly'
