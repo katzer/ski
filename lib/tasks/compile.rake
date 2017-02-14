@@ -32,5 +32,4 @@ task compile: [:init] do
     cd(src_path) { sh gb.go_build(bin_path) }
     chmod_R 'u+x', bin_path
   end
-
 end
