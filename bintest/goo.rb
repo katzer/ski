@@ -28,8 +28,6 @@ BIN  = ARGV.fetch(0).freeze
 PATH = { 'PATH' => "#{File.expand_path('tools', __dir__)}:#{ENV['PATH']}"  }
 
 
-# TODO new tests
-
 class TestGoo < Test::Unit::TestCase
   def test_server
     output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', '-d=true', 'app')
@@ -58,14 +56,14 @@ class TestGoo < Test::Unit::TestCase
     assert_include error, 'ssh: unable to authenticate'
   end
 
-  # def test_offline_host
-  #   output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', '-d=true', 'offline')
-  #
-  #   checkNoError(output,error,"test_offline_host")
-  #
-  #   assert_false status.success?, 'Process did exit cleanly'
-  #   assert_include error, 'no such host'
-  # end
+  def test_offline_host
+    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"', '-d=true', 'offline')
+  
+    checkNoError(output,error,"test_offline_host")
+  
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, 'no such host'
+  end
 
   def test_help
     output, error, status = Open3.capture3(PATH, BIN, '-h')
