@@ -63,7 +63,9 @@ func makeExecutor(opts *Opts) Executor {
 		planet.outputStruct.planet = entry
 		id := entry
 		planetType := getType(entry)
-		user, host = getUserAndHost(connDet)
+		if isSupported(entry) {
+			user, host = getUserAndHost(connDet)
+		}
 		switch planetType {
 		case linuxServer:
 			dbID = ""

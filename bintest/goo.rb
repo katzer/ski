@@ -190,25 +190,25 @@ class TestGoo < Test::Unit::TestCase
     assert_include output, "usage:", 'return was not correct'
   end
 
-  # TODO: Fix these tests or find out why these are failing.
-  # def test_wrong_flag_order
-  #   output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"", 'app', '-d=true', "-p")
-  #
-  #   checkNoError(output,error,"wrong_flag_order")
-  #
-  #   assert_true status.success?, 'Process did not exit cleanly'
-  #   assert_include output, "total", 'return was not correct'
-  #   assert_include error, "Unkown Type of target", 'error was not correct'
-  # end
-  #
-  # def test_nonexistent_planet
-  #   output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"", '-d=true', 'pep')
-  #
-  #   checkNoError(output,error,"nonexistent_planet")
-  #
-  #   assert_true status.success?, 'Process did not exit cleanly'
-  #   assert_include error, "Unkown Type of target", 'error was not correct'
-  # end
+  
+  def test_wrong_flag_order
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"", 'app', '-d=true', "-p")
+  
+    checkNoError(output,error,"wrong_flag_order")
+  
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, "total", 'return was not correct'
+    assert_include error, "Unkown Type of target", 'error was not correct'
+  end
+  
+  def test_nonexistent_planet
+    output, error, status = Open3.capture3(PATH, BIN, "-c=\"ls -al\"", '-d=true', 'pep')
+  
+    checkNoError(output,error,"nonexistent_planet")
+  
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include error, "Unkown Type of target", 'error was not correct'
+  end
 
   def test_no_template
     output, error, status = Open3.capture3(PATH, BIN,"-s=\"showver.sh\"", "-t=\"no_template\"", '-d=true', "-p", "app")
