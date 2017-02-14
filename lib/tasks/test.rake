@@ -35,7 +35,7 @@ namespace :test do
       bin_path << '.exe' if File.exist? "#{bin_path}.exe"
       test_bin_path << '.exe' if File.exist? "#{bin_path}.exe"
       sh "cp #{bin_path} #{testFolderPath}/bin"
-      sh "ruby #{APP_ROOT}/bintest/goo.rb #{testBinPath}"
+      sh "ruby #{APP_ROOT}/bintest/goo.rb #{test_bin_path}"
     end
     sh "rm #{APP_ROOT}/bintest/testFolder/config/ssh/orbit.key"
   end

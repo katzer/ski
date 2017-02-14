@@ -80,7 +80,7 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app')
     check_error(output, error, 'test_empty_return')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_equal output, '\n', 'return was not empty'
+    assert_equal output, "\n", 'return was not empty'
   end
 
   def test_table_print
@@ -89,7 +89,7 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app')
     check_error(output, error, 'test_tablePrint')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, '\n["willywonka_version",', 'return was not right'
+    assert_include output, "\n[\"willywonka_version\",", 'return was not right'
   end
 
   def test_pretty_table_print
@@ -106,7 +106,7 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app')
     check_error(output, error, 'test_script_execution')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_equal output, 'bang\n', 'return was not correct'
+    assert_equal output, "bang\n", 'return was not correct'
   end
 
   def test_no_such_script
