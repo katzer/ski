@@ -126,7 +126,7 @@ class TestGoo < Test::Unit::TestCase
     check_no_error(output, error, 'bad_script')
     assert_false status.success?, 'Process did exit cleanly'
     assert_include error, 'Process exited with status 127',
-                          'return was not correct'
+                        'return was not correct'
   end
 
   def test_bad_command
@@ -134,7 +134,8 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app')
     check_no_error(output, error, 'bad_command')
     assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'Process exited with status 127', 'return was not correct'
+    assert_include error, 'Process exited with status 127',
+                        'return was not correct'
   end
 
   def test_pretty_print
@@ -142,7 +143,8 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app')
     check_error(output, error, 'pretty_print')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, '0    app                  ', 'return was not correct'
+    assert_include output, '0    app                  ',
+                          'return was not correct'
   end
 
   def test_multiple_pretty_print
