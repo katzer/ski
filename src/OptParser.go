@@ -63,14 +63,6 @@ func (opts *Opts) String() string {
 		opts.planets)
 }
 
-/**
-*	Returns the contents of args in following order:
-*	prettyprint flag
-*	script flag
-*	script path
-*	command
-*	planets
- */
 func (opts *Opts) procArgs(args []string) {
 	flag.BoolVar(&opts.helpFlag, "h", false, "help")
 	flag.BoolVar(&opts.prettyFlag, "p", false, "prettyprint")
@@ -141,7 +133,6 @@ func getType(id string) string {
 	cmd := exec.Command("ff", "-t", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		// Old. throwErrOut(out, err)
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
 		os.Stderr.WriteString(message)
 		log.Fatalln(message)
@@ -159,7 +150,6 @@ func getPlanetDetails(id string) string {
 	cmd := exec.Command("ff", id, "-f=pqdb")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		// Old. throwErrOut(out, err)
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
 		os.Stderr.WriteString(message)
 		log.Fatalln(message)
@@ -185,7 +175,6 @@ func countSupported(planets []string) int {
  */
 func isSupported(planet string) bool {
 	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
-	// TODO: what if the type is camel case or all capital
 	planetType := getType(planet)
 	return supported[planetType]
 }

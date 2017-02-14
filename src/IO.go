@@ -64,43 +64,6 @@ func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
 	}
 }
 
-/**
-func tablePrint(templatePath string, filePath string) {
-	pys := getPyScript()
-	pyScriptFile := ""
-	if runtime.GOOS == "windows" {
-		pyScriptFile = os.Getenv("TEMP") + "\\tempTabFormat.py"
-	} else {
-		pyScriptFile = os.Getenv("HOME") + "/tempTabFormat.py"
-	}
-	err := ioutil.WriteFile(pyScriptFile, []byte(pys), 0644)
-	if err != nil {
-		fmt.Println("writing pyscript failed")
-		log.Fatal(err)
-	}
-	cmd := exec.Command("python2", pyScriptFile, templatePath, filePath)
-	cmd.Stdin = strings.NewReader("some input")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err = cmd.Run()
-	if err != nil {
-		fmt.Println("executing pyscript failed")
-		log.Fatal(err)
-	}
-	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
-	formattedString = strings.TrimSpace(formattedString)
-	parsedTable := parseFSMOutput(formattedString)
-	fmt.Printf("pased Structure: %v\n", parsedTable)
-	fmt.Println("raw table")
-	fmt.Printf("%s\n", formattedString)
-
-	err = os.Remove(pyScriptFile)
-	if err != nil {
-		fmt.Println("removing pyscript failed")
-		log.Fatal(err)
-	}
-}*/
-
 func trimDBMetaInformations(strucOut *StructuredOuput) {
 	cleaned := strings.Split(strucOut.output, "\n")
 	strucOut.output = strings.Join(cleaned[:len(cleaned)-3], "")

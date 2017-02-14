@@ -16,7 +16,7 @@ build/
 releases/
 .vendor/
 .vscode/
-# testScripts
+testScripts
 
 # Architecture specific extensions/prefixes
 *.[568vq]

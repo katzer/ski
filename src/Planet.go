@@ -19,7 +19,6 @@ func (planet *Planet) execute(opts *Opts) {
 		} else {
 			execDBCommand(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
 		}
-		//trimDBMetaInformations(&planet.outputStruct)
 	} else if planet.planetType == linuxServer {
 		if opts.scriptFlag {
 			execScript(planet.user, planet.host, &planet.outputStruct, opts)
@@ -28,8 +27,6 @@ func (planet *Planet) execute(opts *Opts) {
 			execCommand(planet.user, planet.host, opts.command, &(planet.outputStruct), opts)
 			planet.planetInfo(opts)
 		}
-	} else {
-		// TODO: Huh?
 	}
 }
 

@@ -100,7 +100,7 @@ class TestGoo < Test::Unit::TestCase
     checkError(output,error,"test_tablePrint")
 
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, "\n[\"IPST_Version\", \"Section\", \"Suse\", \"UnixVersion\", \"UnixPatch\", \"Key\", \"Value\", \"Key2\", \"Value2\", \"Os\", \"OracleDb\"],\n", 'return was not right'
+    assert_include output, "somegibbersihthatshouldneverwork", 'return was not right'
   end
 
   def test_pretty_tablePrint
@@ -110,7 +110,7 @@ class TestGoo < Test::Unit::TestCase
     checkError(output,error,"test_pretty_tablePrint")
 
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, "| IPST_Version | Section  | gateway                                   | telhandlerkm                              |", 'return was not right'
+    assert_include output, "| Section  |", 'return was not right'
   end
 
   def test_script_execution

@@ -29,12 +29,7 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
 
 	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, textFSMName)
-	/**
-	if runtime.GOOS == "windows" {
-		pyScriptFile = os.Getenv("TEMP") + "\\tempTabFormat.py"
-	} else {
-		pyScriptFile = os.Getenv("HOME") + "/tempTabFormat.py"
-	}*/
+
 	cmd := exec.Command("python2", pyScriptFile, templateFile, tmpTableFile)
 	cmd.Stdin = strings.NewReader("some input")
 	var out bytes.Buffer
@@ -49,18 +44,11 @@ func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
 	jsonString := convertToJSON(formattedString)
-	//formattedString = strings.TrimSpace(formattedString)
-	//cleanString := tableFormatter.cleanEntries(formattedString)
 
 	err = os.Remove(tmpTableFile)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	//################################# temporaray hardocode##############################################
-	//cleanString = cleanifyTable(cleanString)
-	//cleanString = fmt.Sprintf("[\n%s]\n", strings.Replace(formattedString, "]\n[", "],\n[", -1))
-	//################################# temporaray hardocode##############################################
 
 	return strings.Replace(jsonString, "'", "\"", -1)
 
