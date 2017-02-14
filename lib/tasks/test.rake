@@ -25,8 +25,8 @@ namespace :test do
   task bintest: [:compile] do
     config_path = "#{APP_ROOT}/bintest/testFolder/config"
     ssh_path = "#{APP_ROOT}/bintest/testFolder/config/ssh"
-    sh "mkdir #{config_path}" unless Dir.exist? "#{config_path}"
-    sh "mkdir #{ssh_path}" unless Dir.exist? "#{ssh_path}"
+    sh "mkdir #{config_path}" unless Dir.exist? config_path
+    sh "mkdir #{ssh_path}" unless Dir.exist? ssh_path
     sh "cp $HOME/.ssh/orbit.key #{ssh_path}"
     Go::Build.builds.each do |gb|
       next unless gb.bintest?
