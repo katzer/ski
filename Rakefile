@@ -26,9 +26,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require_relative 'build_config.rb'
 require 'fileutils'
 
-APP_NAME     = 'goo'.freeze
+APP_NAME     = 'ski'.freeze
 APP_ROOT     = Dir.pwd.freeze
-APP_VERSION  = `go run #{APP_ROOT}/src/*.go -v`
 
 def release_path
   "#{APP_ROOT}/releases"
@@ -45,6 +44,12 @@ end
 def testFolderPath
   "#{APP_ROOT}/bintest/testFolder"
 end
+
+def version_path
+  "#{src_path}/version"
+end
+
+APP_VERSION  = `go run #{version_path}/*.go -v`
 
 Dir.chdir('lib') { Dir['tasks/*.rake'].each { |file| load file } }
 

@@ -5,6 +5,7 @@
 *.log
 tags
 orbit.key
+.sass-lint.yml
 
 # Folders
 _obj
@@ -36,3 +37,4 @@ _testmain.go
 todo.txt
 src/debug
 .idea/
+

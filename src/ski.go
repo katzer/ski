@@ -92,7 +92,7 @@ func makeExecutor(opts *Opts) Executor {
  */
 func printVersion() {
 	// TODO: Read it from a config file
-	os.Stdout.WriteString("0.9\n")
+	os.Stdout.WriteString(version + "\n")
 }
 
 /**
