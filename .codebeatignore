@@ -1,4 +1,5 @@
 bintest/tools/**
+bintest/**
 build/**
 .vscode/**
 releases/**
