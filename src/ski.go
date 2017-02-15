@@ -72,7 +72,7 @@ func makeExecutor(opts *Opts) Executor {
 		case database:
 			dbID, connDet = procDBDets(connDet)
 		case webServer:
-			message := "Usage of goo with web servers is not implemented"
+			message := "Usage of ski with web servers is not implemented"
 			os.Stderr.WriteString(message)
 			log.Warnln(message)
 			continue
@@ -88,7 +88,7 @@ func makeExecutor(opts *Opts) Executor {
 }
 
 /**
-*	Prints the current Version of the goo application
+*	Prints the current Version of the ski application
  */
 func printVersion() {
 	// TODO: Read it from a config file
@@ -99,7 +99,7 @@ func printVersion() {
 *	Prints the help dialog
  */
 func printUsage() {
-	usage := `usage: goo [options...] <planets>...
+	usage := `usage: ski [options...] <planets>...
 	Options:
 	-s="<scriptname>"   Execute script and return result
 	-c="<command>"      Execute script and return result

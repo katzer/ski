@@ -30,12 +30,12 @@ namespace :test do
     sh "cp $HOME/.ssh/orbit.key #{ssh_path}"
     Go::Build.builds.each do |gb|
       next unless gb.bintest?
-      test_bin_path = "#{APP_ROOT}/bintest/testFolder/bin/goo"
-      bin_path = "#{build_path}/#{gb.name}/bin/goo"
+      test_bin_path = "#{APP_ROOT}/bintest/testFolder/bin/ski"
+      bin_path = "#{build_path}/#{gb.name}/bin/ski"
       bin_path << '.exe' if File.exist? "#{bin_path}.exe"
       test_bin_path << '.exe' if File.exist? "#{bin_path}.exe"
       sh "cp #{bin_path} #{testFolderPath}/bin"
-      sh "ruby #{APP_ROOT}/bintest/goo.rb #{test_bin_path}"
+      sh "ruby #{APP_ROOT}/bintest/ski.rb #{test_bin_path}"
     end
     sh "rm #{APP_ROOT}/bintest/testFolder/config/ssh/orbit.key"
   end

@@ -6,18 +6,20 @@
 tags
 orbit.key
 .sass-lint.yml
+testlog.log
 
 # Folders
 _obj
 _test
 bin/
-goo
+ski
 pkg/
 build/
 releases/
 .vendor/
 .vscode/
 testScripts
+
 
 # Architecture specific extensions/prefixes
 *.[568vq]

@@ -42,7 +42,7 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'web')
     check_no_error(output, error, 'test_web')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include error, 'Usage of goo with web servers is not implemented'
+    assert_include error, 'Usage of ski with web servers is not implemented'
   end
 
   def test_not_authorized_host
@@ -65,7 +65,7 @@ class TestGoo < Test::Unit::TestCase
     output, error, status = Open3.capture3(PATH, BIN, '-h')
     check_error(output, error, 'test_help')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, 'usage: goo'
+    assert_include output, 'usage: ski'
   end
 
   def test_version

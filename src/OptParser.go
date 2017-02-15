@@ -171,7 +171,7 @@ func countSupported(planets []string) int {
 }
 
 /**
-*	checks, wether a planet is supported by goo or not
+*	checks, wether a planet is supported by ski or not
  */
 func isSupported(planet string) bool {
 	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
