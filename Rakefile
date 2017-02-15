@@ -24,6 +24,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 require_relative 'build_config.rb'
+require 'fileutils'
 
 APP_NAME     = 'goo'.freeze
 APP_ROOT     = Dir.pwd.freeze
@@ -41,9 +42,23 @@ def src_path
   "#{APP_ROOT}/src"
 end
 
+def testFolderPath
+  "#{APP_ROOT}/bintest/testFolder"
+end
+
 Dir.chdir('lib') { Dir['tasks/*.rake'].each { |file| load file } }
 
 desc 'print version'
 task :version  do
   puts APP_VERSION
+end
+
+desc 'create missing directories'
+task :init do
+  FileUtils::mkdir_p "#{testFolderPath}/bin"
+end
+
+desc 'removes artifacts and folders not becessary for a distribution.'
+task :clean do
+  FileUtils::rm_rf "#{testFolderPath}/bin"
 end

@@ -2,16 +2,27 @@
 
 Execute commands or collect informations on multiple servers in parallel.
 
-    $ goo -h
-    usage: usage: goo [options...] <planet> [<further planets>]... -c="<command>"
+    $ ski -h
+    usage: ski [options...] -c="<command>" <planets>... 
     Options:
-    -s="<path/to/script>", --script="<path/to/script>"  Execute script and return result
-    -p, --pretty                                            Pretty print output as a table
-    -t, --type                                              Show type of planet
-    -h, --help                                              This help text
-    -v, --version                                           Show version number
+    -s="<scriptname>"   	Execute script and return result
+    -c="<command>"  	    Execute script and return result
+    -t=<"templatename>" 	Templatefile to be applied 
+    -p    			        Pretty print output as a table
+    -l    			        Load bash profiles on Server
+    -t    			        Show type of planet
+    -h    			        Display this help text
+    -v    			        Show version number
+    -d			            Show extended debug informations
+
 
 ## Prerequisites
+Create an enviroment variable called `ORBIT_HOME` and set it to the absolute path of the ski folder-structure. 
+
+Example: You save the release at `/home/youruser/workspace/ski`. Your `ORBIT_HOME` should be `/home/youruser/workspace/ski`as well
+
+Either create an enviroment variable called `ORBIT_KEY` containing an absolute path to the ssh private key that should be used for executing commands on the planets or save said key at `ski/config/ssh/`.
+
 You'll need the following installed and in your `PATH`:
 - [ff][ff]
 
@@ -46,7 +57,7 @@ Get the connection by type:
 
     $ export ORBIT_FILE=/path/to/orbit.json
 
-    $ goo app-package-1 app-package-2 -c="hostname"
+    $ goo -c="hostname" app-package-1 app-package-2
     $ hostname-1
     $ hostname-2
 
@@ -54,13 +65,13 @@ Get the connection by type:
 
 Execute a script:
 
-    $ goo app-package-1 app-package-2 -s="scripts/hostname.sh"
+    $ goo -s="scripts/hostname.sh" app-package-1 app-package-2
     $ hostname-1
     $ hostname-2
 
 Pretty print output:
 
-    $ goo -p app-package-1 app-package-1 "hostname"
+    $ goo -p -c="hostname" app-package-1 app-package-2
     
       NR   PLANET          hostname
       ===============================

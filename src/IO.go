@@ -3,20 +3,8 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
-	"log"
-	"os"
-	"os/exec"
-	"runtime"
-	"strconv"
 	"strings"
 )
-
-/**
-################################################################################
-							ConsoleHandler-Section
-################################################################################
-*/
 
 const planetLength int = 21
 
@@ -49,10 +37,10 @@ func printIndented(msg string, indent int, exceptFirst bool) {
 	fmt.Println(buffer.String())
 }
 
-func printHeadline(scriptFlag bool, scriptPath string, command string, indent int) {
-	print("NR   PLANET               ")
+func printHeadline(scriptFlag bool, scriptName string, command string, indent int) {
+	fmt.Print("NR   PLANET               ")
 	if scriptFlag {
-		printIndented(scriptPath, indent, true)
+		printIndented(scriptName, indent, true)
 	} else {
 		printIndented(command, indent, true)
 	}
@@ -61,64 +49,22 @@ func printHeadline(scriptFlag bool, scriptPath string, command string, indent in
 
 func printWhite(length int) {
 	for i := 0; i < length; i++ {
-		print(" ")
+		fmt.Print(" ")
 	}
 }
 
 func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
-	if opts.prettyFlag {
-		printHeadline(opts.scriptFlag, opts.scriptPath, opts.command, 26)
+	if opts.prettyFlag && !opts.tableFlag {
+		printHeadline(opts.scriptFlag, opts.scriptName, opts.command, 80)
 	}
-	for i, planet := range toPrint {
-		if !opts.prettyFlag {
-			print(planet.output)
-		} else {
-			print(strconv.Itoa(i) + "")
-			if i/10 < 1 {
-				print(" ")
-			}
-			if i/100 < 1 {
-				print(" ")
-			}
-			if i/1000 < 1 {
-				print(" ")
-			}
-			print(" ")
-			print(planet.planet)
-			printWhite(planetLength - len(planet.planet))
-			printIndented(planet.output, 26, true)
-		}
+	for i, entry := range toPrint {
+		formatted := format(entry, i, opts)
+
+		fmt.Print(formatted)
 	}
 }
 
-func tablePrint(templatePath string, filePath string) {
-	pys := getPyScript()
-	pyScriptFile := ""
-	if runtime.GOOS == "windows" {
-		pyScriptFile = os.Getenv("TEMP") + "\\tempTabFormat.py"
-	} else {
-		pyScriptFile = os.Getenv("HOME") + "/tempTabFormat.py"
-	}
-	err := ioutil.WriteFile(pyScriptFile, []byte(pys), 0644)
-	if err != nil {
-		fmt.Println("writing pyscript failed")
-		log.Fatal(err)
-	}
-	cmd := exec.Command("python2", pyScriptFile, templatePath, filePath)
-	cmd.Stdin = strings.NewReader("some input")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err = cmd.Run()
-	if err != nil {
-		fmt.Println("executing pyscript failed")
-		log.Fatal(err)
-	}
-	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
-	fmt.Printf(" %q\n", formattedString)
-
-	err = os.Remove(pyScriptFile)
-	if err != nil {
-		fmt.Println("removing pyscript failed")
-		log.Fatal(err)
-	}
+func trimDBMetaInformations(strucOut *StructuredOuput) {
+	cleaned := strings.Split(strucOut.output, "\n")
+	strucOut.output = strings.Join(cleaned[:len(cleaned)-3], "")
 }

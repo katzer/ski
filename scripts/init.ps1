@@ -28,14 +28,14 @@ function init_go() {
 }
 
 function init_orbit() {
-    $env:ORBIT_KEY="\.ssh\orbit_rsa"
+    $env:ORBIT_KEY="\.ssh\orbit.key"
     $env:PATH+=";C:\code\bintest\tools"
 }
 
 function init_sshd() {
     Start-Service ssh-agent
     Start-Service sshd
-    ssh-add $HOME\.ssh\orbit_rsa 2> $NULL
+    ssh-add $HOME\.ssh\orbit.key 2> $NULL
 }
 
 init_go

@@ -1,21 +1,15 @@
 package main
 
 import (
-	//"github.com/mgutz/ansi"
 	"fmt"
-	"gopkg.in/hypersleep/easyssh.v0"
 	"os"
+	"path"
+	"runtime"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
+	"gopkg.in/hypersleep/easyssh.v0"
 )
-
-/**
-################################################################################
-								SSH-Section
-################################################################################
-*/
-
-type SSHHandler struct {
-}
 
 /**
 *	Executes a command on a remote ssh server
@@ -23,73 +17,38 @@ type SSHHandler struct {
 *		connDet: connection details in following form: user@hostname
 *		cmd: command to be executed
  */
-func execSSHCommand(connDet string, command string, strucOut *StructuredOuput, opts *Opts) {
+func execCommand(user string, hostname string, command string, strucOut *StructuredOuput, opts *Opts) {
 
-	user := getUser(opts.currentDet)
-	hostname := getHost(opts.currentDet)
+	keyPath := os.Getenv("ORBIT_KEY")
+	if keyPath == "" {
+		if runtime.GOOS == "windows" {
+			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
+		} else {
+			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key"), os.Getenv("HOME"))
+		}
+	}
+
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:    os.Getenv("ORBIT_KEY"),
+		Key:    keyPath,
 		Port:   "22",
 	}
 	var cmd string
 	if opts.loadFlag {
-		cmd = "sh -lc \"echo -----APPPLANT-ORBIT----- && " + command + " \""
+		cmd = fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
 	} else {
 		cmd = command
 	}
 	// Call Run method with command you want to run on remote server.
 	out, err := ssh.Run(cmd)
 	// Handle errors
-	if err != nil {
-		if opts.debugFlag {
-			fmt.Println("#####SSH DEBUG#####")
-			fmt.Println("conndet:")
-			fmt.Println(connDet)
-			fmt.Println("user:")
-			fmt.Println(user)
-			fmt.Println("hostname:")
-			fmt.Println(hostname)
-			fmt.Println("orbit key:")
-			fmt.Println(os.Getenv("ORBIT_KEY"))
-			fmt.Println("command:")
-			fmt.Println(command)
-			fmt.Println("strucOut:")
-			fmt.Println(strucOut)
-			fmt.Println("opts:")
-			fmt.Print("prettyFlag: ")
-			fmt.Println(opts.prettyFlag)
-			fmt.Print("scriptFlag: ")
-			fmt.Println(opts.scriptFlag)
-			fmt.Print("typeFlag: ")
-			fmt.Println(opts.typeFlag)
-			fmt.Print("debugFlag: ")
-			fmt.Println(opts.debugFlag)
-			fmt.Print("loadFlag: ")
-			fmt.Println(opts.loadFlag)
-			fmt.Print("helpFlag: ")
-			fmt.Println(opts.helpFlag)
-			fmt.Print("versionFlag: ")
-			fmt.Println(opts.versionFlag)
-			fmt.Print("tableFlag: ")
-			fmt.Println(opts.tableFlag)
-			fmt.Print("scriptPath: ")
-			fmt.Println(opts.scriptPath)
-			fmt.Print("command: ")
-			fmt.Println(opts.command)
-			fmt.Print("planets: ")
-			fmt.Println(opts.planets)
-			fmt.Print("planetsCount: ")
-			fmt.Println(opts.planetsCount)
-			fmt.Print("currentDet: ")
-			fmt.Println(opts.currentDet)
-			fmt.Print("currentDBDet: ")
-			fmt.Println(opts.currentDBDet)
 
-			fmt.Println("#####SSH DEBUG END#####")
-		}
-		throwErrExt(err, "called from exesSSHCommand ")
+	if err != nil {
+		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
+		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
+		os.Stderr.WriteString(errorString)
+		log.Fatalf("%s\nAdditional info: %s\n", err, message)
 	} else {
 		cleanedOut := out
 		if opts.loadFlag {
@@ -100,28 +59,44 @@ func execSSHCommand(connDet string, command string, strucOut *StructuredOuput, o
 		strucOut.output = cleanedOut
 		strucOut.maxOutLength = maxLength
 	}
+	log.Debugln("### execCommand complete ###")
+	log.Debugf("user: %s\n", user)
+	log.Debugf("hostname: %s\n", hostname)
+	log.Debugf("orbit key: %s\n", os.Getenv("ORBIT_KEY"))
+	log.Debugf("command: %s\n", command)
+	log.Debugf("strucOut: %v\n", strucOut)
+	log.Debugf("planet: %s\n maxLineLength: %d\n", strucOut.planet, strucOut.maxOutLength)
+
 }
 
 /**
 *	Uploads a file to the remote server
  */
-func uploadFile(connDet string, opts *Opts) {
-	user := getUser(opts.currentDet)
-	hostname := getHost(opts.currentDet)
-
+func uploadFile(user string, hostname string, opts *Opts) {
+	keyPath := os.Getenv("ORBIT_KEY")
+	if keyPath == "" {
+		if runtime.GOOS == "windows" {
+			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
+		} else {
+			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key"), os.Getenv("HOME"))
+		}
+	}
 	ssh := &easyssh.MakeConfig{
 		User:   user,
 		Server: hostname,
-		Key:    os.Getenv("ORBIT_KEY"),
+		Key:    keyPath,
 		Port:   "22",
 	}
 
 	// Call Scp method with file you want to upload to remote server.
-	err := ssh.Scp(opts.scriptPath)
+	err := ssh.Scp(path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.scriptName))
 
 	// Handle errors
 	if err != nil {
-		throwErr(err)
+		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
+		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
+		os.Stderr.WriteString(errorString)
+		log.Fatalf("%s\nAdditional info: %s\n", err, message)
 	}
 }
 
@@ -131,10 +106,12 @@ func uploadFile(connDet string, opts *Opts) {
 *		connDet: 	Connection details to planet
 *		scriptPath: Path to script
  */
-func upAndExecSSHScript(connDet string, strucOut *StructuredOuput, opts *Opts) {
-	uploadFile(connDet, opts)
-	path := strings.Split(opts.scriptPath, "/")
+func execScript(user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
+	uploadFile(user, hostname, opts)
 	placeholder := StructuredOuput{}
-	scriptName := path[len(path)-1]
-	execSSHCommand(connDet, "chmod +x "+scriptName+" && "+"./"+scriptName, &placeholder, opts)
+	scriptName := opts.scriptName
+	executionCommand := fmt.Sprintf("sh %s", scriptName)
+	delCommand := fmt.Sprintf("rm %s", scriptName)
+	execCommand(user, hostname, executionCommand, strucOut, opts)
+	execCommand(user, hostname, delCommand, &placeholder, opts)
 }

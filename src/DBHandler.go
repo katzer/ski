@@ -3,44 +3,35 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
-	"strings"
+	"path"
+
+	log "github.com/Sirupsen/logrus"
 )
 
-/**
-################################################################################
-							DB-Handler-Section
-################################################################################
-*/
-
-type DBHandler struct {
-}
-
-func execDBCommand(dbDet string, strucOut *StructuredOuput, opts *Opts) {
-	tmpDBFile := os.Getenv("HOME") + "/orbit.sql"
+func execDBCommand(dbID string, user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
+	tmpDBFile := path.Join(os.Getenv("ORBIT_HOME"), "scripts", "orbit.sql")
 	err := ioutil.WriteFile(tmpDBFile, []byte(opts.command), 0644)
 	if err != nil {
-		fmt.Println("writefile failed!")
-		os.Exit(1)
+		log.Fatalf("writing temporary sql script failed : %v", err)
 	}
-	opts.scriptPath = tmpDBFile
-	upAndExecDBScript(dbDet, strucOut, opts)
+	opts.scriptName = "orbit.sql"
+	execDBScript(dbID, user, hostname, strucOut, opts)
 	err = os.Remove(tmpDBFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func upAndExecDBScript(dbDet string, strucOut *StructuredOuput, opts *Opts) {
-	dbID, sshAddress := procDBDets(dbDet)
-	username := getUser(sshAddress)
-	uploadFile(sshAddress, opts)
-	path := strings.Split(opts.scriptPath, "/")
+func execDBScript(dbID string, user string, hostname string, strucOut *StructuredOuput, opts *Opts) {
+	const dbCommand = ". profiles/%s.prof && pqdb_sql.out -x -s %s ~/sql/%s"
+	uploadFile(user, hostname, opts)
 	placeholder := StructuredOuput{}
-	execSSHCommand(sshAddress, "mv ~/"+path[len(path)-1]+" ~/sql/"+path[len(path)-1], &placeholder, opts)
-	queryString := ". profiles/" + username + ".prof && pqdb_sql.out -s " + dbID + " ~/sql/" + path[len(path)-1]
-	//placeholder := StructuredOuput{}
-	execSSHCommand(sshAddress, queryString, strucOut, opts)
-
+	scriptName := opts.scriptName
+	command := fmt.Sprintf("mv ~/%s ~/sql/%s", scriptName, scriptName)
+	execCommand(user, hostname, command, &placeholder, opts)
+	queryString := fmt.Sprintf(dbCommand, user, dbID, scriptName)
+	removeCommand := fmt.Sprintf("rm ~/sql/%s", scriptName)
+	execCommand(user, hostname, queryString, strucOut, opts)
+	execCommand(user, hostname, removeCommand, &placeholder, opts)
 }

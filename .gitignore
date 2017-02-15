@@ -2,17 +2,21 @@
 *.o
 *.a
 *.so
+*.log
+tags
+orbit.key
 
 # Folders
 _obj
 _test
 bin/
+goo
 pkg/
 build/
 releases/
 .vendor/
-textfsm/
 .vscode/
+testScripts
 
 # Architecture specific extensions/prefixes
 *.[568vq]
@@ -30,3 +34,5 @@ _testmain.go
 *.test
 *.prof
 todo.txt
+src/debug
+.idea/

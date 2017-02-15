@@ -1,70 +1,100 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
 	"os/exec"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
-/**
-################################################################################
-						Information-Retrieval-Section
-################################################################################
-*/
-
+// Opts ...
 type Opts struct {
+	debugFlag    bool
+	helpFlag     bool
+	loadFlag     bool
 	prettyFlag   bool
 	scriptFlag   bool
-	typeFlag     bool
-	debugFlag    bool
-	loadFlag     bool
-	helpFlag     bool
-	versionFlag  bool
 	tableFlag    bool
-	scriptPath   string
-	command      string
-	planets      []string
+	versionFlag  bool
 	planetsCount int
-	currentDet   string
+	command      string
 	currentDBDet string
+	currentDet   string
+	scriptName   string
+	template     string
+	planets      []string
 }
 
-/**
-*	Returns the contents of args in following order:
-*	prettyprint flag
-*	script flag
-*	script path
-*	command
-*	planets
- */
-func (opts *Opts) procArgs(args []string) {
+func (opts *Opts) String() string {
+	template := `opts : {
+	debugFlag: %t
+	helpFlag: %t
+	loadFlag: %t
+	prettyFlag: %t
+	scriptFlag: %t
+	tableFlag: %t
+	versionFlag: %t
+	planetsCount: %d
+	command: %s
+	currentDBDet: %s
+	currentDet: %s
+	scriptName: %s
+	planets: %v
+}
+`
 
+	return fmt.Sprintf(template,
+		opts.debugFlag,
+		opts.helpFlag,
+		opts.loadFlag,
+		opts.prettyFlag,
+		opts.scriptFlag,
+		opts.tableFlag,
+		opts.versionFlag,
+		opts.planetsCount,
+		opts.command,
+		opts.currentDBDet,
+		opts.currentDet,
+		opts.scriptName,
+		opts.planets)
+}
+
+func (opts *Opts) procArgs(args []string) {
 	flag.BoolVar(&opts.helpFlag, "h", false, "help")
-	flag.BoolVar(&opts.prettyFlag, "pp", false, "prettyprint")
-	flag.BoolVar(&opts.typeFlag, "t", false, "type")
+	flag.BoolVar(&opts.prettyFlag, "p", false, "prettyprint")
 	flag.BoolVar(&opts.debugFlag, "d", false, "verbose")
 	flag.BoolVar(&opts.loadFlag, "l", false, "ssh profile loading")
 	flag.BoolVar(&opts.versionFlag, "v", false, "version")
-	flag.BoolVar(&opts.tableFlag, "tp", false, "tablePrint")
+	flag.StringVar(&opts.template, "t", "", "filename of template")
+	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
-	flag.StringVar(&opts.scriptPath, "s", "", "path to script file to be uploaded and executed")
 	flag.Parse()
-	opts.scriptFlag = !(opts.scriptPath == "")
+	opts.scriptFlag = !(opts.scriptName == "")
+	opts.tableFlag = !(opts.template == "")
+	if opts.scriptFlag && !(opts.command == "") {
+		message := "providing both a script AND a command is not possible"
+		err := errors.New(message)
+		os.Stderr.WriteString(fmt.Sprintf("%s\nAddInf: %s\n", err, message))
+		log.Fatal(err)
+	}
 
 	planets := flag.Args()
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
+	opts.template = strings.TrimSuffix(strings.TrimPrefix(opts.template, "\""), "\"")
+	opts.scriptName = strings.TrimSuffix(strings.TrimPrefix(opts.scriptName, "\""), "\"")
+
 	for _, argument := range planets {
-		if isSupported(argument) {
-			opts.planets = append(opts.planets, argument)
-			opts.planetsCount++
-		} else {
-			fmt.Fprintf(os.Stderr, "This Type of Connection is not supported.")
-			os.Exit(1)
-		}
+		opts.planets = append(opts.planets, argument)
+		opts.planetsCount++
 	}
 	if len(args) == 1 {
+		opts.helpFlag = true
+	}
+	if !opts.helpFlag && !opts.scriptFlag && !opts.versionFlag && opts.command == "" {
 		opts.helpFlag = true
 	}
 
@@ -87,9 +117,10 @@ func getHost(connDet string) string {
 *		connDet: Connection details in following form: user@hostname
 *	@return: user
  */
-func getUser(connDet string) string {
+func getUserAndHost(connDet string) (string, string) {
+	// TODO: error handling or remove the func completely
 	toReturn := strings.Split(connDet, "@")
-	return toReturn[0]
+	return toReturn[0], toReturn[1]
 }
 
 /**
@@ -102,7 +133,9 @@ func getType(id string) string {
 	cmd := exec.Command("ff", "-t", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		throwErrOut(out, err)
+		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
+		os.Stderr.WriteString(message)
+		log.Fatalln(message)
 	}
 	return strings.TrimSpace(string(out))
 }
@@ -113,24 +146,24 @@ func getType(id string) string {
 *		id: The planets id
 *	@return: The connection details to the planet
  */
-func (opts Opts) getConnDet(id string) string {
-	cmd := exec.Command("ff", id)
+func getPlanetDetails(id string) string {
+	cmd := exec.Command("ff", id, "-f=pqdb")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		throwErrOut(out, err)
+		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
+		os.Stderr.WriteString(message)
+		log.Fatalln(message)
 	}
 	return strings.TrimSpace(string(out))
 }
 
 /**
-*
-*
-*
+*	counts the supported planets in a list of planets
  */
 func countSupported(planets []string) int {
 	i := 0
 	for _, planet := range planets {
-		if getType(planet) == "server" {
+		if getType(planet) == linuxServer {
 			i++
 		}
 	}
@@ -138,15 +171,12 @@ func countSupported(planets []string) int {
 }
 
 /**
-*
-*
+*	checks, wether a planet is supported by goo or not
  */
 func isSupported(planet string) bool {
-	if getType(planet) == "server" {
-		return true
-	}
-	return false
-
+	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
+	planetType := getType(planet)
+	return supported[planetType]
 }
 
 func getMaxLength(toProcess string) int {
@@ -155,7 +185,7 @@ func getMaxLength(toProcess string) int {
 }
 
 /**
-*
+*	splits db details (dbID:user@host) and returns them as dbID,user@host
  */
 func procDBDets(dbDet string) (string, string) {
 	parts := strings.Split(dbDet, ":")

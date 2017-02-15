@@ -1,0 +1,24 @@
+Value willywonka_version (\d+(\.\d+)*)
+Value Section (\w+(\s+\w+)*)
+Value Suse (.+$)
+Value UnixVersion (\d+)
+Value UnixPatch (\d+)
+Value Key ((?!OS|SUSE|Oracle DB|VERSION|PATCHLEVEL)\S+)
+Value Value (.+$)
+Value Key2 (\S+)
+Value Value2 (\S+)
+Value Os (.+$)
+Value OracleDb (.+$)
+
+Start
+  ^willywonka version check ${willywonka_version} -> Record
+  ^\-\[${Section}\](\-)* -> Record
+  ^\sSUSE\s+${Suse} -> Record
+  ^\sVERSION\s+=\s+${UnixVersion} -> Record
+  ^\s${Key}\s+${Value} -> Record
+  ^\sPATCHLEVEL\s+=\s+${UnixPatch} -> Record
+  ^\sOS\s+${Os} -> Record
+  ^\sOracle DB\s+${OracleDb} -> Record
+  ^\w+\s+\|.+\|\s+${Key2}\s+\|\s+${Value2}\s+\|.+ -> Record
+
+EOF

@@ -29,7 +29,8 @@ init_go() {
 }
 
 init_orbit() {
-    export ORBIT_KEY=/.ssh/orbit_rsa
+    export ORBIT_KEY=/.ssh/orbit.key
+    export ORBIT_HOME=`pwd`/bintest/testFolder
     export PATH=`pwd`/bintest/tools:$PATH
     chmod -R u+x `pwd`/bintest/tools
 }
@@ -46,3 +47,4 @@ init_sshd() {
 init_go
 init_orbit
 init_sshd
+git -C $GOPATH/src/golang.org/x/crypto reset --hard abc5fa7ad02123a41f02bf1391c9760f7586e608

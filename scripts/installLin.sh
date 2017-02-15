@@ -49,15 +49,15 @@ install_deps() {
 install_pkgs() {
     gem install rake os test-unit --no-ri --no-rdoc
     go get gopkg.in/hypersleep/easyssh.v0
-    go get -u github.com/mgutz/ansi/cmd/ansi-mgutz
+    go get github.com/Sirupsen/logrus
 }
 
 setup_sshd() {
     ssh-keygen -A
     sudo /usr/sbin/sshd
     mkdir -p $HOME/.ssh
-    ssh-keygen -t rsa -q -f $HOME/.ssh/orbit_rsa -N ""
-    cp $HOME/.ssh/orbit_rsa.pub $HOME/.ssh/authorized_keys
+    ssh-keygen -t rsa -q -f $HOME/.ssh/orbit.key -N ""
+    cp $HOME/.ssh/orbit.key.pub $HOME/.ssh/authorized_keys
     ssh-keyscan -t ecdsa-sha2-nistp256 localhost > $HOME/.ssh/known_hosts
 }
 
