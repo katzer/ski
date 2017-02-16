@@ -12,59 +12,16 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-const pythonScriptName = "textfsm.py"
-
 // TableFormatter prints input in tabular format
 type TableFormatter struct {
 }
 
 func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string {
-	tmpTableFile := ""
-	tmpTableFile = path.Join(os.Getenv("ORBIT_HOME"), "orbitTable.txt")
-
-	err := ioutil.WriteFile(tmpTableFile, []byte(toFormat), 0644)
-	if err != nil {
-		log.Fatalf("Attempt to write a temporary file for textfsm execution failed: %s\n", tmpTableFile)
-	}
-	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
-
-	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, textFSMName)
-
-	cmd := exec.Command("python2", pyScriptFile, templateFile, tmpTableFile)
-	cmd.Stdin = strings.NewReader("some input")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err = cmd.Run()
-	if err != nil {
-		message := "thrown from tableFormatter.format->exec pythonscript"
-		full := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
-		os.Stderr.WriteString(full)
-		log.Errorln(full)
-		log.Fatalf("Format: %s\n", toFormat)
-	}
-	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
-	jsonString := convertToJSON(formattedString)
-
-	err = os.Remove(tmpTableFile)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	tableFormatter.writeTmpTable(toFormat)
+	jsonString := convertToJSON(tableFormatter.executeTextFSM(toFormat, opts))
+	tableFormatter.deleteTmpTable()
 	return strings.Replace(jsonString, "'", "\"", -1)
 
-}
-
-func (tableFormatter *TableFormatter) parseFSMOutput(toParse string) map[string]string {
-	var parsed map[string]string
-	parsed = make(map[string]string)
-	split := strings.Split(toParse, "\n")
-	split = split[0 : len(split)-2]
-	for _, entry := range split {
-		row := strings.Split(entry, " ")
-		parsed[strings.TrimSuffix(row[0], ",")] = strings.Join(row[1:], "")
-	}
-
-	return parsed
 }
 
 func (tableFormatter *TableFormatter) cleanEntries(toParse string) string {
@@ -73,20 +30,30 @@ func (tableFormatter *TableFormatter) cleanEntries(toParse string) string {
 	cleaned := ""
 	for _, entry := range split {
 		row := strings.Split(entry, ", ")
-		row[0] = strings.TrimPrefix(row[0], "[")
-		row[0] = strings.TrimPrefix(row[0], "'")
-		row[0] = strings.TrimSuffix(row[0], "'")
-		row[0] = strings.TrimSpace(row[0])
-		row[0] = fmt.Sprintf("['%s'", row[0])
-		row[1] = strings.TrimSuffix(row[1], "]")
-		row[1] = strings.TrimPrefix(row[1], "'")
-		row[1] = strings.TrimSuffix(row[1], "'")
-		row[1] = strings.TrimSpace(row[1])
-		row[1] = fmt.Sprintf("'%s']", row[1])
+		row[0] = tableFormatter.cleanEntry(row[0], true)
+		row[1] = tableFormatter.cleanEntry(row[1], false)
 		cleaned = fmt.Sprintf("%s%s, %s\n", cleaned, row[0], row[1])
 	}
 
 	return cleaned
+}
+
+func (tableFormatter *TableFormatter) cleanEntry(row string, key bool) string {
+	cleanedComponent := ""
+	if key {
+		cleanedComponent = strings.TrimPrefix(row, "[")
+	} else {
+		cleanedComponent = strings.TrimPrefix(row, "]")
+	}
+	cleanedComponent = strings.TrimPrefix(cleanedComponent, "'")
+	cleanedComponent = strings.TrimSuffix(cleanedComponent, "'")
+	cleanedComponent = strings.TrimSpace(cleanedComponent)
+	if key {
+		cleanedComponent = fmt.Sprintf("['%s'", cleanedComponent)
+	} else {
+		cleanedComponent = fmt.Sprintf("'%s']", cleanedComponent)
+	}
+	return cleanedComponent
 }
 
 func cleanifyTable(toclean string) string {
@@ -111,4 +78,43 @@ func cleanifyTable(toclean string) string {
 
 func convertToJSON(toConvert string) string {
 	return fmt.Sprintf("[\n%s]\n", strings.Replace(toConvert, "]\n[", "],\n[", -1))
+}
+
+func (tableFormatter *TableFormatter) executeTextFSM(toFormat string, opts *Opts) string {
+	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
+	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
+	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, textFSMName)
+
+	cmd := exec.Command("python2", pyScriptFile, templateFile, tmpTableFile)
+	cmd.Stdin = strings.NewReader("some input")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		message := "thrown from tableFormatter.format->exec pythonscript"
+		full := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
+		os.Stderr.WriteString(full)
+		log.Errorln(full)
+		log.Fatalf("Format: %s\n", toFormat)
+	}
+	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
+	return formattedString
+}
+
+func (tableFormatter *TableFormatter) writeTmpTable(toWrite string) {
+	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
+	err := ioutil.WriteFile(tmpTableFile, []byte(toWrite), 0644)
+	if err != nil {
+		log.Fatalf("Attempt to write a temporary file for textfsm execution failed: %s\n", tmpTableFile)
+	}
+
+}
+
+func (tableFormatter *TableFormatter) deleteTmpTable() {
+	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
+	err := os.Remove(tmpTableFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

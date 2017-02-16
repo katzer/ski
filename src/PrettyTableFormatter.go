@@ -38,20 +38,6 @@ func (prettyTableFormatter *PrettyTableFormatter) format(toFormat string, opts *
 
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) parseFSMOutput(toParse string) map[string]string {
-	var parsed map[string]string
-	parsed = make(map[string]string)
-	split := strings.Split(toParse, "\n")
-	split = split[0 : len(split)-2]
-	for _, entry := range split {
-		row := strings.Split(entry, " ")
-		parsed[strings.TrimSuffix(row[0], ",")] = strings.Join(row[1:], "")
-	}
-
-	return parsed
-
-}
-
 func (prettyTableFormatter *PrettyTableFormatter) normalizeTable(toNormalize [][]string) []Entry {
 	var toReturn = make([]Entry, 0)
 	keys := toNormalize[0][:]
@@ -62,13 +48,17 @@ func (prettyTableFormatter *PrettyTableFormatter) normalizeTable(toNormalize [][
 			if skip {
 				skip = false
 				continue
-			} else if value != "" {
-				if strings.Contains(keys[i], "Key") {
-					toReturn = append(toReturn, Entry{value, entry[i+1]})
-					skip = true
-				} else if !strings.Contains(keys[i], "Value") {
-					toReturn = append(toReturn, Entry{keys[i], value})
-				}
+			}
+			if value == "" {
+				continue
+			}
+			if strings.Contains(keys[i], "Key") {
+				toReturn = append(toReturn, Entry{value, entry[i+1]})
+				skip = true
+				continue
+			}
+			if !strings.Contains(keys[i], "Value") {
+				toReturn = append(toReturn, Entry{keys[i], value})
 			}
 		}
 	}
