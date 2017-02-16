@@ -41,13 +41,7 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 	strucOut.output = cleanedOut
 	strucOut.maxOutLength = maxLength
 
-	log.Debugln("### execCommand complete ###")
-	log.Debugf("user: %s\n", planet.user)
-	log.Debugf("hostname: %s\n", planet.host)
-	log.Debugf("orbit key: %s\n", os.Getenv("ORBIT_KEY"))
-	log.Debugf("command: %s\n", command)
-	log.Debugf("strucOut: %v\n", strucOut)
-	log.Debugf("planet: %s\n maxLineLength: %d\n", strucOut.planet, strucOut.maxOutLength)
+	logExecCommand(command, planet, strucOut)
 }
 
 /**
