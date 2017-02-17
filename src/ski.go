@@ -18,9 +18,8 @@ type StructuredOuput struct {
 const logFile string = "testlog.log"
 
 func main() {
-	args := os.Args
 	opts := Opts{}
-	opts.procArgs(args)
+	opts.procArgs(os.Args)
 
 	if opts.helpFlag {
 		printUsage()
@@ -58,28 +57,14 @@ func makeExecutor(opts *Opts) Executor {
 	executor := Executor{}
 	var planet Planet
 	for _, entry := range opts.planets {
-		var user, host, dbID string
-		connDet := getPlanetDetails(entry)
+		var user, host, dbID, connDet string
+		dbID, connDet = getFullConnectionDetails(entry)
+		planetType := getType(entry)
 		planet.outputStruct.planet = entry
 		id := entry
-		planetType := getType(entry)
 		if isSupported(entry) {
 			user, host = getUserAndHost(connDet)
-		}
-		switch planetType {
-		case linuxServer:
-			dbID = ""
-		case database:
-			dbID, connDet = procDBDets(connDet)
-		case webServer:
-			message := "Usage of ski with web servers is not implemented"
-			os.Stderr.WriteString(message)
-			log.Warnln(message)
-			continue
-		default:
-			message := fmt.Sprintf("Unkown Type of target %s: %s\n", entry, planet.planetType)
-			os.Stderr.WriteString(message)
-			log.Warnln(message)
+		} else {
 			continue
 		}
 		executor.planets = append(executor.planets, Planet{id, user, host, planetType, dbID, StructuredOuput{id, "", 0}})

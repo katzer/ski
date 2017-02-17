@@ -14,19 +14,27 @@ type Planet struct {
 
 func (planet *Planet) execute(opts *Opts) {
 	if planet.planetType == database {
-		if opts.scriptFlag {
-			execDBScript(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
-		} else {
-			execDBCommand(planet.dbID, planet.user, planet.host, &planet.outputStruct, opts)
-		}
+		planet.executeDatabase(opts)
 	} else if planet.planetType == linuxServer {
-		if opts.scriptFlag {
-			execScript(planet.user, planet.host, &planet.outputStruct, opts)
-		} else {
-			planet.planetInfo(opts)
-			execCommand(planet.user, planet.host, opts.command, &(planet.outputStruct), opts)
-			planet.planetInfo(opts)
-		}
+		planet.executeLinux(opts)
+	}
+}
+
+func (planet *Planet) executeDatabase(opts *Opts) {
+	if opts.scriptName != "" {
+		execDBScript(planet, &planet.outputStruct, opts)
+	} else {
+		execDBCommand(planet, &planet.outputStruct, opts)
+	}
+}
+
+func (planet *Planet) executeLinux(opts *Opts) {
+	if opts.scriptName != "" {
+		execScript(planet, &planet.outputStruct, opts)
+	} else {
+		planet.planetInfo(opts)
+		execCommand(opts.command, planet, &(planet.outputStruct), opts)
+		planet.planetInfo(opts)
 	}
 }
 

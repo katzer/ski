@@ -4,11 +4,12 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 	"os"
 	"os/exec"
+	"path"
+	"runtime"
 	"strings"
-
-	log "github.com/Sirupsen/logrus"
 )
 
 // Opts ...
@@ -17,8 +18,6 @@ type Opts struct {
 	helpFlag     bool
 	loadFlag     bool
 	prettyFlag   bool
-	scriptFlag   bool
-	tableFlag    bool
 	versionFlag  bool
 	planetsCount int
 	command      string
@@ -35,8 +34,6 @@ func (opts *Opts) String() string {
 	helpFlag: %t
 	loadFlag: %t
 	prettyFlag: %t
-	scriptFlag: %t
-	tableFlag: %t
 	versionFlag: %t
 	planetsCount: %d
 	command: %s
@@ -52,8 +49,6 @@ func (opts *Opts) String() string {
 		opts.helpFlag,
 		opts.loadFlag,
 		opts.prettyFlag,
-		opts.scriptFlag,
-		opts.tableFlag,
 		opts.versionFlag,
 		opts.planetsCount,
 		opts.command,
@@ -73,14 +68,8 @@ func (opts *Opts) procArgs(args []string) {
 	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
 	flag.Parse()
-	opts.scriptFlag = !(opts.scriptName == "")
-	opts.tableFlag = !(opts.template == "")
-	if opts.scriptFlag && !(opts.command == "") {
-		message := "providing both a script AND a command is not possible"
-		err := errors.New(message)
-		os.Stderr.WriteString(fmt.Sprintf("%s\nAddInf: %s\n", err, message))
-		log.Fatal(err)
-	}
+
+	validateCommandAndScript(opts.scriptName, opts.command)
 
 	planets := flag.Args()
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
@@ -91,12 +80,8 @@ func (opts *Opts) procArgs(args []string) {
 		opts.planets = append(opts.planets, argument)
 		opts.planetsCount++
 	}
-	if len(args) == 1 {
-		opts.helpFlag = true
-	}
-	if !opts.helpFlag && !opts.scriptFlag && !opts.versionFlag && opts.command == "" {
-		opts.helpFlag = true
-	}
+
+	validateArgsCount(opts)
 
 }
 
@@ -190,4 +175,85 @@ func getMaxLength(toProcess string) int {
 func procDBDets(dbDet string) (string, string) {
 	parts := strings.Split(dbDet, ":")
 	return parts[0], parts[1]
+}
+
+/**
+*	Returns the proper Keypath
+ */
+func getKeyPath() string {
+	keyPath := os.Getenv("ORBIT_KEY")
+	if keyPath == "" {
+		if runtime.GOOS == "windows" {
+			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
+		} else {
+			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key"), os.Getenv("HOME"))
+		}
+	}
+	return keyPath
+}
+
+/**
+*	Prepends the profile loading command and seperator to a command
+ */
+func makeLoadCommand(command string, opts *Opts) string {
+	if opts.loadFlag {
+		return fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
+	}
+	return command
+}
+
+/**
+*	Removes the output provided by the profile loading
+ */
+func cleanProfileLoadedOutput(output string, opts *Opts) string {
+	if opts.loadFlag {
+		splitOut := strings.Split(output, "-----APPPLANT-ORBIT-----\n")
+		return splitOut[len(splitOut)-1]
+	}
+	return output
+}
+
+/**
+*	Checks if theres a command and a script at the same time
+ */
+func validateCommandAndScript(scriptname string, command string) {
+	if !(scriptname == "") && !(command == "") {
+		message := "providing both a script AND a command is not possible"
+		err := errors.New(message)
+		os.Stderr.WriteString(fmt.Sprintf("%s\nAddInf: %s\n", err, message))
+		log.Fatal(err)
+	}
+}
+
+/**
+*	Checks if there are enough of the correct arguments to run ski
+ */
+func validateArgsCount(opts *Opts) {
+	if len(os.Args) == 1 {
+		opts.helpFlag = true
+	}
+	if !opts.helpFlag && opts.scriptName == "" && !opts.versionFlag && opts.command == "" {
+		opts.helpFlag = true
+	}
+}
+
+func getFullConnectionDetails(planet string) (string, string) {
+	var dbID, connDet string
+	planetType := getType(planet)
+	switch planetType {
+	case linuxServer:
+		dbID = ""
+		connDet = getPlanetDetails(planet)
+	case database:
+		dbID, connDet = procDBDets(connDet)
+	case webServer:
+		message := "Usage of ski with web servers is not implemented"
+		os.Stderr.WriteString(message)
+		log.Warnln(message)
+	default:
+		message := fmt.Sprintf("Unkown Type of target %s: %s\n", planet, planetType)
+		os.Stderr.WriteString(message)
+		log.Warnln(message)
+	}
+	return dbID, connDet
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 )
@@ -11,51 +10,47 @@ const planetLength int = 21
 /**
 *	Prints the given String indented by the given spaces.
  */
-func printIndented(msg string, indent int, exceptFirst bool) {
-	charString := []rune(msg)
-	var buffer bytes.Buffer
-	_ = exceptFirst
-	toAppend := ""
-	if !exceptFirst {
-		for i := 0; i < indent; i++ {
-			buffer.WriteByte(32)
+func printIndented(msg string, indent int, exceptFirst bool) string {
+	whitespace := printWhite(indent)
+	rows := strings.SplitAfter(msg, "\n")
+	indented := ""
+	for count, row := range rows {
+		if count == 0 && exceptFirst {
+			indented = row
+			continue
 		}
+		if count == len(rows)-1 {
+			continue
+		}
+		indented = fmt.Sprintf("%s%s%s", indented, whitespace, row)
 	}
-	for _, char := range charString {
-		if char == 10 {
-			fmt.Println(buffer.String())
-			buffer.Reset()
-			for i := 0; i < indent; i++ {
-				buffer.WriteByte(32)
-			}
-		}
-		if char != 10 {
-			toAppend = fmt.Sprintf("%c", char)
-			buffer.WriteString(toAppend)
-		}
-	}
-	fmt.Println(buffer.String())
+	return indented
 }
 
-func printHeadline(scriptFlag bool, scriptName string, command string, indent int) {
-	fmt.Print("NR   PLANET               ")
-	if scriptFlag {
-		printIndented(scriptName, indent, true)
+func printHeadline(indent int, opts *Opts) {
+	headline := "NR   PLANET               "
+
+	if !(opts.scriptName == "") {
+		headline = fmt.Sprintf("%s%s\n", headline, printIndented(opts.scriptName, indent, true))
 	} else {
-		printIndented(command, indent, true)
+		headline = fmt.Sprintf("%s%s\n", headline, printIndented(opts.command, indent, true))
 	}
-	fmt.Println("================================================================================")
+	separator := "================================================================================"
+	headline = fmt.Sprintf("%s%s\n", headline, separator)
+	fmt.Print(headline)
 }
 
-func printWhite(length int) {
+func printWhite(length int) string {
+	whitespace := ""
 	for i := 0; i < length; i++ {
-		fmt.Print(" ")
+		whitespace = fmt.Sprintf("%s ", whitespace)
 	}
+	return whitespace
 }
 
 func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
-	if opts.prettyFlag && !opts.tableFlag {
-		printHeadline(opts.scriptFlag, opts.scriptName, opts.command, 80)
+	if opts.prettyFlag && opts.template == "" {
+		printHeadline(80, opts)
 	}
 	for i, entry := range toPrint {
 		formatted := format(entry, i, opts)
