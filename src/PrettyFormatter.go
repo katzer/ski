@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// TableFormatter prints input in tabular format
+// PrettyFormatter displays output from one or multiple planets in a neat, orderly fashion
 type PrettyFormatter struct {
 }
 

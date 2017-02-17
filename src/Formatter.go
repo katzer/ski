@@ -7,14 +7,14 @@ import (
 func format(toPrint StructuredOuput, counter int, opts *Opts) string {
 	var formatted string
 	if !opts.prettyFlag {
-		if opts.tableFlag {
+		if opts.template != "" {
 			var formatter TableFormatter
 			formatted = formatter.format(toPrint.output, opts)
 		} else {
 			formatted = toPrint.output
 		}
 	} else {
-		if opts.tableFlag {
+		if opts.template != "" {
 			var preFormatter TableFormatter
 			preFormatted := preFormatter.format(toPrint.output, opts)
 			var formatter PrettyTableFormatter

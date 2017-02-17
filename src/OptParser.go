@@ -18,8 +18,6 @@ type Opts struct {
 	helpFlag     bool
 	loadFlag     bool
 	prettyFlag   bool
-	scriptFlag   bool
-	tableFlag    bool
 	versionFlag  bool
 	planetsCount int
 	command      string
@@ -36,8 +34,6 @@ func (opts *Opts) String() string {
 	helpFlag: %t
 	loadFlag: %t
 	prettyFlag: %t
-	scriptFlag: %t
-	tableFlag: %t
 	versionFlag: %t
 	planetsCount: %d
 	command: %s
@@ -53,8 +49,6 @@ func (opts *Opts) String() string {
 		opts.helpFlag,
 		opts.loadFlag,
 		opts.prettyFlag,
-		opts.scriptFlag,
-		opts.tableFlag,
 		opts.versionFlag,
 		opts.planetsCount,
 		opts.command,
@@ -75,10 +69,7 @@ func (opts *Opts) procArgs(args []string) {
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
 	flag.Parse()
 
-	opts.scriptFlag = !(opts.scriptName == "")
-	opts.tableFlag = !(opts.template == "")
-
-	validateCommandAndScript(opts.scriptFlag, opts.command)
+	validateCommandAndScript(opts.scriptName, opts.command)
 
 	planets := flag.Args()
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
@@ -225,8 +216,8 @@ func cleanProfileLoadedOutput(output string, opts *Opts) string {
 /**
 *	Checks if theres a command and a script at the same time
  */
-func validateCommandAndScript(scriptFlag bool, command string) {
-	if scriptFlag && !(command == "") {
+func validateCommandAndScript(scriptname string, command string) {
+	if !(scriptname == "") && !(command == "") {
 		message := "providing both a script AND a command is not possible"
 		err := errors.New(message)
 		os.Stderr.WriteString(fmt.Sprintf("%s\nAddInf: %s\n", err, message))
@@ -241,7 +232,7 @@ func validateArgsCount(opts *Opts) {
 	if len(os.Args) == 1 {
 		opts.helpFlag = true
 	}
-	if !opts.helpFlag && !opts.scriptFlag && !opts.versionFlag && opts.command == "" {
+	if !opts.helpFlag && opts.scriptName == "" && !opts.versionFlag && opts.command == "" {
 		opts.helpFlag = true
 	}
 }

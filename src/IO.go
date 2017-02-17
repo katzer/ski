@@ -30,7 +30,7 @@ func printIndented(msg string, indent int, exceptFirst bool) string {
 func printHeadline(indent int, opts *Opts) {
 	headline := "NR   PLANET               "
 
-	if opts.scriptFlag {
+	if !(opts.scriptName == "") {
 		headline = fmt.Sprintf("%s%s\n", headline, printIndented(opts.scriptName, indent, true))
 	} else {
 		headline = fmt.Sprintf("%s%s\n", headline, printIndented(opts.command, indent, true))
@@ -49,7 +49,7 @@ func printWhite(length int) string {
 }
 
 func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
-	if opts.prettyFlag && !opts.tableFlag {
+	if opts.prettyFlag && opts.template == "" {
 		printHeadline(80, opts)
 	}
 	for i, entry := range toPrint {

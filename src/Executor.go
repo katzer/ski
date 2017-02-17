@@ -17,7 +17,7 @@ func (executor *Executor) execMain(opts *Opts) {
 	var wg sync.WaitGroup
 
 	log.Debugln("prettyflag " + strconv.FormatBool(opts.prettyFlag))
-	log.Debugln("scriptflag " + strconv.FormatBool(opts.scriptFlag))
+	log.Debugln("script " + opts.scriptName)
 	log.Debugln("command " + opts.command)
 	for _, planet := range opts.planets {
 		log.Debugf("planet %s", planet)

@@ -21,7 +21,7 @@ func (planet *Planet) execute(opts *Opts) {
 }
 
 func (planet *Planet) executeDatabase(opts *Opts) {
-	if opts.scriptFlag {
+	if opts.scriptName != "" {
 		execDBScript(planet, &planet.outputStruct, opts)
 	} else {
 		execDBCommand(planet, &planet.outputStruct, opts)
@@ -29,7 +29,7 @@ func (planet *Planet) executeDatabase(opts *Opts) {
 }
 
 func (planet *Planet) executeLinux(opts *Opts) {
-	if opts.scriptFlag {
+	if opts.scriptName != "" {
 		execScript(planet, &planet.outputStruct, opts)
 	} else {
 		planet.planetInfo(opts)
