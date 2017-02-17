@@ -49,13 +49,19 @@ func printWhite(length int) string {
 }
 
 func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
+	formatter := Formatter{}
+	formatter.init()
+	var formatted string
 	if opts.prettyFlag && opts.template == "" {
 		printHeadline(80, opts)
 	}
 	for i, entry := range toPrint {
-		formatted := format(entry, i, opts)
-
+		formatted = formatter.format(entry, i, opts)
 		fmt.Print(formatted)
+
+	}
+	if opts.prettyFlag && opts.template != "" {
+		formatter.prettyTableFormatter.execute()
 	}
 }
 

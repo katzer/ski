@@ -4,24 +4,35 @@ import (
 	"strings"
 )
 
-func format(toPrint StructuredOuput, counter int, opts *Opts) string {
+//Formatter a struct remebering the different formatter
+type Formatter struct {
+	prettyFormatter      PrettyFormatter
+	tableFormatter       TableFormatter
+	prettyTableFormatter PrettyTableFormatter
+}
+
+func (formatter *Formatter) init() {
+	formatter.prettyFormatter = PrettyFormatter{}
+	formatter.tableFormatter = TableFormatter{}
+	formatter.prettyTableFormatter = PrettyTableFormatter{}
+
+	formatter.prettyTableFormatter.init()
+}
+
+func (formatter *Formatter) format(toPrint StructuredOuput, counter int, opts *Opts) string {
 	var formatted string
 	if !opts.prettyFlag {
 		if opts.template != "" {
-			var formatter TableFormatter
-			formatted = formatter.format(toPrint.output, opts)
+			formatted = formatter.tableFormatter.format(toPrint.output, opts)
 		} else {
 			formatted = toPrint.output
 		}
 	} else {
 		if opts.template != "" {
-			var preFormatter TableFormatter
-			preFormatted := preFormatter.format(toPrint.output, opts)
-			var formatter PrettyTableFormatter
-			formatted = formatter.format(preFormatted, opts)
+			preFormatted := formatter.tableFormatter.format(toPrint.output, opts)
+			formatter.prettyTableFormatter.format(preFormatted, opts)
 		} else {
-			var formatter PrettyFormatter
-			formatted = formatter.format(toPrint, counter)
+			formatted = formatter.prettyFormatter.format(toPrint, counter)
 		}
 	}
 	return formatted

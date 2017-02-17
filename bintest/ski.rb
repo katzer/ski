@@ -98,7 +98,7 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app')
     check_error(output, error, 'test_pretty_tablePrint')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, '| willywonka_version |', 'return was not right'
+    assert_include output, '| WILLYWONKA VERSION |', 'return was not right'
   end
 
   def test_script_execution
