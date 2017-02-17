@@ -186,10 +186,10 @@ func getKeyPath() string {
 		if runtime.GOOS == "windows" {
 			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
 		} else {
-			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key"), os.Getenv("HOME"))
+			keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key")
 		}
 	}
-	return keyPath
+	return strings.TrimPrefix(keyPath, os.Getenv("HOME"))
 }
 
 /**
