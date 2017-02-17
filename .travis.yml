@@ -12,12 +12,10 @@ before_script:
 
 script:
 - scripts/bintest
-- build/x86_64-pc-linux-gnu-glibc-2.12/bin/ski -v
-- build/x86_64-pc-linux-gnu-glibc-2.14/bin/ski -v
 
 before_deploy:
 - scripts/release
-- export BUILD_VERSION=`rake local:version`
+- export BUILD_VERSION=`rake version`
 - sudo chmod -R 1777 releases
 - ls -la releases
 - ls -la releases/v$BUILD_VERSION
@@ -39,7 +37,6 @@ deploy:
   on:
     tags: true
     condition:
-    - "$MRUBY_VERSION == 1.2.0"
     - "$TRAVIS_OS_NAME == linux"
 
 #   slack:

@@ -22,8 +22,6 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-scripts/clean
-
 docker-compose -f docker-compose.common.yml -f docker-compose.musl.yml build compile
 docker-compose -f docker-compose.common.yml -f docker-compose.musl.yml run compile
 
