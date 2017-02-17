@@ -20,25 +20,48 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-namespace :test do
-  desc 'run integration tests'
-  task bintest: [:compile] do
-    config_path = "#{orbit_path}/config"
-    ssh_path    = "#{orbit_path}/config/ssh"
+require 'rubygems'
+require 'os'
+require 'go/build'
 
-    mkdir_p config_path
-    mkdir_p ssh_path
-    cp '/root/.ssh/orbit.key', ssh_path
+Go::Build.new('x86_64-pc-linux-gnu-glibc-2.14') do
+  os :linux
+  arch :amd64
+  appname :ski
+  bintest_if OS.linux? && OS.bits == 64
+end
 
-    Go::Build.builds.each do |gb|
-      next unless gb.bintest?
-      test_bin_path = "#{orbit_path}/bin/ski"
-      bin_path      = "#{build_path}/#{gb.name}/bin"
+Go::Build.new('i686-pc-linux-gnu-glibc-2.14') do
+  os :linux
+  arch :'386'
+  appname :ski
+  bintest_if OS.linux? && OS.bits == 32
+end
 
-      test_bin_path << '.exe' if OS.windows?
+Go::Build.new('x86_64-apple-darwin14') do
+  os :darwin
+  arch :amd64
+  appname :ski
+  bintest_if OS.mac? && OS.bits == 64
+end
 
-      cp_r bin_path, orbit_path
-      sh "ruby #{APP_ROOT}/bintest/ski.rb #{test_bin_path}"
-    end
-  end
+Go::Build.new('i386-apple-darwin14') do
+  os :darwin
+  arch :'386'
+  appname :ski
+  bintest_if OS.mac? && OS.bits == 32
+end
+
+Go::Build.new('x86_64-w64-mingw32') do
+  os :windows
+  arch :amd64
+  appname :"ski.exe"
+  bintest_if OS.windows? && OS.bits == 64
+end
+
+Go::Build.new('i686-w64-mingw32') do
+  os :windows
+  arch :'386'
+  appname :"ski.exe"
+  bintest_if OS.windows? && OS.bits == 32
 end

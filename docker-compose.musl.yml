@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
+# Copyright (c) 2016 by appPlant GmbH. All rights reserved.
 #
 # @APPPLANT_LICENSE_HEADER_START@
 #
@@ -20,21 +20,17 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-FROM golang:alpine
-MAINTAINER Sebastian Katzer "katzer@appplant.de"
-
-ENV APP_HOME /root/code
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
-
-COPY scripts/install.sh .
-RUN sh install.sh
-RUN gem install rake os test-unit --no-ri --no-rdoc
-RUN gem update --system --no-ri --no-rdoc
-RUN git config --global http.https://gopkg.in.followRedirects true
-RUN go get gopkg.in/hypersleep/easyssh.v0
-RUN go get github.com/Sirupsen/logrus
-RUN git -C $GOPATH/src/golang.org/x/crypto reset --hard abc5fa7ad02123a41f02bf1391c9760f7586e608
-RUN apk add tree
-
-COPY scripts/init.sh /etc/profile.d
+compile: &defaults
+  dockerfile: Dockerfile.musl
+  environment:
+    BUILD_CONFIG: build_config.musl.rb
+bintest:
+  <<: *defaults
+clean:
+  <<: *defaults
+shell:
+  <<: *defaults
+release:
+  <<: *defaults
+getversion:
+  <<: *defaults

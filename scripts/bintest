@@ -1,5 +1,7 @@
+#!/bin/sh
+
 #
-# Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
+# Copyright (c) 2016 by appPlant GmbH. All rights reserved.
 #
 # @APPPLANT_LICENSE_HEADER_START@
 #
@@ -20,25 +22,13 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-namespace :test do
-  desc 'run integration tests'
-  task bintest: [:compile] do
-    config_path = "#{orbit_path}/config"
-    ssh_path    = "#{orbit_path}/config/ssh"
+scripts/clean
 
-    mkdir_p config_path
-    mkdir_p ssh_path
-    cp '/root/.ssh/orbit.key', ssh_path
+docker-compose -f docker-compose.common.yml -f docker-compose.musl.yml build bintest
+docker-compose -f docker-compose.common.yml -f docker-compose.musl.yml run bintest
 
-    Go::Build.builds.each do |gb|
-      next unless gb.bintest?
-      test_bin_path = "#{orbit_path}/bin/ski"
-      bin_path      = "#{build_path}/#{gb.name}/bin"
+docker-compose -f docker-compose.common.yml -f docker-compose.glibc-2.12.yml build bintest
+docker-compose -f docker-compose.common.yml -f docker-compose.glibc-2.12.yml run bintest
 
-      test_bin_path << '.exe' if OS.windows?
-
-      cp_r bin_path, orbit_path
-      sh "ruby #{APP_ROOT}/bintest/ski.rb #{test_bin_path}"
-    end
-  end
-end
+docker-compose -f docker-compose.common.yml -f docker-compose.glibc-2.14.yml build bintest
+docker-compose -f docker-compose.common.yml -f docker-compose.glibc-2.14.yml run bintest

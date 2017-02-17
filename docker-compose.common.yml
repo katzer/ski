@@ -1,13 +1,13 @@
 #
-# Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
+# Copyright (c) 2016 by appPlant GmbH. All rights reserved.
 #
 # @APPPLANT_LICENSE_HEADER_START@
 #
-# This file contains Original Code and\or Modifications of Original Code
+# This file contains Original Code and/or Modifications of Original Code
 # as defined in and that are subject to the Apache License
 # Version 2.0 (the 'License'). You may not use this file except in
 # compliance with the License. Please obtain a copy of the License at
-# http:\\opensource.org\licenses\Apache-2.0\ and read it before using this
+# http://opensource.org/licenses/Apache-2.0/ and read it before using this
 # file.
 #
 # The Original Code and all software distributed under the License are
@@ -20,21 +20,23 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-version: 0.0.1.{build}
-
-platform:
-- x64
-- x86
-
-clone_folder: C:\code
-
-install:
-- ps: cd C:\code; .\scripts\install.ps1
-- ps: cd C:\code; .\scripts\init.ps1
-
-build_script:
-- cmd: cd C:\code && rake compile
-# - cmd: ssh -Tv -i $HOME\.ssh\orbit.key localhost "echo 123"
-
-test_script:
-- cmd: cd C:\code && rake test:bintest
+compile: &defaults
+  build: .
+  volumes:
+    - .:/root/code:rw
+  command: /bin/bash -c "rake compile"
+bintest:
+  <<: *defaults
+  command: /bin/bash -lc "rake test:bintest"
+clean:
+  <<: *defaults
+  command: /bin/bash -c "rake clean"
+release:
+  <<: *defaults
+  command: /bin/bash -c "rake release"
+shell:
+  <<: *defaults
+  command: /bin/bash -l
+getversion:
+  <<: *defaults
+  command: /bin/bash -c "rake version"

@@ -1,5 +1,3 @@
-#!/bin/sh
-
 #
 # Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
 #
@@ -22,29 +20,13 @@
 #
 # @APPPLANT_LICENSE_HEADER_END@
 
-init_go() {
-    [ -z "$GOROOT" ] && export GOROOT=/usr/local/go
-    [ -z "$GOPATH" ] && export GOPATH=/go
-    export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
-}
+require 'rubygems'
+require 'os'
+require 'go/build'
 
-init_orbit() {
-    export ORBIT_KEY=/.ssh/orbit.key
-    export ORBIT_HOME=`pwd`/bintest/testFolder
-    export PATH=`pwd`/bintest/tools:$PATH
-    chmod -R u+x `pwd`/bintest/tools
-}
-
-init_sshd() {
-    if [[ `id -u` -ne 0 ]]
-        then sudo /usr/sbin/sshd
-        else /usr/sbin/sshd
-    fi
-    eval `ssh-agent -s`
-    ssh-add $HOME$ORBIT_KEY
-}
-
-init_go
-init_orbit
-init_sshd
-git -C $GOPATH/src/golang.org/x/crypto reset --hard abc5fa7ad02123a41f02bf1391c9760f7586e608
+Go::Build.new('x86_64-pc-linux-busybox-musl') do
+  os :linux
+  arch :amd64
+  appname :ski
+  bintest_if OS.linux? && OS.bits == 64
+end
