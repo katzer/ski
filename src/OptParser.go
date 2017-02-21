@@ -6,26 +6,21 @@ import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"os"
-	"os/exec"
-	"path"
-	"runtime"
+
 	"strings"
 )
 
 // Opts ...
 type Opts struct {
-	debugFlag    bool
-	helpFlag     bool
-	loadFlag     bool
-	prettyFlag   bool
-	versionFlag  bool
-	planetsCount int
-	command      string
-	currentDBDet string
-	currentDet   string
-	scriptName   string
-	template     string
-	planets      []string
+	debugFlag   bool
+	helpFlag    bool
+	loadFlag    bool
+	prettyFlag  bool
+	versionFlag bool
+	command     string
+	scriptName  string
+	template    string
+	planets     []string
 }
 
 func (opts *Opts) String() string {
@@ -35,10 +30,7 @@ func (opts *Opts) String() string {
 	loadFlag: %t
 	prettyFlag: %t
 	versionFlag: %t
-	planetsCount: %d
 	command: %s
-	currentDBDet: %s
-	currentDet: %s
 	scriptName: %s
 	planets: %v
 }
@@ -50,10 +42,7 @@ func (opts *Opts) String() string {
 		opts.loadFlag,
 		opts.prettyFlag,
 		opts.versionFlag,
-		opts.planetsCount,
 		opts.command,
-		opts.currentDBDet,
-		opts.currentDet,
 		opts.scriptName,
 		opts.planets)
 }
@@ -78,139 +67,11 @@ func (opts *Opts) procArgs(args []string) {
 
 	for _, argument := range planets {
 		opts.planets = append(opts.planets, argument)
-		opts.planetsCount++
+		// opts.planetsCount++
 	}
 
 	validateArgsCount(opts)
 
-}
-
-/**
-*	Splits the given connectiondetails and returns the hostname
-*	@params:
-*		connDet: Connection details in following form: user@hostname
-*	@return: hostname
- */
-func getHost(connDet string) string {
-	toReturn := strings.Split(connDet, "@")
-	return toReturn[1]
-}
-
-/**
-*	Splits the given connectiondetails and returns the user
-*	@params:
-*		connDet: Connection details in following form: user@hostname
-*	@return: user
- */
-func getUserAndHost(connDet string) (string, string) {
-	// TODO: error handling or remove the func completely
-	toReturn := strings.Split(connDet, "@")
-	return toReturn[0], toReturn[1]
-}
-
-/**
-*	Returns the type of a given planet
-*	@params:
-*		id: The planets id
-*	@return: The planets type
- */
-func getType(id string) string {
-	cmd := exec.Command("ff", "-t", id)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
-		os.Stderr.WriteString(message)
-		log.Fatalln(message)
-	}
-	return strings.TrimSpace(string(out))
-}
-
-/**
-*	Returns the connection details to a given planet
-*	@params:
-*		id: The planets id
-*	@return: The connection details to the planet
- */
-func getPlanetDetails(id string) string {
-	cmd := exec.Command("ff", id, "-f=pqdb")
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
-		os.Stderr.WriteString(message)
-		log.Fatalln(message)
-	}
-	return strings.TrimSpace(string(out))
-}
-
-/**
-*	counts the supported planets in a list of planets
- */
-func countSupported(planets []string) int {
-	i := 0
-	for _, planet := range planets {
-		if getType(planet) == linuxServer {
-			i++
-		}
-	}
-	return i
-}
-
-/**
-*	checks, wether a planet is supported by ski or not
- */
-func isSupported(planet string) bool {
-	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
-	planetType := getType(planet)
-	return supported[planetType]
-}
-
-func getMaxLength(toProcess string) int {
-	_ = toProcess
-	return 0
-}
-
-/**
-*	splits db details (dbID:user@host) and returns them as dbID,user@host
- */
-func procDBDets(dbDet string) (string, string) {
-	parts := strings.Split(dbDet, ":")
-	return parts[0], parts[1]
-}
-
-/**
-*	Returns the proper Keypath
- */
-func getKeyPath() string {
-	keyPath := os.Getenv("ORBIT_KEY")
-	if keyPath == "" {
-		if runtime.GOOS == "windows" {
-			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
-		} else {
-			keyPath = strings.TrimPrefix(path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key"), os.Getenv("HOME"))
-		}
-	}
-	return keyPath
-}
-
-/**
-*	Prepends the profile loading command and seperator to a command
- */
-func makeLoadCommand(command string, opts *Opts) string {
-	if opts.loadFlag {
-		return fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
-	}
-	return command
-}
-
-/**
-*	Removes the output provided by the profile loading
- */
-func cleanProfileLoadedOutput(output string, opts *Opts) string {
-	if opts.loadFlag {
-		splitOut := strings.Split(output, "-----APPPLANT-ORBIT-----\n")
-		return splitOut[len(splitOut)-1]
-	}
-	return output
 }
 
 /**
@@ -235,25 +96,4 @@ func validateArgsCount(opts *Opts) {
 	if !opts.helpFlag && opts.scriptName == "" && !opts.versionFlag && opts.command == "" {
 		opts.helpFlag = true
 	}
-}
-
-func getFullConnectionDetails(planet string) (string, string) {
-	var dbID, connDet string
-	planetType := getType(planet)
-	switch planetType {
-	case linuxServer:
-		dbID = ""
-		connDet = getPlanetDetails(planet)
-	case database:
-		dbID, connDet = procDBDets(connDet)
-	case webServer:
-		message := "Usage of ski with web servers is not implemented"
-		os.Stderr.WriteString(message)
-		log.Warnln(message)
-	default:
-		message := fmt.Sprintf("Unkown Type of target %s: %s\n", planet, planetType)
-		os.Stderr.WriteString(message)
-		log.Warnln(message)
-	}
-	return dbID, connDet
 }
