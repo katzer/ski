@@ -100,7 +100,7 @@ func getType(id string) string {
 *	@return: The connection details to the planet
  */
 func getPlanetDetails(id string) string {
-	cmd := exec.Command("ff", id, "-f=pqdb")
+	cmd := exec.Command("ff", "-f=ski", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
