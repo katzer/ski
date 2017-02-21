@@ -24,7 +24,7 @@ Example: You save the release at `/home/youruser/workspace/ski`. Your `ORBIT_HOM
 Either create an enviroment variable called `ORBIT_KEY` containing an absolute path to the ssh private key that should be used for executing commands on the planets or save said key at `ski/config/ssh/`.
 
 You'll need the following installed and in your `PATH`:
-- [ff][ff]
+- [fifa][ff]
 
 ## Installation
 
@@ -39,17 +39,20 @@ Clone the repo:
 And then execute:
 
 ```bash
-$ docker-compose run compile # https://docs.docker.com/engine/installation
+$ scripts/compile # https://docs.docker.com/engine/installation
 ```
 
 You'll be able to find the binaries in the following directories:
 
-- Linux (64-bit): `build/x86_64-pc-linux-gnu/bin/goo`
-- Linux (32-bit): `build/i686-pc-linux-gnu/bin/goo`
-- OS X (64-bit): `build/x86_64-apple-darwin14/bin/goo`
-- OS X (32-bit): `build/i386-apple-darwin14/bin/goo`
-- Windows (64-bit): `build/x86_64-w64-mingw32/bin/goo`
-- Windows (32-bit): `build/i686-w64-mingw32/bin/goo`
+- Linux (64-bit, for old distros): `build/x86_64-pc-linux-gnu-glibc-2.12/bin/ski`
+- Linux (32-bit, for old distros): `build/i686-pc-linux-gnu-glibc-2.12/bin/ski`
+- Linux (64-bit GNU): `build/x86_64-pc-linux-gnu-glibc-2.14/bin/ski`
+- Linux (32-bit GNU): `build/i686-pc-linux-gnu-glibc-2.14/bin/ski`
+- Linux (64-bit BusyBox): `build/x86_64-pc-linux-busybox-musl/bin/ski`
+- OS X (64-bit): `build/x86_64-apple-darwin14/bin/ski`
+- OS X (32-bit): `build/i386-apple-darwin14/bin/ski`
+- Windows (64-bit): `build/x86_64-w64-mingw32/bin/ski`
+- Windows (32-bit): `build/i686-w64-mingw32/bin/ski`
 
 ## Basic Usage
 
@@ -57,7 +60,7 @@ Get the connection by type:
 
     $ export ORBIT_FILE=/path/to/orbit.json
 
-    $ goo -c="hostname" app-package-1 app-package-2
+    $ ski -c="hostname" app-package-1 app-package-2
     $ hostname-1
     $ hostname-2
 
@@ -65,13 +68,13 @@ Get the connection by type:
 
 Execute a script:
 
-    $ goo -s="scripts/hostname.sh" app-package-1 app-package-2
+    $ ski -s="scripts/hostname.sh" app-package-1 app-package-2
     $ hostname-1
     $ hostname-2
 
 Pretty print output:
 
-    $ goo -p -c="hostname" app-package-1 app-package-2
+    $ ski -p -c="hostname" app-package-1 app-package-2
     
       NR   PLANET          hostname
       ===============================
@@ -80,7 +83,7 @@ Pretty print output:
 
 ## Releases
 
-    $ docker-compose run release
+    $ scripts/release
 
 Affer this command finishes, you'll see the /releases for each target in the releases directory.
 
@@ -88,7 +91,7 @@ Affer this command finishes, you'll see the /releases for each target in the rel
 
 To run all integration tests:
 
-    $ docker-compose run bintest
+    $ scripts/bintest
 
 ## Contributing
 

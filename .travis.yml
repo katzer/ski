@@ -1,50 +1,20 @@
-#
-# Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
-#
-# @APPPLANT_LICENSE_HEADER_START@
-#
-# This file contains Original Code and/or Modifications of Original Code
-# as defined in and that are subject to the Apache License
-# Version 2.0 (the 'License'). You may not use this file except in
-# compliance with the License. Please obtain a copy of the License at
-# http://opensource.org/licenses/Apache-2.0/ and read it before using this
-# file.
-#
-# The Original Code and all software distributed under the License are
-# distributed on an 'AS IS' basis, WITHOUT WARRANTY OF ANY KIND, EITHER
-# EXPRESS OR IMPLIED, AND APPLE HEREBY DISCLAIMS ALL SUCH WARRANTIES,
-# INCLUDING WITHOUT LIMITATION, ANY WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE, QUIET ENJOYMENT OR NON-INFRINGEMENT.
-# Please see the License for the specific language governing rights and
-# limitations under the License.
-#
-# @APPPLANT_LICENSE_HEADER_END@
-
 language: go
 sudo: false
 
 os:
-- osx
 - linux
 
 services:
 - docker
 
-install:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sh scripts/install.sh; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh scripts/install.sh; fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then . scripts/init.sh; fi
-
 before_script:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake compile; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run compile; fi
+- chmod u+x scripts/*
 
 script:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rake test:bintest; fi
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker-compose run bintest; fi
+- scripts/bintest
 
 before_deploy:
-- docker-compose run release
+- scripts/release
 - export BUILD_VERSION=`rake version`
 - sudo chmod -R 1777 releases
 - ls -la releases
@@ -55,12 +25,12 @@ deploy:
   api_key: "$GITHUB_OAUTH_TOKEN"
   file:
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-i386-apple-darwin14.tgz"
-  - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-i686-pc-linux-gnu.tgz"
+  - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-i686-pc-linux-gnu-glibc.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-i686-w64-mingw32.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-apple-darwin14.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-gnu.tgz"
+  - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-busybox.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-w64-mingw32.tgz"
-  - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION.tgz"
   skip_cleanup: true
   on:
     tags: true
