@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016 by appPlant GmbH. All rights reserved.
+# Copyright (c) 2013-2016 by appPlant GmbH. All rights reserved.
 #
 # @APPPLANT_LICENSE_HEADER_START@
 #
@@ -23,7 +23,9 @@
 FROM appplant/go-cli:glibc-2.14
 MAINTAINER Sebastian Katzer "katzer@appplant.de"
 
+
 RUN go get gopkg.in/hypersleep/easyssh.v0
 RUN go get github.com/Sirupsen/logrus
+RUN go get github.com/olekukonko/tablewriter
 
 ENV ORBIT_HOME $APP_HOME/bintest/orbit

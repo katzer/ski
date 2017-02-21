@@ -37,9 +37,8 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 		log.Fatalf("%s\nAdditional info: %s\n", err, message)
 	}
 	cleanedOut := cleanProfileLoadedOutput(out, opts)
-	maxLength := getMaxLength(out)
 	strucOut.output = cleanedOut
-	strucOut.maxOutLength = maxLength
+	strucOut.maxOutLength = 0
 
 	logExecCommand(command, planet, strucOut)
 }

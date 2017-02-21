@@ -49,17 +49,44 @@ func printWhite(length int) string {
 }
 
 func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
+	formatter := Formatter{}
+	formatter.init()
+	var formatted string
 	if opts.prettyFlag && opts.template == "" {
 		printHeadline(80, opts)
 	}
 	for i, entry := range toPrint {
-		formatted := format(entry, i, opts)
-
+		formatted = formatter.format(entry, i, opts)
 		fmt.Print(formatted)
+
+	}
+	if opts.prettyFlag && opts.template != "" {
+		formatter.prettyTableFormatter.execute()
 	}
 }
 
 func trimDBMetaInformations(strucOut *StructuredOuput) {
 	cleaned := strings.Split(strucOut.output, "\n")
 	strucOut.output = strings.Join(cleaned[:len(cleaned)-3], "")
+}
+
+/**
+*	Prepends the profile loading command and seperator to a command
+ */
+func makeLoadCommand(command string, opts *Opts) string {
+	if opts.loadFlag {
+		return fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
+	}
+	return command
+}
+
+/**
+*	Removes the output provided by the profile loading
+ */
+func cleanProfileLoadedOutput(output string, opts *Opts) string {
+	if opts.loadFlag {
+		splitOut := strings.Split(output, "-----APPPLANT-ORBIT-----\n")
+		return splitOut[len(splitOut)-1]
+	}
+	return output
 }
