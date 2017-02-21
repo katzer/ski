@@ -1,4 +1,4 @@
-# goo [![Build Status](https://travis-ci.org/appPlant/goo.svg?branch=master)](https://travis-ci.org/appPlant/goo) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Code Climate](https://codeclimate.com/github/appPlant/goo/badges/gpa.svg)](https://codeclimate.com/github/appPlant/goo)
+# goo [![Build Status](https://travis-ci.org/appPlant/goo.svg?branch=master)](https://travis-ci.org/appPlant/goo) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![codebeat badge](https://codebeat.co/badges/b0a926f1-d7bf-4ee1-9bc8-4cb1e087d347)](https://codebeat.co/projects/github-com-appplant-goo)
 
 Execute commands or collect informations on multiple servers in parallel.
 
