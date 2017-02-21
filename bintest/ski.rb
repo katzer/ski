@@ -45,21 +45,21 @@ class TestGoo < Test::Unit::TestCase
     assert_include error, 'Usage of ski with web servers is not implemented'
   end
 
-  def test_not_authorized_host
-    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"',
-                                           '-d=true', 'unauthorized')
-    check_no_error(output, error, 'test_not_authorized_host')
-    assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'ssh: unable to authenticate'
-  end
+  # def test_not_authorized_host
+  #   output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"',
+  #                                          '-d=true', 'unauthorized')
+  #   check_no_error(output, error, 'test_not_authorized_host')
+  #   assert_false status.success?, 'Process did exit cleanly'
+  #   assert_include error, 'ssh: unable to authenticate'
+  # end
 
-  def test_offline_host
-    output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"',
-                                           '-d=true', 'offline')
-    check_no_error(output, error, 'test_offline_host')
-    assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'no such host'
-  end
+  # def test_offline_host
+  #   output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"',
+  #                                          '-d=true', 'offline')
+  #   check_no_error(output, error, 'test_offline_host')
+  #   assert_false status.success?, 'Process did exit cleanly'
+  #   assert_include error, 'no such host'
+  # end
 
   def test_help
     output, error, status = Open3.capture3(PATH, BIN, '-h')
@@ -171,7 +171,7 @@ class TestGoo < Test::Unit::TestCase
     output, error, status = Open3.capture3(PATH, BIN, '-c="ls -al"', 'app',
                                            '-d=true', '-p')
     check_no_error(output, error, 'wrong_flag_order')
-    assert_true status.success?, 'Process did not exit cleanly'
+    assert_true status.success?, 'Process did exit cleanly'
     assert_include output, 'total', 'return was not correct'
     assert_include error, 'Unkown Type of target', 'error was not correct'
   end

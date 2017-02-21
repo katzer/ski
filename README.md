@@ -61,16 +61,16 @@ Get the connection by type:
     $ export ORBIT_FILE=/path/to/orbit.json
 
     $ ski -c="hostname" app-package-1 app-package-2
-    $ hostname-1
-    $ hostname-2
+    hostname-1
+    hostname-2
 
 ## Advanced features
 
 Execute a script:
 
     $ ski -s="scripts/hostname.sh" app-package-1 app-package-2
-    $ hostname-1
-    $ hostname-2
+    hostname-1
+    hostname-2
 
 Pretty print output:
 

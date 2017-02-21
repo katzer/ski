@@ -1,6 +1,8 @@
 package main
 
-import log "github.com/Sirupsen/logrus"
+import (
+	log "github.com/Sirupsen/logrus"
+)
 
 // Planet contains all Informations of one server
 type Planet struct {

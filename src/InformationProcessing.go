@@ -13,10 +13,10 @@ import (
 func getFullConnectionDetails(planet string) (string, string) {
 	var dbID, connDet string
 	planetType := getType(planet)
+	connDet = getPlanetDetails(planet)
 	switch planetType {
 	case linuxServer:
 		dbID = ""
-		connDet = getPlanetDetails(planet)
 	case database:
 		dbID, connDet = procDBDets(connDet)
 	case webServer:
@@ -83,7 +83,7 @@ func isSupported(planet string) bool {
 *	@return: The planets type
  */
 func getType(id string) string {
-	cmd := exec.Command("ff", "-t", id)
+	cmd := exec.Command("fifa", "-t", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
@@ -100,14 +100,18 @@ func getType(id string) string {
 *	@return: The connection details to the planet
  */
 func getPlanetDetails(id string) string {
-	cmd := exec.Command("ff", "-f=ski", id)
+	cmd := exec.Command("fifa", "-f=ski", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
 		os.Stderr.WriteString(message)
 		log.Fatalln(message)
 	}
-	return strings.TrimSpace(string(out))
+	if len(strings.Split(string(out), "|")) >= 4 {
+		return strings.TrimSpace(strings.Split(string(out), "|")[3])
+	}
+	return ""
+
 }
 
 /**

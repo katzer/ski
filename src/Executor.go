@@ -1,10 +1,9 @@
 package main
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"strconv"
 	"sync"
-
-	log "github.com/Sirupsen/logrus"
 )
 
 // Executor This struct ensures the parallel execution of all command executions
@@ -24,6 +23,7 @@ func (executor *Executor) execMain(opts *Opts) {
 	}
 
 	wg.Add(len(executor.planets))
+
 	for i, planet := range executor.planets {
 		// to avoid closure over the value planet and the value i. seems odd but it is recommended
 		a := i
@@ -34,7 +34,6 @@ func (executor *Executor) execMain(opts *Opts) {
 			wg.Done()
 		}()
 	}
-
 	wg.Wait()
 	formatAndPrint(outputList, opts)
 }

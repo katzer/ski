@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if [ "$1" == "-t" ]
+  then
+  if [ "$2" == "app" ] || [ "$2" == "unauthorized" ] || [ "$2" == "offline" ]
+    then
+    echo server
+  fi
+  if [ "$2" == "db" ]
+    then
+    echo db
+  fi
+  if [ "$2" == "web" ]
+    then
+    echo web
+  fi
+fi
+
+if [ "$1" == "-f=ski" ]
+  then
+  if [ "$2" == "app" ] || [ "$2" == "web" ]
+    then
+    echo "server|app-package-1|App-Package 1|"`whoami`"@localhost"
+  fi
+  if  [ "$2" == "db" ]
+    then
+    echo "server|app-package-1|App-Package 1|dbdb:"`whoami`"@localhost"
+  fi
+  if [ "$2" == "unauthorized" ]
+    then
+    echo user@localhost
+  fi
+  if [ "$2" == "offline" ]
+    then
+    echo user@testhost
+  fi
+fi

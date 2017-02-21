@@ -25,10 +25,8 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 		Port:   "22",
 	}
 	cmd := makeLoadCommand(command, opts)
-
 	// Call Run method with command you want to run on remote server.
 	out, err := ssh.Run(cmd)
-
 	// Handle errors
 	if err != nil {
 		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
@@ -39,7 +37,6 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 	cleanedOut := cleanProfileLoadedOutput(out, opts)
 	strucOut.output = cleanedOut
 	strucOut.maxOutLength = 0
-
 	logExecCommand(command, planet, strucOut)
 }
 
