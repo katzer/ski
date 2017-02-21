@@ -60,7 +60,7 @@ module Go
 
     def go_build(binpath)
       if OS.windows?
-        "set GOOS=#{os}&&set GOARCH=#{arch}&&go build -i -o #{binpath}/#{appname}"
+        "set GOOS=#{os}&&set GOARCH=#{arch}&&go build -i -ldflags=\"-X main.version=$(go run #{version_path}/*.go)\" -o #{binpath}/#{appname}"
       else
         "GOOS=#{os} GOARCH=#{arch} go build -i -ldflags=\"-X main.version=$(go run #{version_path}/*.go)\" -o #{binpath}/#{appname}"
       end
