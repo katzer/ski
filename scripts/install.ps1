@@ -40,6 +40,8 @@ function Install-Pkgs() {
     if (-not (Test-Path env:GOPATH)) { $env:GOPATH = "$HOME\goms" }
     go get gopkg.in/hypersleep/easyssh.v0
     go get github.com/Sirupsen/logrus
+    go get github.com/rifflock/lfshook
+    go get github.com/lestrrat/go-file-rotatelogs
 }
 
 function Setup-Sshd() {

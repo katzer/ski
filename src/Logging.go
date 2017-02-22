@@ -1,28 +1,93 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"os"
+	"time"
 
-	"github.com/Sirupsen/logrus"
 	log "github.com/Sirupsen/logrus"
+	rotor "github.com/lestrrat/go-file-rotatelogs"
+	hook "github.com/rifflock/lfshook"
 )
 
-func setupLogger(destination string, level logrus.Level) (*os.File, error) {
-	logFile, err := os.OpenFile(destination, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+func setupLogger(customLogfile string, level log.Level) (*os.File, error) {
+	logFile, err := os.OpenFile(customLogfile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
-		logrus.Warnf("logrus will write to stderr. Bad file name: %s", destination)
+		log.Warnf("logrus will write to stderr. Bad file name: %s", customLogfile)
 	} else {
-		logrus.SetOutput(logFile)
+		log.SetOutput(logFile)
 	}
 
-	formatter := new(logrus.TextFormatter)
+	formatter := setupDefaultFormatter()
+	log.SetFormatter(formatter)
+	log.SetLevel(level)
+	return logFile, err
+}
+
+func setupLoggerWithRotation(customLogfile string, level log.Level) {
+	logFile := "ski.log" // default log file
+	if customLogfile != "" {
+		logFile = customLogfile
+	}
+
+	formatter := setupDefaultFormatter()
+
+	log.SetFormatter(formatter)
+	log.SetLevel(level)
+
+	writer, err := rotor.New(
+		logFile+".%Y%m%d%H%M",
+		rotor.WithLinkName(logFile),
+		rotor.WithMaxAge(24*time.Hour),
+		rotor.WithRotationTime(time.Hour),
+	)
+	if err != nil {
+		os.Stderr.WriteString(fmt.Sprintf("%v. Rolling file appender can't be used.\n", err))
+		os.Stderr.WriteString("Logrus will log to stderr.")
+	} else {
+		hook := hook.NewHook(hook.WriterMap{
+			log.DebugLevel: writer,
+			log.WarnLevel:  writer,
+			log.InfoLevel:  writer,
+			log.ErrorLevel: writer,
+			log.FatalLevel: writer,
+		})
+		log.AddHook(hook)
+		log.SetOutput(ioutil.Discard)
+	}
+}
+
+func setupLoggerWithFileAppender(customLogfile string, level log.Level) {
+	logFile := "ski.log" // default log file
+	if customLogfile != "" {
+		logFile = customLogfile
+	}
+
+	formatter := setupDefaultFormatter()
+	log.SetFormatter(formatter)
+	log.SetLevel(level)
+
+	hook := hook.NewHook(hook.PathMap{
+		log.DebugLevel: logFile,
+		log.WarnLevel:  logFile,
+		log.InfoLevel:  logFile,
+		log.ErrorLevel: logFile,
+		log.FatalLevel: logFile,
+	})
+
+	log.AddHook(hook)
+	log.SetOutput(ioutil.Discard)
+}
+
+func setupDefaultFormatter() log.Formatter {
+	formatter := new(log.TextFormatter)
 	formatter.DisableSorting = true
 	formatter.ForceColors = true
 	formatter.TimestampFormat = "2006-01-02 15:04:05"
 	formatter.FullTimestamp = true
-	logrus.SetFormatter(formatter)
-	logrus.SetLevel(level)
-	return logFile, err
+
+	return formatter
 }
 
 func logExecCommand(command string, planet *Planet, strucOut *StructuredOuput) {

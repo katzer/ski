@@ -25,6 +25,8 @@ MAINTAINER nbatsukh "batsukh@appplant.de"
 
 RUN go get gopkg.in/hypersleep/easyssh.v0
 RUN go get github.com/Sirupsen/logrus
+RUN go get github.com/rifflock/lfshook
+RUN go get github.com/lestrrat/go-file-rotatelogs
 RUN go get github.com/olekukonko/tablewriter
 
 ENV ORBIT_HOME $APP_HOME/bintest/orbit

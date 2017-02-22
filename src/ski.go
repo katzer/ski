@@ -16,7 +16,7 @@ type StructuredOuput struct {
 }
 
 // Default logfile path
-const logFile string = "testlog.log"
+const logFile string = "ski.log"
 
 func main() {
 	opts := Opts{}
@@ -37,7 +37,7 @@ func main() {
 	}
 
 	file, err := setupLogger(logFile, level)
-	// No error -> a file was opened for writing, arange for closing the file
+	// No error -> a file was opened for writing, arrange for closing the file
 	if err == nil {
 		defer closeFile(file)
 	}
