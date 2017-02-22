@@ -7,7 +7,6 @@ tags
 orbit.key
 changelog
 .sass-lint.yml
-testlog.log
 
 # Folders
 _obj
