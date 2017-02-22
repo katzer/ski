@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+
 	"os"
-	"path"
 	"os/exec"
+	"path"
 	"runtime"
+
 	log "github.com/Sirupsen/logrus"
 )
 
@@ -81,8 +83,8 @@ func printVersion() {
 	runtimeOS := getOS()
 	progArch := getArch()
 	archOS := getOSArch()
-	version := fmt.Sprintf("ski version %s %s %s (%s)", version, progArch, runtimeOS, archOS)
-	os.Stdout.WriteString(version + "\n")
+	vers := fmt.Sprintf("ski version %s %s %s (%s)", version, progArch, runtimeOS, archOS)
+	os.Stdout.WriteString(vers + "\n")
 }
 
 /**
