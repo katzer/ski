@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"os"
+	"path"
 	"os/exec"
 	"runtime"
+	log "github.com/Sirupsen/logrus"
 )
 
 // StructuredOuput ...
@@ -14,9 +15,6 @@ type StructuredOuput struct {
 	output       string
 	maxOutLength int
 }
-
-// Default logfile path
-const logFile string = "ski.log"
 
 func main() {
 	opts := Opts{}
@@ -35,23 +33,26 @@ func main() {
 	if opts.debugFlag {
 		level = log.DebugLevel
 	}
+	// Default logfile path
+	logDir := path.Join(os.Getenv("ORBIT_HOME"), "logs")
+	createLogDirIfNecessary(logDir)
+	logFile := path.Join(logDir, "ski.log")
+	setupLogger(logFile, level)
 
-	file, err := setupLogger(logFile, level)
-	// No error -> a file was opened for writing, arrange for closing the file
-	if err == nil {
-		defer closeFile(file)
-	}
-
-	log.Infof("Started with args: %v\n", os.Args)
-	log.Debugln(&opts)
+	log.Infof("Started with args: %v", os.Args)
+	log.Debug(&opts)
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
-	log.Infof("Ended with args: %v\n", os.Args)
+	log.Infof("Ended with args: %v", os.Args)
 }
 
-func closeFile(file *os.File) {
-	file.Sync()
-	file.Close()
+func createLogDirIfNecessary(dir string) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
+			// can't do anything
+			os.Stderr.WriteString(fmt.Sprintf("%v", err))
+		}
+	}
 }
 
 func makeExecutor(opts *Opts) Executor {
