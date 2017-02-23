@@ -103,7 +103,7 @@ func (dataset *Dataset) makePrintView(keys map[int]string) {
 
 func (prettyTableFormatter *PrettyTableFormatter) cutMapToSlice(toCut map[string]bool) []string {
 	toReturn := make([]string, 0)
-	for i := 0; i < len(prettyTableFormatter.orderedKeys)-1; i++ {
+	for i := 0; i < len(prettyTableFormatter.orderedKeys); i++ {
 		toReturn = append(toReturn, prettyTableFormatter.orderedKeys[i])
 	}
 	log.Debugf("prettyTableFormatter.cutMapToSlice: %v\n", toReturn)

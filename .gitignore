@@ -12,6 +12,7 @@ changelog
 _obj
 _test
 bin/
+bintest/testFolder/
 ski
 pkg/
 build/
