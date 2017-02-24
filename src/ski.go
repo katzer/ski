@@ -62,9 +62,8 @@ func makeExecutor(opts *Opts) Executor {
 	executor := Executor{}
 	for _, planetID := range opts.planets {
 		planet := parseConnectionDetails(planetID)
-		valid := isValidPlanet(planet)
-		if !valid {
-			continue
+		if !isValidPlanet(planet) {
+			os.Exit(1) // TODO ask if it really is wanted.
 		}
 		planet.id = planetID
 		planet.outputStruct = StructuredOuput{planetID, "", 0}
@@ -79,13 +78,9 @@ func isValidPlanet(planet Planet) bool {
 	if !ok {
 		switch planet.planetType {
 		case webServer:
-			msg := "Usage of ski with web servers is not implemented"
-			os.Stderr.WriteString(msg)
-			log.Fatal(msg)
+			os.Stderr.WriteString("Usage of ski with web servers is not implemented")
 		default:
-			msg := "Unkown Type of target"
-			os.Stderr.WriteString(msg)
-			log.Fatal(msg)
+			os.Stderr.WriteString("Unkown Type of target")
 		}
 	}
 	// TODO: since we know what kind of action is attempted on this server
