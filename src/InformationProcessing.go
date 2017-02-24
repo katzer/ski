@@ -2,26 +2,26 @@ package main
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"os"
 	"os/exec"
 	"path"
 	"runtime"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
-func getFullConnectionDetails(skiString string) (string, string, string) {
-	var dbID string
-	split := strings.Split(skiString, "|")
-	connDet := split[len(split)-1]
-	user := strings.Split(connDet, "@")[0]
-	host := strings.TrimSuffix(strings.Split(connDet, "@")[1], "\n")
-
+func parseConnectionDetails(planetID string) Planet {
+	skiString := getFullSkiString(planetID)
+	var planet Planet
+	var dbID string // TODO what is it, why is it not set
+	tokens := strings.Split(skiString, skiDelim)
+	planet.planetType = tokens[0]
+	planet.user, planet.host = getUserAndHost(tokens[len(tokens)-1])
+	planet.dbID = dbID
 	log.Debugf("skiString: %s", skiString)
-	log.Debugf("user: %s", user)
-	log.Debugf("host: %s", host)
-	log.Debugf("dbID: %s", dbID)
-	return user, host, dbID
+	log.Debugf("planet: %v", planet)
+	return planet
 }
 
 /**
@@ -51,21 +51,8 @@ func getKeyPath() string {
 *	checks, wether a planet is supported by ski or not
  */
 func isSupported(planetType string) bool {
-	switch planetType {
-	case linuxServer:
-		return true
-	case database:
-		return true
-	case webServer:
-		os.Stderr.WriteString("Usage of ski with web servers is not implemented")
-		log.Fatalf("Usage of ski with web servers is not implemented")
-		return false
-	default:
-		os.Stderr.WriteString("Unkown Type of target")
-		log.Fatalf("Unkown Type of target")
-		return false
-
-	}
+	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
+	return supported[planetType]
 }
 
 /**
@@ -75,8 +62,7 @@ func isSupported(planetType string) bool {
 *	@return: The planets type
  */
 func getType(skiString string) string {
-
-	return strings.Split(skiString, "|")[0]
+	return strings.Split(skiString, skiDelim)[0]
 }
 
 /**
@@ -117,5 +103,5 @@ func getHost(connDet string) string {
 func getUserAndHost(connDet string) (string, string) {
 	// TODO: error handling or remove the func completely
 	toReturn := strings.Split(connDet, "@")
-	return toReturn[0], toReturn[1]
+	return toReturn[0], strings.TrimSuffix(toReturn[1], "\n")
 }

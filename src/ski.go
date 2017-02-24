@@ -60,20 +60,38 @@ func createLogDirIfNecessary(dir string) {
 func makeExecutor(opts *Opts) Executor {
 	log.Debugf("Function: makeExecutor")
 	executor := Executor{}
-	for _, entry := range opts.planets {
-		fullSkiString := getFullSkiString(entry)
-		var planet Planet
-		planet.planetType = getType(fullSkiString)
-		if !isSupported(planet.planetType) {
+	for _, planetID := range opts.planets {
+		planet := parseConnectionDetails(planetID)
+		valid := isValidPlanet(planet)
+		if !valid {
 			continue
 		}
-		planet.id = entry
-		planet.user, planet.host, planet.dbID = getFullConnectionDetails(fullSkiString)
-		planet.outputStruct = StructuredOuput{entry, "", 0}
+		planet.id = planetID
+		planet.outputStruct = StructuredOuput{planetID, "", 0}
 		executor.planets = append(executor.planets, planet)
 	}
 	log.Debugf("executor: %s", executor)
 	return executor
+}
+
+func isValidPlanet(planet Planet) bool {
+	ok := isSupported(planet.planetType)
+	if !ok {
+		switch planet.planetType {
+		case webServer:
+			msg := "Usage of ski with web servers is not implemented"
+			os.Stderr.WriteString(msg)
+			log.Fatal(msg)
+		default:
+			msg := "Unkown Type of target"
+			os.Stderr.WriteString(msg)
+			log.Fatal(msg)
+		}
+	}
+	// TODO: since we know what kind of action is attempted on this server
+	// we could check if the action is permitted on the current planet and
+	// if not mark it as not valid
+	return ok
 }
 
 /**

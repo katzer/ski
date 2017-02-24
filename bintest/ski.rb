@@ -210,11 +210,11 @@ class TestGoo < Test::Unit::TestCase
     assert_include error, 'Process exited with status 1', 'wrong error'
   end
 
-  def test_glibc_version
-    output, = Open3.capture2 "readelf -V #{BIN} | grep GLIBC_2.[1-9][0-9]"
-
-    assert_empty output
-  end
+#  def test_glibc_version
+#    output, = Open3.capture2 "readelf -V #{BIN} | grep GLIBC_2.[1-9][0-9]"
+#
+#    assert_empty output
+#  end
 end
 
 def check_error(output, error, test_name)
