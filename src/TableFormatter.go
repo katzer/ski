@@ -64,8 +64,8 @@ func cleanifyTable(toclean string) string {
 	for _, entry := range split {
 		row := strings.Split(entry, ", ")
 		if FAST {
-			row[0] = fmt.Sprintf("['%s'", strings.TrimSpace(strings.Split(row[1], "|")[2]))
-			row[1] = fmt.Sprintf("'%s']", strings.TrimSpace(strings.Split(row[1], "|")[3]))
+			row[0] = fmt.Sprintf("['%s'", strings.TrimSpace(strings.Split(row[1], tableDelim)[2]))
+			row[1] = fmt.Sprintf("'%s']", strings.TrimSpace(strings.Split(row[1], tableDelim)[3]))
 		}
 		if strings.Contains(row[0], "-[FAST") {
 			FAST = true

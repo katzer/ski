@@ -14,22 +14,16 @@ import (
 func parseConnectionDetails(planetID string) Planet {
 	skiString := getFullSkiString(planetID)
 	var planet Planet
-	var dbID string // TODO what is it, why is it not set
 	tokens := strings.Split(skiString, skiDelim)
 	planet.planetType = tokens[0]
-	planet.user, planet.host = getUserAndHost(tokens[len(tokens)-1])
-	planet.dbID = dbID
-	log.Debugf("skiString: %s", skiString)
-	log.Debugf("planet: %v", planet)
+	connectionURL := tokens[len(tokens)-1]
+	urlTokens := strings.Split(connectionURL, ":")
+	if len(urlTokens) > 1 {
+		planet.dbID = urlTokens[0]
+	}
+	planet.user, planet.host = getUserAndHost(connectionURL)
+	log.Debugf("skiString: %s, and planet parsed from it: %v", planet)
 	return planet
-}
-
-/**
-*	splits db details (dbID:user@host) and returns them as dbID,user@host
- */
-func procDBDets(dbDet string) (string, string) {
-	parts := strings.Split(dbDet, ":")
-	return parts[0], parts[1]
 }
 
 /**
@@ -56,16 +50,6 @@ func isSupported(planetType string) bool {
 }
 
 /**
-*	Returns the type of a given planet
-*	@params:
-*		id: The planets id
-*	@return: The planets type
- */
-func getType(skiString string) string {
-	return strings.Split(skiString, skiDelim)[0]
-}
-
-/**
 *	Returns the connection details to a given planet
 *	@params:
 *		id: The planets id
@@ -79,19 +63,8 @@ func getFullSkiString(id string) string {
 		os.Stderr.WriteString("Unknown target\n")
 		log.Fatalf(message)
 	}
-	return string(out)
-
-}
-
-/**
-*	Splits the given connectiondetails and returns the hostname
-*	@params:
-*		connDet: Connection details in following form: user@hostname
-*	@return: hostname
- */
-func getHost(connDet string) string {
-	toReturn := strings.Split(connDet, "@")
-	return toReturn[1]
+	// TODO fifa sends a newline
+	return strings.TrimSuffix(string(out), "\n")
 }
 
 /**
@@ -100,8 +73,13 @@ func getHost(connDet string) string {
 *		connDet: Connection details in following form: user@hostname
 *	@return: user
  */
-func getUserAndHost(connDet string) (string, string) {
-	// TODO: error handling or remove the func completely
-	toReturn := strings.Split(connDet, "@")
-	return toReturn[0], strings.TrimSuffix(toReturn[1], "\n")
+func getUserAndHost(connectionURL string) (string, string) {
+	var tokens []string
+	idx := strings.IndexRune(connectionURL, ':')
+	if idx < 0 {
+		tokens = strings.Split(connectionURL, "@")
+		return tokens[0], tokens[1]
+	}
+	tokens = strings.Split(connectionURL[idx+1:], "@")
+	return tokens[0], tokens[1]
 }
