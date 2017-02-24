@@ -3,6 +3,7 @@
 *.a
 *.so
 *.log
+bintest/orbit/logs/*.log.\d+
 tags
 orbit.key
 changelog
