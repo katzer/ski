@@ -10,25 +10,18 @@ import (
 	"strings"
 )
 
-func getFullConnectionDetails(planet string) (string, string) {
-	var dbID, connDet string
-	planetType := getType(planet)
-	connDet = getPlanetDetails(planet)
-	switch planetType {
-	case linuxServer:
-		dbID = ""
-	case database:
-		dbID, connDet = procDBDets(connDet)
-	case webServer:
-		message := "Usage of ski with web servers is not implemented"
-		os.Stderr.WriteString(message)
-		log.Warnln(message)
-	default:
-		message := fmt.Sprintf("Unkown Type of target %s: %s\n", planet, planetType)
-		os.Stderr.WriteString(message)
-		log.Warnln(message)
-	}
-	return dbID, connDet
+func getFullConnectionDetails(skiString string) (string, string, string) {
+	var dbID string
+	split := strings.Split(skiString, "|")
+	connDet := split[len(split)-1]
+	user := strings.Split(connDet, "@")[0]
+	host := strings.TrimSuffix(strings.Split(connDet, "@")[1], "\n")
+
+	log.Debugf("skiString: %s", skiString)
+	log.Debugf("user: %s", user)
+	log.Debugf("host: %s", host)
+	log.Debugf("dbID: %s", dbID)
+	return user, host, dbID
 }
 
 /**
@@ -55,25 +48,24 @@ func getKeyPath() string {
 }
 
 /**
-*	counts the supported planets in a list of planets
- */
-func countSupported(planets []string) int {
-	i := 0
-	for _, planet := range planets {
-		if getType(planet) == linuxServer {
-			i++
-		}
-	}
-	return i
-}
-
-/**
 *	checks, wether a planet is supported by ski or not
  */
-func isSupported(planet string) bool {
-	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
-	planetType := getType(planet)
-	return supported[planetType]
+func isSupported(planetType string) bool {
+	switch planetType {
+	case linuxServer:
+		return true
+	case database:
+		return true
+	case webServer:
+		os.Stderr.WriteString("Usage of ski with web servers is not implemented")
+		log.Fatalf("Usage of ski with web servers is not implemented")
+		return false
+	default:
+		os.Stderr.WriteString("Unkown Type of target")
+		log.Fatalf("Unkown Type of target")
+		return false
+
+	}
 }
 
 /**
@@ -82,15 +74,9 @@ func isSupported(planet string) bool {
 *		id: The planets id
 *	@return: The planets type
  */
-func getType(id string) string {
-	cmd := exec.Command("fifa", "-t", id)
-	out, err := cmd.CombinedOutput()
-	if err != nil {
-		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
-		os.Stderr.WriteString(message)
-		log.Fatalln(message)
-	}
-	return strings.TrimSpace(string(out))
+func getType(skiString string) string {
+
+	return strings.Split(skiString, "|")[0]
 }
 
 /**
@@ -99,18 +85,15 @@ func getType(id string) string {
 *		id: The planets id
 *	@return: The connection details to the planet
  */
-func getPlanetDetails(id string) string {
+func getFullSkiString(id string) string {
 	cmd := exec.Command("fifa", "-f=ski", id)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
-		os.Stderr.WriteString(message)
-		log.Fatalln(message)
+		os.Stderr.WriteString("Unkown target")
+		log.Fatalf(message)
 	}
-	if len(strings.Split(string(out), "|")) >= 4 {
-		return strings.TrimSpace(strings.Split(string(out), "|")[3])
-	}
-	return ""
+	return string(out)
 
 }
 

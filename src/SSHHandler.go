@@ -16,6 +16,8 @@ import (
 *		cmd: command to be executed
  */
 func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts *Opts) {
+	log.Debugf("function: execCommand")
+	log.Debugf("user, host : %s %s", planet.user, planet.host)
 	keyPath := getKeyPath()
 
 	ssh := &easyssh.MakeConfig{
@@ -72,6 +74,8 @@ func uploadFile(user string, hostname string, opts *Opts) {
 *		scriptPath: Path to script
  */
 func execScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
+	log.Debugf("function: execScript")
+	log.Debugf("user, host : |%s| |%s|", planet.user, planet.host)
 	uploadFile(planet.user, planet.host, opts)
 	placeholder := StructuredOuput{}
 	scriptName := opts.scriptName

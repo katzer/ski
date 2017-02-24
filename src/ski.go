@@ -58,21 +58,21 @@ func createLogDirIfNecessary(dir string) {
 }
 
 func makeExecutor(opts *Opts) Executor {
+	log.Debugf("Function: makeExecutor")
 	executor := Executor{}
-	var planet Planet
 	for _, entry := range opts.planets {
-		var user, host, dbID, connDet string
-		dbID, connDet = getFullConnectionDetails(entry)
-		planetType := getType(entry)
-		planet.outputStruct.planet = entry
-		id := entry
-		if isSupported(entry) {
-			user, host = getUserAndHost(connDet)
-		} else {
+		fullSkiString := getFullSkiString(entry)
+		var planet Planet
+		planet.planetType = getType(fullSkiString)
+		if !isSupported(planet.planetType) {
 			continue
 		}
-		executor.planets = append(executor.planets, Planet{id, user, host, planetType, dbID, StructuredOuput{id, "", 0}})
+		planet.id = entry
+		planet.user, planet.host, planet.dbID = getFullConnectionDetails(fullSkiString)
+		planet.outputStruct = StructuredOuput{entry, "", 0}
+		executor.planets = append(executor.planets, planet)
 	}
+	log.Debugf("executor: %s", executor)
 	return executor
 }
 

@@ -5,33 +5,47 @@ if [ "$1" == "-t" ]
   if [ "$2" == "app" ] || [ "$2" == "unauthorized" ] || [ "$2" == "offline" ]
     then
     echo server
+    exit 0
   fi
   if [ "$2" == "db" ]
     then
     echo db
+    exit 0
   fi
   if [ "$2" == "web" ]
     then
     echo web
+    exit 0
   fi
 fi
 
 if [ "$1" == "-f=ski" ]
   then
-  if [ "$2" == "app" ] || [ "$2" == "web" ]
+  if [ "$2" == "app" ]
     then
     echo "server|app-package-1|App-Package 1|"`whoami`"@localhost"
+    exit 0
+  fi
+  if  [ "$2" == "web" ]
+    then
+    echo "web|app-package-1|App-Package 1|dbdb:"`whoami`"@localhost"
+    exit 0
   fi
   if  [ "$2" == "db" ]
     then
     echo "server|app-package-1|App-Package 1|dbdb:"`whoami`"@localhost"
+    exit 0
   fi
   if [ "$2" == "unauthorized" ]
     then
-    echo user@localhost
+    echo "unknown|unknown|unknown|unknown"
+    exit 1
   fi
   if [ "$2" == "offline" ]
     then
-    echo user@testhost
+    echo "unknown|unknown|unknown|unknown"
+    exit 1
   fi
 fi
+echo "unknown|unknown|unknown|unknown"
+exit 1

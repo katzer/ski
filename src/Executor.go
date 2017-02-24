@@ -12,6 +12,7 @@ type Executor struct {
 }
 
 func (executor *Executor) execMain(opts *Opts) {
+	log.Debugf("Function: execMain")
 	outputList := make([]StructuredOuput, len(executor.planets))
 	var wg sync.WaitGroup
 

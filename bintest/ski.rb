@@ -41,7 +41,7 @@ class TestGoo < Test::Unit::TestCase
     output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"',
                                            '-d=true', 'web')
     check_no_error(output, error, 'test_web')
-    assert_true status.success?, 'Process did not exit cleanly'
+    assert_false status.success?, 'Process did exit cleanly'
     assert_include error, 'Usage of ski with web servers is not implemented'
   end
 
@@ -171,17 +171,16 @@ class TestGoo < Test::Unit::TestCase
     output, error, status = Open3.capture3(PATH, BIN, '-c="ls -al"', 'app',
                                            '-d=true', '-p')
     check_no_error(output, error, 'wrong_flag_order')
-    assert_true status.success?, 'Process did exit cleanly'
-    assert_include output, 'total', 'return was not correct'
-    assert_include error, 'Unkown Type of target', 'error was not correct'
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, 'Unkown target', 'error was not correct'
   end
 
   def test_nonexistent_planet
     output, error, status = Open3.capture3(PATH, BIN, '-c="ls -al"', '-d=true',
                                            'pep')
     check_no_error(output, error, 'nonexistent_planet')
-    assert_true status.success?, 'Process did not exit cleanly'
-    assert_include error, 'Unkown Type of target', 'error was not correct'
+    assert_false status.success?, 'Process did exit cleanly'
+    assert_include error, 'Unkown target', 'error was not correct'
   end
 
   def test_no_template
