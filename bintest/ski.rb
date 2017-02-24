@@ -172,7 +172,7 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', '-p')
     check_no_error(output, error, 'wrong_flag_order')
     assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'Unkown target', 'error was not correct'
+    assert_include error, 'Unknown target', 'error was not correct'
   end
 
   def test_nonexistent_planet
@@ -180,7 +180,7 @@ class TestGoo < Test::Unit::TestCase
                                            'pep')
     check_no_error(output, error, 'nonexistent_planet')
     assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'Unkown target', 'error was not correct'
+    assert_include error, 'Unknown target', 'error was not correct'
   end
 
   def test_no_template
