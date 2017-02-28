@@ -59,6 +59,12 @@ func (opts *Opts) procArgs(args []string) {
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
 	flag.Parse()
 
+	validateArgsCount(opts)
+	if opts.version {
+		printVersion()
+		os.Exit(0)
+	}
+
 	validateCommandAndScript(opts.scriptName, opts.command)
 
 	planets := flag.Args()
@@ -69,9 +75,6 @@ func (opts *Opts) procArgs(args []string) {
 	for _, argument := range planets {
 		opts.planets = append(opts.planets, argument)
 	}
-
-	validateArgsCount(opts)
-
 }
 
 /**
@@ -90,10 +93,13 @@ func validateCommandAndScript(scriptname string, command string) {
 *	Checks if there are enough of the correct arguments to run ski
  */
 func validateArgsCount(opts *Opts) {
-	if len(os.Args) == 1 {
-		opts.help = true
-	}
-	if !opts.help && opts.scriptName == "" && !opts.version && opts.command == "" {
-		opts.help = true
+	tooFew := len(os.Args) == 1
+	// TODO Check if flags package removes the leading and trailing white spaces.
+	scriptEmpty := len(opts.scriptName) == 0
+	cmdEmpty := len(opts.command) == 0
+	versionNotWanted := !opts.version
+	if tooFew || scriptEmpty && cmdEmpty && versionNotWanted {
+		printUsage()
+		os.Exit(0)
 	}
 }

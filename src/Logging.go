@@ -62,3 +62,12 @@ func logExecCommand(command string, planet *Planet, strucOut *StructuredOuput) {
 	log.Debugf("strucOut: %v\n", strucOut)
 	log.Debugf("planet: %s\n maxLineLength: %d\n", strucOut.planet, strucOut.maxOutLength)
 }
+
+func createLogDirIfNecessary(dir string) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
+			// can't do anything
+			os.Stderr.WriteString(fmt.Sprintf("%v", err))
+		}
+	}
+}

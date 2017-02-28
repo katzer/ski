@@ -14,6 +14,13 @@ type Planet struct {
 	outputStruct StructuredOuput
 }
 
+// StructuredOuput ...
+type StructuredOuput struct {
+	planet       string
+	output       string
+	maxOutLength int
+}
+
 func (planet *Planet) execute(opts *Opts) {
 	if planet.planetType == database {
 		planet.executeDatabase(opts)

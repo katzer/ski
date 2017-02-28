@@ -2,39 +2,21 @@ package main
 
 import (
 	"fmt"
-
 	"os"
-	"os/exec"
 	"path"
-	"runtime"
 
 	log "github.com/Sirupsen/logrus"
 )
-
-// StructuredOuput ...
-type StructuredOuput struct {
-	planet       string
-	output       string
-	maxOutLength int
-}
 
 func main() {
 	opts := Opts{}
 	opts.procArgs(os.Args)
 
-	if opts.help {
-		printUsage()
-		os.Exit(0)
-	}
-	if opts.version {
-		printVersion()
-		os.Exit(0)
-	}
-
 	level := log.InfoLevel
 	if opts.debug {
 		level = log.DebugLevel
 	}
+
 	// Default logfile path
 	logDir := path.Join(os.Getenv("ORBIT_HOME"), "logs")
 	createLogDirIfNecessary(logDir)
@@ -46,15 +28,6 @@ func main() {
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
 	log.Infof("Ended with args: %v", os.Args)
-}
-
-func createLogDirIfNecessary(dir string) {
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
-			// can't do anything
-			os.Stderr.WriteString(fmt.Sprintf("%v", err))
-		}
-	}
 }
 
 func makeExecutor(opts *Opts) Executor {
@@ -105,52 +78,4 @@ func printUsage() {
 	-d    Show extended debug informations, set logging level to debug
 `
 	fmt.Println(usage)
-}
-
-func getOS() string {
-	switch runtime.GOOS {
-	case "windows":
-		return "Windows"
-	case "linux":
-		return "Linux"
-	case "darwin":
-		return "MacOS"
-	default:
-		return "could not determine OS"
-	}
-}
-
-func getArch() string {
-	switch runtime.GOARCH {
-	case "amd64":
-		return "64bit"
-	case "386":
-		return "32bit"
-	default:
-		return "could not determine architecture"
-	}
-}
-
-func getOSArch() string {
-	switch runtime.GOOS {
-	case "linux":
-		out, err := exec.Command("uname", "-m").Output()
-		if err != nil {
-			fmt.Println("error occured")
-			fmt.Printf("%s", err)
-		}
-		return string(out)
-	case "windows":
-		out, err := exec.Command("if exist \"%ProgramFiles(x86)%\" echo 64-bit").Output()
-		if err != nil {
-			fmt.Println("error occured")
-			fmt.Printf("%s", err)
-		}
-		if string(out) == "64-bit" {
-			return "x86_64"
-		}
-		return "i686"
-	default:
-		return "could not determine Operating system"
-	}
 }
