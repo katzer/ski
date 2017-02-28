@@ -60,5 +60,4 @@ func logExecCommand(command string, planet *Planet, strucOut *StructuredOuput) {
 	log.Debugf("orbit key: %s\n", os.Getenv("ORBIT_KEY"))
 	log.Debugf("command: %s\n", command)
 	log.Debugf("strucOut: %v\n", strucOut)
-	log.Debugf("planet: %s\n maxLineLength: %d\n", strucOut.planet, strucOut.maxOutLength)
 }

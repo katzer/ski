@@ -3,22 +3,21 @@ package main
 import (
 	"bytes"
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
 	"strings"
-
-	log "github.com/Sirupsen/logrus"
 )
 
 // TableFormatter prints input in tabular format
 type TableFormatter struct {
 }
 
-func (tableFormatter *TableFormatter) format(toFormat string, opts *Opts) string {
-	tableFormatter.writeTmpTable(toFormat)
-	jsonString := convertToJSON(tableFormatter.executeTextFSM(toFormat, opts))
+func (tableFormatter *TableFormatter) format(planet Planet, opts *Opts) string {
+	tableFormatter.writeTmpTable(planet.outputStruct.output)
+	jsonString := convertToJSON(tableFormatter.executeTextFSM(planet, opts))
 	tableFormatter.deleteTmpTable()
 	return strings.Replace(jsonString, "'", "\"", -1)
 
@@ -80,7 +79,7 @@ func convertToJSON(toConvert string) string {
 	return fmt.Sprintf("[\n%s]\n", strings.Replace(toConvert, "]\n[", "],\n[", -1))
 }
 
-func (tableFormatter *TableFormatter) executeTextFSM(toFormat string, opts *Opts) string {
+func (tableFormatter *TableFormatter) executeTextFSM(planet Planet, opts *Opts) string {
 	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
 	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
 	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, textFSMName)
@@ -95,7 +94,7 @@ func (tableFormatter *TableFormatter) executeTextFSM(toFormat string, opts *Opts
 		full := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
 		os.Stderr.WriteString(full)
 		log.Errorln(full)
-		log.Fatalf("Format: %s\n", toFormat)
+		log.Fatalf("Format: %s\n", planet.outputStruct.output)
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
 	return formattedString

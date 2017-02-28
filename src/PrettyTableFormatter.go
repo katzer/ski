@@ -4,6 +4,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/olekukonko/tablewriter"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -26,21 +27,40 @@ func (prettyTableFormatter *PrettyTableFormatter) init() {
 	prettyTableFormatter.keys = make(map[string]bool)
 	prettyTableFormatter.orderedKeys = make(map[int]string)
 	prettyTableFormatter.sets = make([]Dataset, 0)
+	prettyTableFormatter.addKey("Nr.")
+	prettyTableFormatter.addKey("Planet-ID")
+	prettyTableFormatter.addKey("Planet-Name")
+	prettyTableFormatter.addKey("Planet-Type")
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) format(toFormat string, opts *Opts) {
+func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Opts) {
 	var decodedJSON = make([][]string, 0)
-	decodedJSON = decode(toFormat)
-	normalizedTable := prettyTableFormatter.normalizeTable(decodedJSON)
-	var set Dataset
-	set.data = normalizedTable
+	decodedJSON = decode(planet.outputStruct.output)
+	initTable := prettyTableFormatter.addMetadata(planet)
+	fullTable := prettyTableFormatter.normalizeTable(initTable, decodedJSON)
+	set := Dataset{fullTable, nil}
+	log.Debugf("prettyTableFormatter.format()")
+	log.Debugf("prettyTableFormatter.keys %v", prettyTableFormatter.keys)
+	log.Debugf("prettyTableFormatter.keys length %i", len(prettyTableFormatter.keys))
+	log.Debugf("fullTable %v", fullTable)
+	log.Debugf("fullTable length %i", len(fullTable))
 	prettyTableFormatter.sets = append(prettyTableFormatter.sets, set)
-
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) normalizeTable(toNormalize [][]string) map[string]string {
-	var toReturn = make(map[string]string)
+func (prettyTableFormatter *PrettyTableFormatter) addMetadata(planet Planet) map[string]string {
+	var toComplete = make(map[string]string)
+	prettyTableFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
+	prettyTableFormatter.addEntry("Planet-ID", planet.id, toComplete)
+	prettyTableFormatter.addEntry("Planet-Name", planet.name, toComplete)
+	prettyTableFormatter.addEntry("Planet-Type", planet.planetType, toComplete)
+	return toComplete
+}
+
+func (prettyTableFormatter *PrettyTableFormatter) normalizeTable(toReturn map[string]string, toNormalize [][]string) map[string]string {
 	keys := toNormalize[0][:]
+	log.Debugf("prettyTableFormatter.normalizeTable()")
+	log.Debugf(".keys %v", keys)
+	log.Debugf(".keys length %i", len(keys))
 	values := toNormalize[1:][:]
 	skip := false
 	for _, entry := range values {
@@ -84,21 +104,16 @@ func (prettyTableFormatter *PrettyTableFormatter) fillSets() {
 		set.makePrintView(prettyTableFormatter.orderedKeys)
 		prettyTableFormatter.sets[i] = set
 	}
-	log.Debugf("prettyTableFormatter.fillSets dataset.printview: %v\n", prettyTableFormatter.sets[0].printView)
 }
 
 func (dataset *Dataset) makePrintView(keys map[int]string) {
-	for i := 0; i < len(keys)-1; i++ {
+	for i := 0; i <= len(keys)-1; i++ {
 		if dataset.data[keys[i]] == "" {
 			dataset.printView = append(dataset.printView, "-")
 			continue
 		}
 		dataset.printView = append(dataset.printView, dataset.data[keys[i]])
 	}
-	log.Debugf("prettyTableFormatter.makePrintView keys: %v\n", keys)
-	log.Debugf("prettyTableFormatter.makePrintView dataset.data: %v\n", dataset.data)
-	log.Debugf("prettyTableFormatter.makePrintView dataset.data len: %d\n", len(dataset.data))
-	log.Debugf("prettyTableFormatter.makePrintView dataset.printview: %v\n", dataset.printView)
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) cutMapToSlice(toCut map[string]bool) []string {
@@ -106,7 +121,6 @@ func (prettyTableFormatter *PrettyTableFormatter) cutMapToSlice(toCut map[string
 	for i := 0; i < len(prettyTableFormatter.orderedKeys); i++ {
 		toReturn = append(toReturn, prettyTableFormatter.orderedKeys[i])
 	}
-	log.Debugf("prettyTableFormatter.cutMapToSlice: %v\n", toReturn)
 	return toReturn
 }
 
@@ -116,8 +130,10 @@ func (prettyTableFormatter *PrettyTableFormatter) printTable() {
 	table.SetHeader(prettyTableFormatter.cutMapToSlice(prettyTableFormatter.keys))
 
 	for _, set := range prettyTableFormatter.sets {
-		log.Debugf("prettyTable.printTable settoappend: %v\n", set.printView)
 		table.Append(set.printView)
+		log.Debugf("prettyTableFormatter.printTable()")
+		log.Debugf("set.printView %v", set.printView)
+		log.Debugf("set.printView length %i", len(set.printView))
 	}
 
 	table.Render() // Send output

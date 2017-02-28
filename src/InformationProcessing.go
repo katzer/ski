@@ -17,6 +17,7 @@ func parseConnectionDetails(planetID string) Planet {
 	var dbID string // TODO what is it, why is it not set
 	tokens := strings.Split(skiString, skiDelim)
 	planet.planetType = tokens[0]
+	planet.name = tokens[2]
 	planet.user, planet.host = getUserAndHost(tokens[len(tokens)-1])
 	planet.dbID = dbID
 	log.Debugf("skiString: %s", skiString)

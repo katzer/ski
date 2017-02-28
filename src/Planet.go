@@ -4,15 +4,19 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
+// codebeat:disable[TOO_MANY_IVARS]
 // Planet contains all Informations of one server
 type Planet struct {
 	id           string
+	name         string
 	user         string
 	host         string
 	planetType   string
 	dbID         string
-	outputStruct StructuredOuput
+	outputStruct *StructuredOuput
 }
+
+// codebeat:enable[TOO_MANY_IVARS]
 
 func (planet *Planet) execute(opts *Opts) {
 	if planet.planetType == database {
@@ -24,18 +28,18 @@ func (planet *Planet) execute(opts *Opts) {
 
 func (planet *Planet) executeDatabase(opts *Opts) {
 	if opts.scriptName != "" {
-		execDBScript(planet, &planet.outputStruct, opts)
+		execDBScript(planet, planet.outputStruct, opts)
 	} else {
-		execDBCommand(planet, &planet.outputStruct, opts)
+		execDBCommand(planet, planet.outputStruct, opts)
 	}
 }
 
 func (planet *Planet) executeLinux(opts *Opts) {
 	if opts.scriptName != "" {
-		execScript(planet, &planet.outputStruct, opts)
+		execScript(planet, planet.outputStruct, opts)
 	} else {
 		planet.planetInfo(opts)
-		execCommand(opts.command, planet, &(planet.outputStruct), opts)
+		execCommand(opts.command, planet, planet.outputStruct, opts)
 		planet.planetInfo(opts)
 	}
 }

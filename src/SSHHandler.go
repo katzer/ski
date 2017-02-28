@@ -38,7 +38,6 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 	}
 	cleanedOut := cleanProfileLoadedOutput(out, opts)
 	strucOut.output = cleanedOut
-	strucOut.maxOutLength = 0
 	logExecCommand(command, planet, strucOut)
 }
 
@@ -74,6 +73,7 @@ func uploadFile(user string, hostname string, opts *Opts) {
 *		scriptPath: Path to script
  */
 func execScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
+
 	log.Debugf("function: execScript")
 	log.Debugf("user, host : |%s| |%s|", planet.user, planet.host)
 	uploadFile(planet.user, planet.host, opts)

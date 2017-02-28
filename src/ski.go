@@ -13,9 +13,9 @@ import (
 
 // StructuredOuput ...
 type StructuredOuput struct {
-	planet       string
-	output       string
-	maxOutLength int
+	planet   string
+	output   string
+	position int
 }
 
 func main() {
@@ -60,14 +60,14 @@ func createLogDirIfNecessary(dir string) {
 func makeExecutor(opts *Opts) Executor {
 	log.Debugf("Function: makeExecutor")
 	executor := Executor{}
-	for _, planetID := range opts.planets {
+	for i, planetID := range opts.planets {
 		planet := parseConnectionDetails(planetID)
 		valid := isValidPlanet(planet)
 		if !valid {
 			continue
 		}
 		planet.id = planetID
-		planet.outputStruct = StructuredOuput{planetID, "", 0}
+		planet.outputStruct = &StructuredOuput{planetID, "", i}
 		executor.planets = append(executor.planets, planet)
 	}
 	log.Debugf("executor: %s", executor)
