@@ -40,4 +40,11 @@ func execDBScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
 	removeCommand := fmt.Sprintf("rm ~/sql/%s", scriptName)
 	execCommand(queryString, planet, strucOut, opts)
 	execCommand(removeCommand, planet, &placeholder, opts)
+	cleanDBMetaData(strucOut)
+}
+
+func cleanDBMetaData(strucOut *StructuredOuput) {
+	split := strings.Split(strucOut.output, "\n")
+	reduced := split[1:(len(split) - 3)]
+	strucOut.output = strings.Join(reduced, "\n")
 }

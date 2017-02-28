@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// codebeat:disable[TOO_MANY_IVARS]
 // Opts ...
 type Opts struct {
 	debugFlag   bool
@@ -22,6 +23,8 @@ type Opts struct {
 	template    string
 	planets     []string
 }
+
+// codebeat:enable[TOO_MANY_IVARS]
 
 func (opts *Opts) String() string {
 	template := `opts : {
