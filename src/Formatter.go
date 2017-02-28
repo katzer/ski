@@ -21,7 +21,7 @@ func (formatter *Formatter) init() {
 
 func (formatter *Formatter) format(toPrint StructuredOuput, counter int, opts *Opts) string {
 	var formatted string
-	if !opts.prettyFlag {
+	if !opts.pretty {
 		if opts.template != "" {
 			formatted = formatter.tableFormatter.format(toPrint.output, opts)
 		} else {

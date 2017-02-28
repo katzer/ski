@@ -22,17 +22,17 @@ func main() {
 	opts := Opts{}
 	opts.procArgs(os.Args)
 
-	if opts.helpFlag {
+	if opts.help {
 		printUsage()
 		os.Exit(0)
 	}
-	if opts.versionFlag {
+	if opts.version {
 		printVersion()
 		os.Exit(0)
 	}
 
 	level := log.InfoLevel
-	if opts.debugFlag {
+	if opts.debug {
 		level = log.DebugLevel
 	}
 	// Default logfile path

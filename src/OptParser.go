@@ -4,32 +4,33 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"os"
+
+	log "github.com/Sirupsen/logrus"
 
 	"strings"
 )
 
 // Opts ...
 type Opts struct {
-	debugFlag   bool
-	helpFlag    bool
-	loadFlag    bool
-	prettyFlag  bool
-	versionFlag bool
-	command     string
-	scriptName  string
-	template    string
-	planets     []string
+	debug      bool
+	help       bool
+	load       bool
+	pretty     bool
+	version    bool
+	command    string
+	scriptName string
+	template   string
+	planets    []string
 }
 
 func (opts *Opts) String() string {
 	template := `opts : {
-	debugFlag: %t
-	helpFlag: %t
-	loadFlag: %t
-	prettyFlag: %t
-	versionFlag: %t
+	debug: %t
+	help: %t
+	load: %t
+	pretty: %t
+	version: %t
 	command: %s
 	scriptName: %s
 	planets: %v
@@ -37,22 +38,22 @@ func (opts *Opts) String() string {
 `
 
 	return fmt.Sprintf(template,
-		opts.debugFlag,
-		opts.helpFlag,
-		opts.loadFlag,
-		opts.prettyFlag,
-		opts.versionFlag,
+		opts.debug,
+		opts.help,
+		opts.load,
+		opts.pretty,
+		opts.version,
 		opts.command,
 		opts.scriptName,
 		opts.planets)
 }
 
 func (opts *Opts) procArgs(args []string) {
-	flag.BoolVar(&opts.helpFlag, "h", false, "help")
-	flag.BoolVar(&opts.prettyFlag, "p", false, "prettyprint")
-	flag.BoolVar(&opts.debugFlag, "d", false, "verbose")
-	flag.BoolVar(&opts.loadFlag, "l", false, "ssh profile loading")
-	flag.BoolVar(&opts.versionFlag, "v", false, "version")
+	flag.BoolVar(&opts.help, "h", false, "help")
+	flag.BoolVar(&opts.pretty, "p", false, "prettyprint")
+	flag.BoolVar(&opts.debug, "d", false, "verbose")
+	flag.BoolVar(&opts.load, "l", false, "ssh profile loading")
+	flag.BoolVar(&opts.version, "v", false, "version")
 	flag.StringVar(&opts.template, "t", "", "filename of template")
 	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
@@ -90,9 +91,9 @@ func validateCommandAndScript(scriptname string, command string) {
  */
 func validateArgsCount(opts *Opts) {
 	if len(os.Args) == 1 {
-		opts.helpFlag = true
+		opts.help = true
 	}
-	if !opts.helpFlag && opts.scriptName == "" && !opts.versionFlag && opts.command == "" {
-		opts.helpFlag = true
+	if !opts.help && opts.scriptName == "" && !opts.version && opts.command == "" {
+		opts.help = true
 	}
 }
