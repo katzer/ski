@@ -63,15 +63,10 @@ func (opts *Opts) String() string {
 }
 
 func (opts *Opts) postProcessing() {
-
+	// TODO ask what is happening here
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
 	opts.template = strings.TrimSuffix(strings.TrimPrefix(opts.template, "\""), "\"")
 	opts.scriptName = strings.TrimSuffix(strings.TrimPrefix(opts.scriptName, "\""), "\"")
-
-	// planets := flag.Args()
-	// for _, argument := range planets {
-	// 	opts.planets = append(opts.planets, argument)
-	// }
 }
 
 func validate(opts *Opts) {

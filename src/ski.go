@@ -21,11 +21,6 @@ func parseOptions(opts *Opts) {
 	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
 	flag.Parse()
-
-	// planetIDs := flag.Args()
-	// for _, id := range planetIDs {
-	// 	opts.planets = append(opts.planets, id)
-	// }
 	opts.planets = flag.Args()
 }
 
