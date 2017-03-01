@@ -11,22 +11,37 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-func parseOptions(opts *Opts) {
-	flag.BoolVar(&opts.help, "h", false, "help")
-	flag.BoolVar(&opts.pretty, "p", false, "prettyprint")
-	flag.BoolVar(&opts.debug, "d", false, "verbose")
-	flag.BoolVar(&opts.load, "l", false, "ssh profile loading")
-	flag.BoolVar(&opts.version, "v", false, "version")
-	flag.StringVar(&opts.template, "t", "", "filename of template")
-	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
-	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
+func parseOptions() Opts {
+	var help, pretty, debug, load, version bool
+	var template, scriptName, command string
+
+	flag.BoolVar(&help, "h", false, "help")
+	flag.BoolVar(&pretty, "p", false, "prettyprint")
+	flag.BoolVar(&debug, "d", false, "verbose")
+	flag.BoolVar(&load, "l", false, "ssh profile loading")
+	flag.BoolVar(&version, "v", false, "version")
+	flag.StringVar(&template, "t", "", "filename of template")
+	flag.StringVar(&scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
+	flag.StringVar(&command, "c", "", "command to be executed in quotes")
 	flag.Parse()
-	opts.planets = flag.Args()
+
+	opts := Opts{
+		help:       help,
+		pretty:     pretty,
+		debug:      debug,
+		load:       load,
+		version:    version,
+		template:   template,
+		scriptName: scriptName,
+		command:    command,
+		planets:    flag.Args(),
+	}
+
+	return opts
 }
 
 func main() {
-	opts := Opts{}
-	parseOptions(&opts)
+	opts := parseOptions()
 	validate(&opts)
 	opts.postProcessing()
 
