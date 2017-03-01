@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 	"os"
 
@@ -63,43 +62,33 @@ func (opts *Opts) String() string {
 		opts.planets)
 }
 
-func (opts *Opts) procArgs(args []string) {
-	flag.BoolVar(&opts.help, "h", false, "help")
-	flag.BoolVar(&opts.pretty, "p", false, "prettyprint")
-	flag.BoolVar(&opts.debug, "d", false, "verbose")
-	flag.BoolVar(&opts.load, "l", false, "ssh profile loading")
-	flag.BoolVar(&opts.version, "v", false, "version")
-	flag.StringVar(&opts.template, "t", "", "filename of template")
-	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
-	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
-	flag.Parse()
+func (opts *Opts) postProcessing() {
 
-	validateArgsCount(opts)
-	if opts.version {
-		printVersion()
-		os.Exit(0)
-	}
-
-	validateCommandAndScript(opts.scriptName, opts.command)
-
-	planets := flag.Args()
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
 	opts.template = strings.TrimSuffix(strings.TrimPrefix(opts.template, "\""), "\"")
 	opts.scriptName = strings.TrimSuffix(strings.TrimPrefix(opts.scriptName, "\""), "\"")
 
-	for _, argument := range planets {
-		opts.planets = append(opts.planets, argument)
-	}
+	// planets := flag.Args()
+	// for _, argument := range planets {
+	// 	opts.planets = append(opts.planets, argument)
+	// }
+}
+
+func validate(opts *Opts) {
+	validateArgsCount(opts)
+	validateCommandAndScript(opts)
 }
 
 /**
 *	Checks if theres a command and a script at the same time
  */
-func validateCommandAndScript(scriptname string, command string) {
-	if !(scriptname == "") && !(command == "") {
+func validateCommandAndScript(opts *Opts) {
+	scriptNotEmpty := len(opts.scriptName) > 0
+	cmdNotEmpty := len(opts.command) > 0
+	if scriptNotEmpty && cmdNotEmpty {
 		message := "providing both a script AND a command is not possible"
 		err := errors.New(message)
-		os.Stderr.WriteString(fmt.Sprintf("%s\nAddInf: %s\n", err, message))
+		fmt.Fprintf(os.Stderr, "%s\nAddInf: %s\n", err, message)
 		log.Fatal(err)
 	}
 }
@@ -112,8 +101,11 @@ func validateArgsCount(opts *Opts) {
 	// TODO Check if flags package removes the leading and trailing white spaces.
 	scriptEmpty := len(opts.scriptName) == 0
 	cmdEmpty := len(opts.command) == 0
-	versionNotWanted := !opts.version
-	if tooFew || scriptEmpty && cmdEmpty && versionNotWanted {
+	if opts.version {
+		printVersion()
+		os.Exit(0)
+	}
+	if tooFew || scriptEmpty && cmdEmpty {
 		printUsage()
 		os.Exit(0)
 	}

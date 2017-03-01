@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -10,9 +11,28 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
+func parseOptions(opts *Opts) {
+	flag.BoolVar(&opts.help, "h", false, "help")
+	flag.BoolVar(&opts.pretty, "p", false, "prettyprint")
+	flag.BoolVar(&opts.debug, "d", false, "verbose")
+	flag.BoolVar(&opts.load, "l", false, "ssh profile loading")
+	flag.BoolVar(&opts.version, "v", false, "version")
+	flag.StringVar(&opts.template, "t", "", "filename of template")
+	flag.StringVar(&opts.scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
+	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
+	flag.Parse()
+
+	planetIDs := flag.Args()
+	for _, id := range planetIDs {
+		opts.planets = append(opts.planets, id)
+	}
+}
+
 func main() {
 	opts := Opts{}
-	opts.procArgs(os.Args)
+	parseOptions(&opts)
+	validate(&opts)
+	opts.postProcessing()
 
 	level := log.InfoLevel
 	if opts.debug {
