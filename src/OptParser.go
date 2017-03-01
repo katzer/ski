@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	log "github.com/Sirupsen/logrus"
@@ -12,21 +14,6 @@ import (
 
 // Opts ...
 type Opts struct {
-	Debug      bool
-	Help       bool
-	Load       bool
-	Pretty     bool
-	Version    bool
-	Command    string
-	ScriptName string
-	Template   string
-	Planets    []string
-}
-
-// Task ...
-// Note: will replace Opts above or Opts will look like this.
-// TODO: refactoring pending.
-type Task struct {
 	Debug      bool     `json:"debug"`
 	Help       bool     `json:"help"`
 	Load       bool     `json:"load"`
@@ -106,4 +93,24 @@ func validateArgsCount(opts *Opts) {
 		printUsage()
 		os.Exit(0)
 	}
+}
+
+// creates a task from a json file
+func createATaskFromJobFile(jsonFile string) (opts Opts) {
+	job := Opts{}
+	bytes, err := ioutil.ReadFile(jsonFile)
+	if err != nil {
+		log.Fatalf("Couldn't open job file: %s", jsonFile)
+	}
+
+	err = json.Unmarshal(bytes, &job)
+	if err != nil {
+		log.Fatalf("Error parsing job json file: %s", jsonFile)
+	}
+
+	log.Debugf("Read a task from %s", jsonFile)
+	log.Debugln()
+	log.Debugf("Unmarshalled %v", job)
+	log.Debugln()
+	return job
 }

@@ -2,54 +2,40 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path"
 	"testing"
 )
 
-var toUnMarshall string
-var data []byte
-var absPath string
+// Test to see if the flags in job file override/ignore
+// the ones given as cmdline args
+func TestParseOptions(t *testing.T) {
+	// create the json file in tmp folder
+	jsonFile := setupOptParserTest()
+	jobOption := fmt.Sprintf("-j=%s", jsonFile)
+	os.Args = []string{"ski", jobOption, "-d=false", "-v=true", "-c=\"ls -la ${HOME}\""}
+	fmt.Printf("TestParseOptionsWithJobFile :: os.Args: %v\n", os.Args)
+	opts := parseOptions()
+	fmt.Printf("TestParseOptionsWithJobFile :: opts: %s\n", opts.String())
 
-func setup() {
-	toUnMarshall = "job.js"
-	json := `{
-  "debug"      : true,
-  "help"       : true,
-  "load"       : true,
-  "version"    : false,
-  "command"    : "whatever",
-  "scriptName" : "doink",
-  "template"   : "not_a_good_one",
-  "planets"    : [ "1","2","3"]
-}
-`
-	data = []byte(json)
-	absPath = path.Join(os.TempDir(), toUnMarshall)
-	err := ioutil.WriteFile(absPath, data, 0644)
-	if err != nil {
-		panic(err)
+	errors := make([]string, 0)
+	if !opts.Debug {
+		errors = append(errors, "Debug flag was set through the cmdline option.")
 	}
-}
+	if opts.Version {
+		errors = append(errors, "Version flag set through the cmdline option.")
+	}
+	if opts.Command != "whatever" {
+		msg := fmt.Sprintf("Command was not parsed correctly: %s", opts.Command)
+		errors = append(errors, msg)
+	}
 
-func TestCreateTaskFromJobFile(t *testing.T) {
-	fmt.Println("starting Test for CreateTaskFromJobFile")
-	setup()
-	fmt.Printf("reading file %s...\n", absPath)
-	opts := createATaskFromJobFile(absPath)
-	if !(opts.Debug && opts.Load && opts.Help) || opts.Version {
-		fmt.Fprintf(os.Stderr, "parsed from json: %v", opts)
+	// remove the json file from the tmp folder
+	tearDownOptParserTest(jsonFile)
+
+	if len(errors) > 0 {
+		for i, message := range errors {
+			fmt.Fprintf(os.Stdout, "%d. Error: %s\n", i, message)
+		}
 		t.Fail()
-	}
-	tearDown()
-	fmt.Println("ending Test for CreateTaskFromJobFile")
-}
-
-func tearDown() {
-	absPath := path.Join(os.TempDir(), toUnMarshall)
-	err := os.Remove(absPath)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Could not remove the file %s after a test", absPath)
 	}
 }

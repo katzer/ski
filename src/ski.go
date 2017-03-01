@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 
@@ -13,18 +11,22 @@ import (
 
 func parseOptions() Opts {
 	var help, pretty, debug, load, version bool
-	var template, scriptName, command string
+	var jobFile, template, scriptName, command string
 
 	flag.BoolVar(&help, "h", false, "help")
 	flag.BoolVar(&pretty, "p", false, "prettyprint")
 	flag.BoolVar(&debug, "d", false, "verbose")
 	flag.BoolVar(&load, "l", false, "ssh profile loading")
 	flag.BoolVar(&version, "v", false, "version")
+	flag.StringVar(&jobFile, "j", "", "path to a json file with a task description")
 	flag.StringVar(&template, "t", "", "filename of template")
 	flag.StringVar(&scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
 	flag.StringVar(&command, "c", "", "command to be executed in quotes")
 	flag.Parse()
 
+	if len(jobFile) > 0 {
+		return createATaskFromJobFile(jobFile)
+	}
 	opts := Opts{
 		Help:       help,
 		Pretty:     pretty,
@@ -93,28 +95,6 @@ func isValidPlanet(planet Planet) bool {
 	// we could check if the action is permitted on the current planet and
 	// if not mark it as not valid
 	return ok
-}
-
-// creates a task from a json file
-// TODO: add flag for job/task and read the values from it in case it is not
-// empty, overriding / ignoring other cmdline flags
-func createATaskFromJobFile(jsonFile string) (opts Task) {
-	job := Task{}
-	bytes, err := ioutil.ReadFile(jsonFile)
-	if err != nil {
-		log.Fatalf("Couldn't open job file: %s", jsonFile)
-	}
-
-	err = json.Unmarshal(bytes, &job)
-	if err != nil {
-		log.Fatalf("Error parsing job json file: %s", jsonFile)
-	}
-
-	log.Debugf("Read a task from %s", jsonFile)
-	log.Debugln()
-	log.Debugf("Unmarshalled %v", job)
-	log.Debugln()
-	return job
 }
 
 /**
