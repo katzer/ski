@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 
@@ -60,6 +62,28 @@ func isValidPlanet(planet Planet) bool {
 	// we could check if the action is permitted on the current planet and
 	// if not mark it as not valid
 	return ok
+}
+
+// creates a task from a json file
+// TODO: add flag for job/task and read the values from it in case it is not
+// empty, overriding / ignoring other cmdline flags
+func createATaskFromJobFile(jsonFile string) (opts Task) {
+	job := Task{}
+	bytes, err := ioutil.ReadFile(jsonFile)
+	if err != nil {
+		log.Fatalf("Couldn't open job file: %s", jsonFile)
+	}
+
+	err = json.Unmarshal(bytes, &job)
+	if err != nil {
+		log.Fatalf("Error parsing job json file: %s", jsonFile)
+	}
+
+	log.Debugf("Read a task from %s", jsonFile)
+	log.Debugln()
+	log.Debugf("Unmarshalled %v", job)
+	log.Debugln()
+	return job
 }
 
 /**

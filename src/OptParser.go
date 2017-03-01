@@ -24,6 +24,21 @@ type Opts struct {
 	planets    []string
 }
 
+// Task ...
+// Note: will replace Opts above or Opts will look like this.
+// TODO: refactoring pending.
+type Task struct {
+	Debug      bool     `json:"debug"`
+	Help       bool     `json:"help"`
+	Load       bool     `json:"load"`
+	Pretty     bool     `json:"pretty"`
+	Version    bool     `json:"version"`
+	Command    string   `json:"command"`
+	ScriptName string   `json:"scriptName"`
+	Template   string   `json:"template"`
+	Planets    []string `json:"planets"`
+}
+
 func (opts *Opts) String() string {
 	template := `opts : {
 	debug: %t
