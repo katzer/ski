@@ -22,10 +22,11 @@ func parseOptions(opts *Opts) {
 	flag.StringVar(&opts.command, "c", "", "command to be executed in quotes")
 	flag.Parse()
 
-	planetIDs := flag.Args()
-	for _, id := range planetIDs {
-		opts.planets = append(opts.planets, id)
-	}
+	// planetIDs := flag.Args()
+	// for _, id := range planetIDs {
+	// 	opts.planets = append(opts.planets, id)
+	// }
+	opts.planets = flag.Args()
 }
 
 func main() {

@@ -1,9 +1,10 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
 	"strconv"
 	"sync"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // Executor This struct ensures the parallel execution of all command executions
