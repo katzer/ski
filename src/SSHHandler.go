@@ -34,7 +34,10 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
 		os.Stderr.WriteString(errorString)
-		log.Fatalf("%s\nAdditional info: %s\n", err, message)
+		log.Warnf("%s\nAdditional info: %s\n", err, message)
+		strucOut.output = message
+		logExecCommand(command, planet, strucOut)
+		return
 	}
 	cleanedOut := cleanProfileLoadedOutput(out, opts)
 	strucOut.output = cleanedOut
@@ -62,7 +65,7 @@ func uploadFile(user string, hostname string, opts *Opts) {
 		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
 		os.Stderr.WriteString(errorString)
-		log.Fatalf("%s\nAdditional info: %s\n", err, message)
+		log.Warningf("%s\nAdditional info: %s\n", err, message)
 	}
 }
 

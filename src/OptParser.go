@@ -62,6 +62,7 @@ func (opts *Opts) procArgs(args []string) {
 	flag.Parse()
 
 	validateCommandAndScript(opts.scriptName, opts.command)
+	validateExtension(opts.scriptName)
 
 	planets := flag.Args()
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
@@ -97,5 +98,14 @@ func validateArgsCount(opts *Opts) {
 	}
 	if !opts.helpFlag && opts.scriptName == "" && !opts.versionFlag && opts.command == "" {
 		opts.helpFlag = true
+	}
+}
+
+func validateExtension(scriptname string) {
+	if scriptname != "" && !(strings.HasSuffix(scriptname, ".sh") || strings.HasSuffix(scriptname, ".sql")) {
+		message := "The provided script must end in either \".sh\" if it's a shell script or \".sql\" if it's a sql script ."
+		err := errors.New(message)
+		os.Stderr.WriteString(message)
+		log.Fatal(err)
 	}
 }
