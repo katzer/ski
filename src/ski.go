@@ -26,15 +26,15 @@ func parseOptions() Opts {
 	flag.Parse()
 
 	opts := Opts{
-		help:       help,
-		pretty:     pretty,
-		debug:      debug,
-		load:       load,
-		version:    version,
-		template:   template,
-		scriptName: scriptName,
-		command:    command,
-		planets:    flag.Args(),
+		Help:       help,
+		Pretty:     pretty,
+		Debug:      debug,
+		Load:       load,
+		Version:    version,
+		Template:   template,
+		ScriptName: scriptName,
+		Command:    command,
+		Planets:    flag.Args(),
 	}
 
 	return opts
@@ -46,7 +46,7 @@ func main() {
 	opts.postProcessing()
 
 	level := log.InfoLevel
-	if opts.debug {
+	if opts.Debug {
 		level = log.DebugLevel
 	}
 
@@ -66,7 +66,7 @@ func main() {
 func makeExecutor(opts *Opts) Executor {
 	log.Debugf("Function: makeExecutor")
 	executor := Executor{}
-	for _, planetID := range opts.planets {
+	for _, planetID := range opts.Planets {
 		planet := parseConnectionDetails(planetID)
 		if !isValidPlanet(planet) {
 			os.Exit(1) // TODO ask if it really is wanted.

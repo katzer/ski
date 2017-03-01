@@ -30,10 +30,10 @@ func printIndented(msg string, indent int, exceptFirst bool) string {
 func printHeadline(indent int, opts *Opts) {
 	headline := "NR   PLANET               "
 
-	if !(opts.scriptName == "") {
-		headline = fmt.Sprintf("%s%s\n", headline, printIndented(opts.scriptName, indent, true))
+	if !(opts.ScriptName == "") {
+		headline = fmt.Sprintf("%s%s\n", headline, printIndented(opts.ScriptName, indent, true))
 	} else {
-		headline = fmt.Sprintf("%s%s\n", headline, printIndented(opts.command, indent, true))
+		headline = fmt.Sprintf("%s%s\n", headline, printIndented(opts.Command, indent, true))
 	}
 	separator := "================================================================================"
 	headline = fmt.Sprintf("%s%s\n", headline, separator)
@@ -52,7 +52,7 @@ func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
 	formatter := Formatter{}
 	formatter.init()
 	var formatted string
-	if opts.pretty && opts.template == "" {
+	if opts.Pretty && opts.Template == "" {
 		printHeadline(80, opts)
 	}
 	for i, entry := range toPrint {
@@ -60,7 +60,7 @@ func formatAndPrint(toPrint []StructuredOuput, opts *Opts) {
 		fmt.Print(formatted)
 
 	}
-	if opts.pretty && opts.template != "" {
+	if opts.Pretty && opts.Template != "" {
 		formatter.prettyTableFormatter.execute()
 	}
 }
@@ -74,7 +74,7 @@ func trimDBMetaInformations(strucOut *StructuredOuput) {
 *	Prepends the profile loading command and seperator to a command
  */
 func makeLoadCommand(command string, opts *Opts) string {
-	if opts.load {
+	if opts.Load {
 		return fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
 	}
 	return command
@@ -84,7 +84,7 @@ func makeLoadCommand(command string, opts *Opts) string {
 *	Removes the output provided by the profile loading
  */
 func cleanProfileLoadedOutput(output string, opts *Opts) string {
-	if opts.load {
+	if opts.Load {
 		splitOut := strings.Split(output, "-----APPPLANT-ORBIT-----\n")
 		return splitOut[len(splitOut)-1]
 	}

@@ -82,7 +82,7 @@ func convertToJSON(toConvert string) string {
 
 func (tableFormatter *TableFormatter) executeTextFSM(toFormat string, opts *Opts) string {
 	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
-	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
+	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.Template)
 	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, textFSMName)
 
 	cmd := exec.Command("python2", pyScriptFile, templateFile, tmpTableFile)

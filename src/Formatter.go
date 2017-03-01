@@ -21,14 +21,14 @@ func (formatter *Formatter) init() {
 
 func (formatter *Formatter) format(toPrint StructuredOuput, counter int, opts *Opts) string {
 	var formatted string
-	if !opts.pretty {
-		if opts.template != "" {
+	if !opts.Pretty {
+		if opts.Template != "" {
 			formatted = formatter.tableFormatter.format(toPrint.output, opts)
 		} else {
 			formatted = toPrint.output
 		}
 	} else {
-		if opts.template != "" {
+		if opts.Template != "" {
 			preFormatted := formatter.tableFormatter.format(toPrint.output, opts)
 			formatter.prettyTableFormatter.format(preFormatted, opts)
 		} else {

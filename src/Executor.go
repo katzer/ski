@@ -17,10 +17,10 @@ func (executor *Executor) execMain(opts *Opts) {
 	outputList := make([]StructuredOuput, len(executor.planets))
 	var wg sync.WaitGroup
 
-	log.Debugln("pretty " + strconv.FormatBool(opts.pretty))
-	log.Debugln("script " + opts.scriptName)
-	log.Debugln("command " + opts.command)
-	for _, planet := range opts.planets {
+	log.Debugln("pretty " + strconv.FormatBool(opts.Pretty))
+	log.Debugln("script " + opts.ScriptName)
+	log.Debugln("command " + opts.Command)
+	for _, planet := range opts.Planets {
 		log.Debugf("planet %s", planet)
 	}
 
