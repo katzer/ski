@@ -62,7 +62,6 @@ func (opts *Opts) procArgs(args []string) {
 	flag.Parse()
 
 	validateCommandAndScript(opts.scriptName, opts.command)
-	validateExtension(opts.scriptName)
 
 	planets := flag.Args()
 	opts.command = strings.TrimSuffix(strings.TrimPrefix(opts.command, "\""), "\"")
@@ -73,13 +72,11 @@ func (opts *Opts) procArgs(args []string) {
 		opts.planets = append(opts.planets, argument)
 	}
 
+	validateExtension(opts.scriptName)
 	validateArgsCount(opts)
 
 }
 
-/**
-*	Checks if theres a command and a script at the same time
- */
 func validateCommandAndScript(scriptname string, command string) {
 	if !(scriptname == "") && !(command == "") {
 		message := "providing both a script AND a command is not possible"
@@ -89,9 +86,7 @@ func validateCommandAndScript(scriptname string, command string) {
 	}
 }
 
-/**
-*	Checks if there are enough of the correct arguments to run ski
- */
+//Checks if there are enough of the correct arguments to run ski
 func validateArgsCount(opts *Opts) {
 	if len(os.Args) == 1 {
 		opts.helpFlag = true

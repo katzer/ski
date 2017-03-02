@@ -9,12 +9,6 @@ import (
 	"gopkg.in/hypersleep/easyssh.v0"
 )
 
-/**
-*	Executes a command on a remote ssh server
-*	@params:
-*		connDet: connection details in following form: user@hostname
-*		cmd: command to be executed
- */
 func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts *Opts) {
 	log.Debugf("function: execCommand")
 	log.Debugf("user, host : %s %s", planet.user, planet.host)
@@ -44,9 +38,6 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 	logExecCommand(command, planet, strucOut)
 }
 
-/**
-*	Uploads a file to the remote server
- */
 func uploadFile(user string, hostname string, opts *Opts) {
 	keyPath := getKeyPath()
 
@@ -69,12 +60,6 @@ func uploadFile(user string, hostname string, opts *Opts) {
 	}
 }
 
-/**
-*	Uploads and executes a script on a given planet
-*	@params:
-*		connDet: 	Connection details to planet
-*		scriptPath: Path to script
- */
 func execScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
 
 	log.Debugf("function: execScript")

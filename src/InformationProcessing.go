@@ -25,17 +25,12 @@ func parseConnectionDetails(planetID string) Planet {
 	return planet
 }
 
-/**
-*	splits db details (dbID:user@host) and returns them as dbID,user@host
- */
+//splits db details (dbID:user@host) and returns them as dbID,user@host
 func procDBDets(dbDet string) (string, string) {
 	parts := strings.Split(dbDet, ":")
 	return parts[0], parts[1]
 }
 
-/**
-*	Returns the proper Keypath
- */
 func getKeyPath() string {
 	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
@@ -48,30 +43,15 @@ func getKeyPath() string {
 	return strings.TrimPrefix(keyPath, os.Getenv("HOME"))
 }
 
-/**
-*	checks, wether a planet is supported by ski or not
- */
 func isSupported(planetType string) bool {
 	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
 	return supported[planetType]
 }
 
-/**
-*	Returns the type of a given planet
-*	@params:
-*		id: The planets id
-*	@return: The planets type
- */
 func getType(skiString string) string {
 	return strings.Split(skiString, skiDelim)[0]
 }
 
-/**
-*	Returns the connection details to a given planet
-*	@params:
-*		id: The planets id
-*	@return: The connection details to the planet
- */
 func getFullSkiString(id string) string {
 	cmd := exec.Command("fifa", "-f=ski", id)
 	out, err := cmd.CombinedOutput()
@@ -84,23 +64,11 @@ func getFullSkiString(id string) string {
 
 }
 
-/**
-*	Splits the given connectiondetails and returns the hostname
-*	@params:
-*		connDet: Connection details in following form: user@hostname
-*	@return: hostname
- */
 func getHost(connDet string) string {
 	toReturn := strings.Split(connDet, "@")
 	return toReturn[1]
 }
 
-/**
-*	Splits the given connectiondetails and returns the user
-*	@params:
-*		connDet: Connection details in following form: user@hostname
-*	@return: user
- */
 func getUserAndHost(connDet string) (string, string) {
 	// TODO: error handling or remove the func completely
 	toReturn := strings.Split(connDet, "@")

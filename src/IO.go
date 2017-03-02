@@ -27,9 +27,6 @@ func trimDBMetaInformations(strucOut *StructuredOuput) {
 	strucOut.output = strings.Join(cleaned[:len(cleaned)-3], "")
 }
 
-/**
-*	Prepends the profile loading command and seperator to a command
- */
 func makeLoadCommand(command string, opts *Opts) string {
 	if opts.loadFlag {
 		return fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
@@ -37,9 +34,6 @@ func makeLoadCommand(command string, opts *Opts) string {
 	return command
 }
 
-/**
-*	Removes the output provided by the profile loading
- */
 func cleanProfileLoadedOutput(output string, opts *Opts) string {
 	if opts.loadFlag {
 		splitOut := strings.Split(output, "-----APPPLANT-ORBIT-----\n")

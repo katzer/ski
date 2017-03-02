@@ -94,9 +94,6 @@ func isValidPlanet(planet Planet) bool {
 	return ok
 }
 
-/**
-*	Prints the help dialog
- */
 func printUsage() {
 	usage := `usage: ski [options...] <planets>...
 	Options:

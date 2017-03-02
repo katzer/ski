@@ -12,8 +12,8 @@ import (
 
 func execDBCommand(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
 	if !strings.HasSuffix(opts.command, ";") {
-		fmt.Println("The SQL-Command needs to be terminated with a \";\"")
-		fmt.Println("Appending \";\"...")
+		log.Warningf("The SQL-Command needs to be terminated with a \";\"")
+		log.Warningf("Appending \";\"...")
 		opts.command = fmt.Sprintf("%s;", opts.command)
 	}
 	tmpDBFile := path.Join(os.Getenv("ORBIT_HOME"), "scripts", "orbit.sql")
