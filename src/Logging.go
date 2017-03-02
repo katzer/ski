@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
@@ -11,8 +12,15 @@ import (
 	hook "github.com/rifflock/lfshook"
 )
 
-func setupLogger(customLogfile string, level log.Level) {
-	logFile := "ski.log" // default log file
+func setupLogger(customLogfile string, verbose bool) {
+	level := log.InfoLevel // default level
+	if verbose {
+		level = log.DebugLevel
+	}
+
+	logDir := path.Join(os.Getenv("ORBIT_HOME"), "logs")
+	createLogDirIfNecessary(logDir)
+	logFile := path.Join(logDir, "ski.log") // default log file
 	if len(customLogfile) > 0 {
 		logFile = customLogfile
 	}

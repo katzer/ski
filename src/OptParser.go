@@ -19,10 +19,12 @@ type Opts struct {
 	Load       bool     `json:"load"`
 	Pretty     bool     `json:"pretty"`
 	Version    bool     `json:"version"`
+	SaveReport bool     `json:"save_report"`
 	Command    string   `json:"command"`
 	ScriptName string   `json:"scriptName"`
 	Template   string   `json:"template"`
 	Planets    []string `json:"planets"`
+	LogFile    string   `json:"log_file"`
 }
 
 func (opts *Opts) String() string {

@@ -4,21 +4,22 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path"
 
 	log "github.com/Sirupsen/logrus"
 )
 
 func parseOptions() Opts {
-	var help, pretty, debug, load, version bool
-	var jobFile, template, scriptName, command string
+	var help, pretty, debug, load, version, saveReport bool
+	var jobFile, logFile, template, scriptName, command string
 
 	flag.BoolVar(&help, "h", false, "help")
 	flag.BoolVar(&pretty, "p", false, "prettyprint")
 	flag.BoolVar(&debug, "d", false, "verbose")
 	flag.BoolVar(&load, "l", false, "ssh profile loading")
 	flag.BoolVar(&version, "v", false, "version")
+	flag.BoolVar(&saveReport, "js", false, "if the summary should be saved in json format. Used with the job flag")
 	flag.StringVar(&jobFile, "j", "", "path to a json file with a task description")
+	flag.StringVar(&logFile, "logfile", "ski.log", "path to a file for logging")
 	flag.StringVar(&template, "t", "", "filename of template")
 	flag.StringVar(&scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
 	flag.StringVar(&command, "c", "", "command to be executed in quotes")
@@ -33,10 +34,12 @@ func parseOptions() Opts {
 		Debug:      debug,
 		Load:       load,
 		Version:    version,
+		SaveReport: saveReport,
 		Template:   template,
 		ScriptName: scriptName,
 		Command:    command,
 		Planets:    flag.Args(),
+		LogFile:    logFile,
 	}
 
 	return opts
@@ -47,16 +50,8 @@ func main() {
 	validate(&opts)
 	opts.postProcessing()
 
-	level := log.InfoLevel
-	if opts.Debug {
-		level = log.DebugLevel
-	}
-
-	// Default logfile path
-	logDir := path.Join(os.Getenv("ORBIT_HOME"), "logs")
-	createLogDirIfNecessary(logDir)
-	logFile := path.Join(logDir, "ski.log")
-	setupLogger(logFile, level)
+	verbose := opts.Debug || len(opts.LogFile) > 0
+	setupLogger(opts.LogFile, verbose)
 
 	log.Infof("Started with args: %v", os.Args)
 	log.Debug(&opts)
