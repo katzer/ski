@@ -49,7 +49,7 @@ func uploadFile(user string, hostname string, opts *Opts) {
 	}
 
 	// Call Scp method with file you want to upload to remote server.
-	err := ssh.Scp(path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.scriptName))
+	err := ssh.Scp(path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.ScriptName))
 
 	// Handle errors
 	if err != nil {
@@ -65,7 +65,7 @@ func execScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
 	log.Debugf("user, host : |%s| |%s|", planet.user, planet.host)
 	uploadFile(planet.user, planet.host, opts)
 	placeholder := StructuredOuput{}
-	scriptName := opts.scriptName
+	scriptName := opts.ScriptName
 	executionCommand := fmt.Sprintf("sh %s", scriptName)
 	delCommand := fmt.Sprintf("rm %s", scriptName)
 	execCommand(executionCommand, planet, strucOut, opts)

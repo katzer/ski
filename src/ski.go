@@ -1,26 +1,53 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-
 	"os"
-	"os/exec"
-	"path"
-	"runtime"
-
 	log "github.com/Sirupsen/logrus"
 )
 
-// StructuredOuput ...
-type StructuredOuput struct {
-	planet   string
-	output   string
-	position int
+func parseOptions() Opts {
+	var help, pretty, debug, load, version, saveReport bool
+	var jobFile, logFile, template, scriptName, command string
+
+	flag.BoolVar(&help, "h", false, "help")
+	flag.BoolVar(&pretty, "p", false, "prettyprint")
+	flag.BoolVar(&debug, "d", false, "verbose")
+	flag.BoolVar(&load, "l", false, "ssh profile loading")
+	flag.BoolVar(&version, "v", false, "version")
+	flag.BoolVar(&saveReport, "js", false, "if the summary should be saved in json format. Used with the job flag")
+	flag.StringVar(&jobFile, "j", "", "path to a json file with a task description")
+	flag.StringVar(&logFile, "logfile", "ski.log", "path to a file for logging")
+	flag.StringVar(&template, "t", "", "filename of template")
+	flag.StringVar(&scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
+	flag.StringVar(&command, "c", "", "command to be executed in quotes")
+	flag.Parse()
+
+	if len(jobFile) > 0 {
+		return createATaskFromJobFile(jobFile)
+	}
+	opts := Opts{
+		Help:       help,
+		Pretty:     pretty,
+		Debug:      debug,
+		Load:       load,
+		Version:    version,
+		SaveReport: saveReport,
+		Template:   template,
+		ScriptName: scriptName,
+		Command:    command,
+		Planets:    flag.Args(),
+		LogFile:    logFile,
+	}
+
+	return opts
 }
 
 func main() {
-	opts := Opts{}
-	opts.procArgs(os.Args)
+	opts := parseOptions()
+	validate(&opts)
+	opts.postProcessing()
 
 	if opts.helpFlag {
 		printUsage()
@@ -31,15 +58,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	level := log.InfoLevel
-	if opts.debugFlag {
-		level = log.DebugLevel
-	}
-	// Default logfile path
-	logDir := path.Join(os.Getenv("ORBIT_HOME"), "logs")
-	createLogDirIfNecessary(logDir)
-	logFile := path.Join(logDir, "ski.log")
-	setupLogger(logFile, level)
+	verbose := opts.Debug || len(opts.LogFile) > 0
+	setupLogger(opts.LogFile, verbose)
 
 	log.Infof("Started with args: %v", os.Args)
 	log.Debug(&opts)
@@ -47,7 +67,7 @@ func main() {
 	exec.execMain(&opts)
 	log.Infof("Ended with args: %v", os.Args)
 }
-
+/**
 func createLogDirIfNecessary(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
@@ -55,19 +75,18 @@ func createLogDirIfNecessary(dir string) {
 			os.Stderr.WriteString(fmt.Sprintf("%v", err))
 		}
 	}
-}
+}**/
 
 func makeExecutor(opts *Opts) Executor {
 	log.Debugf("Function: makeExecutor")
 	executor := Executor{}
-	for i, planetID := range opts.planets {
+	for _, planetID := range opts.Planets {
 		planet := parseConnectionDetails(planetID)
-		valid := isValidPlanet(planet)
-		if !valid {
-			continue
+		if !isValidPlanet(planet) {
+			os.Exit(1) // TODO ask if it really is wanted.
 		}
 		planet.id = planetID
-		planet.outputStruct = &StructuredOuput{planetID, "", i}
+		planet.outputStruct = StructuredOuput{planetID, "", 0}
 		executor.planets = append(executor.planets, planet)
 	}
 	log.Debugf("executor: %s", executor)
@@ -79,13 +98,9 @@ func isValidPlanet(planet Planet) bool {
 	if !ok {
 		switch planet.planetType {
 		case webServer:
-			msg := "Usage of ski with web servers is not implemented"
-			os.Stderr.WriteString(msg)
-			log.Fatal(msg)
+			os.Stderr.WriteString("Usage of ski with web servers is not implemented")
 		default:
-			msg := "Unkown Type of target"
-			os.Stderr.WriteString(msg)
-			log.Fatal(msg)
+			os.Stderr.WriteString("Unkown Type of target")
 		}
 	}
 	// TODO: since we know what kind of action is attempted on this server

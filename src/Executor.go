@@ -1,9 +1,10 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
 	"strconv"
 	"sync"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // Executor This struct ensures the parallel execution of all command executions
@@ -15,10 +16,10 @@ func (executor *Executor) execMain(opts *Opts) {
 	log.Debugf("Function: execMain")
 	var wg sync.WaitGroup
 
-	log.Debugln("prettyflag " + strconv.FormatBool(opts.prettyFlag))
-	log.Debugln("script " + opts.scriptName)
-	log.Debugln("command " + opts.command)
-	for _, planet := range opts.planets {
+	log.Debugln("pretty " + strconv.FormatBool(opts.Pretty))
+	log.Debugln("script " + opts.ScriptName)
+	log.Debugln("command " + opts.Command)
+	for _, planet := range opts.Planets {
 		log.Debugf("planet %s", planet)
 	}
 

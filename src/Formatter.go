@@ -20,14 +20,14 @@ func (formatter *Formatter) init() {
 
 func (formatter *Formatter) format(planet Planet, opts *Opts) string {
 	var formatted string
-	if !opts.prettyFlag {
-		if opts.template != "" {
-			formatted = formatter.tableFormatter.format(planet, opts)
+	if !opts.Pretty {
+		if opts.Template != "" {
+			formatted = formatter.tableFormatter.format(toPrint.output, opts)
 		} else {
 			formatted = planet.outputStruct.output
 		}
 	} else {
-		if opts.template != "" {
+		if opts.Template != "" {
 			planet.outputStruct.output = formatter.tableFormatter.format(planet, opts)
 			formatter.prettyTableFormatter.format(planet, opts)
 		} else {
@@ -38,10 +38,10 @@ func (formatter *Formatter) format(planet Planet, opts *Opts) string {
 }
 
 func (formatter *Formatter) execute(opts *Opts) {
-	if !opts.prettyFlag {
+	if !opts.Pretty {
 		return
 	}
-	if opts.template != "" {
+	if opts.Template != "" {
 		formatter.prettyTableFormatter.execute()
 		return
 	}

@@ -31,7 +31,7 @@ func convertToJSON(toConvert string) string {
 // executes phyton2 program "textFSM" with provided template and temporary file and returns the answer
 func (tableFormatter *TableFormatter) executeTextFSM(planet Planet, opts *Opts) string {
 	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
-	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
+	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.Template)
 	pyScriptFile := path.Join(os.Getenv("ORBIT_HOME"), thirdPartySoftwareDirectory, textFSMDirectory, textFSMName)
 
 	cmd := exec.Command("python2", pyScriptFile, templateFile, tmpTableFile)

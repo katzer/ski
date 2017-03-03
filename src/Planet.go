@@ -13,9 +13,15 @@ type Planet struct {
 	host         string
 	planetType   string
 	dbID         string
-	outputStruct *StructuredOuput
+	outputStruct StructuredOuput
 }
 
+// StructuredOuput ...
+type StructuredOuput struct {
+	planet       string
+	output       string
+	maxOutLength int
+}
 // codebeat:enable[TOO_MANY_IVARS]
 
 func (planet *Planet) execute(opts *Opts) {
@@ -27,19 +33,19 @@ func (planet *Planet) execute(opts *Opts) {
 }
 
 func (planet *Planet) executeDatabase(opts *Opts) {
-	if opts.scriptName != "" {
-		execDBScript(planet, planet.outputStruct, opts)
+	if opts.ScriptName != "" {
+		execDBScript(planet, &planet.outputStruct, opts)
 	} else {
-		execDBCommand(planet, planet.outputStruct, opts)
+		execDBCommand(planet, &planet.outputStruct, opts)
 	}
 }
 
 func (planet *Planet) executeLinux(opts *Opts) {
-	if opts.scriptName != "" {
-		execScript(planet, planet.outputStruct, opts)
+	if opts.ScriptName != "" {
+		execScript(planet, &planet.outputStruct, opts)
 	} else {
 		planet.planetInfo(opts)
-		execCommand(opts.command, planet, planet.outputStruct, opts)
+		execCommand(opts.Command, planet, &(planet.outputStruct), opts)
 		planet.planetInfo(opts)
 	}
 }
@@ -48,7 +54,7 @@ func (planet *Planet) planetInfo(opts *Opts) {
 	log.Debugln("###planet.execute-->execcommand###")
 	log.Debugln("planet.user: %s", planet.user)
 	log.Debugln("planet.host: %s", planet.host)
-	log.Debugln("opts.command: %s", opts.command)
+	log.Debugln("opts.command: %s", opts.Command)
 	log.Debugln("planet.outputStruct: %v", planet.outputStruct)
 	log.Debugln("opts: %v\n", opts)
 	log.Debugln("###planet.execute-->execcommand###")

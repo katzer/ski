@@ -28,14 +28,14 @@ func trimDBMetaInformations(strucOut *StructuredOuput) {
 }
 
 func makeLoadCommand(command string, opts *Opts) string {
-	if opts.loadFlag {
+	if opts.Load {
 		return fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
 	}
 	return command
 }
 
 func cleanProfileLoadedOutput(output string, opts *Opts) string {
-	if opts.loadFlag {
+	if opts.Load {
 		splitOut := strings.Split(output, "-----APPPLANT-ORBIT-----\n")
 		return splitOut[len(splitOut)-1]
 	}

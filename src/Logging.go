@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
@@ -11,8 +12,15 @@ import (
 	hook "github.com/rifflock/lfshook"
 )
 
-func setupLogger(customLogfile string, level log.Level) {
-	logFile := "ski.log" // default log file
+func setupLogger(customLogfile string, verbose bool) {
+	level := log.InfoLevel // default level
+	if verbose {
+		level = log.DebugLevel
+	}
+
+	logDir := path.Join(os.Getenv("ORBIT_HOME"), "logs")
+	createLogDirIfNecessary(logDir)
+	logFile := path.Join(logDir, "ski.log") // default log file
 	if len(customLogfile) > 0 {
 		logFile = customLogfile
 	}
@@ -60,4 +68,13 @@ func logExecCommand(command string, planet *Planet, strucOut *StructuredOuput) {
 	log.Debugf("orbit key: %s\n", os.Getenv("ORBIT_KEY"))
 	log.Debugf("command: %s\n", command)
 	log.Debugf("strucOut: %v\n", strucOut)
+}
+
+func createLogDirIfNecessary(dir string) {
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
+			// can't do anything
+			os.Stderr.WriteString(fmt.Sprintf("%v", err))
+		}
+	}
 }

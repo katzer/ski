@@ -17,11 +17,13 @@ func parseConnectionDetails(planetID string) Planet {
 	var dbID string // TODO what is it, why is it not set
 	tokens := strings.Split(skiString, skiDelim)
 	planet.planetType = tokens[0]
-	planet.name = tokens[2]
-	planet.user, planet.host = getUserAndHost(tokens[len(tokens)-1])
-	planet.dbID = dbID
-	log.Debugf("skiString: %s", skiString)
-	log.Debugf("planet: %v", planet)
+	connectionURL := tokens[len(tokens)-1]
+	urlTokens := strings.Split(connectionURL, ":")
+	if len(urlTokens) > 1 {
+		planet.dbID = urlTokens[0]
+	}
+	planet.user, planet.host = getUserAndHost(connectionURL)
+	log.Debugf("skiString: %s, and planet parsed from it: %v", planet)
 	return planet
 }
 
@@ -60,17 +62,18 @@ func getFullSkiString(id string) string {
 		os.Stderr.WriteString("Unknown target\n")
 		log.Fatalf(message)
 	}
-	return string(out)
-
+	// TODO fifa sends a newline
+	return strings.TrimSuffix(string(out), "\n")
 }
 
-func getHost(connDet string) string {
-	toReturn := strings.Split(connDet, "@")
-	return toReturn[1]
-}
 
-func getUserAndHost(connDet string) (string, string) {
-	// TODO: error handling or remove the func completely
-	toReturn := strings.Split(connDet, "@")
-	return toReturn[0], strings.TrimSuffix(toReturn[1], "\n")
+func getUserAndHost(connectionURL string) (string, string) {
+	var tokens []string
+	idx := strings.IndexRune(connectionURL, ':')
+	if idx < 0 {
+		tokens = strings.Split(connectionURL, "@")
+		return tokens[0], tokens[1]
+	}
+	tokens = strings.Split(connectionURL[idx+1:], "@")
+	return tokens[0], tokens[1]
 }
