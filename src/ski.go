@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"os"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 func parseOptions() Opts {
@@ -27,6 +28,7 @@ func parseOptions() Opts {
 	if len(jobFile) > 0 {
 		return createATaskFromJobFile(jobFile)
 	}
+
 	opts := Opts{
 		Help:       help,
 		Pretty:     pretty,
@@ -46,17 +48,8 @@ func parseOptions() Opts {
 
 func main() {
 	opts := parseOptions()
-	opts.postProcessing()
 	validate(&opts)
-
-	if opts.Help {
-		printUsage()
-		os.Exit(0)
-	}
-	if opts.Version {
-		printVersion()
-		os.Exit(0)
-	}
+	opts.postProcessing()
 
 	verbose := opts.Debug || len(opts.LogFile) > 0
 	setupLogger(opts.LogFile, verbose)
@@ -68,28 +61,11 @@ func main() {
 	log.Infof("Ended with args: %v", os.Args)
 }
 
-/**
-func createLogDirIfNecessary(dir string) {
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
-			// can't do anything
-			os.Stderr.WriteString(fmt.Sprintf("%v", err))
-		}
-	}
-}**/
-
 func makeExecutor(opts *Opts) Executor {
 	log.Debugf("Function: makeExecutor")
 	executor := Executor{}
-	for i, planetID := range opts.Planets {
-		planet := parseConnectionDetails(planetID)
-		if !isValidPlanet(planet) {
-			os.Exit(1) // TODO ask if it really is wanted.
-		}
-		planet.id = planetID
-		planet.outputStruct = &StructuredOuput{planetID, "", i}
-		executor.planets = append(executor.planets, planet)
-	}
+	planets := parseConnectionDetails(opts.Planets)
+	executor.planets = planets
 	log.Debugf("executor: %s", executor)
 	return executor
 }

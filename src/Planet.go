@@ -13,6 +13,7 @@ type Planet struct {
 	host         string
 	planetType   string
 	dbID         string
+	valid        bool
 	outputStruct *StructuredOuput
 }
 

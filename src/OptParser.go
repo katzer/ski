@@ -66,6 +66,17 @@ func validate(opts *Opts) {
 	validateArgsCount(opts)
 	validateExtension(opts.ScriptName)
 	validateCommandAndScript(opts)
+	checkForInvalidIds(opts.Planets)
+}
+
+func checkForInvalidIds(ids []string) {
+	for _, id := range ids {
+		// Check if any flags were given after planet ids, if yes stop the app
+		if strings.HasPrefix(id, "-") {
+			fmt.Fprintf(os.Stderr, "Unknown target: %s", id)
+			os.Exit(1)
+		}
+	}
 }
 
 /**
