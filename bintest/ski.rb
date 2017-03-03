@@ -113,7 +113,7 @@ class TestGoo < Test::Unit::TestCase
     output, error, status = Open3.capture3(PATH, BIN, '-s="nonExistent.sh"',
                                            '-d=true', 'app')
     check_no_error(output, error, 'no_such_script')
-    assert_false status.success?, 'Process did exit cleanly'
+    assert_true status.success?, 'Process did exit cleanly'
     assert_equal output, '', 'return was not correct'
     assert_include error, 'no such file or directory', 'error was not correct'
   end
@@ -122,7 +122,7 @@ class TestGoo < Test::Unit::TestCase
     output, error, status = Open3.capture3(PATH, BIN, '-s="badscript.sh"',
                                            'app')
     check_no_error(output, error, 'bad_script')
-    assert_false status.success?, 'Process did exit cleanly'
+    assert_true status.success?, 'Process did exit cleanly'
     assert_include error, 'Process exited with status 127', 'return incorrect'
   end
 
@@ -147,9 +147,9 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app', 'app', 'app')
     check_error(output, error, 'pretty_print')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, '|   0 | app       |           - |', 'return was incorrect'
-    assert_include output, '|   1 | app       |           - |', 'return was incorrect'
-    assert_include output, '|   2 | app       |           - |', 'return was incorrect'
+    assert_include output, '|   0 | app       |', 'return was incorrect'
+    assert_include output, '|   1 | app       |', 'return was incorrect'
+    assert_include output, '|   2 | app       |', 'return was incorrect'
   end
 
   def test_malformed_flag
