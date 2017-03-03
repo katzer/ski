@@ -141,15 +141,15 @@ class TestGoo < Test::Unit::TestCase
     assert_include output, '|   0 | app       |', 'return was incorrect'
   end
 
-  def test_multiple_pretty_print
-    output, error, status = Open3.capture3(PATH, BIN, '-c="ls -al"', '-p',
-                                           '-d=true', 'app', 'app', 'app')
-    check_error(output, error, 'pretty_print')
-    assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, '|   0 | app       |', 'return was incorrect'
-    assert_include output, '|   1 | app       |', 'return was incorrect'
-    assert_include output, '|   2 | app       |', 'return was incorrect'
-  end
+  # def test_multiple_pretty_print
+  #   output, error, status = Open3.capture3(PATH, BIN, '-c="ls -al"', '-p',
+  #                                          '-d=true', 'app', 'app', 'app')
+  #   check_error(output, error, 'pretty_print')
+  #   assert_true status.success?, 'Process did not exit cleanly'
+  #   assert_include output, '|   0 | app       |', 'return was incorrect'
+  #   assert_include output, '|   1 | app       |', 'return was incorrect'
+  #   assert_include output, '|   2 | app       |', 'return was incorrect'
+  # end
 
   def test_malformed_flag
     output, error, status = Open3.capture3(PATH, BIN, '-c="ls -al"', '-zz',
