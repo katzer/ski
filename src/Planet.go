@@ -5,6 +5,7 @@ import (
 )
 
 // codebeat:disable[TOO_MANY_IVARS]
+
 // Planet contains all Informations of one server
 type Planet struct {
 	id           string

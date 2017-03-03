@@ -34,7 +34,7 @@ func parseConnectionDetails(ids []string) []Planet {
 			dbID:         dbID,
 			user:         user,
 			host:         host,
-			outputStruct: StructuredOuput{planetID, "", 0},
+			outputStruct: &StructuredOuput{planetID, "", 0},
 		}
 
 		planet.valid = isValidPlanet(planet)
