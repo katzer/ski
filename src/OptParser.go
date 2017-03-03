@@ -1,17 +1,18 @@
 package main
 
 import (
+	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
+	"io/ioutil"
 	"os"
-
 	"strings"
 )
 
 // codebeat:disable[TOO_MANY_IVARS]
-// Opts ...
+
+// Opts structure for holding commandline arguments
 type Opts struct {
 	Debug      bool     `json:"debug"`
 	Help       bool     `json:"help"`
@@ -63,7 +64,7 @@ func (opts *Opts) postProcessing() {
 
 func validate(opts *Opts) {
 	validateArgsCount(opts)
-	validateExtension(opts.scriptName)
+	validateExtension(opts.ScriptName)
 	validateCommandAndScript(opts)
 }
 
@@ -84,12 +85,13 @@ func validateCommandAndScript(opts *Opts) {
 //Checks if the given script got an acceptable extension
 func validateExtension(scriptname string) {
 	if scriptname != "" && !(strings.HasSuffix(scriptname, ".sh") || strings.HasSuffix(scriptname, ".sql")) {
-		message := "The provided script must end in either \".sh\" if it's a shell script or \".sql\" if it's a sql script ."
+		message := fmt.Sprintf("The provided script \"%s\" must end in either \".sh\" if it's a shell script or \".sql\" if it's a sql script .", scriptname)
 		err := errors.New(message)
 		os.Stderr.WriteString(message)
 		log.Fatal(err)
 	}
 }
+
 /**
 *	Checks if there are enough of the correct arguments to run ski
  */

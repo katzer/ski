@@ -14,7 +14,6 @@ import (
 func parseConnectionDetails(planetID string) Planet {
 	skiString := getFullSkiString(planetID)
 	var planet Planet
-	var dbID string // TODO what is it, why is it not set
 	tokens := strings.Split(skiString, skiDelim)
 	planet.planetType = tokens[0]
 	connectionURL := tokens[len(tokens)-1]
@@ -25,12 +24,6 @@ func parseConnectionDetails(planetID string) Planet {
 	planet.user, planet.host = getUserAndHost(connectionURL)
 	log.Debugf("skiString: %s, and planet parsed from it: %v", planet)
 	return planet
-}
-
-//splits db details (dbID:user@host) and returns them as dbID,user@host
-func procDBDets(dbDet string) (string, string) {
-	parts := strings.Split(dbDet, ":")
-	return parts[0], parts[1]
 }
 
 func getKeyPath() string {
@@ -65,7 +58,6 @@ func getFullSkiString(id string) string {
 	// TODO fifa sends a newline
 	return strings.TrimSuffix(string(out), "\n")
 }
-
 
 func getUserAndHost(connectionURL string) (string, string) {
 	var tokens []string

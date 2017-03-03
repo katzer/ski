@@ -22,7 +22,7 @@ func (formatter *Formatter) format(planet Planet, opts *Opts) string {
 	var formatted string
 	if !opts.Pretty {
 		if opts.Template != "" {
-			formatted = formatter.tableFormatter.format(toPrint.output, opts)
+			formatted = formatter.tableFormatter.format(planet, opts)
 		} else {
 			formatted = planet.outputStruct.output
 		}

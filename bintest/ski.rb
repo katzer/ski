@@ -121,7 +121,7 @@ class TestGoo < Test::Unit::TestCase
   def test_bad_script
     output, error, status = Open3.capture3(PATH, BIN, '-s="badscript.sh"',
                                            'app')
-    check_no_error(output, error, 'bad_script')
+    check_error(output, error, 'bad_script')
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include error, 'Process exited with status 127', 'return incorrect'
   end
@@ -139,7 +139,7 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app')
     check_error(output, error, 'pretty_print')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, '|   0 | app       | App-Package 1 |', 'return was incorrect'
+    assert_include output, '|   0 | app       |           - |', 'return was incorrect'
   end
 
   def test_multiple_pretty_print
@@ -147,9 +147,9 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app', 'app', 'app')
     check_error(output, error, 'pretty_print')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, '|   0 | app       | App-Package 1 |', 'return was incorrect'
-    assert_include output, '|   1 | app       | App-Package 1 |', 'return was incorrect'
-    assert_include output, '|   2 | app       | App-Package 1 |', 'return was incorrect'
+    assert_include output, '|   0 | app       |           - |', 'return was incorrect'
+    assert_include output, '|   1 | app       |           - |', 'return was incorrect'
+    assert_include output, '|   2 | app       |           - |', 'return was incorrect'
   end
 
   def test_malformed_flag

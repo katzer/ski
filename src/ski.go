@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	log "github.com/Sirupsen/logrus"
+	"os"
 )
 
 func parseOptions() Opts {
@@ -46,14 +46,14 @@ func parseOptions() Opts {
 
 func main() {
 	opts := parseOptions()
-	validate(&opts)
 	opts.postProcessing()
+	validate(&opts)
 
-	if opts.helpFlag {
+	if opts.Help {
 		printUsage()
 		os.Exit(0)
 	}
-	if opts.versionFlag {
+	if opts.Version {
 		printVersion()
 		os.Exit(0)
 	}
@@ -67,6 +67,7 @@ func main() {
 	exec.execMain(&opts)
 	log.Infof("Ended with args: %v", os.Args)
 }
+
 /**
 func createLogDirIfNecessary(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
@@ -80,13 +81,13 @@ func createLogDirIfNecessary(dir string) {
 func makeExecutor(opts *Opts) Executor {
 	log.Debugf("Function: makeExecutor")
 	executor := Executor{}
-	for _, planetID := range opts.Planets {
+	for i, planetID := range opts.Planets {
 		planet := parseConnectionDetails(planetID)
 		if !isValidPlanet(planet) {
 			os.Exit(1) // TODO ask if it really is wanted.
 		}
 		planet.id = planetID
-		planet.outputStruct = StructuredOuput{planetID, "", 0}
+		planet.outputStruct = &StructuredOuput{planetID, "", i}
 		executor.planets = append(executor.planets, planet)
 	}
 	log.Debugf("executor: %s", executor)
@@ -122,52 +123,4 @@ func printUsage() {
 	-d    Show extended debug informations, set logging level to debug
 `
 	fmt.Println(usage)
-}
-
-func getOS() string {
-	switch runtime.GOOS {
-	case "windows":
-		return "Windows"
-	case "linux":
-		return "Linux"
-	case "darwin":
-		return "MacOS"
-	default:
-		return "could not determine OS"
-	}
-}
-
-func getArch() string {
-	switch runtime.GOARCH {
-	case "amd64":
-		return "64bit"
-	case "386":
-		return "32bit"
-	default:
-		return "Unkown architecture"
-	}
-}
-
-func getOSArch() string {
-	switch runtime.GOOS {
-	case "linux":
-		out, err := exec.Command("uname", "-m").Output()
-		if err != nil {
-			fmt.Println("error occured")
-			fmt.Printf("%s", err)
-		}
-		return string(out)
-	case "windows":
-		out, err := exec.Command("if exist \"%ProgramFiles(x86)%\" echo 64-bit").Output()
-		if err != nil {
-			fmt.Println("error occured")
-			fmt.Printf("%s", err)
-		}
-		if string(out) == "64-bit" {
-			return "x86_64"
-		}
-		return "i686"
-	default:
-		return "unkown Operating System"
-	}
 }

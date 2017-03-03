@@ -17,7 +17,7 @@ func formatAndPrint(planets []Planet, opts *Opts) {
 		fmt.Print(formatted)
 
 	}
-	if opts.prettyFlag {
+	if opts.Pretty {
 		formatter.execute(opts)
 	}
 }
