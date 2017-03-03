@@ -48,8 +48,8 @@ func parseOptions() Opts {
 
 func main() {
 	opts := parseOptions()
-	validate(&opts)
 	opts.postProcessing()
+	validate(&opts)
 
 	verbose := opts.Debug || len(opts.LogFile) > 0
 	setupLogger(opts.LogFile, verbose)
