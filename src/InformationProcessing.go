@@ -21,7 +21,7 @@ func parseConnectionDetails(ids []string) []Planet {
 		urlTokens := strings.Split(connectionURL, ":")
 
 		var dbID string
-		planetID, planetType := tokens[0], tokens[1]
+		planetID, planetType, name := tokens[0], tokens[1], tokens[2]
 		if len(urlTokens) > 1 {
 			dbID = urlTokens[0]
 		}
@@ -31,6 +31,7 @@ func parseConnectionDetails(ids []string) []Planet {
 		planet := Planet{
 			id:           planetID,
 			planetType:   planetType,
+			name:         name,
 			dbID:         dbID,
 			user:         user,
 			host:         host,
