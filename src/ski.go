@@ -129,7 +129,7 @@ func getArch() string {
 	case "386":
 		return "32bit"
 	default:
-		return "could not determine architecture"
+		return "Unkown architecture"
 	}
 }
 
@@ -153,6 +153,6 @@ func getOSArch() string {
 		}
 		return "i686"
 	default:
-		return "could not determine Operating system"
+		return "unkown Operating System"
 	}
 }

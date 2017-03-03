@@ -23,62 +23,12 @@ func (tableFormatter *TableFormatter) format(planet Planet, opts *Opts) string {
 
 }
 
-func (tableFormatter *TableFormatter) cleanEntries(toParse string) string {
-	split := strings.Split(toParse, "\n")
-	split = split[:len(split)-1]
-	cleaned := ""
-	for _, entry := range split {
-		row := strings.Split(entry, ", ")
-		row[0] = tableFormatter.cleanEntry(row[0], true)
-		row[1] = tableFormatter.cleanEntry(row[1], false)
-		cleaned = fmt.Sprintf("%s%s, %s\n", cleaned, row[0], row[1])
-	}
-
-	return cleaned
-}
-
-func (tableFormatter *TableFormatter) cleanEntry(row string, key bool) string {
-	cleanedComponent := ""
-	if key {
-		cleanedComponent = strings.TrimPrefix(row, "[")
-	} else {
-		cleanedComponent = strings.TrimPrefix(row, "]")
-	}
-	cleanedComponent = strings.TrimPrefix(cleanedComponent, "'")
-	cleanedComponent = strings.TrimSuffix(cleanedComponent, "'")
-	cleanedComponent = strings.TrimSpace(cleanedComponent)
-	if key {
-		cleanedComponent = fmt.Sprintf("['%s'", cleanedComponent)
-	} else {
-		cleanedComponent = fmt.Sprintf("'%s']", cleanedComponent)
-	}
-	return cleanedComponent
-}
-
-func cleanifyTable(toclean string) string {
-	split := strings.Split(toclean, "\n")
-	split = split[:len(split)-1]
-	cleaned := ""
-	FAST := false
-	for _, entry := range split {
-		row := strings.Split(entry, ", ")
-		if FAST {
-			row[0] = fmt.Sprintf("['%s'", strings.TrimSpace(strings.Split(row[1], "|")[2]))
-			row[1] = fmt.Sprintf("'%s']", strings.TrimSpace(strings.Split(row[1], "|")[3]))
-		}
-		if strings.Contains(row[0], "-[FAST") {
-			FAST = true
-			continue
-		}
-		cleaned = fmt.Sprintf("%s%s, %s\n", cleaned, row[0], row[1])
-	}
-	return cleaned
-}
-
+// Converts the quite special format textFSM returns to proper JSON format
 func convertToJSON(toConvert string) string {
 	return fmt.Sprintf("[\n%s]\n", strings.Replace(toConvert, "]\n[", "],\n[", -1))
 }
 
+// executes phyton2 program "textFSM" with provided template and temporary file and returns the answer
 func (tableFormatter *TableFormatter) executeTextFSM(planet Planet, opts *Opts) string {
 	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
 	templateFile := path.Join(os.Getenv("ORBIT_HOME"), templateDirectory, opts.template)
@@ -100,6 +50,7 @@ func (tableFormatter *TableFormatter) executeTextFSM(planet Planet, opts *Opts) 
 	return formattedString
 }
 
+// Writes the provided string to a temporary file
 func (tableFormatter *TableFormatter) writeTmpTable(toWrite string) {
 	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
 	err := ioutil.WriteFile(tmpTableFile, []byte(toWrite), 0644)
@@ -109,6 +60,7 @@ func (tableFormatter *TableFormatter) writeTmpTable(toWrite string) {
 
 }
 
+// deletes temporary file needed for textFSM
 func (tableFormatter *TableFormatter) deleteTmpTable() {
 	tmpTableFile := path.Join(os.Getenv("ORBIT_HOME"), tmpTableFileName)
 	err := os.Remove(tmpTableFile)

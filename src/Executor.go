@@ -25,7 +25,7 @@ func (executor *Executor) execMain(opts *Opts) {
 	wg.Add(len(executor.planets))
 
 	for _, planet := range executor.planets {
-		// to avoid closure over the value planet and the value i. seems odd but it is recommended
+		// to avoid closure over the value planet. seems odd but it is recommended
 		planet := planet
 		go func() {
 			planet.execute(opts)

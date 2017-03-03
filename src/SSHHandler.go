@@ -61,7 +61,6 @@ func uploadFile(user string, hostname string, opts *Opts) {
 }
 
 func execScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
-
 	log.Debugf("function: execScript")
 	log.Debugf("user, host : |%s| |%s|", planet.user, planet.host)
 	uploadFile(planet.user, planet.host, opts)

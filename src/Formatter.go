@@ -1,10 +1,8 @@
 package main
 
-import (
-	"strings"
-)
+import ()
 
-//Formatter a struct remebering the different formatter
+//Formatter a struct remembering the different formatter
 type Formatter struct {
 	prettyFormatter      PrettyFormatter
 	tableFormatter       TableFormatter
@@ -40,23 +38,12 @@ func (formatter *Formatter) format(planet Planet, opts *Opts) string {
 }
 
 func (formatter *Formatter) execute(opts *Opts) {
-	if opts.prettyFlag {
-		if opts.template != "" {
-			formatter.prettyTableFormatter.execute()
-			return
-		}
-		formatter.prettyFormatter.execute()
+	if !opts.prettyFlag {
+		return
 	}
-}
-
-func parseFSMOutput(toParse string) map[string]string {
-	var parsed map[string]string
-	parsed = make(map[string]string)
-	split := strings.Split(toParse, "\n")
-	split = split[0 : len(split)-2]
-	for _, entry := range split {
-		row := strings.Split(entry, " ")
-		parsed[strings.TrimSuffix(row[0], ",")] = strings.Join(row[1:], "")
+	if opts.template != "" {
+		formatter.prettyTableFormatter.execute()
+		return
 	}
-	return parsed
+	formatter.prettyFormatter.execute()
 }

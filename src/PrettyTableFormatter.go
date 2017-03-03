@@ -127,6 +127,8 @@ func (prettyTableFormatter *PrettyTableFormatter) cutMapToSlice(toCut map[string
 func (prettyTableFormatter *PrettyTableFormatter) printTable() {
 
 	table := tablewriter.NewWriter(os.Stdout)
+	table.SetRowLine(true)
+	table.SetRowSeparator("-")
 	table.SetHeader(prettyTableFormatter.cutMapToSlice(prettyTableFormatter.keys))
 
 	for _, set := range prettyTableFormatter.sets {
