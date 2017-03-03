@@ -114,7 +114,6 @@ class TestGoo < Test::Unit::TestCase
                                            '-d=true', 'app')
     check_no_error(output, error, 'no_such_script')
     assert_true status.success?, 'Process did exit cleanly'
-    assert_equal output, '', 'return was not correct'
     assert_include error, 'no such file or directory', 'error was not correct'
   end
 
