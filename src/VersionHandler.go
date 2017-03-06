@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 var version = "undefined"
@@ -14,7 +14,7 @@ func printVersion() {
 	progArch := getArch()
 	archOS := getOSArch()
 	vers := fmt.Sprintf("ski version %s %s %s (%s)", version, progArch, runtimeOS, archOS)
-	os.Stdout.WriteString(vers + "\n")
+	fmt.Printf("%s\n", vers)
 }
 
 func getOS() string {
@@ -49,7 +49,7 @@ func getOSArch() string {
 			fmt.Println("error occured")
 			fmt.Printf("%s", err)
 		}
-		return string(out)
+		return strings.TrimSuffix(string(out), "\n")
 	case "windows":
 		out, err := exec.Command("if exist \"%ProgramFiles(x86)%\" echo 64-bit").Output()
 		if err != nil {
