@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
@@ -22,7 +23,8 @@ func setupLogger(customLogfile string, verbose bool) {
 	createLogDirIfNecessary(logDir)
 	logFile := path.Join(logDir, "ski.log") // default log file
 	if len(customLogfile) > 0 {
-		logFile = customLogfile
+		filename := filepath.Base(customLogfile)
+		logFile = path.Join(logDir, filename)
 	}
 
 	formatter := getDefaultFormatter()

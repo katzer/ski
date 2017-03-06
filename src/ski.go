@@ -8,48 +8,11 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-func parseOptions() Opts {
-	var help, pretty, debug, load, version, saveReport bool
-	var jobFile, logFile, template, scriptName, command string
-
-	flag.BoolVar(&help, "h", false, "help")
-	flag.BoolVar(&pretty, "p", false, "prettyprint")
-	flag.BoolVar(&debug, "d", false, "verbose")
-	flag.BoolVar(&load, "l", false, "ssh profile loading")
-	flag.BoolVar(&version, "v", false, "version")
-	flag.BoolVar(&saveReport, "js", false, "if the summary should be saved in json format. Used with the job flag")
-	flag.StringVar(&jobFile, "j", "", "path to a json file with a task description")
-	flag.StringVar(&logFile, "logfile", "ski.log", "path to a file for logging")
-	flag.StringVar(&template, "t", "", "filename of template")
-	flag.StringVar(&scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
-	flag.StringVar(&command, "c", "", "command to be executed in quotes")
-	flag.Parse()
-
-	if len(jobFile) > 0 {
-		return createATaskFromJobFile(jobFile)
-	}
-
-	opts := Opts{
-		Help:       help,
-		Pretty:     pretty,
-		Debug:      debug,
-		Load:       load,
-		Version:    version,
-		SaveReport: saveReport,
-		Template:   template,
-		ScriptName: scriptName,
-		Command:    command,
-		Planets:    flag.Args(),
-		LogFile:    logFile,
-	}
-
-	return opts
-}
-
 func main() {
 	opts := parseOptions()
+	validateArgsCount(&opts)
 	opts.postProcessing()
-	validate(&opts)
+	opts.validate()
 
 	verbose := opts.Debug || len(opts.LogFile) > 0
 	setupLogger(opts.LogFile, verbose)
@@ -99,4 +62,58 @@ func printUsage() {
 	-d    Show extended debug informations, set logging level to debug
 `
 	fmt.Println(usage)
+	os.Exit(0)
+}
+
+func parseOptions() Opts {
+	var help, pretty, debug, load, _version, saveReport bool
+	var jobFile, logFile, template, scriptName, command string
+
+	flag.BoolVar(&help, "h", false, "help")
+	flag.BoolVar(&pretty, "p", false, "prettyprint")
+	flag.BoolVar(&debug, "d", false, "verbose")
+	flag.BoolVar(&load, "l", false, "ssh profile loading")
+	flag.BoolVar(&_version, "v", false, "version")
+	flag.BoolVar(&saveReport, "js", false, "if the summary should be saved in json format. Used with the job flag")
+	flag.StringVar(&jobFile, "j", "", "path to a json file with a task description")
+	flag.StringVar(&logFile, "logfile", "ski.log", "path to a file for logging")
+	flag.StringVar(&template, "t", "", "filename of template")
+	flag.StringVar(&scriptName, "s", "", "name of the script(regardless wether db or bash) to be executed")
+	flag.StringVar(&command, "c", "", "command to be executed in quotes")
+	// flag.Usage = printUsage
+	flag.Parse()
+
+	if len(jobFile) > 0 {
+		return createATaskFromJobFile(jobFile)
+	}
+
+	opts := Opts{
+		Help:       help,
+		Pretty:     pretty,
+		Debug:      debug,
+		Load:       load,
+		Version:    _version,
+		SaveReport: saveReport,
+		Template:   template,
+		ScriptName: scriptName,
+		Command:    command,
+		Planets:    flag.Args(),
+		LogFile:    logFile,
+	}
+
+	return opts
+}
+
+func validateArgsCount(opts *Opts) {
+	if opts.Version {
+		printVersion()
+		os.Exit(0)
+	}
+	tooFew := len(os.Args) == 1
+	// TODO Check if flags package removes the leading and trailing white spaces.
+	scriptEmpty := len(opts.ScriptName) == 0
+	cmdEmpty := len(opts.Command) == 0
+	if tooFew || scriptEmpty && cmdEmpty {
+		printUsage()
+	}
 }

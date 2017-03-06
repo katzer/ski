@@ -12,7 +12,7 @@ func TestParseOptions(t *testing.T) {
 	// create the json file in tmp folder
 	jsonFile := setupOptParserTest()
 	jobOption := fmt.Sprintf("-j=%s", jsonFile)
-	os.Args = []string{"ski", jobOption, "-d=false", "-v=true", "-c=\"ls -la ${HOME}\""}
+	os.Args = []string{"ski", jobOption, "-d=false", "-v=false", "-c=\"ls -la ${HOME}\""}
 	fmt.Printf("TestParseOptions :: os.Args: %v\n", os.Args)
 	opts := parseOptions()
 	fmt.Printf("TestParseOptions :: opts: %s\n", opts.String())

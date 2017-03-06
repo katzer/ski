@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // codebeat:disable[TOO_MANY_IVARS]
@@ -36,6 +37,7 @@ func (opts *Opts) String() string {
 	Load: %t
 	Pretty: %t
 	Version: %t
+  SaveReport %t
 	Command: %s
 	ScriptName: %s
 	Template : %s
@@ -49,6 +51,7 @@ func (opts *Opts) String() string {
 		opts.Load,
 		opts.Pretty,
 		opts.Version,
+		opts.SaveReport,
 		opts.Command,
 		opts.ScriptName,
 		opts.Template,
@@ -62,15 +65,14 @@ func (opts *Opts) postProcessing() {
 	opts.ScriptName = strings.TrimSuffix(strings.TrimPrefix(opts.ScriptName, "\""), "\"")
 }
 
-func validate(opts *Opts) {
-	validateArgsCount(opts)
-	validateExtension(opts.ScriptName)
-	validateCommandAndScript(opts)
-	checkForInvalidIds(opts.Planets)
+func (opts *Opts) validate() {
+	opts.validateExtension()
+	opts.validateCommandAndScript()
+	opts.checkForInvalidIds()
 }
 
-func checkForInvalidIds(ids []string) {
-	for _, id := range ids {
+func (opts *Opts) checkForInvalidIds() {
+	for _, id := range opts.Planets {
 		// Check if any flags were given after planet ids, if yes stop the app
 		if strings.HasPrefix(id, "-") {
 			fmt.Fprintf(os.Stderr, "Unknown target: %s", id)
@@ -79,10 +81,7 @@ func checkForInvalidIds(ids []string) {
 	}
 }
 
-/**
-*	Checks if theres a command and a script at the same time
- */
-func validateCommandAndScript(opts *Opts) {
+func (opts *Opts) validateCommandAndScript() {
 	scriptNotEmpty := len(opts.ScriptName) > 0
 	cmdNotEmpty := len(opts.Command) > 0
 	if scriptNotEmpty && cmdNotEmpty {
@@ -94,30 +93,12 @@ func validateCommandAndScript(opts *Opts) {
 }
 
 //Checks if the given script got an acceptable extension
-func validateExtension(scriptname string) {
-	if scriptname != "" && !(strings.HasSuffix(scriptname, ".sh") || strings.HasSuffix(scriptname, ".sql")) {
-		message := fmt.Sprintf("The provided script \"%s\" must end in either \".sh\" if it's a shell script or \".sql\" if it's a sql script .", scriptname)
-		err := errors.New(message)
-		os.Stderr.WriteString(message)
-		log.Fatal(err)
-	}
-}
-
-/**
-*	Checks if there are enough of the correct arguments to run ski
- */
-func validateArgsCount(opts *Opts) {
-	tooFew := len(os.Args) == 1
-	// TODO Check if flags package removes the leading and trailing white spaces.
-	scriptEmpty := len(opts.ScriptName) == 0
-	cmdEmpty := len(opts.Command) == 0
-	if opts.Version {
-		printVersion()
-		os.Exit(0)
-	}
-	if tooFew || scriptEmpty && cmdEmpty {
-		printUsage()
-		os.Exit(0)
+func (opts *Opts) validateExtension() {
+	script := opts.ScriptName
+	if script != "" && !(strings.HasSuffix(script, ".sh") || strings.HasSuffix(script, ".sql")) {
+		message := fmt.Sprintf("The provided scripts %s must have either .sh or .sql extension.", script)
+		fmt.Fprintln(os.Stderr, message)
+		log.Fatal(message)
 	}
 }
 
