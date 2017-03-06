@@ -27,7 +27,7 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 	if err != nil {
 		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
-		os.Stderr.WriteString(errorString)
+		fmt.Fprintln(os.Stderr, errorString)
 		log.Warnf("%s\nAdditional info: %s\n", err, message)
 		strucOut.output = message
 		logExecCommand(command, planet, strucOut)
@@ -55,7 +55,7 @@ func uploadFile(user string, hostname string, opts *Opts) {
 	if err != nil {
 		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
-		os.Stderr.WriteString(errorString)
+		fmt.Fprintln(os.Stderr, errorString)
 		log.Warningf("%s\nAdditional info: %s\n", err, message)
 	}
 }

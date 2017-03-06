@@ -3,12 +3,13 @@ package main
 import (
 	"bytes"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // TableFormatter prints input in tabular format
@@ -42,7 +43,7 @@ func (tableFormatter *TableFormatter) executeTextFSM(planet Planet, opts *Opts) 
 	if err != nil {
 		message := "thrown from tableFormatter.format->exec pythonscript"
 		full := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
-		os.Stderr.WriteString(full)
+		fmt.Fprintln(os.Stderr, full)
 		log.Errorln(full)
 		log.Fatalf("Format: %s\n", planet.outputStruct.output)
 	}

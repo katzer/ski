@@ -39,8 +39,8 @@ func setupLogger(customLogfile string, verbose bool) {
 	)
 
 	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("%v. Rolling file appender can't be used.\n", err))
-		os.Stderr.WriteString("Logrus will log to stderr.")
+		fmt.Fprintf(os.Stderr, "%v. Rolling file appender can't be used.\n", err)
+		fmt.Fprintln(os.Stderr, "Logrus will log to stderr.")
 	} else {
 		hook := hook.NewHook(hook.WriterMap{
 			log.DebugLevel: writer,
@@ -76,7 +76,7 @@ func createLogDirIfNecessary(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
 			// can't do anything
-			os.Stderr.WriteString(fmt.Sprintf("%v", err))
+			fmt.Fprintf(os.Stderr, "%v", err)
 		}
 	}
 }

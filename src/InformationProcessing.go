@@ -83,7 +83,7 @@ func getFullSkiString(ids []string) []string {
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
-		os.Stderr.WriteString("Unknown target\n")
+		fmt.Fprintln(os.Stderr, "Unknown target")
 		log.Fatalf(message)
 	}
 	// NOTE: "\n" at the end
