@@ -16,13 +16,13 @@ module HostTests
     assert_include output, '123'
   end
 
-#def test_not_authorized_host
-#  output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"',
-#                                        '-d=true', 'unauthorized')
-#  check_no_error(output, error, 'test_not_authorized_host')
-#  assert_false status.success?, 'Process did exit cleanly'
-#  assert_include error, 'ssh: unable to authenticate'
-#end
+def test_not_authorized_host
+  output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"',
+                                        '-d=true', 'unauthorized')
+  check_no_error(output, error, 'test_not_authorized_host')
+  assert_false status.success?, 'Process did exit cleanly'
+  assert_include error, 'ssh: unable to authenticate'
+end
 
 #def test_offline_host#   output, error, status = Open3.capture3(PATH, BIN, '-c="echo 123"',#                                          '-d=true', 'offline')#   check_no_error(output, error, 'test_offline_host')#   assert_false status.success?, 'Process did exit cleanly'#   assert_include error, 'no such host'# enddef test_help
 #  output, error, status = Open3.capture3(PATH, BIN, '-h')
