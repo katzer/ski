@@ -1,10 +1,11 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/olekukonko/tablewriter"
 	"os"
 	"strconv"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/olekukonko/tablewriter"
 )
 
 // PrettyFormatter displays output from one or multiple planets in a neat, orderly fashion
@@ -24,7 +25,7 @@ func (prettyFormatter *PrettyFormatter) init() {
 	prettyFormatter.addKey("Planet-Type")
 }
 
-func (prettyFormatter *PrettyFormatter) addMetadata(toComplete map[string]string, planet Planet) map[string]string {
+func (prettyFormatter *PrettyFormatter) addMetadata(toComplete map[string]string, planet *Planet) map[string]string {
 	prettyFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
 	prettyFormatter.addEntry("Planet-ID", planet.id, toComplete)
 	prettyFormatter.addEntry("Planet-Name", planet.name, toComplete)
@@ -48,7 +49,7 @@ func (prettyFormatter *PrettyFormatter) addKey(key string) {
 	}
 }
 
-func (prettyFormatter *PrettyFormatter) format(planet Planet) {
+func (prettyFormatter *PrettyFormatter) format(planet *Planet) {
 	var completeTable = make(map[string]string)
 	prettyFormatter.addMetadata(completeTable, planet)
 	prettyFormatter.addEntry("output", planet.outputStruct.output, completeTable)

@@ -63,19 +63,20 @@ func getDefaultFormatter() log.Formatter {
 	return formatter
 }
 
-func logExecCommand(command string, planet *Planet, strucOut *StructuredOuput) {
+func logExecCommand(command string, planet *Planet) {
 	log.Debugln("### execCommand complete ###")
 	log.Debugf("user: %s\n", planet.user)
 	log.Debugf("hostname: %s\n", planet.host)
 	log.Debugf("orbit key: %s\n", os.Getenv("ORBIT_KEY"))
 	log.Debugf("command: %s\n", command)
-	log.Debugf("strucOut: %v\n", strucOut)
+	log.Debugf("strucOut: %v\n", planet.outputStruct)
 }
 
 func createLogDirIfNecessary(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
 			// can't do anything
+			fmt.Fprintf(os.Stderr, "createlogdir\n")
 			fmt.Fprintf(os.Stderr, "%v", err)
 		}
 	}

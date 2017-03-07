@@ -15,6 +15,7 @@ type Planet struct {
 	planetType   string
 	dbID         string
 	valid        bool
+	errored      bool
 	outputStruct *StructuredOuput
 }
 
@@ -37,18 +38,18 @@ func (planet *Planet) execute(opts *Opts) {
 
 func (planet *Planet) executeDatabase(opts *Opts) {
 	if opts.ScriptName != "" {
-		execDBScript(planet, planet.outputStruct, opts)
+		execDBScript(planet, opts)
 	} else {
-		execDBCommand(planet, planet.outputStruct, opts)
+		execDBCommand(planet, opts)
 	}
 }
 
 func (planet *Planet) executeLinux(opts *Opts) {
 	if opts.ScriptName != "" {
-		execScript(planet, planet.outputStruct, opts)
+		execScript(planet, opts)
 	} else {
 		planet.planetInfo(opts)
-		execCommand(opts.Command, planet, planet.outputStruct, opts)
+		execCommand(opts.Command, planet, opts)
 		planet.planetInfo(opts)
 	}
 }

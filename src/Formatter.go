@@ -1,7 +1,5 @@
 package main
 
-import ()
-
 //Formatter a struct remembering the different formatter
 type Formatter struct {
 	prettyFormatter      PrettyFormatter
@@ -18,7 +16,7 @@ func (formatter *Formatter) init() {
 	formatter.prettyFormatter.init()
 }
 
-func (formatter *Formatter) format(planet Planet, opts *Opts) string {
+func (formatter *Formatter) format(planet *Planet, opts *Opts) string {
 	var formatted string
 	if !opts.Pretty {
 		if opts.Template != "" {

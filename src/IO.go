@@ -2,23 +2,29 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
-const planetLength int = 21
-
 func formatAndPrint(planets []Planet, opts *Opts) {
 	formatter := Formatter{}
+	failed := false
 	formatter.init()
 	var formatted string
 
 	for _, entry := range planets {
-		formatted = formatter.format(entry, opts)
+		if entry.errored {
+			failed = true
+		}
+		formatted = formatter.format(&entry, opts)
 		fmt.Print(formatted)
 
 	}
 	if opts.Pretty {
 		formatter.execute(opts)
+	}
+	if failed {
+		os.Exit(1)
 	}
 }
 

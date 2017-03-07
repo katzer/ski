@@ -1,11 +1,12 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/olekukonko/tablewriter"
 	"os"
 	"strconv"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/olekukonko/tablewriter"
 )
 
 const prettyPythonScriptName = "texttable.py"
@@ -33,9 +34,9 @@ func (prettyTableFormatter *PrettyTableFormatter) init() {
 	prettyTableFormatter.addKey("Planet-Type")
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Opts) {
+func (prettyTableFormatter *PrettyTableFormatter) format(planet *Planet, opts *Opts) {
 	var decodedJSON = make([][]string, 0)
-	decodedJSON = decode(planet.outputStruct.output)
+	decodedJSON = decode(planet, planet.outputStruct.output)
 	initTable := prettyTableFormatter.addMetadata(planet)
 	fullTable := prettyTableFormatter.normalizeTable(initTable, decodedJSON)
 	set := Dataset{fullTable, nil}
@@ -47,7 +48,7 @@ func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Op
 	prettyTableFormatter.sets = append(prettyTableFormatter.sets, set)
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) addMetadata(planet Planet) map[string]string {
+func (prettyTableFormatter *PrettyTableFormatter) addMetadata(planet *Planet) map[string]string {
 	var toComplete = make(map[string]string)
 	prettyTableFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
 	prettyTableFormatter.addEntry("Planet-ID", planet.id, toComplete)

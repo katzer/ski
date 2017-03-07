@@ -107,12 +107,16 @@ func createATaskFromJobFile(jsonFile string) (opts Opts) {
 	job := Opts{}
 	bytes, err := ioutil.ReadFile(jsonFile)
 	if err != nil {
-		log.Fatalf("Couldn't open job file: %s", jsonFile)
+		errorMessage := fmt.Sprintf("Couldn't open job file: %s", jsonFile)
+		fmt.Fprint(os.Stderr, errorMessage)
+		log.Fatal(errorMessage)
 	}
 
 	err = json.Unmarshal(bytes, &job)
 	if err != nil {
-		log.Fatalf("Error parsing job json file: %s", jsonFile)
+		errorMessage := fmt.Sprintf("Error parsing job json file: %s", jsonFile)
+		fmt.Fprint(os.Stderr, errorMessage)
+		log.Fatal(errorMessage)
 	}
 
 	log.Debugf("Read a task from %s", jsonFile)

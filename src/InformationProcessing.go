@@ -35,6 +35,7 @@ func parseConnectionDetails(ids []string) []Planet {
 			dbID:         dbID,
 			user:         user,
 			host:         host,
+			errored:      false,
 			outputStruct: &StructuredOuput{planetID, "", 0},
 		}
 
@@ -52,7 +53,7 @@ func getKeyPath() string {
 	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
 		if runtime.GOOS == "windows" {
-			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
+			keyPath = ""
 		} else {
 			keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key")
 		}
