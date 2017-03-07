@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
@@ -105,7 +106,13 @@ func (opts *Opts) validateExtension() {
 // creates a task from a json file
 func createATaskFromJobFile(jsonFile string) (opts Opts) {
 	job := Opts{}
-	bytes, err := ioutil.ReadFile(jsonFile)
+	wcopy := jsonFile // assumption abs path
+	tokens := strings.Split(jsonFile, string(os.PathSeparator))
+	if len(tokens) == 1 {
+		// relative path given, read from jobs folder
+		wcopy = path.Join(os.Getenv("ORBIT_HOME"), "jobs", jsonFile)
+	}
+	bytes, err := ioutil.ReadFile(wcopy)
 	if err != nil {
 		log.Fatalf("Couldn't open job file: %s", jsonFile)
 	}
