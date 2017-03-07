@@ -38,7 +38,7 @@ func (opts *Opts) String() string {
 	Load: %t
 	Pretty: %t
 	Version: %t
-  SaveReport %t
+	SaveReport: %t
 	Command: %s
 	ScriptName: %s
 	Template : %s
