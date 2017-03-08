@@ -3,6 +3,7 @@
 *.a
 *.so
 *.log
+*.log.*
 bintest/orbit/logs/*.log.*
 tags
 orbit.key
@@ -43,4 +44,3 @@ src/debug
 .idea/
 
 *.orig
-
