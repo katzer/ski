@@ -1,11 +1,12 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/olekukonko/tablewriter"
 	"os"
 	"strconv"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/olekukonko/tablewriter"
 )
 
 const prettyPythonScriptName = "texttable.py"
@@ -34,8 +35,7 @@ func (prettyTableFormatter *PrettyTableFormatter) init() {
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Opts) {
-	var decodedJSON = make([][]string, 0)
-	decodedJSON = decode(planet.outputStruct.output)
+	decodedJSON := decode(planet.outputStruct.output)
 	initTable := prettyTableFormatter.addMetadata(planet)
 	fullTable := prettyTableFormatter.normalizeTable(initTable, decodedJSON)
 	set := Dataset{fullTable, nil}
