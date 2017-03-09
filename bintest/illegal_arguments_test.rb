@@ -6,7 +6,7 @@ module IllegalArgumentsTest
     output, error, status = Open3.capture3(PATH, BIN, '-c="yabeda baba"',
                                            '-d=true', 'app')
     check_no_error(output, error, 'bad_command')
-    assert_true status.success?, 'Process did exit cleanly'
+    assert_false status.success?, 'Process did exit cleanly'
     assert_include output, 'Process exited with status 127', 'return incorrect'
   end
 
@@ -14,9 +14,9 @@ module IllegalArgumentsTest
     output, error, status = Open3.capture3(PATH, BIN, '-s="showver.sh"',
                                            '-t="useless_template"', '-d=true',
                                            '-p', 'app')
-    check_no_error(output, error, 'malformed_template')
-    assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'exit status 2', 'wrong error'
+    check_error(output, error, 'malformed_template')
+    assert_true status.success?, 'Process did exit cleanly'
+    #assert_include error, 'exit status 2', 'wrong error'
   end
 
   def test_no_template
@@ -25,14 +25,14 @@ module IllegalArgumentsTest
                                            '-p', 'app')
     check_no_error(output, error, 'no_template')
     assert_false status.success?, 'Process did exit cleanly'
-    assert_include error, 'exit status 2', 'wrong error'
+    assert_include error, 'The provided template does not exist', 'wrong error'
   end
 
   def test_bad_script
     output, error, status = Open3.capture3(PATH, BIN, '-s="badscript.sh"',
                                            'app')
-    check_no_error(output, error, 'bad_script')
-    assert_true status.success?, 'Process did exit cleanly'
+    check_error(output, error, 'bad_script')
+    assert_false status.success?, 'Process did exit cleanly'
     assert_include output, 'Process exited with status 127', 'return incorrect'
   end
 
@@ -40,7 +40,7 @@ module IllegalArgumentsTest
     output, error, status = Open3.capture3(PATH, BIN, '-s="nonExistent.sh"',
                                            '-d=true', 'app')
     check_no_error(output, error, 'no_such_script')
-    assert_true status.success?, 'Process did exit cleanly'
+    assert_false status.success?, 'Process did exit cleanly'
     assert_include output, 'no such file or directory', 'error was not correct'
   end
 end

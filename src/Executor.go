@@ -9,7 +9,7 @@ import (
 
 // Executor This struct ensures the parallel execution of all command executions
 type Executor struct {
-	planets []Planet
+	planets []*Planet
 }
 
 func (executor *Executor) execMain(opts *Opts) {

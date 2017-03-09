@@ -21,6 +21,7 @@ releases/
 .vendor/
 .vscode/
 testScripts
+*.log.*
 
 
 # Architecture specific extensions/prefixes

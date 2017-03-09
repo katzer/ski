@@ -33,7 +33,7 @@ func makeExecutor(opts *Opts) Executor {
 	return executor
 }
 
-func isValidPlanet(planet Planet) bool {
+func isValidPlanet(planet *Planet) bool {
 	ok := isSupported(planet.planetType)
 	if !ok {
 		switch planet.planetType {

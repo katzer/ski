@@ -48,9 +48,7 @@ func (planet *Planet) executeLinux(opts *Opts) {
 	if opts.ScriptName != "" {
 		execScript(planet, opts)
 	} else {
-		planet.planetInfo(opts)
 		execCommand(opts.Command, planet, opts)
-		planet.planetInfo(opts)
 	}
 }
 

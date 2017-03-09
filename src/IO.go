@@ -6,17 +6,16 @@ import (
 	"strings"
 )
 
-func formatAndPrint(planets []Planet, opts *Opts) {
+func formatAndPrint(planets []*Planet, opts *Opts) {
 	formatter := Formatter{}
 	failed := false
 	formatter.init()
 	var formatted string
-
 	for _, entry := range planets {
 		if entry.errored {
 			failed = true
 		}
-		formatted = formatter.format(&entry, opts)
+		formatted = formatter.format(entry, opts)
 		fmt.Print(formatted)
 
 	}

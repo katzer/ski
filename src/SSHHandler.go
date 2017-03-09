@@ -9,7 +9,7 @@ import (
 	"gopkg.in/hypersleep/easyssh.v0"
 )
 
-func execCommand(command string, planet *Planet, opts *Opts) {
+func execCommand(command string, planet *Planet, opts *Opts) error {
 	log.Debugf("function: execCommand")
 	log.Debugf("user, host : %s %s", planet.user, planet.host)
 	keyPath := getKeyPath()
@@ -31,15 +31,16 @@ func execCommand(command string, planet *Planet, opts *Opts) {
 		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errorString)
 		planet.errored = true
 		logExecCommand(command, planet)
-		return
+		return err
 	}
 	out = cleanProfileLoadedOutput(out, opts)
 
 	planet.outputStruct.output += out
 	logExecCommand(command, planet)
+	return nil
 }
 
-func uploadFile(planet *Planet, opts *Opts) {
+func uploadFile(planet *Planet, opts *Opts) error {
 	keyPath := getKeyPath()
 
 	ssh := &easyssh.MakeConfig{
@@ -59,16 +60,29 @@ func uploadFile(planet *Planet, opts *Opts) {
 		log.Warn(errorString)
 		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errorString)
 		planet.errored = true
+		return err
 	}
+	return nil
 }
 
-func execScript(planet *Planet, opts *Opts) {
+func execScript(planet *Planet, opts *Opts) error {
+	var err error
 	log.Debugf("function: execScript")
 	log.Debugf("user, host : |%s| |%s|", planet.user, planet.host)
-	uploadFile(planet, opts)
+	err = uploadFile(planet, opts)
+	if err != nil {
+		return err
+	}
 	scriptName := opts.ScriptName
 	executionCommand := fmt.Sprintf("sh %s", scriptName)
 	delCommand := fmt.Sprintf("rm %s>/dev/null", scriptName)
-	execCommand(executionCommand, planet, opts)
-	execCommand(delCommand, planet, opts)
+	err = execCommand(executionCommand, planet, opts)
+	if err != nil {
+		return err
+	}
+	err = execCommand(delCommand, planet, opts)
+	if err != nil {
+		return err
+	}
+	return nil
 }
