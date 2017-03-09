@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
@@ -22,7 +23,8 @@ func setupLogger(customLogfile string, verbose bool) {
 	createLogDirIfNecessary(logDir)
 	logFile := path.Join(logDir, "ski.log") // default log file
 	if len(customLogfile) > 0 {
-		logFile = customLogfile
+		filename := filepath.Base(customLogfile)
+		logFile = path.Join(logDir, filename)
 	}
 
 	formatter := getDefaultFormatter()
@@ -37,8 +39,8 @@ func setupLogger(customLogfile string, verbose bool) {
 	)
 
 	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("%v. Rolling file appender can't be used.\n", err))
-		os.Stderr.WriteString("Logrus will log to stderr.")
+		fmt.Fprintf(os.Stderr, "%v. Rolling file appender can't be used.\n", err)
+		fmt.Fprintln(os.Stderr, "Logrus will log to stderr.")
 	} else {
 		hook := hook.NewHook(hook.WriterMap{
 			log.DebugLevel: writer,
@@ -68,14 +70,13 @@ func logExecCommand(command string, planet *Planet, strucOut *StructuredOuput) {
 	log.Debugf("orbit key: %s\n", os.Getenv("ORBIT_KEY"))
 	log.Debugf("command: %s\n", command)
 	log.Debugf("strucOut: %v\n", strucOut)
-	log.Debugf("planet: %s\n maxLineLength: %d\n", strucOut.planet, strucOut.maxOutLength)
 }
 
 func createLogDirIfNecessary(dir string) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		if err = os.MkdirAll(dir, 0775|os.ModeDir); err != nil {
 			// can't do anything
-			os.Stderr.WriteString(fmt.Sprintf("%v", err))
+			fmt.Fprintf(os.Stderr, "%v", err)
 		}
 	}
 }

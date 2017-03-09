@@ -6,13 +6,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
-
-	"strings"
 )
 
-// Opts ...
+// codebeat:disable[TOO_MANY_IVARS]
+
+// Opts structure for holding commandline arguments
 type Opts struct {
 	Debug      bool     `json:"debug"`
 	Help       bool     `json:"help"`
@@ -27,6 +29,8 @@ type Opts struct {
 	LogFile    string   `json:"log_file"`
 }
 
+// codebeat:enable[TOO_MANY_IVARS]
+
 func (opts *Opts) String() string {
 	template := `opts : {
 	Debug: %t
@@ -34,6 +38,7 @@ func (opts *Opts) String() string {
 	Load: %t
 	Pretty: %t
 	Version: %t
+	SaveReport: %t
 	Command: %s
 	ScriptName: %s
 	Template : %s
@@ -47,6 +52,7 @@ func (opts *Opts) String() string {
 		opts.Load,
 		opts.Pretty,
 		opts.Version,
+		opts.SaveReport,
 		opts.Command,
 		opts.ScriptName,
 		opts.Template,
@@ -60,15 +66,23 @@ func (opts *Opts) postProcessing() {
 	opts.ScriptName = strings.TrimSuffix(strings.TrimPrefix(opts.ScriptName, "\""), "\"")
 }
 
-func validate(opts *Opts) {
-	validateArgsCount(opts)
-	validateCommandAndScript(opts)
+func (opts *Opts) validate() {
+	opts.validateExtension()
+	opts.validateCommandAndScript()
+	opts.checkForInvalidIds()
 }
 
-/**
-*	Checks if theres a command and a script at the same time
- */
-func validateCommandAndScript(opts *Opts) {
+func (opts *Opts) checkForInvalidIds() {
+	for _, id := range opts.Planets {
+		// Check if any flags were given after planet ids, if yes stop the app
+		if strings.HasPrefix(id, "-") {
+			fmt.Fprintf(os.Stderr, "Unknown target: %s", id)
+			os.Exit(1)
+		}
+	}
+}
+
+func (opts *Opts) validateCommandAndScript() {
 	scriptNotEmpty := len(opts.ScriptName) > 0
 	cmdNotEmpty := len(opts.Command) > 0
 	if scriptNotEmpty && cmdNotEmpty {
@@ -79,28 +93,26 @@ func validateCommandAndScript(opts *Opts) {
 	}
 }
 
-/**
-*	Checks if there are enough of the correct arguments to run ski
- */
-func validateArgsCount(opts *Opts) {
-	tooFew := len(os.Args) == 1
-	// TODO Check if flags package removes the leading and trailing white spaces.
-	scriptEmpty := len(opts.ScriptName) == 0
-	cmdEmpty := len(opts.Command) == 0
-	if opts.Version {
-		printVersion()
-		os.Exit(0)
-	}
-	if tooFew || scriptEmpty && cmdEmpty {
-		printUsage()
-		os.Exit(0)
+//Checks if the given script got an acceptable extension
+func (opts *Opts) validateExtension() {
+	script := opts.ScriptName
+	if script != "" && !(strings.HasSuffix(script, ".sh") || strings.HasSuffix(script, ".sql")) {
+		message := fmt.Sprintf("The provided scripts %s must have either .sh or .sql extension.", script)
+		fmt.Fprintln(os.Stderr, message)
+		log.Fatal(message)
 	}
 }
 
 // creates a task from a json file
 func createATaskFromJobFile(jsonFile string) (opts Opts) {
 	job := Opts{}
-	bytes, err := ioutil.ReadFile(jsonFile)
+	wcopy := jsonFile // assumption abs path
+	tokens := strings.Split(jsonFile, string(os.PathSeparator))
+	if len(tokens) == 1 {
+		// relative path given, read from jobs folder
+		wcopy = path.Join(os.Getenv("ORBIT_HOME"), "jobs", jsonFile)
+	}
+	bytes, err := ioutil.ReadFile(wcopy)
 	if err != nil {
 		log.Fatalf("Couldn't open job file: %s", jsonFile)
 	}

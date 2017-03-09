@@ -12,5 +12,6 @@ func decode(jsonObject string) [][]string {
 	if err != nil {
 		log.Errorln(err)
 	}
+
 	return toReturn
 }

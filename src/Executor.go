@@ -14,7 +14,6 @@ type Executor struct {
 
 func (executor *Executor) execMain(opts *Opts) {
 	log.Debugf("Function: execMain")
-	outputList := make([]StructuredOuput, len(executor.planets))
 	var wg sync.WaitGroup
 
 	log.Debugln("pretty " + strconv.FormatBool(opts.Pretty))
@@ -26,16 +25,14 @@ func (executor *Executor) execMain(opts *Opts) {
 
 	wg.Add(len(executor.planets))
 
-	for i, planet := range executor.planets {
-		// to avoid closure over the value planet and the value i. seems odd but it is recommended
-		a := i
+	for _, planet := range executor.planets {
+		// to avoid closure over the value planet. seems odd but it is recommended
 		planet := planet
 		go func() {
 			planet.execute(opts)
-			outputList[a] = planet.outputStruct
 			wg.Done()
 		}()
 	}
 	wg.Wait()
-	formatAndPrint(outputList, opts)
+	formatAndPrint(executor.planets, opts)
 }

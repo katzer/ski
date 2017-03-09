@@ -2,31 +2,28 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
 	"runtime"
+	"strings"
 )
 
 var version = "undefined"
 
-/**
-*	Prints the current Version of the ski application
- */
 func printVersion() {
 	runtimeOS := getOS()
 	progArch := getArch()
 	archOS := getOSArch()
 	vers := fmt.Sprintf("ski version %s %s %s (%s)", version, progArch, runtimeOS, archOS)
-	os.Stdout.WriteString(vers + "\n")
+	fmt.Printf("%s\n", vers)
 }
 
 func getOS() string {
 	switch runtime.GOOS {
-	case "windows":
+	case windows:
 		return "Windows"
-	case "linux":
+	case linux:
 		return "Linux"
-	case "darwin":
+	case mac:
 		return "MacOS"
 	default:
 		return "could not determine OS"
@@ -46,14 +43,14 @@ func getArch() string {
 
 func getOSArch() string {
 	switch runtime.GOOS {
-	case "linux":
+	case linux:
 		out, err := exec.Command("uname", "-m").Output()
 		if err != nil {
 			fmt.Println("error occured")
 			fmt.Printf("%s", err)
 		}
-		return string(out)
-	case "windows":
+		return strings.TrimSuffix(string(out), "\n")
+	case windows:
 		out, err := exec.Command("if exist \"%ProgramFiles(x86)%\" echo 64-bit").Output()
 		if err != nil {
 			fmt.Println("error occured")

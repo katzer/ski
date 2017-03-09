@@ -23,17 +23,17 @@ if [ "$1" == "-f=ski" ]
   then
   if [ "$2" == "app" ]
     then
-    echo "server|app-package-1|App-Package 1|"`whoami`"@localhost"
+    echo "app|server|App-Package 1|"`whoami`"@localhost"
     exit 0
   fi
   if  [ "$2" == "web" ]
     then
-    echo "web|app-package-1|App-Package 1|"`whoami`"@localhost"
+    echo "web|web|App-Package 1|"`whoami`"@localhost"
     exit 0
   fi
   if  [ "$2" == "db" ]
     then
-    echo "db|app-package-1|App-Package 1|dbdb:"`whoami`"@localhost"
+    echo "db|db|App-Package 1|dbdb:"`whoami`"@localhost"
     exit 0
   fi
   if [ "$2" == "unauthorized" ]

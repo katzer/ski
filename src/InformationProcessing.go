@@ -11,28 +11,47 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-func parseConnectionDetails(planetID string) Planet {
-	skiString := getFullSkiString(planetID)
-	var planet Planet
-	tokens := strings.Split(skiString, skiDelim)
-	planet.planetType = tokens[0]
-	connectionURL := tokens[len(tokens)-1]
-	urlTokens := strings.Split(connectionURL, ":")
-	if len(urlTokens) > 1 {
-		planet.dbID = urlTokens[0]
+func parseConnectionDetails(ids []string) []Planet {
+	// NOTE: fifa swapped type and id positions, id comes first
+	skiStrings := getFullSkiString(ids)
+	retval := make([]Planet, 0)
+	for _, skiString := range skiStrings {
+		tokens := strings.Split(skiString, skiDelim)
+		connectionURL := tokens[len(tokens)-1]
+		urlTokens := strings.Split(connectionURL, ":")
+
+		var dbID string
+		planetID, planetType, name := tokens[0], tokens[1], tokens[2]
+		if len(urlTokens) > 1 {
+			dbID = urlTokens[0]
+		}
+
+		user, host := getUserAndHost(connectionURL)
+
+		planet := Planet{
+			id:           planetID,
+			planetType:   planetType,
+			name:         name,
+			dbID:         dbID,
+			user:         user,
+			host:         host,
+			outputStruct: &StructuredOuput{planetID, "", 0},
+		}
+
+		planet.valid = isValidPlanet(planet)
+		// TODO Write the ski string to out?
+		// if (!planet.valid) {
+		// }
+		log.Debugf("skiString: %s, and planet parsed from it: %v", skiString, planet)
+		retval = append(retval, planet)
 	}
-	planet.user, planet.host = getUserAndHost(connectionURL)
-	log.Debugf("skiString: %s, and planet parsed from it: %v", planet)
-	return planet
+	return retval
 }
 
-/**
-*	Returns the proper Keypath
- */
 func getKeyPath() string {
 	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
-		if runtime.GOOS == "windows" {
+		if runtime.GOOS == windows {
 			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
 		} else {
 			keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key")
@@ -41,9 +60,6 @@ func getKeyPath() string {
 	return strings.TrimPrefix(keyPath, os.Getenv("HOME"))
 }
 
-/**
-*	checks, wether a planet is supported by ski or not
- */
 func isSupported(planetType string) bool {
 	supported := map[string]bool{database: true, linuxServer: true, webServer: false}
 	return supported[planetType]
@@ -55,24 +71,31 @@ func isSupported(planetType string) bool {
 *		id: The planets id
 *	@return: The connection details to the planet
  */
-func getFullSkiString(id string) string {
-	cmd := exec.Command("fifa", "-f=ski", id)
+func getFullSkiString(ids []string) []string {
+	length := len(ids)
+	if length == 0 {
+		return []string{}
+	}
+
+	args := append([]string{"-f=ski"}, ids...)
+	cmd := exec.Command("fifa", args...)
+	// TODO check the exit code etc. if len(cmd.Path) == 0 {}
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
-		os.Stderr.WriteString("Unknown target\n")
+		fmt.Fprintln(os.Stderr, "Unknown target")
 		log.Fatalf(message)
 	}
-	// TODO fifa sends a newline
-	return strings.TrimSuffix(string(out), "\n")
+	// NOTE: "\n" at the end
+	wcopy := strings.TrimSuffix(string(out), "\n")
+	lines := strings.Split(wcopy, "\n")
+	for i, line := range lines {
+		log.Debugf("%d lines received.", length)
+		log.Debugf("Line %d: %s\n", i, line)
+	}
+	return lines
 }
 
-/**
-*	Splits the given connectiondetails and returns the user
-*	@params:
-*		connDet: Connection details in following form: user@hostname
-*	@return: user
- */
 func getUserAndHost(connectionURL string) (string, string) {
 	var tokens []string
 	idx := strings.IndexRune(connectionURL, ':')

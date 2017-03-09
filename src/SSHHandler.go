@@ -9,12 +9,6 @@ import (
 	"gopkg.in/hypersleep/easyssh.v0"
 )
 
-/**
-*	Executes a command on a remote ssh server
-*	@params:
-*		connDet: connection details in following form: user@hostname
-*		cmd: Command to be executed
- */
 func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts *Opts) {
 	log.Debugf("function: execCommand")
 	log.Debugf("user, host : %s %s", planet.user, planet.host)
@@ -33,18 +27,17 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 	if err != nil {
 		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
-		os.Stderr.WriteString(errorString)
-		log.Fatalf("%s\nAdditional info: %s\n", err, message)
+		fmt.Fprintln(os.Stderr, errorString)
+		log.Warnf("%s\nAdditional info: %s\n", err, message)
+		strucOut.output = message
+		logExecCommand(command, planet, strucOut)
+		return
 	}
 	cleanedOut := cleanProfileLoadedOutput(out, opts)
 	strucOut.output = cleanedOut
-	strucOut.maxOutLength = 0
 	logExecCommand(command, planet, strucOut)
 }
 
-/**
-*	Uploads a file to the remote server
- */
 func uploadFile(user string, hostname string, opts *Opts) {
 	keyPath := getKeyPath()
 
@@ -62,17 +55,11 @@ func uploadFile(user string, hostname string, opts *Opts) {
 	if err != nil {
 		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
-		os.Stderr.WriteString(errorString)
-		log.Fatalf("%s\nAdditional info: %s\n", err, message)
+		fmt.Fprintln(os.Stderr, errorString)
+		log.Warningf("%s\nAdditional info: %s\n", err, message)
 	}
 }
 
-/**
-*	Uploads and executes a script on a given planet
-*	@params:
-*		connDet: 	Connection details to planet
-*		scriptPath: Path to script
- */
 func execScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
 	log.Debugf("function: execScript")
 	log.Debugf("user, host : |%s| |%s|", planet.user, planet.host)

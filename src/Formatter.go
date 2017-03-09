@@ -1,10 +1,8 @@
 package main
 
-import (
-	"strings"
-)
+import ()
 
-//Formatter a struct remebering the different formatter
+//Formatter a struct remembering the different formatter
 type Formatter struct {
 	prettyFormatter      PrettyFormatter
 	tableFormatter       TableFormatter
@@ -17,35 +15,35 @@ func (formatter *Formatter) init() {
 	formatter.prettyTableFormatter = PrettyTableFormatter{}
 
 	formatter.prettyTableFormatter.init()
+	formatter.prettyFormatter.init()
 }
 
-func (formatter *Formatter) format(toPrint StructuredOuput, counter int, opts *Opts) string {
+func (formatter *Formatter) format(planet Planet, opts *Opts) string {
 	var formatted string
 	if !opts.Pretty {
 		if opts.Template != "" {
-			formatted = formatter.tableFormatter.format(toPrint.output, opts)
+			formatted = formatter.tableFormatter.format(planet, opts)
 		} else {
-			formatted = toPrint.output
+			formatted = planet.outputStruct.output
 		}
 	} else {
 		if opts.Template != "" {
-			preFormatted := formatter.tableFormatter.format(toPrint.output, opts)
-			formatter.prettyTableFormatter.format(preFormatted, opts)
+			planet.outputStruct.output = formatter.tableFormatter.format(planet, opts)
+			formatter.prettyTableFormatter.format(planet, opts)
 		} else {
-			formatted = formatter.prettyFormatter.format(toPrint, counter)
+			formatter.prettyFormatter.format(planet)
 		}
 	}
 	return formatted
 }
 
-func parseFSMOutput(toParse string) map[string]string {
-	var parsed map[string]string
-	parsed = make(map[string]string)
-	split := strings.Split(toParse, "\n")
-	split = split[0 : len(split)-2]
-	for _, entry := range split {
-		row := strings.Split(entry, " ")
-		parsed[strings.TrimSuffix(row[0], ",")] = strings.Join(row[1:], "")
+func (formatter *Formatter) execute(opts *Opts) {
+	if !opts.Pretty {
+		return
 	}
-	return parsed
+	if opts.Template != "" {
+		formatter.prettyTableFormatter.execute()
+		return
+	}
+	formatter.prettyFormatter.execute()
 }
