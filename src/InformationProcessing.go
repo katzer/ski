@@ -52,7 +52,7 @@ func parseConnectionDetails(ids []string) []*Planet {
 func getKeyPath() string {
 	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
-		if runtime.GOOS == "windows" {
+		if runtime.GOOS == windows {
 			keyPath = ""
 		} else {
 			keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key")

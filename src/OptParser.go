@@ -38,7 +38,7 @@ func (opts *Opts) String() string {
 	Load: %t
 	Pretty: %t
 	Version: %t
-  SaveReport %t
+	SaveReport: %t
 	Command: %s
 	ScriptName: %s
 	Template : %s
@@ -122,7 +122,13 @@ func (opts *Opts) validateTemplate() {
 // creates a task from a json file
 func createATaskFromJobFile(jsonFile string) (opts Opts) {
 	job := Opts{}
-	bytes, err := ioutil.ReadFile(jsonFile)
+	wcopy := jsonFile // assumption abs path
+	tokens := strings.Split(jsonFile, string(os.PathSeparator))
+	if len(tokens) == 1 {
+		// relative path given, read from jobs folder
+		wcopy = path.Join(os.Getenv("ORBIT_HOME"), "jobs", jsonFile)
+	}
+	bytes, err := ioutil.ReadFile(wcopy)
 	if err != nil {
 		errorMessage := fmt.Sprintf("Couldn't open job file: %s", jsonFile)
 		fmt.Fprint(os.Stderr, errorMessage)

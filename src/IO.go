@@ -27,11 +27,6 @@ func formatAndPrint(planets []*Planet, opts *Opts) {
 	}
 }
 
-func trimDBMetaInformations(strucOut *StructuredOuput) {
-	cleaned := strings.Split(strucOut.output, "\n")
-	strucOut.output = strings.Join(cleaned[:len(cleaned)-3], "")
-}
-
 func makeLoadCommand(command string, opts *Opts) string {
 	if opts.Load {
 		return fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
