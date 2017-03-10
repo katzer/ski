@@ -11,7 +11,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-func execDBCommand(planet *Planet, opts *Opts) error {
+func execDBCommand(planet Planet, opts *Opts) error {
 	var err error
 	if !strings.HasSuffix(opts.Command, ";") {
 		log.Warningf("The SQL-Command needs to be terminated with a \";\"")
@@ -23,7 +23,7 @@ func execDBCommand(planet *Planet, opts *Opts) error {
 	if err != nil {
 		errormessage := fmt.Sprintf("writing temporary sql script failed : %v", err)
 		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errormessage)
-		planet.errored = true
+		planet.outputStruct.errored = true
 		log.Warning(errormessage)
 		return err
 	}
@@ -36,14 +36,14 @@ func execDBCommand(planet *Planet, opts *Opts) error {
 	if err != nil {
 		errormessage := fmt.Sprintf("removing temporary sql script failed : %v", err)
 		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errormessage)
-		planet.errored = true
+		planet.outputStruct.errored = true
 		log.Warning(errormessage)
 		return err
 	}
 	return err
 }
 
-func execDBScript(planet *Planet, opts *Opts) error {
+func execDBScript(planet Planet, opts *Opts) error {
 	var err error
 	err = uploadFile(planet, opts)
 	if err != nil {

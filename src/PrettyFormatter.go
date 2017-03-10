@@ -27,7 +27,7 @@ func (prettyFormatter *PrettyFormatter) init() {
 	prettyFormatter.addKey("Planet-Type")
 }
 
-func (prettyFormatter *PrettyFormatter) addMetadata(toComplete map[string]string, planet *Planet) map[string]string {
+func (prettyFormatter *PrettyFormatter) addMetadata(toComplete map[string]string, planet Planet) map[string]string {
 	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
 	prettyFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
 	prettyFormatter.addEntry("Planet-ID", planet.id, toComplete)
@@ -53,7 +53,7 @@ func (prettyFormatter *PrettyFormatter) addKey(key string) {
 	}
 }
 
-func (prettyFormatter *PrettyFormatter) format(planet *Planet) {
+func (prettyFormatter *PrettyFormatter) format(planet Planet) {
 	var completeTable = make(map[string]string)
 	prettyFormatter.addMetadata(completeTable, planet)
 	prettyFormatter.addEntry("output", planet.outputStruct.output, completeTable)

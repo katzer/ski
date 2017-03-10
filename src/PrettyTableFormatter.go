@@ -36,7 +36,7 @@ func (prettyTableFormatter *PrettyTableFormatter) init() {
 	prettyTableFormatter.addKey("Planet-Type")
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) format(planet *Planet, opts *Opts) {
+func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Opts) {
 	decodedJSON, err := decode(planet, planet.outputStruct.output)
 	fullTable := prettyTableFormatter.addMetadata(planet)
 	if err == nil {
@@ -51,7 +51,7 @@ func (prettyTableFormatter *PrettyTableFormatter) format(planet *Planet, opts *O
 	prettyTableFormatter.sets = append(prettyTableFormatter.sets, set)
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) addMetadata(planet *Planet) map[string]string {
+func (prettyTableFormatter *PrettyTableFormatter) addMetadata(planet Planet) map[string]string {
 	var toComplete = make(map[string]string)
 	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
 	prettyTableFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
