@@ -34,5 +34,4 @@ func (executor *Executor) execMain(opts *Opts) {
 		}()
 	}
 	wg.Wait()
-	formatAndPrint(executor.planets, opts)
 }

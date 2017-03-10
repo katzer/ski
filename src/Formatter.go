@@ -1,47 +1,34 @@
 package main
 
-//Formatter a struct remembering the different formatter
+import "io"
+
+// IFormatter interface for formatters
+type IFormatter interface {
+	format(planets []Planet, opts *Opts, writer io.Writer)
+	init()
+}
+
+//Formatter a factory for creating types of IFormatter implementations
 type Formatter struct {
-	prettyFormatter      PrettyFormatter
-	tableFormatter       TableFormatter
-	prettyTableFormatter PrettyTableFormatter
 }
 
-func (formatter *Formatter) init() {
-	formatter.prettyFormatter = PrettyFormatter{}
-	formatter.tableFormatter = TableFormatter{}
-	formatter.prettyTableFormatter = PrettyTableFormatter{}
-
-	formatter.prettyTableFormatter.init()
-	formatter.prettyFormatter.init()
-}
-
-func (formatter *Formatter) format(planet Planet, opts *Opts) string {
-	var formatted string
-	if !opts.Pretty {
-		if opts.Template != "" {
-			formatted = formatter.tableFormatter.format(planet, opts)
-		} else {
-			formatted = planet.outputStruct.output
-		}
-	} else {
-		if opts.Template != "" {
-			planet.outputStruct.output = formatter.tableFormatter.format(planet, opts)
-			formatter.prettyTableFormatter.format(planet, opts)
-		} else {
-			formatter.prettyFormatter.format(planet)
-		}
+func (formatter *Formatter) getFormatter(opts *Opts) IFormatter {
+	// Ugly
+	if !opts.Pretty && len(opts.Template) == 0 {
+		return nil
 	}
-	return formatted
-}
-
-func (formatter *Formatter) execute(opts *Opts) {
-	if !opts.Pretty {
-		return
+	if !opts.Pretty && len(opts.Template) > 0 {
+		realDeal := TableFormatter{}
+		proxy := TFWrapper{real: &realDeal}
+		return proxy
 	}
-	if opts.Template != "" {
-		formatter.prettyTableFormatter.execute()
-		return
+	// Pretty
+	if len(opts.Template) > 0 {
+		realDeal := PrettyTableFormatter{}
+		proxy := PTFWrapper{real: &realDeal}
+		return proxy
 	}
-	formatter.prettyFormatter.execute()
+	realDeal := PrettyFormatter{}
+	proxy := PFWrapper{real: &realDeal}
+	return proxy
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -12,11 +13,35 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
+// TFWrapper ...
+type TFWrapper struct {
+	real *TableFormatter
+}
+
+func (tfWrapper TFWrapper) init() {
+	tfWrapper.real.init()
+}
+
+func (tfWrapper TFWrapper) format(planets []Planet, opts *Opts, writer io.Writer) {
+	tfWrapper.real.format(planets, opts, writer)
+}
+
 // TableFormatter prints input in tabular format
 type TableFormatter struct {
 }
 
-func (tableFormatter *TableFormatter) format(planet Planet, opts *Opts) string {
+func (tableFormatter *TableFormatter) init() {
+
+}
+
+func (tableFormatter *TableFormatter) format(planets []Planet, opts *Opts, writer io.Writer) {
+	for _, planet := range planets {
+		formatted := tableFormatter.formatPlanet(planet, opts)
+		fmt.Fprint(writer, formatted)
+	}
+}
+
+func (tableFormatter *TableFormatter) formatPlanet(planet Planet, opts *Opts) string {
 	var err error
 	err = tableFormatter.writeTmpTable(planet, planet.outputStruct.output)
 	if err != nil {
@@ -33,7 +58,6 @@ func (tableFormatter *TableFormatter) format(planet Planet, opts *Opts) string {
 		return err.Error()
 	}
 	return strings.Replace(jsonString, "'", "\"", -1)
-
 }
 
 // Converts the quite special format textFSM returns to proper JSON format

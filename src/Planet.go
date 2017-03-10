@@ -22,6 +22,7 @@ type Planet struct {
 type StructuredOuput struct {
 	planet   string
 	output   string
+	table    [][]string
 	position int
 	errored  bool
 }

@@ -11,7 +11,7 @@ import (
 func main() {
 	opts := parseOptions()
 	validateArgsCount(&opts)
-	opts.postProcessing()
+	opts.postProcessing() // TODO move to parseOptions
 	opts.validate()
 
 	verbose := opts.Debug || len(opts.LogFile) > 0
@@ -21,6 +21,7 @@ func main() {
 	log.Debug(&opts)
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
+	formatAndPrint(exec.planets, &opts, os.Stdout)
 	log.Infof("Ended with args: %v", os.Args)
 }
 

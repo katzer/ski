@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"io"
 	"strconv"
 	"strings"
 
@@ -11,6 +11,19 @@ import (
 )
 
 const prettyPythonScriptName = "texttable.py"
+
+// PTFWrapper ...
+type PTFWrapper struct {
+	real *PrettyTableFormatter
+}
+
+func (ptfWrapper PTFWrapper) init() {
+	ptfWrapper.real.init()
+}
+
+func (ptfWrapper PTFWrapper) format(planets []Planet, opts *Opts, writer io.Writer) {
+	ptfWrapper.real.format(planets, opts, writer)
+}
 
 // PrettyTableFormatter prints input in tabular format
 type PrettyTableFormatter struct {
@@ -25,41 +38,20 @@ type Dataset struct {
 	printView []string
 }
 
+func (dataset *Dataset) makePrintView(keys map[int]string) {
+	for i := 0; i <= len(keys)-1; i++ {
+		if dataset.data[keys[i]] == "" {
+			dataset.printView = append(dataset.printView, "-")
+			continue
+		}
+		dataset.printView = append(dataset.printView, dataset.data[keys[i]])
+	}
+}
+
 func (prettyTableFormatter *PrettyTableFormatter) init() {
 	prettyTableFormatter.keys = make(map[string]bool)
 	prettyTableFormatter.orderedKeys = make(map[int]string)
 	prettyTableFormatter.sets = make([]Dataset, 0)
-	prettyTableFormatter.addKey("Nr.")
-	prettyTableFormatter.addKey("Planet-ID")
-	prettyTableFormatter.addKey("Planet-Name")
-	prettyTableFormatter.addKey("Planet-Address")
-	prettyTableFormatter.addKey("Planet-Type")
-}
-
-func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Opts) {
-	decodedJSON, err := decode(planet.outputStruct.output)
-	fullTable := prettyTableFormatter.addMetadata(planet)
-	if err == nil {
-		fullTable = prettyTableFormatter.normalizeTable(fullTable, decodedJSON)
-	}
-	set := Dataset{fullTable, nil}
-	log.Debugf("prettyTableFormatter.format()")
-	log.Debugf("prettyTableFormatter.keys %v", prettyTableFormatter.keys)
-	log.Debugf("prettyTableFormatter.keys length %i", len(prettyTableFormatter.keys))
-	log.Debugf("fullTable %v", fullTable)
-	log.Debugf("fullTable length %i", len(fullTable))
-	prettyTableFormatter.sets = append(prettyTableFormatter.sets, set)
-}
-
-func (prettyTableFormatter *PrettyTableFormatter) addMetadata(planet Planet) map[string]string {
-	var toComplete = make(map[string]string)
-	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
-	prettyTableFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
-	prettyTableFormatter.addEntry("Planet-ID", planet.id, toComplete)
-	prettyTableFormatter.addEntry("Planet-Name", planet.name, toComplete)
-	prettyTableFormatter.addEntry("Planet-Address", address, toComplete)
-	prettyTableFormatter.addEntry("Planet-Type", planet.planetType, toComplete)
-	return toComplete
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) normalizeTable(toReturn map[string]string, toNormalize [][]string) map[string]string {
@@ -90,6 +82,7 @@ func (prettyTableFormatter *PrettyTableFormatter) normalizeTable(toReturn map[st
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) addEntry(key string, value string, table map[string]string) {
+	log.Debugf("len(prettyTableFormatter.orderedKeys) = %d\n", len(prettyTableFormatter.orderedKeys))
 	prettyTableFormatter.addKey(key)
 	if table[key] != "" {
 		table[key] += ", " + value
@@ -100,7 +93,9 @@ func (prettyTableFormatter *PrettyTableFormatter) addEntry(key string, value str
 
 func (prettyTableFormatter *PrettyTableFormatter) addKey(key string) {
 	if !prettyTableFormatter.keys[key] {
-		prettyTableFormatter.orderedKeys[len(prettyTableFormatter.orderedKeys)] = key
+		index := len(prettyTableFormatter.orderedKeys)
+		log.Debugf("adding key : %s at [%d]\n", key, index)
+		prettyTableFormatter.orderedKeys[index] = key
 		prettyTableFormatter.keys[key] = true
 	}
 }
@@ -112,14 +107,20 @@ func (prettyTableFormatter *PrettyTableFormatter) fillSets() {
 	}
 }
 
-func (dataset *Dataset) makePrintView(keys map[int]string) {
-	for i := 0; i <= len(keys)-1; i++ {
-		if dataset.data[keys[i]] == "" {
-			dataset.printView = append(dataset.printView, "-")
-			continue
-		}
-		dataset.printView = append(dataset.printView, dataset.data[keys[i]])
-	}
+func (prettyTableFormatter *PrettyTableFormatter) createSetForPlanet(planet Planet, opts *Opts) {
+	initTable := make(map[string]string)
+	number := strconv.Itoa(planet.outputStruct.position)
+	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
+	prettyTableFormatter.addEntry("Nr.", number, initTable)
+	prettyTableFormatter.addEntry("Planet-ID", planet.id, initTable)
+	prettyTableFormatter.addEntry("Planet-Name", planet.name, initTable)
+	prettyTableFormatter.addEntry("Planet-Address", address, initTable)
+	prettyTableFormatter.addEntry("Planet-Type", planet.planetType, initTable)
+
+	decodedJSON := planet.outputStruct.table
+	fullTable := prettyTableFormatter.normalizeTable(initTable, decodedJSON)
+	set := Dataset{fullTable, nil}
+	prettyTableFormatter.sets = append(prettyTableFormatter.sets, set)
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) cutMapToSlice(toCut map[string]bool) []string {
@@ -130,9 +131,9 @@ func (prettyTableFormatter *PrettyTableFormatter) cutMapToSlice(toCut map[string
 	return toReturn
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) printTable() {
+func (prettyTableFormatter *PrettyTableFormatter) printTable(writer io.Writer) {
 
-	table := tablewriter.NewWriter(os.Stdout)
+	table := tablewriter.NewWriter(writer)
 	table.SetRowLine(true)
 	table.SetRowSeparator("-")
 	table.SetHeader(prettyTableFormatter.cutMapToSlice(prettyTableFormatter.keys))
@@ -147,7 +148,20 @@ func (prettyTableFormatter *PrettyTableFormatter) printTable() {
 	table.Render() // Send output
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) execute() {
+func (prettyTableFormatter *PrettyTableFormatter) format(planets []Planet, opts *Opts, writer io.Writer) {
+	log.Debugf("planets: %v \n", planets)
+	log.Debugf("opts : %s", opts.String())
+	tableFormatter := TableFormatter{} // TODO find out if it is necessary
+	for _, planet := range planets {
+		jsonString := tableFormatter.formatPlanet(planet, opts)
+		var err error
+		planet.outputStruct.table, err = decode(jsonString)
+		if err != nil {
+			// TODO
+			return
+		}
+		prettyTableFormatter.createSetForPlanet(planet, opts)
+	}
 	prettyTableFormatter.fillSets()
-	prettyTableFormatter.printTable()
+	prettyTableFormatter.printTable(writer)
 }
