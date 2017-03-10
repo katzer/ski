@@ -15,7 +15,7 @@ func parseConnectionDetails(ids []string) []Planet {
 	// NOTE: fifa swapped type and id positions, id comes first
 	skiStrings := getFullSkiString(ids)
 	retval := make([]Planet, 0)
-	for _, skiString := range skiStrings {
+	for i, skiString := range skiStrings {
 		tokens := strings.Split(skiString, skiDelim)
 		connectionURL := tokens[len(tokens)-1]
 		urlTokens := strings.Split(connectionURL, ":")
@@ -35,7 +35,7 @@ func parseConnectionDetails(ids []string) []Planet {
 			dbID:         dbID,
 			user:         user,
 			host:         host,
-			outputStruct: &StructuredOuput{planetID, "", 0},
+			outputStruct: &StructuredOuput{planetID, "", i, false},
 		}
 
 		planet.valid = isValidPlanet(planet)
@@ -52,7 +52,7 @@ func getKeyPath() string {
 	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
 		if runtime.GOOS == windows {
-			keyPath = os.Getenv("TEMP") + "\\tempTabFormat.py"
+			keyPath = ""
 		} else {
 			keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key")
 		}
@@ -81,10 +81,15 @@ func getFullSkiString(ids []string) []string {
 	cmd := exec.Command("fifa", args...)
 	// TODO check the exit code etc. if len(cmd.Path) == 0 {}
 	out, err := cmd.CombinedOutput()
+	skiFormat := validateSkiFormat(string(out))
+	if !skiFormat {
+		message := "fifa output is not valid " + string(out)
+		log.Fatalf(message)
+	}
 	if err != nil {
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
-		fmt.Fprintln(os.Stderr, "Unknown target")
-		log.Fatalf(message)
+		log.Warnf(message)
+
 	}
 	// NOTE: "\n" at the end
 	wcopy := strings.TrimSuffix(string(out), "\n")
@@ -98,11 +103,22 @@ func getFullSkiString(ids []string) []string {
 
 func getUserAndHost(connectionURL string) (string, string) {
 	var tokens []string
-	idx := strings.IndexRune(connectionURL, ':')
-	if idx < 0 {
+	idxCol := strings.IndexRune(connectionURL, ':')
+	idxAt := strings.IndexRune(connectionURL, '@')
+	if idxAt < 0 {
+		log.Warnf("invalid address: %s", connectionURL)
+		return "", ""
+	}
+	if idxCol < 0 {
 		tokens = strings.Split(connectionURL, "@")
 		return tokens[0], tokens[1]
 	}
-	tokens = strings.Split(connectionURL[idx+1:], "@")
+	tokens = strings.Split(connectionURL[idxCol+1:], "@")
 	return tokens[0], tokens[1]
+}
+
+func validateSkiFormat(fifaString string) bool {
+	firstLine := strings.Split(fifaString, "\n")[0]
+	tokens := strings.Split(firstLine, skiDelim)
+	return len(tokens) >= 4
 }

@@ -9,7 +9,7 @@ import (
 	"gopkg.in/hypersleep/easyssh.v0"
 )
 
-func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts *Opts) {
+func execCommand(command string, planet Planet, opts *Opts) error {
 	log.Debugf("function: execCommand")
 	log.Debugf("user, host : %s %s", planet.user, planet.host)
 	keyPath := getKeyPath()
@@ -26,24 +26,26 @@ func execCommand(command string, planet *Planet, strucOut *StructuredOuput, opts
 	// Handle errors
 	if err != nil {
 		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
-		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
-		fmt.Fprintln(os.Stderr, errorString)
-		log.Warnf("%s\nAdditional info: %s\n", err, message)
-		strucOut.output = message
-		logExecCommand(command, planet, strucOut)
-		return
+		errorString := fmt.Sprintf("%s\nAdditional Info: %s\n", err, message)
+		log.Warn(errorString)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errorString)
+		planet.outputStruct.errored = true
+		logExecCommand(command, planet)
+		return err
 	}
-	cleanedOut := cleanProfileLoadedOutput(out, opts)
-	strucOut.output = cleanedOut
-	logExecCommand(command, planet, strucOut)
+	out = cleanProfileLoadedOutput(out, opts)
+
+	planet.outputStruct.output += out
+	logExecCommand(command, planet)
+	return nil
 }
 
-func uploadFile(user string, hostname string, opts *Opts) {
+func uploadFile(planet Planet, opts *Opts) error {
 	keyPath := getKeyPath()
 
 	ssh := &easyssh.MakeConfig{
-		User:   user,
-		Server: hostname,
+		User:   planet.user,
+		Server: planet.host,
 		Key:    keyPath,
 		Port:   "22",
 	}
@@ -55,19 +57,32 @@ func uploadFile(user string, hostname string, opts *Opts) {
 	if err != nil {
 		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
-		fmt.Fprintln(os.Stderr, errorString)
-		log.Warningf("%s\nAdditional info: %s\n", err, message)
+		log.Warn(errorString)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errorString)
+		planet.outputStruct.errored = true
+		return err
 	}
+	return nil
 }
 
-func execScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
+func execScript(planet Planet, opts *Opts) error {
+	var err error
 	log.Debugf("function: execScript")
 	log.Debugf("user, host : |%s| |%s|", planet.user, planet.host)
-	uploadFile(planet.user, planet.host, opts)
-	placeholder := StructuredOuput{}
+	err = uploadFile(planet, opts)
+	if err != nil {
+		return err
+	}
 	scriptName := opts.ScriptName
 	executionCommand := fmt.Sprintf("sh %s", scriptName)
-	delCommand := fmt.Sprintf("rm %s", scriptName)
-	execCommand(executionCommand, planet, strucOut, opts)
-	execCommand(delCommand, planet, &placeholder, opts)
+	delCommand := fmt.Sprintf("rm %s>/dev/null", scriptName)
+	err = execCommand(executionCommand, planet, opts)
+	if err != nil {
+		return err
+	}
+	err = execCommand(delCommand, planet, opts)
+	if err != nil {
+		return err
+	}
+	return nil
 }

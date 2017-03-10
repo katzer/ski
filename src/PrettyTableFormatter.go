@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -31,13 +32,16 @@ func (prettyTableFormatter *PrettyTableFormatter) init() {
 	prettyTableFormatter.addKey("Nr.")
 	prettyTableFormatter.addKey("Planet-ID")
 	prettyTableFormatter.addKey("Planet-Name")
+	prettyTableFormatter.addKey("Planet-Address")
 	prettyTableFormatter.addKey("Planet-Type")
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Opts) {
-	decodedJSON := decode(planet.outputStruct.output)
-	initTable := prettyTableFormatter.addMetadata(planet)
-	fullTable := prettyTableFormatter.normalizeTable(initTable, decodedJSON)
+	decodedJSON, err := decode(planet.outputStruct.output)
+	fullTable := prettyTableFormatter.addMetadata(planet)
+	if err == nil {
+		fullTable = prettyTableFormatter.normalizeTable(fullTable, decodedJSON)
+	}
 	set := Dataset{fullTable, nil}
 	log.Debugf("prettyTableFormatter.format()")
 	log.Debugf("prettyTableFormatter.keys %v", prettyTableFormatter.keys)
@@ -49,9 +53,11 @@ func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Op
 
 func (prettyTableFormatter *PrettyTableFormatter) addMetadata(planet Planet) map[string]string {
 	var toComplete = make(map[string]string)
+	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
 	prettyTableFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
 	prettyTableFormatter.addEntry("Planet-ID", planet.id, toComplete)
 	prettyTableFormatter.addEntry("Planet-Name", planet.name, toComplete)
+	prettyTableFormatter.addEntry("Planet-Address", address, toComplete)
 	prettyTableFormatter.addEntry("Planet-Type", planet.planetType, toComplete)
 	return toComplete
 }

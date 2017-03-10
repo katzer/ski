@@ -6,41 +6,67 @@ import (
 	"os"
 	"path"
 
-	log "github.com/Sirupsen/logrus"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
-func execDBCommand(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
+func execDBCommand(planet Planet, opts *Opts) error {
+	var err error
 	if !strings.HasSuffix(opts.Command, ";") {
 		log.Warningf("The SQL-Command needs to be terminated with a \";\"")
 		log.Warningf("Appending \";\"...")
 		opts.Command = fmt.Sprintf("%s;", opts.Command)
 	}
 	tmpDBFile := path.Join(os.Getenv("ORBIT_HOME"), "scripts", "orbit.sql")
-	err := ioutil.WriteFile(tmpDBFile, []byte(opts.Command), 0644)
+	err = ioutil.WriteFile(tmpDBFile, []byte(opts.Command), 0644)
 	if err != nil {
-		log.Fatalf("writing temporary sql script failed : %v", err)
+		errormessage := fmt.Sprintf("writing temporary sql script failed : %v", err)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errormessage)
+		planet.outputStruct.errored = true
+		log.Warning(errormessage)
+		return err
 	}
 	opts.ScriptName = "orbit.sql"
-	execDBScript(planet, strucOut, opts)
+	err = execDBScript(planet, opts)
+	if err != nil {
+		return err
+	}
 	err = os.Remove(tmpDBFile)
 	if err != nil {
-		log.Fatal(err)
+		errormessage := fmt.Sprintf("removing temporary sql script failed : %v", err)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errormessage)
+		planet.outputStruct.errored = true
+		log.Warning(errormessage)
+		return err
 	}
+	return err
 }
 
-func execDBScript(planet *Planet, strucOut *StructuredOuput, opts *Opts) {
-	const dbCommand = ". profiles/%s.prof && pqdb_sql.out -x -s %s ~/sql/%s"
-	uploadFile(planet.user, planet.host, opts)
-	placeholder := StructuredOuput{}
+func execDBScript(planet Planet, opts *Opts) error {
+	var err error
+	err = uploadFile(planet, opts)
+	if err != nil {
+		return err
+	}
 	scriptName := opts.ScriptName
-	command := fmt.Sprintf("mv ~/%s ~/sql/%s", scriptName, scriptName)
-	execCommand(command, planet, &placeholder, opts)
+	moveCommand := fmt.Sprintf("mv ~/%s ~/sql/%s>/dev/null", scriptName, scriptName)
+	err = execCommand(moveCommand, planet, opts)
+	if err != nil {
+		return err
+	}
 	queryString := fmt.Sprintf(dbCommand, planet.user, planet.dbID, scriptName)
-	removeCommand := fmt.Sprintf("rm ~/sql/%s", scriptName)
-	execCommand(queryString, planet, strucOut, opts)
-	execCommand(removeCommand, planet, &placeholder, opts)
-	cleanDBMetaData(strucOut)
+	err = execCommand(queryString, planet, opts)
+	if err != nil {
+		return err
+	}
+	removeCommand := fmt.Sprintf("rm ~/sql/%s>/dev/null", scriptName)
+	err = execCommand(removeCommand, planet, opts)
+	if err != nil {
+		return err
+	}
+	cleanDBMetaData(planet.outputStruct)
+	return err
 }
 
 func cleanDBMetaData(strucOut *StructuredOuput) {

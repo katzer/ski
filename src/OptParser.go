@@ -70,6 +70,7 @@ func (opts *Opts) validate() {
 	opts.validateExtension()
 	opts.validateCommandAndScript()
 	opts.checkForInvalidIds()
+	opts.validateTemplate()
 }
 
 func (opts *Opts) checkForInvalidIds() {
@@ -96,11 +97,26 @@ func (opts *Opts) validateCommandAndScript() {
 //Checks if the given script got an acceptable extension
 func (opts *Opts) validateExtension() {
 	script := opts.ScriptName
-	if script != "" && !(strings.HasSuffix(script, ".sh") || strings.HasSuffix(script, ".sql")) {
+	isSH := strings.HasSuffix(script, ".sh")
+	isSQL := strings.HasSuffix(script, ".sql")
+	if script != "" && !(isSH || isSQL) {
 		message := fmt.Sprintf("The provided scripts %s must have either .sh or .sql extension.", script)
 		fmt.Fprintln(os.Stderr, message)
 		log.Fatal(message)
 	}
+}
+
+func (opts *Opts) validateTemplate() {
+	template := opts.Template != ""
+	file := path.Join(os.Getenv("ORBIT_HOME"), "templates", opts.Template)
+	if template {
+		if _, err := os.Stat(file); os.IsNotExist(err) {
+			message := fmt.Sprintf("The provided template does not exist")
+			fmt.Fprintln(os.Stderr, message)
+			log.Fatal(message)
+		}
+	}
+
 }
 
 // creates a task from a json file
@@ -114,12 +130,16 @@ func createATaskFromJobFile(jsonFile string) (opts Opts) {
 	}
 	bytes, err := ioutil.ReadFile(wcopy)
 	if err != nil {
-		log.Fatalf("Couldn't open job file: %s", jsonFile)
+		errorMessage := fmt.Sprintf("Couldn't open job file: %s", jsonFile)
+		fmt.Fprint(os.Stderr, errorMessage)
+		log.Fatal(errorMessage)
 	}
 
 	err = json.Unmarshal(bytes, &job)
 	if err != nil {
-		log.Fatalf("Error parsing job json file: %s", jsonFile)
+		errorMessage := fmt.Sprintf("Error parsing job json file: %s", jsonFile)
+		fmt.Fprint(os.Stderr, errorMessage)
+		log.Fatal(errorMessage)
 	}
 
 	log.Debugf("Read a task from %s", jsonFile)

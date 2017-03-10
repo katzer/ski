@@ -1,7 +1,5 @@
 package main
 
-import ()
-
 //Formatter a struct remembering the different formatter
 type Formatter struct {
 	prettyFormatter      PrettyFormatter

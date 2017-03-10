@@ -8,6 +8,47 @@
 
 3. Strip binaries to shrink their size.
 
+4. errors within planets don't cause an abort, but cause an abort for that planet alone and writes the error in the planets output
+
+5. ski now validates fifas output
+
+6. fifa is now being called a single time, retrievingevery possible information about every planet
+
+7. fifa mockup updated to return multiple values
+
+8. Output by automatic addition of a semicolon to a db command changed to log warning
+
+9. stripped metadata from db output
+
+10. now checks if a given script ends in a supported extension(supported extensions are .sh and .sql)
+
+11. removed structuredOutputList from ski.go. Now everything is being handled with a planetlist with every planet containing its own StructuredOutput
+
+12. structured output now contains a variable indicating its planets position
+
+13. changed most functions requiring a structuredOutput
+
+14. prettyprint now uses package ascii table rather than the self implemented version
+
+15. added field "address" to prettytable and pretty
+
+16. checks templates existance
+
+17. Expanded prettytables functions so it's able to display multiple planets in a single table, indicating missing values with a "-"
+
+18. expanded prettytable with metadata
+
+19. optionparsing moved from optparser to ski.go
+
+20. ski is now able to parse job configurations from a file
+
+21. inserted codebeat disables for planet and opts
+
+22. removed unnecessary comments
+
+23. removed deprecated functions
+
+
 
 ### 0.9.1 (15.02.2017)
 

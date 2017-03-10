@@ -18,34 +18,85 @@ if [ "$1" == "-t" ]
     exit 0
   fi
 fi
-
+ERRORED="false"
 if [ "$1" == "-f=ski" ]
   then
   if [ "$2" == "app" ]
     then
     echo "app|server|App-Package 1|"`whoami`"@localhost"
-    exit 0
+    
   fi
   if  [ "$2" == "web" ]
     then
     echo "web|web|App-Package 1|"`whoami`"@localhost"
-    exit 0
+    
   fi
   if  [ "$2" == "db" ]
     then
     echo "db|db|App-Package 1|dbdb:"`whoami`"@localhost"
-    exit 0
+    
   fi
   if [ "$2" == "unauthorized" ]
     then
     echo "unknown|unknown|unknown|unknown"
-    exit 1
+    ERRORED="true"
   fi
   if [ "$2" == "offline" ]
     then
     echo "unknown|unknown|unknown|unknown"
-    exit 1
+    ERRORED="true"
+  fi
+  if [ "$3" == "app" ]
+    then
+    echo "app|server|App-Package 1|"`whoami`"@localhost"
+   
+  fi
+  if  [ "$3" == "web" ]
+    then
+    echo "web|web|App-Package 1|"`whoami`"@localhost"
+    
+  fi
+  if  [ "$3" == "db" ]
+    then
+    echo "db|db|App-Package 1|dbdb:"`whoami`"@localhost"
+    
+  fi
+  if [ "$3" == "unauthorized" ]
+    then
+    echo "unknown|unknown|unknown|unknown"
+    ERRORED="true"
+  fi
+  if [ "$3" == "offline" ]
+    then
+    echo "unknown|unknown|unknown|unknown"
+    ERRORED="true"
+  fi
+  if [ "$4" == "app" ]
+    then
+    echo "app|server|App-Package 1|"`whoami`"@localhost"
+    
+  fi
+  if  [ "$4" == "web" ]
+    then
+    echo "web|web|App-Package 1|"`whoami`"@localhost"
+    
+  fi
+  if  [ "$4" == "db" ]
+    then
+    echo "db|db|App-Package 1|dbdb:"`whoami`"@localhost"
+    
+  fi
+  if [ "$4" == "unauthorized" ]
+    then
+    echo "unknown|unknown|unknown|unknown"
+    ERRORED="true"
+  fi
+  if [ "$4" == "offline" ]
+    then
+    echo "unknown|unknown|unknown|unknown"
+    ERRORED="true"
   fi
 fi
-echo "unknown|unknown|unknown|unknown"
-exit 1
+if [ $ERRORED == "true" ]
+  then exit 1
+fi

@@ -1,10 +1,12 @@
 package main
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/olekukonko/tablewriter"
+	"fmt"
 	"os"
 	"strconv"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/olekukonko/tablewriter"
 )
 
 // PrettyFormatter displays output from one or multiple planets in a neat, orderly fashion
@@ -21,13 +23,16 @@ func (prettyFormatter *PrettyFormatter) init() {
 	prettyFormatter.addKey("Nr.")
 	prettyFormatter.addKey("Planet-ID")
 	prettyFormatter.addKey("Planet-Name")
+	prettyFormatter.addKey("Planet-Address")
 	prettyFormatter.addKey("Planet-Type")
 }
 
 func (prettyFormatter *PrettyFormatter) addMetadata(toComplete map[string]string, planet Planet) map[string]string {
+	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
 	prettyFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
 	prettyFormatter.addEntry("Planet-ID", planet.id, toComplete)
 	prettyFormatter.addEntry("Planet-Name", planet.name, toComplete)
+	prettyFormatter.addEntry("Planet-Address", address, toComplete)
 	prettyFormatter.addEntry("Planet-Type", planet.planetType, toComplete)
 	return toComplete
 }
