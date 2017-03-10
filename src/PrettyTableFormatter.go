@@ -37,7 +37,7 @@ func (prettyTableFormatter *PrettyTableFormatter) init() {
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) format(planet Planet, opts *Opts) {
-	decodedJSON, err := decode(planet, planet.outputStruct.output)
+	decodedJSON, err := decode(planet.outputStruct.output)
 	fullTable := prettyTableFormatter.addMetadata(planet)
 	if err == nil {
 		fullTable = prettyTableFormatter.normalizeTable(fullTable, decodedJSON)
