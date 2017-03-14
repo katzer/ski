@@ -22,8 +22,8 @@ module UseCasesTest
                                            '-t="perlver_template"', '-p',
                                            '-d=true', 'app')
     check_error(output, error, 'test_pretty_tablePrint')
-    assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, '| WILLYWONKA VERSION |', 'return was not right'
+    assert_true status.success?, 'Process did not exit cleanly'
   end
 
   # TODO: Activate after fixing the fifa mock.
