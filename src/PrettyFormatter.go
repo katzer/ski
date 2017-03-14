@@ -59,10 +59,10 @@ func (prettyFormatter *PrettyFormatter) createSetForPlanet(planet Planet) {
 	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
 	number := strconv.Itoa(planet.outputStruct.position)
 	prettyFormatter.addEntry("Nr.", number, completeTable)
-	prettyFormatter.addEntry("Planet-ID", planet.id, completeTable)
-	prettyFormatter.addEntry("Planet-Name", planet.name, completeTable)
-	prettyFormatter.addEntry("Planet-Address", address, completeTable)
-	prettyFormatter.addEntry("Planet-Type", planet.planetType, completeTable)
+	prettyFormatter.addEntry("ID", planet.id, completeTable)
+	prettyFormatter.addEntry("Name", planet.name, completeTable)
+	prettyFormatter.addEntry("Address", address, completeTable)
+	prettyFormatter.addEntry("Type", planet.planetType, completeTable)
 	prettyFormatter.addEntry("output", planet.outputStruct.output, completeTable)
 
 	set := Dataset{completeTable, nil}
