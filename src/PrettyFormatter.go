@@ -9,17 +9,17 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-// PFWrapper ...
-type PFWrapper struct {
+// PFAdapter ...
+type PFAdapter struct {
 	real *PrettyFormatter
 }
 
-func (pfWrapper PFWrapper) init() {
-	pfWrapper.real.init()
+func (pfAdapter PFAdapter) init() {
+	pfAdapter.real.init()
 }
 
-func (pfWrapper PFWrapper) format(planets []Planet, opts *Opts, writer io.Writer) {
-	pfWrapper.real.format(planets, opts, writer)
+func (pfAdapter PFAdapter) format(planets []Planet, opts *Opts, writer io.Writer) {
+	pfAdapter.real.format(planets, opts, writer)
 }
 
 // PrettyFormatter displays output from one or multiple planets in a neat, orderly fashion

@@ -19,16 +19,16 @@ func (formatter *Formatter) getFormatter(opts *Opts) IFormatter {
 	}
 	if !opts.Pretty && len(opts.Template) > 0 {
 		realDeal := TableFormatter{}
-		proxy := TFWrapper{real: &realDeal}
+		proxy := TFAdapter{real: &realDeal}
 		return proxy
 	}
 	// Pretty
 	if len(opts.Template) > 0 {
 		realDeal := PrettyTableFormatter{}
-		proxy := PTFWrapper{real: &realDeal}
+		proxy := PTFAdapter{real: &realDeal}
 		return proxy
 	}
 	realDeal := PrettyFormatter{}
-	proxy := PFWrapper{real: &realDeal}
+	proxy := PFAdapter{real: &realDeal}
 	return proxy
 }

@@ -12,17 +12,17 @@ import (
 
 const prettyPythonScriptName = "texttable.py"
 
-// PTFWrapper ...
-type PTFWrapper struct {
+// PTFAdapter ...
+type PTFAdapter struct {
 	real *PrettyTableFormatter
 }
 
-func (ptfWrapper PTFWrapper) init() {
-	ptfWrapper.real.init()
+func (ptfAdapter PTFAdapter) init() {
+	ptfAdapter.real.init()
 }
 
-func (ptfWrapper PTFWrapper) format(planets []Planet, opts *Opts, writer io.Writer) {
-	ptfWrapper.real.format(planets, opts, writer)
+func (ptfAdapter PTFAdapter) format(planets []Planet, opts *Opts, writer io.Writer) {
+	ptfAdapter.real.format(planets, opts, writer)
 }
 
 // PrettyTableFormatter prints input in tabular format

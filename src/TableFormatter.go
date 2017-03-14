@@ -13,17 +13,17 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-// TFWrapper ...
-type TFWrapper struct {
+// TFAdapter ...
+type TFAdapter struct {
 	real *TableFormatter
 }
 
-func (tfWrapper TFWrapper) init() {
-	tfWrapper.real.init()
+func (tfAdapter TFAdapter) init() {
+	tfAdapter.real.init()
 }
 
-func (tfWrapper TFWrapper) format(planets []Planet, opts *Opts, writer io.Writer) {
-	tfWrapper.real.format(planets, opts, writer)
+func (tfAdapter TFAdapter) format(planets []Planet, opts *Opts, writer io.Writer) {
+	tfAdapter.real.format(planets, opts, writer)
 }
 
 // TableFormatter prints input in tabular format
