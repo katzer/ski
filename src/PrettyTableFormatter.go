@@ -107,22 +107,6 @@ func (prettyTableFormatter *PrettyTableFormatter) fillSets() {
 	}
 }
 
-func (prettyTableFormatter *PrettyTableFormatter) createSetForPlanet(planet Planet, opts *Opts) {
-	initTable := make(map[string]string)
-	number := strconv.Itoa(planet.outputStruct.position)
-	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
-	prettyTableFormatter.addEntry("Nr.", number, initTable)
-	prettyTableFormatter.addEntry("Planet-ID", planet.id, initTable)
-	prettyTableFormatter.addEntry("Planet-Name", planet.name, initTable)
-	prettyTableFormatter.addEntry("Planet-Address", address, initTable)
-	prettyTableFormatter.addEntry("Planet-Type", planet.planetType, initTable)
-
-	decodedJSON := planet.outputStruct.table
-	fullTable := prettyTableFormatter.normalizeTable(initTable, decodedJSON)
-	set := Dataset{fullTable, nil}
-	prettyTableFormatter.sets = append(prettyTableFormatter.sets, set)
-}
-
 func (prettyTableFormatter *PrettyTableFormatter) cutMapToSlice(toCut map[string]bool) []string {
 	toReturn := make([]string, 0)
 	for i := 0; i < len(prettyTableFormatter.orderedKeys); i++ {
@@ -149,19 +133,32 @@ func (prettyTableFormatter *PrettyTableFormatter) printTable(writer io.Writer) {
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) format(planets []Planet, opts *Opts, writer io.Writer) {
-	log.Debugf("planets: %v \n", planets)
-	log.Debugf("opts : %s", opts.String())
-	tableFormatter := TableFormatter{} // TODO find out if it is necessary
-	var err error
+	tableFormatter := TableFormatter{} // TODO find out if it is necessary or get it from the factory
 	for _, planet := range planets {
 		jsonString := tableFormatter.formatPlanet(planet, opts)
-		planet.outputStruct.table, err = decode(jsonString)
-		if err != nil {
-			log.Warnf("Error decoding jsonString for planet %s", planet.id)
-			planet.outputStruct.errored = true
-		}
-		prettyTableFormatter.createSetForPlanet(planet, opts)
+		prettyTableFormatter.createSetForPlanet(jsonString, planet, opts)
 	}
 	prettyTableFormatter.fillSets()
 	prettyTableFormatter.printTable(writer)
+}
+
+func (prettyTableFormatter *PrettyTableFormatter) createSetForPlanet(json string, planet Planet, opts *Opts) {
+	table := make(map[string]string)
+	number := strconv.Itoa(planet.outputStruct.position)
+	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
+	prettyTableFormatter.addEntry("Nr.", number, table)
+	prettyTableFormatter.addEntry("Planet-ID", planet.id, table)
+	prettyTableFormatter.addEntry("Planet-Name", planet.name, table)
+	prettyTableFormatter.addEntry("Planet-Address", address, table)
+	prettyTableFormatter.addEntry("Planet-Type", planet.planetType, table)
+	var err error
+	if planet.outputStruct.table, err = decode(json); err == nil {
+		table = prettyTableFormatter.normalizeTable(table, planet.outputStruct.table)
+	} else {
+		log.Warnf("Error decoding json for planet %s", planet.id)
+		planet.outputStruct.errored = true
+		planet.outputStruct.output = json // TODO check if necessary
+	}
+	set := Dataset{table, nil}
+	prettyTableFormatter.sets = append(prettyTableFormatter.sets, set)
 }
