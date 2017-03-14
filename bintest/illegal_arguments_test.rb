@@ -7,7 +7,7 @@ module IllegalArgumentsTest
                                            '-d=true', 'app')
     check_no_error(output, error, 'bad_command')
     assert_include output, 'Process exited with status 127', 'return incorrect'
-    #assert_false status.success?, 'Process did exit cleanly' # TODO check why status is ok
+    # assert_false status.success?, 'Process did exit cleanly' # TODO check why status is ok
   end
 
   def test_malformed_template
@@ -16,8 +16,7 @@ module IllegalArgumentsTest
                                            '-p', 'app')
     check_error(output, error, 'malformed_template')
     # assert_true status.success?, 'Process did exit cleanly' # TODO check why status is ok
-
-    #assert_include error, 'exit status 2', 'wrong error'
+    # assert_include error, 'exit status 2', 'wrong error'
   end
 
   def test_no_template
@@ -34,7 +33,7 @@ module IllegalArgumentsTest
                                            'app')
     check_error(output, error, 'bad_script')
     assert_include output, 'Process exited with status 127', 'return incorrect'
-    #assert_false status.success?, 'Process did exit cleanly' # TODO check why status is ok
+    # assert_false status.success?, 'Process did exit cleanly' # TODO check why status is ok
   end
 
   def test_no_such_script
@@ -43,6 +42,5 @@ module IllegalArgumentsTest
     check_no_error(output, error, 'no_such_script')
     assert_include output, 'no such file or directory', 'error was not correct'
     # assert_false status.success?, 'Process did exit cleanly' # TODO check why status is ok
-
   end
 end

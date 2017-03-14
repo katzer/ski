@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 )
@@ -11,7 +12,6 @@ import (
 func main() {
 	opts := parseOptions()
 	validateArgsCount(&opts)
-	opts.postProcessing() // TODO move to parseOptions
 	opts.validate()
 
 	verbose := opts.Debug || len(opts.LogFile) > 0
@@ -85,7 +85,9 @@ func parseOptions() Opts {
 	flag.Parse()
 
 	if len(jobFile) > 0 {
-		return createATaskFromJobFile(jobFile)
+		retval := createATaskFromJobFile(jobFile)
+		postProcessing(&retval)
+		return retval
 	}
 
 	opts := Opts{
@@ -102,6 +104,8 @@ func parseOptions() Opts {
 		LogFile:    logFile,
 	}
 
+	postProcessing(&opts)
+
 	return opts
 }
 
@@ -117,4 +121,10 @@ func validateArgsCount(opts *Opts) {
 	if tooFew || scriptEmpty && cmdEmpty {
 		printUsage()
 	}
+}
+
+func postProcessing(opts *Opts) {
+	opts.Command = strings.Trim(opts.Command, "\"")
+	opts.Template = strings.Trim(opts.Template, "\"")
+	opts.ScriptName = strings.Trim(opts.ScriptName, "\"")
 }
