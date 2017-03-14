@@ -147,10 +147,10 @@ func (prettyTableFormatter *PrettyTableFormatter) createSetForPlanet(json string
 	number := strconv.Itoa(planet.outputStruct.position)
 	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
 	prettyTableFormatter.addEntry("Nr.", number, table)
-	prettyTableFormatter.addEntry("Planet-ID", planet.id, table)
-	prettyTableFormatter.addEntry("Planet-Name", planet.name, table)
-	prettyTableFormatter.addEntry("Planet-Address", address, table)
-	prettyTableFormatter.addEntry("Planet-Type", planet.planetType, table)
+	prettyTableFormatter.addEntry("ID", planet.id, table)
+	prettyTableFormatter.addEntry("Name", planet.name, table)
+	prettyTableFormatter.addEntry("Address", address, table)
+	prettyTableFormatter.addEntry("Type", planet.planetType, table)
 	var err error
 	if planet.outputStruct.table, err = decode(json); err == nil {
 		table = prettyTableFormatter.normalizeTable(table, planet.outputStruct.table)
