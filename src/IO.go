@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"os"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
@@ -19,6 +20,12 @@ func formatAndPrint(planets []Planet, opts *Opts, writer io.Writer) {
 	log.Debugf("using formatter of type : %T", formatter)
 	formatter.init()
 	formatter.format(planets, opts, writer)
+
+	for _, entry := range planets {
+		if entry.outputStruct.errored {
+			os.Exit(1)
+		}
+	}
 }
 
 func printUnformatted(planets []Planet, writer io.Writer) {

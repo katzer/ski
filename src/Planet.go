@@ -29,7 +29,7 @@ type StructuredOuput struct {
 
 // codebeat:enable[TOO_MANY_IVARS]
 
-func (planet Planet) execute(opts *Opts) {
+func (planet *Planet) execute(opts *Opts) {
 	if planet.planetType == database {
 		planet.executeDatabase(opts)
 	} else if planet.planetType == linuxServer {
@@ -37,7 +37,7 @@ func (planet Planet) execute(opts *Opts) {
 	}
 }
 
-func (planet Planet) executeDatabase(opts *Opts) {
+func (planet *Planet) executeDatabase(opts *Opts) {
 	if opts.ScriptName != "" {
 		execDBScript(planet, opts)
 	} else {
@@ -45,7 +45,7 @@ func (planet Planet) executeDatabase(opts *Opts) {
 	}
 }
 
-func (planet Planet) executeLinux(opts *Opts) {
+func (planet *Planet) executeLinux(opts *Opts) {
 	if opts.ScriptName != "" {
 		execScript(planet, opts)
 	} else {
@@ -53,7 +53,7 @@ func (planet Planet) executeLinux(opts *Opts) {
 	}
 }
 
-func (planet Planet) planetInfo(opts *Opts) {
+func (planet *Planet) planetInfo(opts *Opts) {
 	log.Debugln("###planet.execute-->execcommand###")
 	log.Debugln("planet.user: %s", planet.user)
 	log.Debugln("planet.host: %s", planet.host)

@@ -152,13 +152,13 @@ func (prettyTableFormatter *PrettyTableFormatter) format(planets []Planet, opts 
 	log.Debugf("planets: %v \n", planets)
 	log.Debugf("opts : %s", opts.String())
 	tableFormatter := TableFormatter{} // TODO find out if it is necessary
+	var err error
 	for _, planet := range planets {
 		jsonString := tableFormatter.formatPlanet(planet, opts)
-		var err error
 		planet.outputStruct.table, err = decode(jsonString)
 		if err != nil {
-			// TODO
-			return
+			log.Warnf("Error decoding jsonString for planet %s", planet.id)
+			planet.outputStruct.errored = true
 		}
 		prettyTableFormatter.createSetForPlanet(planet, opts)
 	}
