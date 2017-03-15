@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"path"
 	"runtime"
+	"strconv"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
@@ -21,7 +22,8 @@ func parseConnectionDetails(ids []string) []Planet {
 		urlTokens := strings.Split(connectionURL, ":")
 
 		var dbID string
-		planetID, planetType, name := tokens[0], tokens[1], tokens[2]
+		valid, _ := strconv.ParseBool(tokens[0])
+		planetID, planetType, name := tokens[1], tokens[2], tokens[3]
 		if len(urlTokens) > 1 {
 			dbID = urlTokens[0]
 		}
@@ -35,12 +37,13 @@ func parseConnectionDetails(ids []string) []Planet {
 			dbID:       dbID,
 			user:       user,
 			host:       host,
+			valid:      valid,
 			outputStruct: &StructuredOuput{
 				planet:   planetID,
 				output:   "",
 				table:    make([][]string, 0),
 				position: i,
-                errored : false,
+				errored:  false,
 			},
 		}
 
@@ -83,7 +86,8 @@ func getFullSkiString(ids []string) []string {
 		return []string{}
 	}
 
-	args := append([]string{"-f=ski"}, ids...)
+	args := append([]string{"-f=ski"}, "--no-color")
+	args = append(args, ids...)
 	cmd := exec.Command("fifa", args...)
 	// TODO check the exit code etc. if len(cmd.Path) == 0 {}
 	out, err := cmd.CombinedOutput()
@@ -126,5 +130,5 @@ func getUserAndHost(connectionURL string) (string, string) {
 func validateSkiFormat(fifaString string) bool {
 	firstLine := strings.Split(fifaString, "\n")[0]
 	tokens := strings.Split(firstLine, skiDelim)
-	return len(tokens) >= 4
+	return len(tokens) >= 5
 }

@@ -26,6 +26,10 @@ func (executor *Executor) execMain(opts *Opts) {
 	wg.Add(len(executor.planets))
 
 	for _, planet := range executor.planets {
+		if !planet.valid {
+			wg.Done()
+			continue
+		}
 		// to avoid closure over the value planet. seems odd but it is recommended
 		planet := planet
 		go func() {
