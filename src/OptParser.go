@@ -59,13 +59,6 @@ func (opts *Opts) String() string {
 		opts.Planets)
 }
 
-func (opts *Opts) postProcessing() {
-	// TODO ask what is happening here
-	opts.Command = strings.TrimSuffix(strings.TrimPrefix(opts.Command, "\""), "\"")
-	opts.Template = strings.TrimSuffix(strings.TrimPrefix(opts.Template, "\""), "\"")
-	opts.ScriptName = strings.TrimSuffix(strings.TrimPrefix(opts.ScriptName, "\""), "\"")
-}
-
 func (opts *Opts) validate() {
 	opts.validateExtension()
 	opts.validateCommandAndScript()

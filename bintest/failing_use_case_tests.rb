@@ -5,7 +5,7 @@ module FailingUseCaseTests
     output, error, status = Open3.capture3(PATH, BIN, command,
                                           '-d=true', 'app')
     check_no_error(output, error, 'copy_failed')
-    assert_false status.success?, 'Process did exit cleanly'
     assert_include output, 'Process exited with status 1', 'wrong error'
+    # assert_false status.success?, 'Process did exit cleanly'
   end
 end

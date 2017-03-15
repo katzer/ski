@@ -29,13 +29,19 @@ func parseConnectionDetails(ids []string) []Planet {
 		user, host := getUserAndHost(connectionURL)
 
 		planet := Planet{
-			id:           planetID,
-			planetType:   planetType,
-			name:         name,
-			dbID:         dbID,
-			user:         user,
-			host:         host,
-			outputStruct: &StructuredOuput{planetID, "", i, false},
+			id:         planetID,
+			planetType: planetType,
+			name:       name,
+			dbID:       dbID,
+			user:       user,
+			host:       host,
+			outputStruct: &StructuredOuput{
+				planet:   planetID,
+				output:   "",
+				table:    make([][]string, 0),
+				position: i,
+                errored : false,
+			},
 		}
 
 		planet.valid = isValidPlanet(planet)

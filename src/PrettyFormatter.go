@@ -2,12 +2,25 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"io"
 	"strconv"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/olekukonko/tablewriter"
 )
+
+// PFAdapter ...
+type PFAdapter struct {
+	real *PrettyFormatter
+}
+
+func (pfAdapter PFAdapter) init() {
+	pfAdapter.real.init()
+}
+
+func (pfAdapter PFAdapter) format(planets []Planet, opts *Opts, writer io.Writer) {
+	pfAdapter.real.format(planets, opts, writer)
+}
 
 // PrettyFormatter displays output from one or multiple planets in a neat, orderly fashion
 type PrettyFormatter struct {
@@ -20,24 +33,10 @@ func (prettyFormatter *PrettyFormatter) init() {
 	prettyFormatter.keys = make(map[string]bool)
 	prettyFormatter.orderedKeys = make(map[int]string)
 	prettyFormatter.sets = make([]Dataset, 0)
-	prettyFormatter.addKey("Nr.")
-	prettyFormatter.addKey("Planet-ID")
-	prettyFormatter.addKey("Planet-Name")
-	prettyFormatter.addKey("Planet-Address")
-	prettyFormatter.addKey("Planet-Type")
-}
-
-func (prettyFormatter *PrettyFormatter) addMetadata(toComplete map[string]string, planet Planet) map[string]string {
-	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
-	prettyFormatter.addEntry("Nr.", strconv.Itoa(planet.outputStruct.position), toComplete)
-	prettyFormatter.addEntry("Planet-ID", planet.id, toComplete)
-	prettyFormatter.addEntry("Planet-Name", planet.name, toComplete)
-	prettyFormatter.addEntry("Planet-Address", address, toComplete)
-	prettyFormatter.addEntry("Planet-Type", planet.planetType, toComplete)
-	return toComplete
 }
 
 func (prettyFormatter *PrettyFormatter) addEntry(key string, value string, table map[string]string) {
+	log.Debugf("len(prettyFormatter.orderedKeys) = %d\n", len(prettyFormatter.orderedKeys))
 	prettyFormatter.addKey(key)
 	if table[key] != "" {
 		table[key] += ", " + value
@@ -48,15 +47,24 @@ func (prettyFormatter *PrettyFormatter) addEntry(key string, value string, table
 
 func (prettyFormatter *PrettyFormatter) addKey(key string) {
 	if !prettyFormatter.keys[key] {
-		prettyFormatter.orderedKeys[len(prettyFormatter.orderedKeys)] = key
+		index := len(prettyFormatter.orderedKeys)
+		log.Debugf("adding key : %s at [%d]\n", key, index)
+		prettyFormatter.orderedKeys[index] = key
 		prettyFormatter.keys[key] = true
 	}
 }
 
-func (prettyFormatter *PrettyFormatter) format(planet Planet) {
+func (prettyFormatter *PrettyFormatter) createSetForPlanet(planet Planet) {
 	var completeTable = make(map[string]string)
-	prettyFormatter.addMetadata(completeTable, planet)
+	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
+	number := strconv.Itoa(planet.outputStruct.position)
+	prettyFormatter.addEntry("Nr.", number, completeTable)
+	prettyFormatter.addEntry("ID", planet.id, completeTable)
+	prettyFormatter.addEntry("Name", planet.name, completeTable)
+	prettyFormatter.addEntry("Address", address, completeTable)
+	prettyFormatter.addEntry("Type", planet.planetType, completeTable)
 	prettyFormatter.addEntry("output", planet.outputStruct.output, completeTable)
+
 	set := Dataset{completeTable, nil}
 	prettyFormatter.sets = append(prettyFormatter.sets, set)
 }
@@ -78,9 +86,9 @@ func (prettyFormatter *PrettyFormatter) cutMapToSlice(toCut map[string]bool) []s
 	return toReturn
 }
 
-func (prettyFormatter *PrettyFormatter) printTable() {
+func (prettyFormatter *PrettyFormatter) printTable(writer io.Writer) {
 
-	table := tablewriter.NewWriter(os.Stdout)
+	table := tablewriter.NewWriter(writer)
 	table.SetRowLine(true)
 	table.SetRowSeparator("-")
 	table.SetHeader(prettyFormatter.cutMapToSlice(prettyFormatter.keys))
@@ -93,7 +101,12 @@ func (prettyFormatter *PrettyFormatter) printTable() {
 	table.Render() // Send output
 }
 
-func (prettyFormatter *PrettyFormatter) execute() {
+func (prettyFormatter *PrettyFormatter) format(planets []Planet, opts *Opts, writer io.Writer) {
+	log.Debugf("planets: %v \n", planets)
+	log.Debugf("opts : %s", opts.String())
+	for _, planet := range planets {
+		prettyFormatter.createSetForPlanet(planet)
+	}
 	prettyFormatter.fillSets()
-	prettyFormatter.printTable()
+	prettyFormatter.printTable(writer)
 }

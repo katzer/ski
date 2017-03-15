@@ -63,7 +63,7 @@ func getDefaultFormatter() log.Formatter {
 	return formatter
 }
 
-func logExecCommand(command string, planet Planet) {
+func logExecCommand(command string, planet *Planet) {
 	log.Debugln("### execCommand complete ###")
 	log.Debugf("user: %s\n", planet.user)
 	log.Debugf("hostname: %s\n", planet.host)

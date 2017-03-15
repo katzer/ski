@@ -9,7 +9,7 @@ import (
 	"gopkg.in/hypersleep/easyssh.v0"
 )
 
-func execCommand(command string, planet Planet, opts *Opts) error {
+func execCommand(command string, planet *Planet, opts *Opts) error {
 	log.Debugf("function: execCommand")
 	log.Debugf("user, host : %s %s", planet.user, planet.host)
 	keyPath := getKeyPath()
@@ -40,7 +40,7 @@ func execCommand(command string, planet Planet, opts *Opts) error {
 	return nil
 }
 
-func uploadFile(planet Planet, opts *Opts) error {
+func uploadFile(planet *Planet, opts *Opts) error {
 	keyPath := getKeyPath()
 
 	ssh := &easyssh.MakeConfig{
@@ -65,7 +65,7 @@ func uploadFile(planet Planet, opts *Opts) error {
 	return nil
 }
 
-func execScript(planet Planet, opts *Opts) error {
+func execScript(planet *Planet, opts *Opts) error {
 	var err error
 	log.Debugf("function: execScript")
 	log.Debugf("user, host : |%s| |%s|", planet.user, planet.host)

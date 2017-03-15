@@ -11,7 +11,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-func execDBCommand(planet Planet, opts *Opts) error {
+func execDBCommand(planet *Planet, opts *Opts) error {
 	var err error
 	if !strings.HasSuffix(opts.Command, ";") {
 		log.Warningf("The SQL-Command needs to be terminated with a \";\"")
@@ -43,7 +43,7 @@ func execDBCommand(planet Planet, opts *Opts) error {
 	return err
 }
 
-func execDBScript(planet Planet, opts *Opts) error {
+func execDBScript(planet *Planet, opts *Opts) error {
 	var err error
 	err = uploadFile(planet, opts)
 	if err != nil {
