@@ -86,8 +86,7 @@ func getFullSkiString(ids []string) []string {
 		return []string{}
 	}
 
-	args := append([]string{"-f=ski"}, "--no-color")
-	args = append(args, ids...)
+	args := append([]string{"-f=ski", "--no-color"}, ids...)
 	cmd := exec.Command("fifa", args...)
 	// TODO check the exit code etc. if len(cmd.Path) == 0 {}
 	out, err := cmd.CombinedOutput()
@@ -130,5 +129,5 @@ func getUserAndHost(connectionURL string) (string, string) {
 func validateSkiFormat(fifaString string) bool {
 	firstLine := strings.Split(fifaString, "\n")[0]
 	tokens := strings.Split(firstLine, skiDelim)
-	return len(tokens) >= 5
+	return len(tokens) >= fifaTokenCount
 }
