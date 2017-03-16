@@ -27,15 +27,15 @@ module UseCasesTest
   end
 
   # TODO: Activate after fixing the fifa mock.
-def test_multiple_pretty_print
-  output, error, status = Open3.capture3(PATH, BIN, '-c="ls -al"', '-p',
-                                         '-d=true', 'app', 'app', 'app')
-  check_error(output, error, 'pretty_print')
-  assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, '|   0 | app', 'return was incorrect'
-  assert_include output, '|   1 | app', 'return was incorrect'
-  assert_include output, '|   2 | app', 'return was incorrect'
-end
+  def test_multiple_pretty_print
+    output, error, status = Open3.capture3(PATH, BIN, '-c="ls -al"', '-p',
+                                            '-d=true', 'app', 'app', 'app')
+    check_error(output, error, 'pretty_print')
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, '|   0 | app', 'return was incorrect'
+    assert_include output, '|   1 | app', 'return was incorrect'
+    assert_include output, '|   2 | app', 'return was incorrect'
+  end
 
   def test_table_print
     output, error, status = Open3.capture3(PATH, BIN, '-s="showver.sh"',
@@ -44,6 +44,14 @@ end
     check_error(output, error, 'test_tablePrint')
     assert_true status.success?, 'Process did not exit cleanly'
     assert_include output, "\n[\"willywonka_version\",", 'return was not right'
+  end
+
+  def test_db
+    output, error, status = Open3.capture3(PATH, BIN, '-c="SELECT * FROM *;"',
+                                           '-d=true', 'db')
+    check_error(output, error, 'test_tablePrint')
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, "D\n-\nX", 'return was not right'
   end
 
   def test_empty_return
