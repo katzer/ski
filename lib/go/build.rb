@@ -21,6 +21,7 @@
 # @APPPLANT_LICENSE_HEADER_END@
 
 module Go
+  # Cross build specification for Golang
   class Build
     attr_reader :name
 
@@ -29,41 +30,53 @@ module Go
     end
 
     def initialize(name, &block)
-      @name = name
+      @name  = name
+      @attrs = {}
+
       instance_exec(&block)
       self.class.builds << self
     end
 
     def os(name = nil)
-      @os = name if name
-      @os
+      @attrs[:os] = name if name
+      @attrs[:os]
     end
 
     def arch(name = nil)
-      @arch = name if name
-      @arch
+      @attrs[:arch] = name if name
+      @attrs[:arch]
     end
 
     def appname(name = nil)
-      @appname = name if name
-      @appname
+      @attrs[:appname] = name if name
+      @attrs[:appname]
     end
 
     def bintest_if(enabled)
-      @test = enabled
-      @test
+      @attrs[:test] = enabled
+      @attrs[:test]
     end
 
     def bintest?
-      @test == true
+      @attrs[:test] == true
     end
 
     def go_build(binpath)
+      %(#{env_setup} go build -i -ldflags="-s -X #{version_cmd}" -o #{binpath}/#{appname})
+    end
+
+    private
+
+    def env_setup
       if OS.windows?
-        "set GOOS=#{os}&&set GOARCH=#{arch}&&go build -i -ldflags=\"-s -X main.version=$(go run #{version_path}/*.go)\" -o #{binpath}/#{appname}"
+        "set GOOS=#{os} && set GOARCH=#{arch} &&"
       else
-        "GOOS=#{os} GOARCH=#{arch} go build -i -ldflags=\"-s -X main.version=$(go run #{version_path}/*.go)\" -o #{binpath}/#{appname};"
+        "GOOS=#{os} GOARCH=#{arch}"
       end
+    end
+
+    def version_cmd
+      "main.version=$(go run #{version_path}/*.go)"
     end
   end
 end
