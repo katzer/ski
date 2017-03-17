@@ -8,44 +8,50 @@ import (
 	"testing"
 )
 
-func setupOptParserTest() string {
+func setupOptParserTest() (string, error) {
 	toUnMarshall := "job.js"
+	// "-s=\"showver.sh\"", "-t=\"useless_template\"", "-d", "-p", "app"
 	json := `{
   "debug"      : true,
-  "help"       : true,
-  "load"       : true,
+  "help"       : false,
+  "load"       : false,
   "version"    : false,
-  "command"    : "whatever",
-  "scriptName" : "doink",
-  "template"   : "not_a_good_one",
-  "planets"    : [ "1","2","3"]
+  "command"    : "",
+  "pretty"     : true,
+  "scriptName" : "\"showver.sh\"",
+  "template"   : "\"useless_template\"",
+  "planets"    : [ "app"]
 }
 `
 	data := []byte(json)
 	absPath := path.Join(os.TempDir(), toUnMarshall)
-	err := ioutil.WriteFile(absPath, data, 0644)
-	if err != nil {
-		panic(err)
+
+	if err := ioutil.WriteFile(absPath, data, 0644); err != nil {
+		return "", err
 	}
-	return absPath
+	return absPath, nil
 }
 
 func TestCreateTaskFromJobFile(t *testing.T) {
 	fmt.Println("starting Test for CreateTaskFromJobFile")
-	absPath := setupOptParserTest()
+	var absPath string
+	var err error
+	if absPath, err = setupOptParserTest(); err != nil {
+		t.Fail()
+	}
+
 	fmt.Printf("reading file %s...\n", absPath)
 	opts := createATaskFromJobFile(absPath)
-	if !(opts.Debug && opts.Load && opts.Help) || opts.Version {
+	if opts.Help || opts.Version {
 		fmt.Fprintf(os.Stderr, "parsed from json: %v", opts)
 		t.Fail()
 	}
-	tearDownOptParserTest(absPath)
+	// tearDownOptParserTest(absPath)
 	fmt.Println("ending Test for CreateTaskFromJobFile")
 }
 
 func tearDownOptParserTest(absPath string) {
-	err := os.Remove(absPath)
-	if err != nil {
+	if err := os.Remove(absPath); err != nil {
 		fmt.Fprintf(os.Stderr, "Could not remove the file %s after a test", absPath)
 	}
 }

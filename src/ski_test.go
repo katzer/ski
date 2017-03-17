@@ -10,11 +10,15 @@ import (
 // the ones given as cmdline args
 func TestParseOptions(t *testing.T) {
 	// create the json file in tmp folder
-	jsonFile := setupOptParserTest()
+	jsonFile, err := setupOptParserTest()
+	if err != nil {
+		t.Fail()
+	}
 	jobOption := fmt.Sprintf("-j=%s", jsonFile)
 	os.Args = []string{"ski", jobOption, "-d=false", "-v=false", "-c=\"ls -la ${HOME}\""}
 	fmt.Printf("TestParseOptions :: os.Args: %v\n", os.Args)
 	opts := parseOptions()
+
 	fmt.Printf("TestParseOptions :: opts: %s\n", opts.String())
 
 	errors := make([]string, 0)
@@ -24,7 +28,7 @@ func TestParseOptions(t *testing.T) {
 	if opts.Version {
 		errors = append(errors, "Version flag set through the cmdline option.")
 	}
-	if opts.Command != "whatever" {
+	if opts.Command != "" {
 		msg := fmt.Sprintf("Command was not parsed correctly: %s", opts.Command)
 		errors = append(errors, msg)
 	}

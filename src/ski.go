@@ -4,10 +4,14 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
 )
+
+var help, pretty, debug, load, _version, saveReport bool
+var jobFile, logFile, template, scriptName, command string
 
 func main() {
 	opts := parseOptions()
@@ -22,7 +26,31 @@ func main() {
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
 	formatAndPrint(exec.planets, &opts, os.Stdout)
-	log.Infof("Ended with args: %v", os.Args)
+	if len(jobFile) > 0 {
+		basename := path.Base(jobFile)
+		home := os.Getenv("ORBIT_HOME")
+		const reports = "cron_jobs"
+		if writer, err := os.Create(path.Join(home, reports, basename)); err == nil {
+			writeResultAsJSON(exec.planets, &opts, writer)
+		} else {
+			log.Errorf("Could not create json output for the job %s", basename)
+			os.Exit(1)
+		}
+	}
+	handleExitCode(exec.planets)
+}
+
+// if there were any errors during the execution of command or scripts
+// on any of the planets given as parameter, the exit code is set to non zero
+// in case other programs rely on the exit code.
+func handleExitCode(planets []Planet) {
+	for _, entry := range planets {
+		structuralError := entry.outputStruct == nil
+		executionFailure := entry.outputStruct.errored
+		if structuralError || executionFailure {
+			os.Exit(1)
+		}
+	}
 }
 
 func makeExecutor(opts *Opts) Executor {
@@ -67,9 +95,6 @@ func printUsage() {
 }
 
 func parseOptions() Opts {
-	var help, pretty, debug, load, _version, saveReport bool
-	var jobFile, logFile, template, scriptName, command string
-
 	flag.BoolVar(&help, "h", false, "help")
 	flag.BoolVar(&pretty, "p", false, "prettyprint")
 	flag.BoolVar(&debug, "d", false, "verbose")
