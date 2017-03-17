@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -56,16 +57,28 @@ func (prettyFormatter *PrettyFormatter) addKey(key string) {
 
 func (prettyFormatter *PrettyFormatter) createSetForPlanet(planet Planet) {
 	var completeTable = make(map[string]string)
+	id := planet.id
+	name := planet.name
+	planetType := planet.planetType
 	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
 	number := strconv.Itoa(planet.outputStruct.position)
+	output := planet.outputStruct.output
+	if planet.outputStruct.errored || !planet.valid {
+		number = color.RedString(number)
+		id = color.RedString(id)
+		name = color.RedString(name)
+		address = color.RedString(address)
+		planetType = color.RedString(planetType)
+		output = color.RedString(planet.outputStruct.output)
+	}
 	prettyFormatter.addEntry("Nr.", number, completeTable)
-	prettyFormatter.addEntry("ID", planet.id, completeTable)
-	prettyFormatter.addEntry("Name", planet.name, completeTable)
+	prettyFormatter.addEntry("ID", id, completeTable)
+	prettyFormatter.addEntry("Name", name, completeTable)
 	prettyFormatter.addEntry("Address", address, completeTable)
-	prettyFormatter.addEntry("Type", planet.planetType, completeTable)
-	prettyFormatter.addEntry("output", planet.outputStruct.output, completeTable)
+	prettyFormatter.addEntry("Type", planetType, completeTable)
+	prettyFormatter.addEntry("output", output, completeTable)
 
-	set := Dataset{completeTable, nil}
+	set := Dataset{completeTable, nil, (planet.valid && !planet.outputStruct.errored)}
 	prettyFormatter.sets = append(prettyFormatter.sets, set)
 }
 

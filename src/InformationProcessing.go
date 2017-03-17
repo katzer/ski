@@ -5,15 +5,15 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"runtime"
 	"strconv"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/fatih/color"
 )
 
 func parseConnectionDetails(ids []string) []Planet {
-	// NOTE: fifa swapped type and id positions, id comes first
+	var err string
 	skiStrings := getFullSkiString(ids)
 	retval := make([]Planet, 0)
 	for i, skiString := range skiStrings {
@@ -23,6 +23,9 @@ func parseConnectionDetails(ids []string) []Planet {
 
 		var dbID string
 		valid, _ := strconv.ParseBool(tokens[0])
+		if !valid {
+			err = color.RedString("%s\n", tokens[len(tokens)-1])
+		}
 		planetID, planetType, name := tokens[1], tokens[2], tokens[3]
 		if len(urlTokens) > 1 {
 			dbID = urlTokens[0]
@@ -40,7 +43,7 @@ func parseConnectionDetails(ids []string) []Planet {
 			valid:      valid,
 			outputStruct: &StructuredOuput{
 				planet:   planetID,
-				output:   "",
+				output:   err,
 				table:    make([][]string, 0),
 				position: i,
 				errored:  false,
@@ -60,11 +63,7 @@ func parseConnectionDetails(ids []string) []Planet {
 func getKeyPath() string {
 	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
-		if runtime.GOOS == windows {
-			keyPath = ""
-		} else {
-			keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key")
-		}
+		keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key")
 	}
 	return strings.TrimPrefix(keyPath, os.Getenv("HOME"))
 }

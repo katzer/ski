@@ -6,6 +6,7 @@ import (
 	"path"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/fatih/color"
 	"gopkg.in/hypersleep/easyssh.v0"
 )
 
@@ -28,7 +29,7 @@ func execCommand(command string, planet *Planet, opts *Opts) error {
 		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
 		errorString := fmt.Sprintf("%s\nAdditional Info: %s\n", err, message)
 		log.Warn(errorString)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errorString)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, color.RedString(errorString))
 		planet.outputStruct.errored = true
 		logExecCommand(command, planet)
 		return err
@@ -64,7 +65,7 @@ func uploadFile(planet *Planet, opts *Opts) error {
 		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
 		log.Warn(errorString)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errorString)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, color.RedString(errorString))
 		planet.outputStruct.errored = true
 		return err
 	}

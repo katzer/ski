@@ -12,6 +12,7 @@ import (
 func main() {
 	opts := parseOptions()
 	validateArgsCount(&opts)
+	validateEnv()
 	opts.validate()
 
 	verbose := opts.Debug || len(opts.LogFile) > 0
@@ -121,6 +122,12 @@ func validateArgsCount(opts *Opts) {
 	cmdEmpty := len(opts.Command) == 0
 	if tooFew || scriptEmpty && cmdEmpty {
 		printUsage()
+	}
+}
+
+func validateEnv() {
+	if os.Getenv("ORBIT_HOME") == "" {
+		log.Fatal("ORBIT_HOME not set!")
 	}
 }
 
