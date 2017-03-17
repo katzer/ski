@@ -5,7 +5,7 @@ module IllegalArgumentsTest
   def test_bad_command
     output, error, status = Open3.capture3(PATH, BIN, '-c="yabeda baba"',
                                            '-d=true', 'app')
-    check_no_error(output, error, 'bad_command')
+    check_error(output, error, 'bad_command')
     assert_include output, 'Process exited with status 127', 'return incorrect'
     # assert_false status.success?, 'Process did exit cleanly' # TODO check why status is ok
   end
@@ -39,7 +39,7 @@ module IllegalArgumentsTest
   def test_no_such_script
     output, error, status = Open3.capture3(PATH, BIN, '-s="nonExistent.sh"',
                                            '-d=true', 'app')
-    check_no_error(output, error, 'no_such_script')
+    check_error(output, error, 'no_such_script')
     assert_include output, 'no such file or directory', 'error was not correct'
     # assert_false status.success?, 'Process did exit cleanly' # TODO check why status is ok
   end

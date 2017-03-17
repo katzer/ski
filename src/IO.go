@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
@@ -52,4 +53,12 @@ func cleanProfileLoadedOutput(output string, opts *Opts) string {
 		return splitOut[len(splitOut)-1]
 	}
 	return output
+}
+
+func makeDir(name string) {
+	tempdir := path.Join(os.Getenv("ORBIT_HOME"), name)
+	err := os.MkdirAll(tempdir, 0700)
+	if err != nil {
+		log.Error(err)
+	}
 }

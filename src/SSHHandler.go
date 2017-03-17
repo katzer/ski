@@ -42,7 +42,7 @@ func execCommand(command string, planet *Planet, opts *Opts) error {
 
 func uploadFile(planet *Planet, opts *Opts) error {
 	keyPath := getKeyPath()
-
+	var scriptPath string
 	ssh := &easyssh.MakeConfig{
 		User:   planet.user,
 		Server: planet.host,
@@ -50,8 +50,14 @@ func uploadFile(planet *Planet, opts *Opts) error {
 		Port:   "22",
 	}
 
+	if path.IsAbs(opts.ScriptName) {
+		scriptPath = opts.ScriptName
+	} else {
+		scriptPath = path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.ScriptName)
+	}
+
 	// Call Scp method with file you want to upload to remote server.
-	err := ssh.Scp(path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.ScriptName))
+	err := ssh.Scp(scriptPath)
 
 	// Handle errors
 	if err != nil {
