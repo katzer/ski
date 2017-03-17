@@ -20,16 +20,14 @@ func execDBCommand(planet *Planet, opts *Opts) error {
 		opts.Command = fmt.Sprintf("%s;", opts.Command)
 	}
 
-	tempSQLName := fmt.Sprintf("orbit%s.sql", strconv.Itoa(planet.outputStruct.position))
+	tmpSQLName := fmt.Sprintf("orbit%s.sql", strconv.Itoa(planet.outputStruct.position))
+	tmpDBFile := path.Join(os.Getenv("ORBIT_HOME"), "tmp", tmpSQLName)
 
 	//to decouple the opts with the temporary scriptname from the real opts. TODO find more elegant solution
 	wrapper := *opts
 	tempOpts := &wrapper
-	tempOpts.ScriptName = tempSQLName
+	tempOpts.ScriptName = tmpDBFile
 
-	fmt.Printf("planet %v", *planet)
-	fmt.Println("writing " + tempSQLName)
-	tmpDBFile := path.Join(os.Getenv("ORBIT_HOME"), "scripts", tempSQLName)
 	err = ioutil.WriteFile(tmpDBFile, []byte(opts.Command), 0644)
 	if err != nil {
 		errormessage := fmt.Sprintf("writing temporary sql script failed : %v", err)
@@ -60,6 +58,9 @@ func execDBScript(planet *Planet, opts *Opts) error {
 		return err
 	}
 	scriptName := opts.ScriptName
+	if path.IsAbs(opts.ScriptName) {
+		_, scriptName = path.Split(opts.ScriptName)
+	}
 	moveCommand := fmt.Sprintf("mv ~/%s ~/sql/%s>/dev/null", scriptName, scriptName)
 	err = execCommand(moveCommand, planet, opts)
 	if err != nil {

@@ -20,6 +20,7 @@ func main() {
 
 	verbose := opts.Debug || len(opts.LogFile) > 0
 	setupLogger(opts.LogFile, verbose)
+	setupDirs()
 
 	log.Infof("Started with args: %v", os.Args)
 	log.Debug(&opts)
@@ -150,4 +151,8 @@ func postProcessing(opts *Opts) {
 	opts.Command = strings.Trim(opts.Command, "\"")
 	opts.Template = strings.Trim(opts.Template, "\"")
 	opts.ScriptName = strings.Trim(opts.ScriptName, "\"")
+}
+func setupDirs() {
+	makeDir("tmp")
+	makeDir("chronJobs")
 }
