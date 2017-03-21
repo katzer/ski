@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	log "github.com/Sirupsen/logrus"
 )
@@ -72,6 +73,35 @@ func writeResultAsJSON(planets []Planet, opts *Opts, writer io.Writer) {
 	}
 
 	fmt.Fprintf(writer, "%s\n", json)
+}
+
+func createJSONReport(options map[string]string, planets []Planet, opts *Opts) {
+	basename := strings.Split(options["job_name"], ".")[0]
+	home := options["orbit_home"]
+	reports := options["output"]
+	if len(basename) == 0 || len(home) == 0 || len(reports) == 0 {
+		log.Fatalf("Could not create json output for the job %s", opts.String())
+	}
+
+	folders := path.Join(home, reports, basename)
+	err := os.MkdirAll(folders, 0744)
+
+	if err != nil {
+		log.Fatalf("Could not create json output for the job %s", opts.String())
+	}
+	now := time.Now()
+	format := "%d-%02d-%02dT%02d_%02d_%02d"
+	stamp := fmt.Sprintf(format, now.Year(), now.Month(), now.Day(),
+		now.Hour(), now.Minute(), now.Second())
+	fileToWrite := strings.Join([]string{stamp, "json"}, ".")
+	toCreate := path.Join(folders, fileToWrite)
+
+	if writer, err := os.Create(toCreate); err == nil {
+		defer writer.Close()
+		writeResultAsJSON(planets, opts, writer)
+		return
+	}
+	log.Fatalf("Could not create json output for the job %s", basename)
 }
 
 // creates a task from a json file

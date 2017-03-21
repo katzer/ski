@@ -27,18 +27,15 @@ func main() {
 	exec.execMain(&opts)
 	if len(jobFile) == 0 {
 		formatAndPrint(exec.planets, &opts, os.Stdout)
-	} else {
-		basename := path.Base(jobFile)
-		home := os.Getenv("ORBIT_HOME")
-		const reports = "cron_jobs"
-		if writer, err := os.Create(path.Join(home, reports, basename)); err == nil {
-			writeResultAsJSON(exec.planets, &opts, writer)
-		} else {
-			log.Errorf("Could not create json output for the job %s", basename)
-			os.Exit(1)
-		}
+		handleExitCode(exec.planets)
+		return
 	}
-	handleExitCode(exec.planets)
+	options := map[string]string{}
+	options["job_name"] = path.Base(jobFile)
+	options["orbit_home"] = os.Getenv("ORBIT_HOME")
+	options["output"] = "cron_jobs"
+
+	createJSONReport(options, exec.planets, &opts)
 }
 
 // if there were any errors during the execution of command or scripts
