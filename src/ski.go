@@ -25,8 +25,9 @@ func main() {
 	log.Debug(&opts)
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
-	formatAndPrint(exec.planets, &opts, os.Stdout)
-	if len(jobFile) > 0 {
+	if len(jobFile) == 0 {
+		formatAndPrint(exec.planets, &opts, os.Stdout)
+	} else {
 		basename := path.Base(jobFile)
 		home := os.Getenv("ORBIT_HOME")
 		const reports = "cron_jobs"
