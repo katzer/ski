@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -43,7 +42,7 @@ type Dataset struct {
 func (dataset *Dataset) makePrintView(keys map[int]string) {
 	filler := "-"
 	if dataset.errored {
-		filler = color.RedString("-")
+		filler = makeRed("-")
 	}
 	for i := 0; i <= len(keys)-1; i++ {
 		if dataset.data[keys[i]] == "" {
@@ -156,11 +155,11 @@ func (prettyTableFormatter *PrettyTableFormatter) createSetForPlanet(json string
 	name := planet.name
 	planetType := planet.planetType
 	if planet.outputStruct.errored || !planet.valid {
-		number = color.RedString(number)
-		id = color.RedString(id)
-		name = color.RedString(name)
-		address = color.RedString(address)
-		planetType = color.RedString(planetType)
+		number = makeRed(number)
+		id = makeRed(id)
+		name = makeRed(name)
+		address = makeRed(address)
+		planetType = makeRed(planetType)
 	}
 	prettyTableFormatter.addEntry("Nr.", number, table)
 	prettyTableFormatter.addEntry("ID", id, table)

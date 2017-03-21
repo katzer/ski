@@ -10,14 +10,13 @@ import (
 var version = "undefined"
 
 func printVersion() {
-	runtimeOS := getOS()
-	progArch := getArch()
-	archOS := getOSArch()
-	vers := fmt.Sprintf("ski version %s %s %s (%s)", version, progArch, runtimeOS, archOS)
+	goos := getGOOS()
+	goarch := getGOARCH()
+	vers := fmt.Sprintf("ski version %s (%s %s)", version, goos, goarch)
 	fmt.Printf("%s\n", vers)
 }
 
-func getOS() string {
+func getGOOS() string {
 	switch runtime.GOOS {
 	case windows:
 		return "Windows"
@@ -30,11 +29,13 @@ func getOS() string {
 	}
 }
 
-func getArch() string {
+func getGOARCH() string {
 	switch runtime.GOARCH {
 	case "amd64":
 		return "64bit"
 	case "386":
+		return "32bit"
+	case "686":
 		return "32bit"
 	default:
 		return "could not determine architecture"

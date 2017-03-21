@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/fatih/color"
 )
 
 // TFAdapter ...
@@ -81,7 +80,7 @@ func (tableFormatter *TableFormatter) executeTextFSM(planet Planet, opts *Opts) 
 	if err != nil {
 		message := "thrown from tableFormatter.format->exec pythonscript"
 		errorstring := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, color.RedString(errorstring))
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, makeRed(errorstring))
 		planet.outputStruct.errored = true
 		log.Warn(errorstring)
 		return "", err
@@ -100,7 +99,7 @@ func (tableFormatter *TableFormatter) writeTmpTable(planet Planet, toWrite strin
 	if err != nil {
 		message := fmt.Sprintf("Attempt to write a temporary file for textfsm execution failed: %s\n", tmpTableFile)
 		errorstring := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, color.RedString(errorstring))
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, makeRed(errorstring))
 		planet.outputStruct.errored = true
 		log.Errorln(errorstring)
 		return err
@@ -116,7 +115,7 @@ func (tableFormatter *TableFormatter) deleteTmpTable(planet Planet) error {
 	if err != nil {
 		message := fmt.Sprintf("Attempt to delete the temporary file for textfsm execution failed: %s\n", tmpTableFile)
 		errorstring := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, color.RedString(errorstring))
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, makeRed(errorstring))
 		planet.outputStruct.errored = true
 		log.Errorln(errorstring)
 		return err

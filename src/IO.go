@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/fatih/color"
 )
 
 func formatAndPrint(planets []Planet, opts *Opts, writer io.Writer) {
@@ -61,4 +62,12 @@ func makeDir(name string) {
 	if err != nil {
 		log.Error(err)
 	}
+}
+
+func makeRed(input string) string {
+	tokens := strings.Split(input, "\n")
+	for i, row := range tokens {
+		tokens[i] = color.RedString(row)
+	}
+	return strings.Join(tokens, "\n")
 }

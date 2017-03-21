@@ -2,11 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"path"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/fatih/color"
 	"gopkg.in/hypersleep/easyssh.v0"
 )
 
@@ -29,7 +26,7 @@ func execCommand(command string, planet *Planet, opts *Opts) error {
 		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
 		errorString := fmt.Sprintf("%s\nAdditional Info: %s\n", err, message)
 		log.Warn(errorString)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, color.RedString(errorString))
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, makeRed(errorString))
 		planet.outputStruct.errored = true
 		logExecCommand(command, planet)
 		return err
@@ -43,7 +40,6 @@ func execCommand(command string, planet *Planet, opts *Opts) error {
 
 func uploadFile(planet *Planet, opts *Opts) error {
 	keyPath := getKeyPath()
-	var scriptPath string
 	ssh := &easyssh.MakeConfig{
 		User:   planet.user,
 		Server: planet.host,
@@ -51,11 +47,7 @@ func uploadFile(planet *Planet, opts *Opts) error {
 		Port:   "22",
 	}
 
-	if path.IsAbs(opts.ScriptName) {
-		scriptPath = opts.ScriptName
-	} else {
-		scriptPath = path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.ScriptName)
-	}
+	scriptPath := getScriptPath(opts)
 
 	// Call Scp method with file you want to upload to remote server.
 	err := ssh.Scp(scriptPath)
@@ -65,7 +57,7 @@ func uploadFile(planet *Planet, opts *Opts) error {
 		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
 		log.Warn(errorString)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, color.RedString(errorString))
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, makeRed(errorString))
 		planet.outputStruct.errored = true
 		return err
 	}

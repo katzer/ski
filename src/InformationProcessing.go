@@ -9,13 +9,16 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/fatih/color"
 )
 
 func parseConnectionDetails(ids []string) []Planet {
 	var err string
 	skiStrings := getFullSkiString(ids)
 	retval := make([]Planet, 0)
+	if len(skiStrings) == 0 {
+		planet := makeEmptyPlanet()
+		return append(retval, planet)
+	}
 	for i, skiString := range skiStrings {
 		tokens := strings.Split(skiString, skiDelim)
 		connectionURL := tokens[len(tokens)-1]
@@ -24,7 +27,7 @@ func parseConnectionDetails(ids []string) []Planet {
 		var dbID string
 		valid, _ := strconv.ParseBool(tokens[0])
 		if !valid {
-			err = color.RedString("%s\n", tokens[len(tokens)-1])
+			err = makeRed(fmt.Sprintf("%s\n", tokens[len(tokens)-1]))
 		}
 		planetID, planetType, name := tokens[1], tokens[2], tokens[3]
 		if len(urlTokens) > 1 {
@@ -60,6 +63,26 @@ func parseConnectionDetails(ids []string) []Planet {
 	return retval
 }
 
+func makeEmptyPlanet() Planet {
+	planet := Planet{
+		id:         "-",
+		planetType: "-",
+		name:       "-",
+		dbID:       "-",
+		user:       "-",
+		host:       "-",
+		valid:      false,
+		outputStruct: &StructuredOuput{
+			planet:   "-",
+			output:   "fifa did not return any results",
+			table:    make([][]string, 0),
+			position: 0,
+			errored:  false,
+		},
+	}
+	return planet
+}
+
 func getKeyPath() string {
 	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
@@ -89,10 +112,13 @@ func getFullSkiString(ids []string) []string {
 	cmd := exec.Command("fifa", args...)
 	// TODO check the exit code etc. if len(cmd.Path) == 0 {}
 	out, err := cmd.CombinedOutput()
+	if len(out) == 0 {
+		return make([]string, 0)
+	}
 	skiFormat := validateSkiFormat(string(out))
 	if !skiFormat {
 		message := "fifa output is not valid: " + string(out)
-		log.Fatalf(message)
+		log.Fatal(message)
 	}
 	if err != nil {
 		message := fmt.Sprintf("%s output is: %s called from ErrOut.\n", err, out)
@@ -129,4 +155,16 @@ func validateSkiFormat(fifaString string) bool {
 	firstLine := strings.Split(fifaString, "\n")[0]
 	tokens := strings.Split(firstLine, skiDelim)
 	return len(tokens) >= fifaTokenCount
+}
+
+func getScriptPath(opts *Opts) string {
+	sql := strings.HasSuffix(opts.ScriptName, ".sql")
+	SQL := strings.HasSuffix(opts.ScriptName, ".SQL")
+	if path.IsAbs(opts.ScriptName) {
+		return opts.ScriptName
+	}
+	if sql || SQL {
+		return path.Join(os.Getenv("ORBIT_HOME"), sqlDirectory, opts.ScriptName)
+	}
+	return path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.ScriptName)
 }

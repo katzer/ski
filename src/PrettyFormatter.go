@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -64,12 +63,12 @@ func (prettyFormatter *PrettyFormatter) createSetForPlanet(planet Planet) {
 	number := strconv.Itoa(planet.outputStruct.position)
 	output := planet.outputStruct.output
 	if planet.outputStruct.errored || !planet.valid {
-		number = color.RedString(number)
-		id = color.RedString(id)
-		name = color.RedString(name)
-		address = color.RedString(address)
-		planetType = color.RedString(planetType)
-		output = color.RedString(planet.outputStruct.output)
+		number = makeRed(number)
+		id = makeRed(id)
+		name = makeRed(name)
+		address = makeRed(address)
+		planetType = makeRed(planetType)
+		output = makeRed(planet.outputStruct.output)
 	}
 	prettyFormatter.addEntry("Nr.", number, completeTable)
 	prettyFormatter.addEntry("ID", id, completeTable)
