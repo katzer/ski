@@ -12,18 +12,19 @@ var version = "undefined"
 func printVersion() {
 	goos := getGOOS()
 	goarch := getGOARCH()
-	vers := fmt.Sprintf("ski version %s (%s %s)", version, goos, goarch)
+	osArch := getOSArch()
+	vers := fmt.Sprintf("v%s %s %s (%s)", version, goos, goarch, osArch)
 	fmt.Printf("%s\n", vers)
 }
 
 func getGOOS() string {
 	switch runtime.GOOS {
 	case windows:
-		return "Windows"
+		return "Windows NT"
 	case linux:
 		return "Linux"
 	case mac:
-		return "MacOS"
+		return "Darwin"
 	default:
 		return "could not determine OS"
 	}
@@ -52,15 +53,7 @@ func getOSArch() string {
 		}
 		return strings.TrimSuffix(string(out), "\n")
 	case windows:
-		out, err := exec.Command("if exist \"%ProgramFiles(x86)%\" echo 64-bit").Output()
-		if err != nil {
-			fmt.Println("error occured")
-			fmt.Printf("%s", err)
-		}
-		if string(out) == "64-bit" {
-			return "x86_64"
-		}
-		return "i686"
+		return "x86_64"
 	default:
 		return "could not determine Operating system"
 	}
