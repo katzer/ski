@@ -104,6 +104,7 @@ func (prettyFormatter *PrettyFormatter) printTable(writer io.Writer) {
 	table.SetRowLine(true)
 	table.SetRowSeparator("-")
 	table.SetHeader(prettyFormatter.cutMapToSlice(prettyFormatter.keys))
+	table.SetAutoWrapText(false)
 
 	for _, set := range prettyFormatter.sets {
 		log.Debugf("prettyTable.printTable settoappend: %v\n", set.printView)

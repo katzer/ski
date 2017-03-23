@@ -51,6 +51,12 @@ func (dataset *Dataset) makePrintView(keys map[int]string) {
 		}
 		dataset.printView = append(dataset.printView, dataset.data[keys[i]])
 	}
+	dataset.cleanTrailingNewlines()
+}
+func (dataset *Dataset) cleanTrailingNewlines() {
+	for i, entry := range dataset.printView {
+		dataset.printView[i] = strings.TrimSuffix(entry, "\n")
+	}
 }
 
 func (prettyTableFormatter *PrettyTableFormatter) init() {

@@ -31,37 +31,37 @@ Go::Build.new('x86_64-pc-linux-gnu') do
   bintest_if OS.linux? && OS.bits == 64
 end
 
-Go::Build.new('i686-pc-linux-gnu') do
-  os :linux
-  arch :'386'
-  appname :ski
-  bintest_if OS.linux? && OS.bits == 32
-end
+# Go::Build.new('i686-pc-linux-gnu') do
+#   os :linux
+#   arch :'386'
+#   appname :ski
+#   bintest_if OS.linux? && OS.bits == 32
+# end
 
-Go::Build.new('x86_64-apple-darwin14') do
-  os :darwin
-  arch :amd64
-  appname :ski
-  bintest_if OS.mac? && OS.bits == 64
-end
+# Go::Build.new('x86_64-apple-darwin14') do
+#   os :darwin
+#   arch :amd64
+#   appname :ski
+#   bintest_if OS.mac? && OS.bits == 64
+# end
 
-Go::Build.new('i386-apple-darwin14') do
-  os :darwin
-  arch :'386'
-  appname :ski
-  bintest_if OS.mac? && OS.bits == 32
-end
+# Go::Build.new('i386-apple-darwin14') do
+#   os :darwin
+#   arch :'386'
+#   appname :ski
+#   bintest_if OS.mac? && OS.bits == 32
+# end
 
-Go::Build.new('x86_64-w64-mingw32') do
-  os :windows
-  arch :amd64
-  appname :"ski.exe"
-  bintest_if OS.windows? && OS.bits == 64
-end
+# Go::Build.new('x86_64-w64-mingw32') do
+#   os :windows
+#   arch :amd64
+#   appname :"ski.exe"
+#   bintest_if OS.windows? && OS.bits == 64
+# end
 
-Go::Build.new('i686-w64-mingw32') do
-  os :windows
-  arch :'386'
-  appname :"ski.exe"
-  bintest_if OS.windows? && OS.bits == 32
-end
+# Go::Build.new('i686-w64-mingw32') do
+#   os :windows
+#   arch :'386'
+#   appname :"ski.exe"
+#   bintest_if OS.windows? && OS.bits == 32
+# end

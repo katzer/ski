@@ -67,6 +67,9 @@ func makeDir(name string) {
 func makeRed(input string) string {
 	tokens := strings.Split(input, "\n")
 	for i, row := range tokens {
+		if row == "" {
+			continue
+		}
 		tokens[i] = color.RedString(row)
 	}
 	return strings.Join(tokens, "\n")

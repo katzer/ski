@@ -23,10 +23,10 @@ func execCommand(command string, planet *Planet, opts *Opts) error {
 	out, err := ssh.Run(cmd)
 	// Handle errors
 	if err != nil {
-		message := fmt.Sprintf("called from execCommand.\nKeypath: %s\nCommand: %s", keyPath, cmd)
-		errorString := fmt.Sprintf("%s\nAdditional Info: %s\n", err, message)
+		message := fmt.Sprintf("Command: %s", cmd)
+		errorString := fmt.Sprintf("%s \nAdditional Info: %s \n", err, message)
 		log.Warn(errorString)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, makeRed(errorString))
+		planet.outputStruct.output = fmt.Sprintf("%s%s", planet.outputStruct.output, makeRed(errorString))
 		planet.outputStruct.errored = true
 		logExecCommand(command, planet)
 		return err

@@ -41,9 +41,9 @@ func isValidPlanet(planet Planet) bool {
 	if !ok {
 		switch planet.planetType {
 		case webServer:
-			planet.outputStruct.output += makeRed("Usage of ski with web servers is not implemented")
+			planet.outputStruct.output += makeRed("Usage of ski with web servers is not implemented\n")
 		default:
-			planet.outputStruct.output += makeRed("Planettype not supported")
+			planet.outputStruct.output += makeRed("Planettype not supported\n")
 		}
 	}
 	// TODO: since we know what kind of action is attempted on this server
