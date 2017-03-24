@@ -31,6 +31,9 @@ func formatAndPrint(planets []Planet, opts *Opts, writer io.Writer) {
 }
 
 func printUnformatted(planets []Planet, writer io.Writer) {
+	if !hasSuffix(planets[len(planets)-1].outputStruct.output,"\n"){
+		planets[len(planets)-1].outputStruct.output += "\n"
+	}
 	for _, planet := range planets {
 		fmt.Fprint(writer, planet.outputStruct.output)
 	}
