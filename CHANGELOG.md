@@ -6,6 +6,14 @@
 
 ### 0.9.2 (not yet released)
 
+JOBS!
+
+Formatter!
+
+Colors!
+
+# Further Changes:
+
 1. 64-bit binary for Linux/BusyBox.
 
 2. Compile Linux/GNU binaries with GNU libs (glibc).
@@ -44,13 +52,15 @@
 
 19. optionparsing moved from optparser to ski.go
 
-20. ski is now able to parse job configurations from a file
+20. Files uploaded to the ssh target are now modified with the planets position, so conflicts with running a script multiple times on one planet are avoided
 
-21. inserted codebeat disables for planet and opts
+21. ski is now able to parse job configurations from a file
 
-22. removed unnecessary comments
+22. inserted codebeat disables for planet and opts
 
-23. removed deprecated functions
+23. removed unnecessary comments
+
+24. removed deprecated functions
 
 
 
