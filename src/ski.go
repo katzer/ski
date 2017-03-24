@@ -33,7 +33,7 @@ func main() {
 	options := map[string]string{}
 	options["job_name"] = path.Base(jobFile)
 	options["orbit_home"] = os.Getenv("ORBIT_HOME")
-	options["output"] = "cron_jobs"
+	options["output"] = "jobs_output"
 
 	createJSONReport(options, exec.planets, &opts)
 }

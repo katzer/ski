@@ -33,7 +33,7 @@ func TestWriteResultAsJSON(t *testing.T) {
 	var err error
 	jobFile := "job.js"
 	// Setup
-	name := "cron_jobs"
+	name := "jobs_output"
 	backup := os.Getenv("ORBIT_HOME")
 	os.Setenv("ORBIT_HOME", os.TempDir())
 
@@ -134,7 +134,7 @@ func TestCreateJSONReport(t *testing.T) {
 	options := map[string]string{}
 	options["job_name"] = path.Base(jobFile)
 	options["orbit_home"] = os.Getenv("ORBIT_HOME")
-	options["output"] = "cron_jobs"
+	options["output"] = "jobs_output"
 
 	planet := Planet{
 		id:         "app",
