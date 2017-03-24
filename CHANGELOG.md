@@ -1,13 +1,13 @@
-## Release Notes: _ski_
+# Release Notes: _ski_
 
 
 
 
 
-### 0.9.2 (not yet released)
+# 0.9.2 (not yet released)
 
-JOBS!
-# Now supports jobs
+
+### Now supports jobs
 
 Provide jobfile by using 
     ```
@@ -68,13 +68,13 @@ When running in jobmode, ski writes the output at ORBIT_HOME/jobs_output/$JOBNAM
     }
     ```
 
-# Formatter
+### Formatter
 Ski now uses Interfaces and a FormatterFactory to dynamically create the right formatter for a job.
 
-# Colors
+### Colors
 Ski now colorizes occuring errors in ugly-mode and the whole row of an errored planet in prettymod.
 
-## Further Changes:
+### Further Changes:
 
 1. 64-bit binary for Linux/BusyBox.
 
@@ -126,7 +126,7 @@ Ski now colorizes occuring errors in ugly-mode and the whole row of an errored p
 
 
 
-### 0.9.1 (15.02.2017)
+## 0.9.1 (15.02.2017)
 
 1. Renamed the tool to ski (<b>S</b>ascha <b>K</b>nows <b>I</b>t).
 
@@ -183,7 +183,7 @@ Ski now colorizes occuring errors in ugly-mode and the whole row of an errored p
    ```
 
 
-### 0.9.0 (12.12.2016)
+## 0.9.0 (12.12.2016)
 
 1. Execute command/script/sql on multiple planets at same time:
 
