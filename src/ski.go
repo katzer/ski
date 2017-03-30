@@ -154,5 +154,6 @@ func postProcessing(opts *Opts) {
 }
 func setupDirs() {
 	makeDir("tmp")
-	makeDir("chronJobs")
+	makeDir("jobs")
+	makeDir("jobs_output")
 }
