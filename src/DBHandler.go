@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strconv"
 
 	"strings"
 
@@ -18,7 +19,15 @@ func execDBCommand(planet *Planet, opts *Opts) error {
 		log.Warningf("Appending \";\"...")
 		opts.Command = fmt.Sprintf("%s;", opts.Command)
 	}
-	tmpDBFile := path.Join(os.Getenv("ORBIT_HOME"), "scripts", "orbit.sql")
+
+	tmpSQLName := fmt.Sprintf("orbit%s.sql", strconv.Itoa(planet.outputStruct.position))
+	tmpDBFile := path.Join(os.Getenv("ORBIT_HOME"), "tmp", tmpSQLName)
+
+	//to decouple the opts with the temporary scriptname from the real opts. TODO find more elegant solution
+	wrapper := *opts
+	tempOpts := &wrapper
+	tempOpts.ScriptName = tmpDBFile
+
 	err = ioutil.WriteFile(tmpDBFile, []byte(opts.Command), 0644)
 	if err != nil {
 		errormessage := fmt.Sprintf("writing temporary sql script failed : %v", err)
@@ -27,8 +36,7 @@ func execDBCommand(planet *Planet, opts *Opts) error {
 		log.Warning(errormessage)
 		return err
 	}
-	opts.ScriptName = "orbit.sql"
-	err = execDBScript(planet, opts)
+	err = execDBScript(planet, tempOpts)
 	if err != nil {
 		return err
 	}
@@ -50,6 +58,9 @@ func execDBScript(planet *Planet, opts *Opts) error {
 		return err
 	}
 	scriptName := opts.ScriptName
+	if path.IsAbs(opts.ScriptName) {
+		_, scriptName = path.Split(opts.ScriptName)
+	}
 	moveCommand := fmt.Sprintf("mv ~/%s ~/sql/%s>/dev/null", scriptName, scriptName)
 	err = execCommand(moveCommand, planet, opts)
 	if err != nil {
@@ -71,6 +82,9 @@ func execDBScript(planet *Planet, opts *Opts) error {
 
 func cleanDBMetaData(strucOut *StructuredOuput) {
 	split := strings.Split(strucOut.output, "\n")
-	reduced := split[1:(len(split) - 3)]
+	if len(split) < 4 {
+		return
+	}
+	reduced := split[1:(len(split) - 2)]
 	strucOut.output = strings.Join(reduced, "\n")
 }
