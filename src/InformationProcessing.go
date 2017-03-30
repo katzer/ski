@@ -92,7 +92,7 @@ func getFullSkiString(ids []string) []string {
 	out, err := cmd.CombinedOutput()
 	skiFormat := validateSkiFormat(string(out))
 	if !skiFormat {
-		message := "fifa output is not valid " + string(out)
+		message := "fifa output is not valid: " + string(out)
 		log.Fatalf(message)
 	}
 	if err != nil {
