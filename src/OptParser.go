@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"strings"
@@ -109,35 +107,4 @@ func (opts *Opts) validateTemplate() {
 			log.Fatal(message)
 		}
 	}
-
-}
-
-// creates a task from a json file
-func createATaskFromJobFile(jsonFile string) (opts Opts) {
-	job := Opts{}
-	wcopy := jsonFile // assumption abs path
-	tokens := strings.Split(jsonFile, string(os.PathSeparator))
-	if len(tokens) == 1 {
-		// relative path given, read from jobs folder
-		wcopy = path.Join(os.Getenv("ORBIT_HOME"), "jobs", jsonFile)
-	}
-	bytes, err := ioutil.ReadFile(wcopy)
-	if err != nil {
-		errorMessage := fmt.Sprintf("Couldn't open job file: %s", jsonFile)
-		fmt.Fprint(os.Stderr, errorMessage)
-		log.Fatal(errorMessage)
-	}
-
-	err = json.Unmarshal(bytes, &job)
-	if err != nil {
-		errorMessage := fmt.Sprintf("Error parsing job json file: %s", jsonFile)
-		fmt.Fprint(os.Stderr, errorMessage)
-		log.Fatal(errorMessage)
-	}
-
-	log.Debugf("Read a task from %s", jsonFile)
-	log.Debugln()
-	log.Debugf("Unmarshalled %v", job)
-	log.Debugln()
-	return job
 }
