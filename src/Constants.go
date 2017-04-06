@@ -20,3 +20,4 @@ const linux = "linux"
 const mac = "darwin"
 const dbCommand = ". profiles/%s.prof && pqdb_sql.out -x -s %s ~/sql/%s"
 const fifaTokenCount = 5
+const jobExt = ".json"

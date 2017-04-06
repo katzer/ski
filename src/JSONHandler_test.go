@@ -83,34 +83,10 @@ func TestWriteResultAsJSON(t *testing.T) {
 			if err := json.Unmarshal(bytes, &allInOne); err != nil {
 				t.Fail()
 			} else {
-				if allInOne.Planets[0].ID != planet.id {
-					t.Fail()
-				}
-				if allInOne.Planets[0].Name != planet.name {
-					t.Fail()
-				}
-				if allInOne.Planets[0].User != planet.user {
-					t.Fail()
-				}
-				if allInOne.Planets[0].Host != planet.host {
-					t.Fail()
-				}
-				if allInOne.Planets[0].PlanetType != planet.planetType {
-					t.Fail()
-				}
-				if allInOne.Planets[0].DbID != planet.dbID {
-					t.Fail()
-				}
-				if allInOne.Planets[0].Valid != planet.valid {
-					t.Fail()
-				}
-				if allInOne.Planets[0].Output != planet.outputStruct.output {
-					t.Fail()
-				}
-				if allInOne.Planets[0].Index != planet.outputStruct.position {
-					t.Fail()
-				}
-				if allInOne.Planets[0].Errored != planet.outputStruct.errored {
+				if allInOne.Planets[0].ID != planet.id ||
+					allInOne.Planets[0].Name != planet.name ||
+					allInOne.Planets[0].Output != planet.outputStruct.output ||
+					allInOne.Planets[0].Errored != planet.outputStruct.errored {
 					t.Fail()
 				}
 			}
@@ -127,7 +103,7 @@ func TestWriteResultAsJSON(t *testing.T) {
 // func createJSONReport(options map[string]string, planets []Planet, opts *Opts)
 func TestCreateJSONReport(t *testing.T) {
 	// Setup
-	jobFile := "job.js"
+	jobFile := "job"
 	backup := os.Getenv("ORBIT_HOME")
 	os.Setenv("ORBIT_HOME", os.TempDir())
 
@@ -168,23 +144,17 @@ func TestCreateJSONReport(t *testing.T) {
 	jobName := strings.Split(options["job_name"], ".")[0]
 	// ${ORBIT_HOME/cron_jobs/job/${timestamp_in_iso8601 with : replaced with _ }.json
 	outputFolder := path.Join(options["orbit_home"], options["output"], jobName)
-	fileToWrite := findLatest(outputFolder)
-	fmt.Printf("Attempting to unmarshal JSONReport from %s\n", fileToWrite)
+	latestReport := findLatest(outputFolder)
+	fmt.Printf("Attempting to unmarshal JSONReport from %s\n", latestReport)
 	var bytes []byte
 	var err error
-	if bytes, err = ioutil.ReadFile(fileToWrite); err == nil {
+	if bytes, err = ioutil.ReadFile(latestReport); err == nil {
 		report := JSONReport{}
 		if err = json.Unmarshal(bytes, &report); err == nil {
 			wrapper := report.Planets[0]
 			if wrapper.ID != planet.id ||
 				wrapper.Name != planet.name ||
-				wrapper.User != planet.user ||
-				wrapper.Host != planet.host ||
-				wrapper.PlanetType != planet.planetType ||
-				wrapper.DbID != planet.dbID ||
-				wrapper.Valid != planet.valid ||
 				wrapper.Output != planet.outputStruct.output ||
-				wrapper.Index != planet.outputStruct.position ||
 				wrapper.Errored != planet.outputStruct.errored {
 				fmt.Fprintln(os.Stderr, "Unmarshalled object contains wrong values.")
 				t.Fail()

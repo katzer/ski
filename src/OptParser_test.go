@@ -9,7 +9,7 @@ import (
 )
 
 func setupOptParserTest() (string, error) {
-	toUnMarshall := "job.js"
+	toUnMarshall := "job.json"
 	// "-s=\"showver.sh\"", "-t=\"useless_template\"", "-d", "-p", "app"
 	json := `{
   "debug"      : true,
@@ -24,7 +24,8 @@ func setupOptParserTest() (string, error) {
 }
 `
 	data := []byte(json)
-	absPath := path.Join(os.TempDir(), toUnMarshall)
+	os.Mkdir(path.Join(os.TempDir(), "jobs"), 0744)
+	absPath := path.Join(os.TempDir(), "jobs", toUnMarshall)
 
 	if err := ioutil.WriteFile(absPath, data, 0644); err != nil {
 		return "", err
@@ -36,6 +37,10 @@ func TestCreateTaskFromJobFile(t *testing.T) {
 	fmt.Println("starting Test for CreateTaskFromJobFile")
 	var absPath string
 	var err error
+
+	backup := os.Getenv("ORBIT_HOME")
+	os.Setenv("ORBIT_HOME", os.TempDir())
+
 	if absPath, err = setupOptParserTest(); err != nil {
 		t.Fail()
 	}
@@ -46,8 +51,13 @@ func TestCreateTaskFromJobFile(t *testing.T) {
 		fmt.Fprintf(os.Stderr, "parsed from json: %v", opts)
 		t.Fail()
 	}
-	// tearDownOptParserTest(absPath)
+
 	fmt.Println("ending Test for CreateTaskFromJobFile")
+
+	defer func() {
+		os.Setenv("ORBIT_HOME", backup)
+		tearDownOptParserTest(absPath)
+	}()
 }
 
 func tearDownOptParserTest(absPath string) {
