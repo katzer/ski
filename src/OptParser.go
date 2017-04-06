@@ -19,7 +19,7 @@ type Opts struct {
 	Load       bool     `json:"load"`
 	Pretty     bool     `json:"pretty"`
 	Version    bool     `json:"version"`
-	SaveReport bool     `json:"save_report"`
+	MaxToKeep  int      `json:"max_to_keep"`
 	Command    string   `json:"command"`
 	ScriptName string   `json:"scriptName"`
 	Template   string   `json:"template"`
@@ -36,7 +36,7 @@ func (opts *Opts) String() string {
 	Load: %t
 	Pretty: %t
 	Version: %t
-	SaveReport: %t
+	MaxToKeep: %d
 	Command: %s
 	ScriptName: %s
 	Template : %s
@@ -50,7 +50,7 @@ func (opts *Opts) String() string {
 		opts.Load,
 		opts.Pretty,
 		opts.Version,
-		opts.SaveReport,
+		opts.MaxToKeep,
 		opts.Command,
 		opts.ScriptName,
 		opts.Template,

@@ -156,10 +156,11 @@ func TestCreateJSONReport(t *testing.T) {
 
 	// "-j=/tmp/job.js", "-t=\"perlver_template\"", "-p", "-d=true", "app"
 	opts := Opts{
-		Template: "perlver_template",
-		Pretty:   true,
-		Debug:    true,
-		Planets:  []string{"app"},
+		Template:  "perlver_template",
+		Pretty:    true,
+		Debug:     true,
+		MaxToKeep: 2,
+		Planets:   []string{"app"},
 	}
 
 	createJSONReport(options, planets, &opts)

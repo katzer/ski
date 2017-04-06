@@ -89,6 +89,8 @@ func createJSONReport(options map[string]string, planets []Planet, opts *Opts) {
 	if err != nil {
 		log.Fatalf("Could not create json output for the job %s", opts.String())
 	}
+
+	removeOldOutput(folders, opts.MaxToKeep)
 	now := time.Now()
 	format := "%d-%02d-%02dT%02d_%02d_%02d"
 	stamp := fmt.Sprintf(format, now.Year(), now.Month(), now.Day(),
@@ -102,6 +104,30 @@ func createJSONReport(options map[string]string, planets []Planet, opts *Opts) {
 		return
 	}
 	log.Fatalf("Could not create json output for the job %s", basename)
+}
+
+func removeOldOutput(dir string, maxToKeep int) {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		log.Fatalf("Could not read files in folder %s", dir)
+	}
+
+	total := len(files)
+
+	if total > maxToKeep {
+		diff := total - maxToKeep
+		toDelete := files[:diff]
+
+		for _, file := range toDelete {
+			name := file.Name()
+			abs := path.Join(dir, name)
+			log.Infoln("removing old output " + abs)
+			if err := os.Remove(abs); err != nil {
+				fmt.Println("removing old output " + abs + " failed")
+				log.Errorln("removing old output " + abs + " failed")
+			}
+		}
+	}
 }
 
 // creates a task from a json file

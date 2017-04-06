@@ -10,7 +10,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-var help, pretty, debug, load, _version, saveReport bool
+var help, pretty, debug, load, _version bool
+var maxToKeep int
 var jobFile, logFile, template, scriptName, command string
 
 func main() {
@@ -99,7 +100,7 @@ func parseOptions() Opts {
 	flag.BoolVar(&debug, "d", false, "verbose")
 	flag.BoolVar(&load, "l", false, "ssh profile loading")
 	flag.BoolVar(&_version, "v", false, "version")
-	flag.BoolVar(&saveReport, "js", false, "if the summary should be saved in json format. Used with the job flag")
+	flag.IntVar(&maxToKeep, "js", 2, "maximum number of outputs to keep per job")
 	flag.StringVar(&jobFile, "j", "", "path to a json file with a task description")
 	flag.StringVar(&logFile, "logfile", "ski.log", "path to a file for logging")
 	flag.StringVar(&template, "t", "", "filename of template")
@@ -120,7 +121,7 @@ func parseOptions() Opts {
 		Debug:      debug,
 		Load:       load,
 		Version:    _version,
-		SaveReport: saveReport,
+		MaxToKeep:  maxToKeep,
 		Template:   template,
 		ScriptName: scriptName,
 		Command:    command,
