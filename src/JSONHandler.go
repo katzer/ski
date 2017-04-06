@@ -123,7 +123,6 @@ func removeOldOutput(dir string, maxToKeep int) {
 			abs := path.Join(dir, name)
 			log.Infoln("removing old output " + abs)
 			if err := os.Remove(abs); err != nil {
-				fmt.Println("removing old output " + abs + " failed")
 				log.Errorln("removing old output " + abs + " failed")
 			}
 		}
