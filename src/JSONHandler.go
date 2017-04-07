@@ -90,7 +90,6 @@ func createJSONReport(options map[string]string, planets []Planet, opts *Opts) {
 		log.Fatalf("Could not create json output for the job %s", opts.String())
 	}
 
-	removeOldOutput(folders, opts.MaxToKeep)
 	now := time.Now()
 	format := "%d-%02d-%02dT%02d_%02d_%02d"
 	stamp := fmt.Sprintf(format, now.Year(), now.Month(), now.Day(),
@@ -101,6 +100,7 @@ func createJSONReport(options map[string]string, planets []Planet, opts *Opts) {
 	if writer, err := os.Create(toCreate); err == nil {
 		defer writer.Close()
 		writeResultAsJSON(planets, opts, writer)
+		removeOldOutput(folders, opts.MaxToKeep)
 		return
 	}
 	log.Fatalf("Could not create json output for the job %s", basename)
@@ -113,7 +113,7 @@ func removeOldOutput(dir string, maxToKeep int) {
 	}
 
 	total := len(files)
-
+	log.Infof("removeOldOutput:: Total logs: %d, max # to keep :%d", total, maxToKeep)
 	if total > maxToKeep {
 		diff := total - maxToKeep
 		toDelete := files[:diff]
@@ -131,7 +131,9 @@ func removeOldOutput(dir string, maxToKeep int) {
 
 // creates a task from a json file
 func createATaskFromJobFile(jsonFile string) (opts Opts) {
-	job := Opts{}
+	job := Opts{
+		MaxToKeep: 10,
+	}
 	wcopy := jsonFile // assumption abs path
 	tokens := strings.Split(jsonFile, string(os.PathSeparator))
 
