@@ -84,7 +84,6 @@ func TestWriteResultAsJSON(t *testing.T) {
 				t.Fail()
 			} else {
 				if allInOne.Planets[0].ID != planet.id ||
-					allInOne.Planets[0].Name != planet.name ||
 					allInOne.Planets[0].Output != planet.outputStruct.output ||
 					allInOne.Planets[0].Errored != planet.outputStruct.errored {
 					t.Fail()
@@ -153,7 +152,6 @@ func TestCreateJSONReport(t *testing.T) {
 		if err = json.Unmarshal(bytes, &report); err == nil {
 			wrapper := report.Planets[0]
 			if wrapper.ID != planet.id ||
-				wrapper.Name != planet.name ||
 				wrapper.Output != planet.outputStruct.output ||
 				wrapper.Errored != planet.outputStruct.errored {
 				fmt.Fprintln(os.Stderr, "Unmarshalled object contains wrong values.")

@@ -23,7 +23,6 @@ type JSONReport struct {
 // PlanetWrapper ...
 type PlanetWrapper struct {
 	ID        string `json:"id"`
-	Name      string `json:"name"`
 	Valid     bool   `json:"valid"`
 	Output    string `json:"output"`
 	Errored   bool   `json:"errored"`
@@ -48,7 +47,6 @@ func writeResultAsJSON(planets []Planet, opts *Opts, writer io.Writer) {
 	for i, planet := range planets {
 		wrapper := PlanetWrapper{
 			ID:      planet.id,
-			Name:    planet.name,
 			Output:  planet.outputStruct.output,
 			Errored: planet.outputStruct.errored,
 			// RFC3339 is a subset of ISO 8601
