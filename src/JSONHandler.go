@@ -22,16 +22,11 @@ type JSONReport struct {
 
 // PlanetWrapper ...
 type PlanetWrapper struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	User       string `json:"user"`
-	Host       string `json:"host"`
-	PlanetType string `json:"planet_type"`
-	DbID       string `json:"db_id"`
-	Valid      bool   `json:"valid"`
-	Output     string `json:"output"`
-	Index      int    `json:"index"`
-	Errored    bool   `json:"errored"`
+	ID        string `json:"id"`
+	Valid     bool   `json:"valid"`
+	Output    string `json:"output"`
+	Errored   bool   `json:"errored"`
+	CreatedAt string `json:"created_at"`
 }
 
 func decode(jsonObject string) ([][]string, error) {
@@ -51,17 +46,13 @@ func writeResultAsJSON(planets []Planet, opts *Opts, writer io.Writer) {
 	allInOne.Meta = *opts
 	for i, planet := range planets {
 		wrapper := PlanetWrapper{
-			ID:         planet.id,
-			Name:       planet.name,
-			User:       planet.user,
-			Host:       planet.host,
-			PlanetType: planet.planetType,
-			DbID:       planet.dbID,
-			Valid:      planet.valid,
-			Output:     planet.outputStruct.output,
-			Index:      i,
-			Errored:    planet.outputStruct.errored,
+			ID:      planet.id,
+			Output:  planet.outputStruct.output,
+			Errored: planet.outputStruct.errored,
+			// RFC3339 is a subset of ISO 8601
+			CreatedAt: time.Now().UTC().Format(time.RFC3339),
 		}
+
 		allInOne.Planets[i] = wrapper
 	}
 
@@ -94,8 +85,7 @@ func createJSONReport(options map[string]string, planets []Planet, opts *Opts) {
 	format := "%d-%02d-%02dT%02d_%02d_%02d"
 	stamp := fmt.Sprintf(format, now.Year(), now.Month(), now.Day(),
 		now.Hour(), now.Minute(), now.Second())
-	fileToWrite := strings.Join([]string{stamp, "json"}, ".")
-	toCreate := path.Join(folders, fileToWrite)
+	toCreate := path.Join(folders, fmt.Sprintf(`%s%s`, stamp, jobExt))
 
 	if writer, err := os.Create(toCreate); err == nil {
 		defer writer.Close()
@@ -135,24 +125,30 @@ func createATaskFromJobFile(jsonFile string) (opts Opts) {
 		MaxToKeep: 10,
 	}
 	wcopy := jsonFile // assumption abs path
-	tokens := strings.Split(jsonFile, string(os.PathSeparator))
+	parentDir, basename := path.Split(jsonFile)
 
-	if len(tokens) == 1 {
+	if len(parentDir) == 0 {
 		// relative path given, read from jobs folder
 		wcopy = path.Join(os.Getenv("ORBIT_HOME"), "jobs", jsonFile)
 	}
+
+	tokens := strings.Split(basename, ".")
+	if len(tokens) == 1 {
+		wcopy = fmt.Sprintf(`%s%s`, wcopy, jobExt)
+	}
+
 	var err error
 	var bytes []byte
 	if bytes, err = ioutil.ReadFile(wcopy); err != nil {
-		errorMessage := fmt.Sprintf("%s : %s", err.Error(), jsonFile)
-		fmt.Fprint(os.Stderr, errorMessage)
-		log.Fatal(errorMessage)
+		msg := fmt.Sprintf("%s : %s", err.Error(), jsonFile)
+		fmt.Fprint(os.Stderr, msg)
+		log.Fatal(msg)
 	}
 
 	if json.Unmarshal(bytes, &job); err != nil {
-		errorMessage := fmt.Sprintf("%s : %s", err.Error(), jsonFile)
-		fmt.Fprint(os.Stderr, errorMessage)
-		log.Fatal(errorMessage)
+		msg := fmt.Sprintf("%s : %s", err.Error(), jsonFile)
+		fmt.Fprint(os.Stderr, msg)
+		log.Fatal(msg)
 	}
 
 	log.Debugf("Read a task from %s:", jsonFile)

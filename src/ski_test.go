@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"path"
+	"strings"
 	"testing"
 )
 
@@ -14,7 +16,18 @@ func TestParseOptions(t *testing.T) {
 	if err != nil {
 		t.Fail()
 	}
-	jobOption := fmt.Sprintf("-j=%s", jsonFile)
+
+	backup := os.Getenv("ORBIT_HOME")
+	os.Setenv("ORBIT_HOME", os.TempDir())
+	// remove the json file from the tmp folder
+	defer func() {
+		os.Setenv("ORBIT_HOME", backup)
+		tearDownOptParserTest(jsonFile)
+	}()
+
+	_, basename := path.Split(jsonFile)
+	onlyName := strings.Split(basename, ".")[0]
+	jobOption := fmt.Sprintf("-j=%s", onlyName)
 	os.Args = []string{"ski", jobOption, "-d=false", "-v=false", "-c=\"ls -la ${HOME}\""}
 	fmt.Printf("TestParseOptions :: os.Args: %v\n", os.Args)
 	opts := parseOptions()
@@ -32,9 +45,6 @@ func TestParseOptions(t *testing.T) {
 		msg := fmt.Sprintf("Command was not parsed correctly: %s", opts.Command)
 		errors = append(errors, msg)
 	}
-
-	// remove the json file from the tmp folder
-	tearDownOptParserTest(jsonFile)
 
 	if len(errors) > 0 {
 		for i, message := range errors {
