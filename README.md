@@ -56,30 +56,103 @@ You'll be able to find the binaries in the following directories:
 
 ## Basic Usage
 
-Get the connection by type:
+Execute commands or collect informations on multiple servers in parallel.
 
-    $ export ORBIT_FILE=/path/to/orbit.json
+    $ ski -h
+    usage: ski [options...] -c="<command>" <planets>... 
+    Options:
+    -s="<scriptname>"   	        Execute script and return result
+    -c="<command>"  	        Execute script and return result
+    -t=<"templatename>" 	        Templatefile to be applied 
+    -p    			        Pretty print output as a table
+    -l    			        Load bash profiles on Server
+    -h    			        Display this help text
+    -v    			        Show version number
+    -d			            Show extended debug informations
 
-    $ ski -c="hostname" app-package-1 app-package-2
-    hostname-1
-    hostname-2
+#### Command execution - Linux server
+Use ski to execute commands on linux server planets:
+```
+$ ski -c="echo hi" app-package-1
+hi
+```
 
-## Advanced features
+#### Command execution - Database
+Use ski to execute commands on database planets:
+```
+$ ski -c="SELECT * FROM DUAL;" ora-db
+D
+-
+X
+```
+#### Script execution - Linux server
+Use ski to execute bash scripts on linux server planets:
+```
+$ ski -s="echo-script.sh" app-package-1
+hi
+```
 
-Execute a script:
+#### Script execution - Database
+Use ski to execute sql srcipts on database planets:
+```
+$ ski -s="select.sql" ora-db
+D
+-
+X
+```
 
-    $ ski -s="scripts/hostname.sh" app-package-1 app-package-2
-    hostname-1
-    hostname-2
+#### Prettyprinting script and command execution
+Set the pretty flag to display the planet output from any script or command execution in a neat, readable manner:
+```
+$ ski -c="echo hi" -p app
++-----+-----+---------------+-------------------+--------+---------------------------------------+
+| NR  | ID  |     NAME      |      ADDRESS      |  TYPE  |                OUTPUT                 |
++-----+-----+---------------+-------------------+--------+---------------------------------------+
+|   0 | app | App-Package 1 | user@localhost    | server |                  hi                   |
++-----+-----+---------------+-------------------+--------+---------------------------------------+
+```
 
-Pretty print output:
+#### Output conversion to JSON - template
+Provide a [TextFSM](https://github.com/google/textfsm/wiki/TextFSM) template to convert the output of a planet to json:
+```
+$ ski -s="showver.sh" -t="showver" app
 
-    $ ski -p -c="hostname" app-package-1 app-package-2
-    
-      NR   PLANET          hostname
-      ===============================
-       0   app-package-1   hostname-1
-       1   app-package-2   hostname-1
+[
+["showver_version", "Section", "Suse", "UnixVersion", "UnixPatch", "Key", "Value", "Key2", "Value2", "Os", "OracleDb"],
+["2.1", "", "", "", "", "", "", "", "", "", ""],
+["", "binaries", "", "", "", "", "", "", "", "", ""],
+...
+]
+```
+
+#### Prettyprinting output converted to JSON
+Set the pretty flag to display the planet output from any [TextFSM](https://github.com/google/textfsm/wiki/TextFSM) template converted execution in a neat, readable manner:
+```
+$ ski -s="showver.sh" -t="showver" -p app
+
+| showver_version | Section  | gateway                                   |
+|-----------------|----------|-------------------------------------------|
+| 2.1             | binaries | 4.6.1.1 (build time Oct 21 2015 10:35:11) |
+```
+#### Jobs
+Provide a JSON jobfile to persistently save a configuration to run ski with. Any flag not set in this jobfile will be considered not provided. This way complicated ski execution settings can be stored and called with providing but one parameter to ski.
+The output from this job will be stored in an automatically created folder called `job_output`
+
+Usage: 
+```
+$ ski -j="showver.json" app
+```
+
+```
+showver.json:
+
+{
+  "pretty"     : true,
+  "scriptName" : "showver.sh",
+  "template"   : "showver",
+  "planets"    : [ "app-1", "app-2", "app-3", "app-5" ]
+}
+```
 
 ## Releases
 
