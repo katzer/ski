@@ -156,15 +156,3 @@ func validateSkiFormat(fifaString string) bool {
 	tokens := strings.Split(firstLine, skiDelim)
 	return len(tokens) >= fifaTokenCount
 }
-
-func getScriptPath(opts *Opts) string {
-	sql := strings.HasSuffix(opts.ScriptName, ".sql")
-	SQL := strings.HasSuffix(opts.ScriptName, ".SQL")
-	if path.IsAbs(opts.ScriptName) {
-		return opts.ScriptName
-	}
-	if sql || SQL {
-		return path.Join(os.Getenv("ORBIT_HOME"), sqlDirectory, opts.ScriptName)
-	}
-	return path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.ScriptName)
-}

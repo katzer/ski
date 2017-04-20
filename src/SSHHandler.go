@@ -40,6 +40,7 @@ func execCommand(command string, planet *Planet, opts *Opts) error {
 
 func uploadFile(planet *Planet, opts *Opts) error {
 	keyPath := getKeyPath()
+
 	ssh := &easyssh.MakeConfig{
 		User:   planet.user,
 		Server: planet.host,

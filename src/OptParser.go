@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"strings"
@@ -21,7 +19,7 @@ type Opts struct {
 	Load       bool     `json:"load"`
 	Pretty     bool     `json:"pretty"`
 	Version    bool     `json:"version"`
-	SaveReport bool     `json:"save_report"`
+	MaxToKeep  int      `json:"max_to_keep"`
 	Command    string   `json:"command"`
 	ScriptName string   `json:"scriptName"`
 	Template   string   `json:"template"`
@@ -38,7 +36,7 @@ func (opts *Opts) String() string {
 	Load: %t
 	Pretty: %t
 	Version: %t
-	SaveReport: %t
+	MaxToKeep: %d
 	Command: %s
 	ScriptName: %s
 	Template : %s
@@ -52,7 +50,7 @@ func (opts *Opts) String() string {
 		opts.Load,
 		opts.Pretty,
 		opts.Version,
-		opts.SaveReport,
+		opts.MaxToKeep,
 		opts.Command,
 		opts.ScriptName,
 		opts.Template,
@@ -109,35 +107,4 @@ func (opts *Opts) validateTemplate() {
 			log.Fatal(message)
 		}
 	}
-
-}
-
-// creates a task from a json file
-func createATaskFromJobFile(jsonFile string) (opts Opts) {
-	job := Opts{}
-	wcopy := jsonFile // assumption abs path
-	tokens := strings.Split(jsonFile, string(os.PathSeparator))
-	if len(tokens) == 1 {
-		// relative path given, read from jobs folder
-		wcopy = path.Join(os.Getenv("ORBIT_HOME"), "jobs", jsonFile)
-	}
-	bytes, err := ioutil.ReadFile(wcopy)
-	if err != nil {
-		errorMessage := fmt.Sprintf("Couldn't open job file: %s", jsonFile)
-		fmt.Fprint(os.Stderr, errorMessage)
-		log.Fatal(errorMessage)
-	}
-
-	err = json.Unmarshal(bytes, &job)
-	if err != nil {
-		errorMessage := fmt.Sprintf("Error parsing job json file: %s", jsonFile)
-		fmt.Fprint(os.Stderr, errorMessage)
-		log.Fatal(errorMessage)
-	}
-
-	log.Debugf("Read a task from %s", jsonFile)
-	log.Debugln()
-	log.Debugf("Unmarshalled %v", job)
-	log.Debugln()
-	return job
 }

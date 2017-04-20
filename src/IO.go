@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/fatih/color"
+	color "github.com/fatih/color"
 )
 
 func formatAndPrint(planets []Planet, opts *Opts, writer io.Writer) {
