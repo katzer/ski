@@ -26,7 +26,8 @@ func execCommand(command string, planet *Planet, opts *Opts) error {
 		message := fmt.Sprintf("Command: %s", cmd)
 		errorString := fmt.Sprintf("%s \nAdditional Info: %s \n", err, message)
 		log.Warn(errorString)
-		planet.outputStruct.output = fmt.Sprintf("%s%s", planet.outputStruct.output, makeRed(errorString))
+		planet.outputStruct.output = fmt.Sprintf("%s%s", planet.outputStruct.output, errorString)
+		planet.outputStruct.errors["output"] = fmt.Sprintf("%s%s", planet.outputStruct.output, errorString)
 		planet.outputStruct.errored = true
 		logExecCommand(command, planet)
 		return err
@@ -58,7 +59,8 @@ func uploadFile(planet *Planet, opts *Opts) error {
 		message := fmt.Sprintf("called from uploadFile. Keypath: %s", keyPath)
 		errorString := fmt.Sprintf("%s\nAddInf: %s\n", err, message)
 		log.Warn(errorString)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, makeRed(errorString))
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, errorString)
+		planet.outputStruct.errors["output"] = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, errorString)
 		planet.outputStruct.errored = true
 		return err
 	}

@@ -31,7 +31,8 @@ func execDBCommand(planet *Planet, opts *Opts) error {
 	err = ioutil.WriteFile(tmpDBFile, []byte(opts.Command), 0644)
 	if err != nil {
 		errormessage := fmt.Sprintf("writing temporary sql script failed : %v", err)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, makeRed(errormessage))
+		planet.outputStruct.errors["output"] = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errormessage)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errormessage)
 		planet.outputStruct.errored = true
 		log.Warning(errormessage)
 		return err
@@ -43,7 +44,8 @@ func execDBCommand(planet *Planet, opts *Opts) error {
 	err = os.Remove(tmpDBFile)
 	if err != nil {
 		errormessage := fmt.Sprintf("removing temporary sql script failed : %v", err)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, makeRed(errormessage))
+		planet.outputStruct.errors["output"] = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errormessage)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, errormessage)
 		planet.outputStruct.errored = true
 		log.Warning(errormessage)
 		return err

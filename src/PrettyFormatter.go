@@ -63,12 +63,12 @@ func (prettyFormatter *PrettyFormatter) createSetForPlanet(planet Planet) {
 	number := strconv.Itoa(planet.outputStruct.position)
 	output := planet.outputStruct.output
 	if planet.outputStruct.errored || !planet.valid {
-		number = makeRed(number)
-		id = makeRed(id)
-		name = makeRed(name)
-		address = makeRed(address)
-		planetType = makeRed(planetType)
-		output = makeRed(planet.outputStruct.output)
+		number = colorize(number)
+		id = colorize(id)
+		name = colorize(name)
+		address = colorize(address)
+		planetType = colorize(planetType)
+		output = colorize(planet.outputStruct.output)
 	}
 	prettyFormatter.addEntry("Nr.", number, completeTable)
 	prettyFormatter.addEntry("ID", id, completeTable)
@@ -122,4 +122,8 @@ func (prettyFormatter *PrettyFormatter) format(planets []Planet, opts *Opts, wri
 	}
 	prettyFormatter.fillSets()
 	prettyFormatter.printTable(writer)
+}
+
+func (prettyFormatter *PrettyFormatter) addErrors() {
+
 }

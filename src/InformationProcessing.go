@@ -27,7 +27,7 @@ func parseConnectionDetails(ids []string) []Planet {
 		var dbID string
 		valid, _ := strconv.ParseBool(tokens[0])
 		if !valid {
-			err = makeRed(fmt.Sprintf("%s\n", tokens[len(tokens)-1]))
+			err = fmt.Sprintf("%s\n", tokens[len(tokens)-1])
 		}
 		planetID, planetType, name := tokens[1], tokens[2], tokens[3]
 		if len(urlTokens) > 1 {
@@ -50,8 +50,10 @@ func parseConnectionDetails(ids []string) []Planet {
 				table:    make([][]string, 0),
 				position: i,
 				errored:  false,
+				errors:   make(map[string]string),
 			},
 		}
+		planet.outputStruct.errors["output"] = err
 
 		planet.valid = isValidPlanet(planet)
 		// TODO Write the ski string to out?
@@ -108,7 +110,7 @@ func getFullSkiString(ids []string) []string {
 		return []string{}
 	}
 
-	args := append([]string{"-f=ski", "--no-color"}, ids...)
+	args := append([]string{"-f=ski", "--no-colorize"}, ids...)
 	cmd := exec.Command("fifa", args...)
 	// TODO check the exit code etc. if len(cmd.Path) == 0 {}
 	out, err := cmd.CombinedOutput()
@@ -158,12 +160,11 @@ func validateSkiFormat(fifaString string) bool {
 }
 
 func getScriptPath(opts *Opts) string {
-	sql := strings.HasSuffix(opts.ScriptName, ".sql")
-	SQL := strings.HasSuffix(opts.ScriptName, ".SQL")
+	sql := strings.HasSuffix(strings.ToLower(opts.ScriptName), ".sql")
 	if path.IsAbs(opts.ScriptName) {
 		return opts.ScriptName
 	}
-	if sql || SQL {
+	if sql {
 		return path.Join(os.Getenv("ORBIT_HOME"), sqlDirectory, opts.ScriptName)
 	}
 	return path.Join(os.Getenv("ORBIT_HOME"), scriptDirectory, opts.ScriptName)

@@ -23,11 +23,6 @@ func formatAndPrint(planets []Planet, opts *Opts, writer io.Writer) {
 	formatter.init()
 	formatter.format(planets, opts, writer)
 
-	for _, entry := range planets {
-		if entry.outputStruct.errored {
-			os.Exit(1)
-		}
-	}
 }
 
 func printUnformatted(planets []Planet, writer io.Writer) {
@@ -35,6 +30,10 @@ func printUnformatted(planets []Planet, writer io.Writer) {
 		planets[len(planets)-1].outputStruct.output += "\n"
 	}
 	for _, planet := range planets {
+		if planet.outputStruct.errored {
+			fmt.Fprint(writer, colorize(planet.outputStruct.errors["output"]))
+			continue
+		}
 		fmt.Fprint(writer, planet.outputStruct.output)
 	}
 }
@@ -67,13 +66,22 @@ func makeDir(name string) {
 	}
 }
 
-func makeRed(input string) string {
+func colorize(input string) string {
 	tokens := strings.Split(input, "\n")
 	for i, row := range tokens {
-		if row == "" {
+		if isBlank(row) {
 			continue
 		}
 		tokens[i] = color.RedString(row)
 	}
 	return strings.Join(tokens, "\n")
+}
+
+func isBlank(input string) bool {
+	input = strings.Replace(input, " ", "", -1)
+	input = strings.Replace(input, "\t", "", -1)
+	if len(input) == 0 {
+		return true
+	}
+	return false
 }

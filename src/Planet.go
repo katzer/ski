@@ -27,6 +27,7 @@ type StructuredOuput struct {
 	table    [][]string
 	position int
 	errored  bool
+	errors   map[string]string
 }
 
 // codebeat:enable[TOO_MANY_IVARS]
@@ -65,14 +66,12 @@ func (planet *Planet) validateType(opts *Opts) bool {
 	if opts.ScriptName == "" {
 		return true
 	}
-	sql := strings.HasSuffix(opts.ScriptName, ".sql")
-	SQL := strings.HasSuffix(opts.ScriptName, ".SQL")
-	sh := strings.HasSuffix(opts.ScriptName, ".sh")
-	SH := strings.HasSuffix(opts.ScriptName, ".SH")
-	if (sh || SH) && planet.planetType == "server" {
+	sql := strings.HasSuffix(strings.ToLower(opts.ScriptName), ".sql")
+	sh := strings.HasSuffix(strings.ToLower(opts.ScriptName), ".sh")
+	if (sh) && planet.planetType == "server" {
 		return true
 	}
-	if (sql || SQL) && planet.planetType == "db" {
+	if (sql) && planet.planetType == "db" {
 		return true
 	}
 	return false
