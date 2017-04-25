@@ -36,7 +36,7 @@ func main() {
 	options := map[string]string{}
 	options["job_name"] = path.Base(jobFile)
 	options["orbit_home"] = os.Getenv("ORBIT_HOME")
-	options["output"] = "jobs_output"
+	options["output"] = "reports"
 
 	createJSONReport(options, exec.planets, &opts)
 }
@@ -163,5 +163,5 @@ func postProcessing(opts *Opts) {
 func setupDirs() {
 	makeDir("tmp")
 	makeDir("jobs")
-	makeDir("jobs_output")
+	makeDir("reports")
 }
