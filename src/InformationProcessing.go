@@ -88,7 +88,7 @@ func makeEmptyPlanet() Planet {
 func getKeyPath() string {
 	keyPath := os.Getenv("ORBIT_KEY")
 	if keyPath == "" {
-		keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "ssh", "orbit.key")
+		keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "keys", "orbit.key")
 	}
 	return strings.TrimPrefix(keyPath, os.Getenv("HOME"))
 }
@@ -110,7 +110,7 @@ func getFullSkiString(ids []string) []string {
 		return []string{}
 	}
 
-	args := append([]string{"-f=ski", "--no-colorize"}, ids...)
+	args := append([]string{"-f=ski", "--no-color"}, ids...)
 	cmd := exec.Command("fifa", args...)
 	// TODO check the exit code etc. if len(cmd.Path) == 0 {}
 	out, err := cmd.CombinedOutput()

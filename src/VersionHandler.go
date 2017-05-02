@@ -20,7 +20,7 @@ func printVersion() {
 func getGOOS() string {
 	switch runtime.GOOS {
 	case windows:
-		return "Windows NT"
+		return "Windows_NT"
 	case linux:
 		return "Linux"
 	case mac:
@@ -53,7 +53,11 @@ func getOSArch() string {
 		}
 		return strings.TrimSuffix(string(out), "\n")
 	case windows:
-		return "x86_64"
+		out, err := exec.Command("echo %PROCESSOR_ARCHITECTURE%").Output()
+		if err != nil {
+			return "could not determine OS-architecture"
+		}
+		return strings.TrimSuffix(string(out), "\n")
 	default:
 		return "could not determine Operating system"
 	}

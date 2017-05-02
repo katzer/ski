@@ -78,8 +78,7 @@ func colorize(input string) string {
 }
 
 func isBlank(input string) bool {
-	input = strings.Replace(input, " ", "", -1)
-	input = strings.Replace(input, "\t", "", -1)
+	input = strings.TrimSpace(input)
 	if len(input) == 0 {
 		return true
 	}
