@@ -105,6 +105,7 @@ func TestCreateJSONReport(t *testing.T) {
 	jobFile := "job"
 	backup := os.Getenv("ORBIT_HOME")
 	os.Setenv("ORBIT_HOME", os.TempDir())
+	setupDirs()
 
 	options := map[string]string{}
 	options["job_name"] = path.Base(jobFile)
@@ -132,8 +133,8 @@ func TestCreateJSONReport(t *testing.T) {
 	// "-j=/tmp/job.js", "-t=\"perlver_template\"", "-p", "-d=true", "app"
 	opts := Opts{
 		Template:  "perlver_template",
-		Pretty:    true,
-		Debug:     true,
+		Pretty:    false,
+		Debug:     false,
 		MaxToKeep: 2,
 		Planets:   []string{"app"},
 	}
