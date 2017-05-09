@@ -84,3 +84,7 @@ func isBlank(input string) bool {
 	}
 	return false
 }
+
+func printColored(message string) {
+	fmt.Fprintf(color.Output, message)
+}

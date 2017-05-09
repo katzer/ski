@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/fatih/color"
 )
 
 var help, pretty, debug, load, _version bool
@@ -29,7 +30,7 @@ func main() {
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
 	if len(jobFile) == 0 {
-		formatAndPrint(exec.planets, &opts, os.Stdout)
+		formatAndPrint(exec.planets, &opts, color.Output)
 		handleExitCode(exec.planets)
 		return
 	}
