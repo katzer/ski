@@ -81,6 +81,16 @@ func createJSONReport(options map[string]string, planets []Planet, opts *Opts) {
 		log.Fatalf("Could not create json output for the job %s", opts.String())
 	}
 
+	// If no pretty printing is invovled but a template is given
+	// set the output of the tableformatter as the output of the job.
+	if opts.Pretty == false && len(strings.TrimSpace(opts.Template)) > 0 {
+		tableFormatter := TableFormatter{}
+		for _, planet := range planets {
+			jsonString := tableFormatter.formatPlanet(planet, opts)
+			planet.outputStruct.output = jsonString
+		}
+	}
+
 	now := time.Now()
 	format := "%d-%02d-%02dT%02d_%02d_%02d"
 	stamp := fmt.Sprintf(format, now.Year(), now.Month(), now.Day(),
