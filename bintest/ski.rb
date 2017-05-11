@@ -1,3 +1,4 @@
+require_relative 'job_tests.rb'
 require_relative 'failing_use_case_tests.rb'
 require_relative 'use_cases_test.rb'
 require_relative 'illegal_arguments_test.rb'
@@ -33,13 +34,13 @@ PATH = { 'PATH' => "#{File.expand_path('tools', __dir__)}:#{ENV['PATH']}"  }
 
 
 class TestGoo < Test::Unit::TestCase
+  include JobTests
   include FailingUseCaseTests
   include IllegalArgumentsTest
   include FlagTests
   include HostTests
   include UseCasesTest
 
-  
 end
 
 def test_glibc_version
