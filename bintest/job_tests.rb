@@ -20,19 +20,19 @@ module JobTests
 
   def run_ski(job_name)
     output, error, status = Open3.capture3(PATH, BIN, "-j=#{job_name}")
-    puts "output: #{output}" if !error.empty?
+    puts "output: #{output}" unless error.empty?
     assert_true status.success?, 'Process did not exit cleanly'
   end
 
   def setup_job(job_name)
     # ski -s="showver.sh" -t="perlver_template" app
     path = File.join(ENV['ORBIT_HOME'], 'jobs', "#{job_name}.json")
-    file = File.new(path, File::CREAT|File::TRUNC|File::RDWR, 0644)
+    file = File.new(path, File::CREAT | File::TRUNC | File::RDWR, 0644)
     map = {
-        debug: true,
-        scriptName: '"showver.sh"',
-        template: '"perlver_template"',
-        planets: ['app']
+      debug: true,
+      scriptName: '"showver.sh"',
+      template: '"perlver_template"',
+      planets: ['app']
     }
     file.write(JSON.pretty_generate(map))
     file.close
@@ -46,7 +46,7 @@ module JobTests
 
     sorted = filenames.sort.reverse
     puts "check_report_content: checking the content of #{sorted[0]}"
-    file = File.open(sorted[0], mode='r')
+    file = File.open(sorted[0])
     json = JSON.parse(file.read)
     file.close
 
@@ -57,17 +57,17 @@ module JobTests
     assert_true header.length == 11
 
     expected = {
-        0 => 'willywonka_version',
-        1 => 'Section',
-        2 => 'Suse',
-        3 => 'UnixVersion',
-        4 => 'UnixPatch',
-        5 => 'Key',
-        6 => 'Value',
-        7 => 'Key2',
-        8 => 'Value2',
-        9 => 'Os',
-        10 => 'OracleDb',
+      0 => 'willywonka_version',
+      1 => 'Section',
+      2 => 'Suse',
+      3 => 'UnixVersion',
+      4 => 'UnixPatch',
+      5 => 'Key',
+      6 => 'Value',
+      7 => 'Key2',
+      8 => 'Value2',
+      9 => 'Os',
+      10 => 'OracleDb'
     }
 
     (0..header.length).each do |idx|
