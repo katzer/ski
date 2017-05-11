@@ -20,7 +20,7 @@ module JobTests
 
   def run_ski(job_name)
     output, error, status = Open3.capture3(PATH, BIN, "-j=#{job_name}")
-    check_no_error(output, error, 'test_version_perl_output_and_headers')
+    puts "output: #{output}" if !error.empty?
     assert_true status.success?, 'Process did not exit cleanly'
   end
 
