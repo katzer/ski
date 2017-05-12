@@ -23,7 +23,6 @@ type JSONReport struct {
 // PlanetWrapper ...
 type PlanetWrapper struct {
 	ID        string `json:"id"`
-	Valid     bool   `json:"valid"`
 	Output    string `json:"output"`
 	Errored   bool   `json:"errored"`
 	CreatedAt string `json:"created_at"`
