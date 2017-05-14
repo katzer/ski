@@ -14,10 +14,10 @@ import (
 
 // Opts structure for holding commandline arguments
 type Opts struct {
-	Debug      bool     `json:"debug"`
-	Help       bool     `json:"help"`
-	Load       bool     `json:"load"`
-	Pretty     bool     `json:"pretty"`
+	Debug      bool `json:"debug"`
+	Help       bool `json:"help"`
+	Load       bool `json:"load"`
+	Pretty     bool
 	Version    bool     `json:"version"`
 	MaxToKeep  int      `json:"max_to_keep"`
 	Command    string   `json:"command"`

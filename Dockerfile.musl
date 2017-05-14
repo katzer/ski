@@ -30,3 +30,6 @@ RUN go get github.com/lestrrat/go-file-rotatelogs
 RUN go get github.com/olekukonko/tablewriter
 
 ENV ORBIT_HOME $APP_HOME/bintest/orbit
+
+RUN apk update && apk add --no-cache ruby-dev build-base
+RUN gem install --no-ri --no-rdoc json -v 1.8.2

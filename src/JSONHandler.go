@@ -23,7 +23,6 @@ type JSONReport struct {
 // PlanetWrapper ...
 type PlanetWrapper struct {
 	ID        string `json:"id"`
-	Valid     bool   `json:"valid"`
 	Output    string `json:"output"`
 	Errored   bool   `json:"errored"`
 	CreatedAt string `json:"created_at"`
@@ -79,6 +78,16 @@ func createJSONReport(options map[string]string, planets []Planet, opts *Opts) {
 
 	if err != nil {
 		log.Fatalf("Could not create json output for the job %s", opts.String())
+	}
+
+	// If no pretty printing is invovled but a template is given
+	// set the output of the tableformatter as the output of the job.
+	if opts.Pretty == false && len(strings.TrimSpace(opts.Template)) > 0 {
+		tableFormatter := TableFormatter{}
+		for _, planet := range planets {
+			jsonString := tableFormatter.formatPlanet(planet, opts)
+			planet.outputStruct.output = jsonString
+		}
 	}
 
 	now := time.Now()
