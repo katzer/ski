@@ -56,16 +56,28 @@ func (prettyFormatter *PrettyFormatter) addKey(key string) {
 
 func (prettyFormatter *PrettyFormatter) createSetForPlanet(planet Planet) {
 	var completeTable = make(map[string]string)
+	id := planet.id
+	name := planet.name
+	planetType := planet.planetType
 	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
 	number := strconv.Itoa(planet.outputStruct.position)
+	output := planet.outputStruct.output
+	if planet.outputStruct.errored || !planet.valid {
+		number = colorize(number)
+		id = colorize(id)
+		name = colorize(name)
+		address = colorize(address)
+		planetType = colorize(planetType)
+		output = colorize(planet.outputStruct.output)
+	}
 	prettyFormatter.addEntry("Nr.", number, completeTable)
-	prettyFormatter.addEntry("ID", planet.id, completeTable)
-	prettyFormatter.addEntry("Name", planet.name, completeTable)
+	prettyFormatter.addEntry("ID", id, completeTable)
+	prettyFormatter.addEntry("Name", name, completeTable)
 	prettyFormatter.addEntry("Address", address, completeTable)
-	prettyFormatter.addEntry("Type", planet.planetType, completeTable)
-	prettyFormatter.addEntry("output", planet.outputStruct.output, completeTable)
+	prettyFormatter.addEntry("Type", planetType, completeTable)
+	prettyFormatter.addEntry("output", output, completeTable)
 
-	set := Dataset{completeTable, nil}
+	set := Dataset{completeTable, nil, (planet.valid && !planet.outputStruct.errored)}
 	prettyFormatter.sets = append(prettyFormatter.sets, set)
 }
 
@@ -92,6 +104,7 @@ func (prettyFormatter *PrettyFormatter) printTable(writer io.Writer) {
 	table.SetRowLine(true)
 	table.SetRowSeparator("-")
 	table.SetHeader(prettyFormatter.cutMapToSlice(prettyFormatter.keys))
+	table.SetAutoWrapText(false)
 
 	for _, set := range prettyFormatter.sets {
 		log.Debugf("prettyTable.printTable settoappend: %v\n", set.printView)
@@ -109,4 +122,8 @@ func (prettyFormatter *PrettyFormatter) format(planets []Planet, opts *Opts, wri
 	}
 	prettyFormatter.fillSets()
 	prettyFormatter.printTable(writer)
+}
+
+func (prettyFormatter *PrettyFormatter) addErrors() {
+
 }

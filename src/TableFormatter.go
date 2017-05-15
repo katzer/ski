@@ -79,10 +79,10 @@ func (tableFormatter *TableFormatter) executeTextFSM(planet Planet, opts *Opts) 
 	err := cmd.Run()
 	if err != nil {
 		message := "thrown from tableFormatter.format->exec pythonscript"
-		full := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, full)
+		errorstring := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, errorstring)
 		planet.outputStruct.errored = true
-		log.Warn(full)
+		log.Warn(errorstring)
 		return "", err
 	}
 	formattedString := strings.Split(out.String(), "FSM Table:\n")[1]
@@ -98,10 +98,10 @@ func (tableFormatter *TableFormatter) writeTmpTable(planet Planet, toWrite strin
 	err := ioutil.WriteFile(tmpTableFile, []byte(toWrite), 0644)
 	if err != nil {
 		message := fmt.Sprintf("Attempt to write a temporary file for textfsm execution failed: %s\n", tmpTableFile)
-		full := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, full)
+		errorstring := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, errorstring)
 		planet.outputStruct.errored = true
-		log.Errorln(full)
+		log.Errorln(errorstring)
 		return err
 	}
 	return nil
@@ -114,10 +114,10 @@ func (tableFormatter *TableFormatter) deleteTmpTable(planet Planet) error {
 	err := os.Remove(tmpTableFile)
 	if err != nil {
 		message := fmt.Sprintf("Attempt to delete the temporary file for textfsm execution failed: %s\n", tmpTableFile)
-		full := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
-		planet.outputStruct.output = fmt.Sprintf("%s\n%s", planet.outputStruct.output, full)
+		errorstring := fmt.Sprintf("%s\n --- Additional info: %s\n", err, message)
+		planet.outputStruct.output = fmt.Sprintf("%s\n%s\n", planet.outputStruct.output, errorstring)
 		planet.outputStruct.errored = true
-		log.Errorln(full)
+		log.Errorln(errorstring)
 		return err
 	}
 	return nil

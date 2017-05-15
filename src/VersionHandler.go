@@ -10,31 +10,33 @@ import (
 var version = "undefined"
 
 func printVersion() {
-	runtimeOS := getOS()
-	progArch := getArch()
-	archOS := getOSArch()
-	vers := fmt.Sprintf("ski version %s %s %s (%s)", version, progArch, runtimeOS, archOS)
+	goos := getGOOS()
+	goarch := getGOARCH()
+	osArch := getOSArch()
+	vers := fmt.Sprintf("v%s %s %s (%s)", version, goos, goarch, osArch)
 	fmt.Printf("%s\n", vers)
 }
 
-func getOS() string {
+func getGOOS() string {
 	switch runtime.GOOS {
 	case windows:
-		return "Windows"
+		return "Windows_NT"
 	case linux:
 		return "Linux"
 	case mac:
-		return "MacOS"
+		return "Darwin"
 	default:
 		return "could not determine OS"
 	}
 }
 
-func getArch() string {
+func getGOARCH() string {
 	switch runtime.GOARCH {
 	case "amd64":
 		return "64bit"
 	case "386":
+		return "32bit"
+	case "686":
 		return "32bit"
 	default:
 		return "could not determine architecture"
@@ -51,15 +53,11 @@ func getOSArch() string {
 		}
 		return strings.TrimSuffix(string(out), "\n")
 	case windows:
-		out, err := exec.Command("if exist \"%ProgramFiles(x86)%\" echo 64-bit").Output()
+		out, err := exec.Command("echo %PROCESSOR_ARCHITECTURE%").Output()
 		if err != nil {
-			fmt.Println("error occured")
-			fmt.Printf("%s", err)
+			return "could not determine OS-architecture"
 		}
-		if string(out) == "64-bit" {
-			return "x86_64"
-		}
-		return "i686"
+		return strings.TrimSuffix(string(out), "\n")
 	default:
 		return "could not determine Operating system"
 	}

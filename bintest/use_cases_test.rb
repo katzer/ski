@@ -51,7 +51,7 @@ module UseCasesTest
                                            '-d=true', 'db')
     check_error(output, error, 'test_tablePrint')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, "D\n-\nX", 'return was not right'
+    assert_include output, "D\n-\nX\n", 'return was not right'
   end
 
   def test_empty_return

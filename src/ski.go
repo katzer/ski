@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/fatih/color"
 )
 
 var help, pretty, debug, load, _version bool
@@ -17,6 +18,7 @@ var jobFile, logFile, template, scriptName, command string
 func main() {
 	opts := parseOptions()
 	validateArgsCount(&opts)
+	validateEnv()
 	opts.validate()
 
 	verbose := opts.Debug || len(opts.LogFile) > 0
@@ -28,14 +30,14 @@ func main() {
 	exec := makeExecutor(&opts)
 	exec.execMain(&opts)
 	if len(jobFile) == 0 {
-		formatAndPrint(exec.planets, &opts, os.Stdout)
+		formatAndPrint(exec.planets, &opts, color.Output)
 		handleExitCode(exec.planets)
 		return
 	}
 	options := map[string]string{}
 	options["job_name"] = path.Base(jobFile)
 	options["orbit_home"] = os.Getenv("ORBIT_HOME")
-	options["output"] = "jobs_output"
+	options["output"] = "reports"
 
 	createJSONReport(options, exec.planets, &opts)
 }
@@ -67,9 +69,9 @@ func isValidPlanet(planet Planet) bool {
 	if !ok {
 		switch planet.planetType {
 		case webServer:
-			fmt.Fprintf(os.Stderr, "Usage of ski with web servers is not implemented")
+			planet.outputStruct.output += "Usage of ski with web servers is not implemented\n"
 		default:
-			fmt.Fprintf(os.Stderr, "Unkown Type of target")
+			planet.outputStruct.output += "Planettype not supported\n"
 		}
 	}
 	// TODO: since we know what kind of action is attempted on this server
@@ -148,6 +150,12 @@ func validateArgsCount(opts *Opts) {
 	}
 }
 
+func validateEnv() {
+	if os.Getenv("ORBIT_HOME") == "" {
+		log.Fatal("ORBIT_HOME not set!")
+	}
+}
+
 func postProcessing(opts *Opts) {
 	opts.Command = strings.Trim(opts.Command, "\"")
 	opts.Template = strings.Trim(opts.Template, "\"")
@@ -156,5 +164,5 @@ func postProcessing(opts *Opts) {
 func setupDirs() {
 	makeDir("tmp")
 	makeDir("jobs")
-	makeDir("jobs_output")
+	makeDir("reports")
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strings"
+
 	log "github.com/Sirupsen/logrus"
 )
 
@@ -25,11 +27,18 @@ type StructuredOuput struct {
 	table    [][]string
 	position int
 	errored  bool
+	errors   map[string]string
 }
 
 // codebeat:enable[TOO_MANY_IVARS]
 
 func (planet *Planet) execute(opts *Opts) {
+
+	if !planet.validateType(opts) {
+		planet.outputStruct.output = "script type doesn't fit to planetType"
+		return
+	}
+
 	if planet.planetType == database {
 		planet.executeDatabase(opts)
 	} else if planet.planetType == linuxServer {
@@ -51,6 +60,21 @@ func (planet *Planet) executeLinux(opts *Opts) {
 	} else {
 		execCommand(opts.Command, planet, opts)
 	}
+}
+
+func (planet *Planet) validateType(opts *Opts) bool {
+	if opts.ScriptName == "" {
+		return true
+	}
+	sql := strings.HasSuffix(strings.ToLower(opts.ScriptName), ".sql")
+	sh := strings.HasSuffix(strings.ToLower(opts.ScriptName), ".sh")
+	if (sh) && planet.planetType == "server" {
+		return true
+	}
+	if (sql) && planet.planetType == "db" {
+		return true
+	}
+	return false
 }
 
 func (planet *Planet) planetInfo(opts *Opts) {

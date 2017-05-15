@@ -5,7 +5,7 @@ module HostTests
                                            '-d=true', 'web')
     check_no_error(output, error, 'test_web')
     assert_true status.success?, 'Process did exit cleanly'
-    assert_include error, 'Usage of ski with web servers is not implemented'
+    assert_include output, 'Usage of ski with web servers is not implemented'
   end
 
   def test_server

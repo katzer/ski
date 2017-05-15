@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
+	color "github.com/fatih/color"
 )
 
 func formatAndPrint(planets []Planet, opts *Opts, writer io.Writer) {
@@ -21,10 +22,18 @@ func formatAndPrint(planets []Planet, opts *Opts, writer io.Writer) {
 	log.Debugf("using formatter of type : %T", formatter)
 	formatter.init()
 	formatter.format(planets, opts, writer)
+
 }
 
 func printUnformatted(planets []Planet, writer io.Writer) {
+	if !strings.HasSuffix(planets[len(planets)-1].outputStruct.output, "\n") {
+		planets[len(planets)-1].outputStruct.output += "\n"
+	}
 	for _, planet := range planets {
+		if planet.outputStruct.errored {
+			fmt.Fprint(writer, colorize(planet.outputStruct.errors["output"]))
+			continue
+		}
 		fmt.Fprint(writer, planet.outputStruct.output)
 	}
 }
@@ -55,4 +64,23 @@ func makeDir(name string) {
 	if err != nil {
 		log.Error(err)
 	}
+}
+
+func colorize(input string) string {
+	tokens := strings.Split(input, "\n")
+	for i, row := range tokens {
+		if isBlank(row) {
+			continue
+		}
+		tokens[i] = color.RedString(row)
+	}
+	return strings.Join(tokens, "\n")
+}
+
+func isBlank(input string) bool {
+	input = strings.TrimSpace(input)
+	if len(input) == 0 {
+		return true
+	}
+	return false
 }

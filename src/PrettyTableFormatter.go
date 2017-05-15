@@ -36,15 +36,26 @@ type PrettyTableFormatter struct {
 type Dataset struct {
 	data      map[string]string
 	printView []string
+	errored   bool
 }
 
 func (dataset *Dataset) makePrintView(keys map[int]string) {
+	filler := "-"
+	if dataset.errored {
+		filler = colorize("-")
+	}
 	for i := 0; i <= len(keys)-1; i++ {
 		if dataset.data[keys[i]] == "" {
-			dataset.printView = append(dataset.printView, "-")
+			dataset.printView = append(dataset.printView, filler)
 			continue
 		}
 		dataset.printView = append(dataset.printView, dataset.data[keys[i]])
+	}
+	dataset.cleanTrailingNewlines()
+}
+func (dataset *Dataset) cleanTrailingNewlines() {
+	for i, entry := range dataset.printView {
+		dataset.printView[i] = strings.TrimSuffix(entry, "\n")
 	}
 }
 
@@ -146,11 +157,21 @@ func (prettyTableFormatter *PrettyTableFormatter) createSetForPlanet(json string
 	table := make(map[string]string)
 	number := strconv.Itoa(planet.outputStruct.position)
 	address := fmt.Sprintf("%s@%s", planet.user, planet.host)
+	id := planet.id
+	name := planet.name
+	planetType := planet.planetType
+	if planet.outputStruct.errored || !planet.valid {
+		number = colorize(number)
+		id = colorize(id)
+		name = colorize(name)
+		address = colorize(address)
+		planetType = colorize(planetType)
+	}
 	prettyTableFormatter.addEntry("Nr.", number, table)
-	prettyTableFormatter.addEntry("ID", planet.id, table)
-	prettyTableFormatter.addEntry("Name", planet.name, table)
+	prettyTableFormatter.addEntry("ID", id, table)
+	prettyTableFormatter.addEntry("Name", name, table)
 	prettyTableFormatter.addEntry("Address", address, table)
-	prettyTableFormatter.addEntry("Type", planet.planetType, table)
+	prettyTableFormatter.addEntry("Type", planetType, table)
 	var err error
 	if planet.outputStruct.table, err = decode(json); err == nil {
 		table = prettyTableFormatter.normalizeTable(table, planet.outputStruct.table)
@@ -159,6 +180,6 @@ func (prettyTableFormatter *PrettyTableFormatter) createSetForPlanet(json string
 		planet.outputStruct.errored = true
 		planet.outputStruct.output = json // TODO check if necessary
 	}
-	set := Dataset{table, nil}
+	set := Dataset{table, nil, (!planet.valid || planet.outputStruct.errored)}
 	prettyTableFormatter.sets = append(prettyTableFormatter.sets, set)
 }

@@ -1,6 +1,80 @@
-## Release Notes: _ski_
+# Release Notes: _ski_
 
-### 0.9.2 (not yet released)
+
+
+
+
+# 0.9.2 (not yet released)
+
+
+### Now supports jobs
+
+Provide jobfile by using 
+    ```
+    ski -j job.json
+    ```
+All other flags will be ignored when the -j flag is provided.
+The jobfile can be provided as a relative path or as an absolute path.
+When provided as a relative path, ski starts looking for it in the folder ORBIT_HOME/jobs
+Jobfiles have to be in the following form:
+    ```
+    {
+        "debug":true,
+        "help":false,
+        "load":false,
+        "pretty":false,
+        "version":false,
+        "save_report":false,
+        "command":"ls -a",
+        "scriptName":"",
+        "template":"",
+        "planets":[
+            "app",
+            "app"
+        ],
+        "LogFile":""
+    }
+    ```
+When running in jobmode, ski writes the output at ORBIT_HOME/jobs_output/$JOBNAME$/$TIMESTAMP$ in the following form:
+
+    ```
+    {
+        "meta": {
+            "debug": true,
+            "help": false,
+            "load": false,
+            "pretty": true,
+            "version": false,
+            "save_report": false,
+            "command": "ls -a",
+            "scriptName": "",
+            "template": "",
+            "planets": [
+                "app",
+                "app"
+            ],
+            "log_file": ""
+        },
+        "planets": [
+            {
+                "id": "app",
+                "output": ".\n..\n.bash_profile\n.bashrc\n.gem\n.gitconfig\n.profile\n.ssh\ncode\nprofiles\nsql\n",
+            },
+            {
+                "id": "app",
+                "output": ".\n..\n.bash_profile\n.bashrc\n.gem\n.gitconfig\n.profile\n.ssh\ncode\nprofiles\nsql\n",
+            }
+        ]
+    }
+    ```
+
+### Formatter
+Ski now uses Interfaces and a FormatterFactory to dynamically create the right formatter for a job.
+
+### Colors
+Ski now colorizes occuring errors in ugly-mode and the whole row of an errored planet in prettymod.
+
+### Further Changes:
 
 1. 64-bit binary for Linux/BusyBox.
 
@@ -40,17 +114,19 @@
 
 19. optionparsing moved from optparser to ski.go
 
-20. ski is now able to parse job configurations from a file
+20. Files uploaded to the ssh target are now modified with the planets position, so conflicts with running a script multiple times on one planet are avoided
 
-21. inserted codebeat disables for planet and opts
+21. ski is now able to parse job configurations from a file
 
-22. removed unnecessary comments
+22. inserted codebeat disables for planet and opts
 
-23. removed deprecated functions
+23. removed unnecessary comments
+
+24. removed deprecated functions
 
 
 
-### 0.9.1 (15.02.2017)
+## 0.9.1 (15.02.2017)
 
 1. Renamed the tool to ski (<b>S</b>ascha <b>K</b>nows <b>I</b>t).
 
@@ -107,7 +183,7 @@
    ```
 
 
-### 0.9.0 (12.12.2016)
+## 0.9.0 (12.12.2016)
 
 1. Execute command/script/sql on multiple planets at same time:
 
@@ -131,7 +207,7 @@
 
    ```
    $ ski -p -c="hostname" app-package-1 app-package-2
-    
+
      NR   PLANET          hostname
      ===============================
       0   app-package-1   hostname-1
