@@ -13,7 +13,7 @@ func printVersion() {
 	goos := getGOOS()
 	goarch := getGOARCH()
 	osArch := getOSArch()
-	vers := fmt.Sprintf("v%s %s %s (%s)", version, goos, goarch, osArch)
+	vers := fmt.Sprintf("v%s - %s %s (%s)", version, goos, goarch, osArch)
 	fmt.Printf("%s\n", vers)
 }
 
@@ -33,11 +33,11 @@ func getGOOS() string {
 func getGOARCH() string {
 	switch runtime.GOARCH {
 	case "amd64":
-		return "64bit"
+		return "64-Bit"
 	case "386":
-		return "32bit"
+		return "32-Bit"
 	case "686":
-		return "32bit"
+		return "32-Bit"
 	default:
 		return "could not determine architecture"
 	}
