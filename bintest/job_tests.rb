@@ -41,7 +41,7 @@ module JobTests
   end
 
   def check_report_content(job_name)
-    path = File.join(ENV['ORBIT_HOME'], 'jobs_output', job_name, '*.json')
+    path = File.join(ENV['ORBIT_HOME'], 'reports', job_name, '*.json')
     filenames = Dir.glob(path)
     puts "check_report_content: reports so far #{filenames}"
     assert_false filenames.empty?
