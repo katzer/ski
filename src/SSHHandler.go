@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	log "github.com/Sirupsen/logrus"
-	"gopkg.in/hypersleep/easyssh.v0"
+	"gopkg.in/appPlant/easyssh.v0"
 )
 
 func execCommand(command string, planet *Planet, opts *Opts) error {

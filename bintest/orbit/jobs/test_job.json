@@ -1,0 +1,8 @@
+{
+  "debug": true,
+  "scriptName": "\"showver.sh\"",
+  "template": "\"perlver_template\"",
+  "planets": [
+    "app"
+  ]
+}

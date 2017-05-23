@@ -90,7 +90,7 @@ func getKeyPath() string {
 	if keyPath == "" {
 		keyPath = path.Join(os.Getenv("ORBIT_HOME"), "config", "keys", "orbit.key")
 	}
-	return strings.TrimPrefix(keyPath, os.Getenv("HOME"))
+	return keyPath
 }
 
 func isSupported(planetType string) bool {

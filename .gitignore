@@ -9,6 +9,7 @@ tags
 orbit.key
 changelog
 .sass-lint.yml
+src/config.json
 
 # Folders
 _obj
