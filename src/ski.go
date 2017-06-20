@@ -83,11 +83,14 @@ func isValidPlanet(planet Planet) bool {
 func printUsage() {
 	usage := `usage: ski [options...] <planets>...
 	Options:
-	-s="<scriptname>"   Execute script and return result
-	-c="<command>"      Execute script and return result
-	-t=<"templatename>" Templatefile to be applied
+	-s="<scriptname>"   	Execute script and return result
+	-c="<command>"      	Execute script and return result
+	-t="<templatename>" 	Templatefile to be applied
+	-j="<jobfile>"		Execute task specified in jobfile
+	-logfile="<file>"	File to be used for saving logs
+	-js=<number>		Max. number of outputs to keep per job
 	-p    Pretty print output as a table
-	-l    Load bash profiles on Server
+	-l    Load bash profiles on server
 	-h    Display this help text
 	-v    Show version number
 	-d    Show extended debug informations, set logging level to debug
