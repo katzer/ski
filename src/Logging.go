@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	rotor "github.com/lestrrat/go-file-rotatelogs"
 	hook "github.com/rifflock/lfshook"
 )

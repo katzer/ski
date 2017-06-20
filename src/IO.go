@@ -7,7 +7,7 @@ import (
 	"path"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	color "github.com/fatih/color"
 )
 

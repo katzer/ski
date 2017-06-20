@@ -9,7 +9,7 @@ import (
 
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 func execDBCommand(planet *Planet, opts *Opts) error {

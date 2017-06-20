@@ -24,7 +24,7 @@ FROM appplant/go-cli:musl
 MAINTAINER Sebastian Katzer "katzer@appplant.de"
 
 RUN go get gopkg.in/appPlant/easyssh.v0
-RUN go get github.com/Sirupsen/logrus
+RUN go get github.com/sirupsen/logrus
 RUN go get github.com/rifflock/lfshook
 RUN go get github.com/lestrrat/go-file-rotatelogs
 RUN go get github.com/olekukonko/tablewriter

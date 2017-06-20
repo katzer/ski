@@ -7,8 +7,8 @@ import (
 	"path"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/fatih/color"
+	log "github.com/sirupsen/logrus"
 )
 
 var help, pretty, debug, load, _version bool

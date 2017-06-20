@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"sync"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // Executor This struct ensures the parallel execution of all command executions
