@@ -62,16 +62,16 @@ module Go
     end
 
     def go_build(binpath)
-      %(#{env_setup} go build -i -ldflags="-s -X #{version_cmd}" -o #{binpath}/#{appname})
+      %(#{env_setup} go build -i -ldflags="-s -X #{version_cmd}" -a -installsuffix cgo -o #{binpath}/#{appname})
     end
 
     private
 
     def env_setup
       if OS.windows?
-        "set GOOS=#{os} && set GOARCH=#{arch} &&"
+        "set CGO_ENABLED=0 GOOS=#{os} && set GOARCH=#{arch} &&"
       else
-        "GOOS=#{os} GOARCH=#{arch}"
+        "CGO_ENABLED=0 GOOS=#{os} GOARCH=#{arch}"
       end
     end
 
