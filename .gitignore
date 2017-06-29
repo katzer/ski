@@ -16,6 +16,7 @@ _obj
 _test
 bin/
 bintest/testFolder/
+bintest/orbit/reports/
 ski
 pkg/
 build/
