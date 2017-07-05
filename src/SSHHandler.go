@@ -19,6 +19,7 @@ func execCommand(command string, planet *Planet, opts *Opts) error {
 		Port:   "22",
 	}
 	cmd := makeLoadCommand(command, opts)
+	log.Debugf("complete command %s", cmd)
 	// Call Run method with command you want to run on remote server.
 	out, err := ssh.Run(cmd)
 	// Handle errors

@@ -7,8 +7,8 @@ import (
 	"path"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	color "github.com/fatih/color"
+	log "github.com/sirupsen/logrus"
 )
 
 func formatAndPrint(planets []Planet, opts *Opts, writer io.Writer) {
@@ -45,6 +45,7 @@ func trimDBMetaInformations(strucOut *StructuredOuput) {
 
 func makeLoadCommand(command string, opts *Opts) string {
 	if opts.Load {
+		log.Debugf("profile load has been applied")
 		return fmt.Sprintf(`sh -lc "echo -----APPPLANT-ORBIT----- && %s "`, command)
 	}
 	return command
@@ -53,6 +54,7 @@ func makeLoadCommand(command string, opts *Opts) string {
 func cleanProfileLoadedOutput(output string, opts *Opts) string {
 	if opts.Load {
 		splitOut := strings.Split(output, "-----APPPLANT-ORBIT-----\n")
+		log.Debugf("cleaned part: %s", splitOut[0])
 		return splitOut[len(splitOut)-1]
 	}
 	return output
