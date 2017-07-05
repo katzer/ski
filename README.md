@@ -1,4 +1,4 @@
-# goo [![Build Status](https://travis-ci.org/appPlant/goo.svg?branch=master)](https://travis-ci.org/appPlant/goo) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![codebeat badge](https://codebeat.co/badges/b0a926f1-d7bf-4ee1-9bc8-4cb1e087d347)](https://codebeat.co/projects/github-com-appplant-goo)
+# ski [![Build Status](https://travis-ci.org/appPlant/ski.svg?branch=master)](https://travis-ci.org/appPlant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![codebeat badge](https://codebeat.co/badges/b0a926f1-d7bf-4ee1-9bc8-4cb1e087d347)](https://codebeat.co/projects/github-com-appplant-ski)
 
 Execute commands or collect informations on multiple servers in parallel.
 
@@ -34,7 +34,7 @@ Download the latest version from the [release page][releases] and add the execut
 
 Clone the repo:
     
-    $ git clone https://github.com/appPlant/goo.git && cd goo/
+    $ git clone https://github.com/appPlant/ski.git && cd ski/
 
 And then execute:
 
@@ -168,7 +168,7 @@ To run all integration tests:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/appPlant/goo.
+Bug reports and pull requests are welcome on GitHub at https://github.com/appPlant/ski.
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -186,7 +186,7 @@ Made with :yum: from Leipzig
 © 2016 [appPlant GmbH][appplant]
 
 [ff]: https://github.com/appPlant/ff/releases
-[releases]: https://github.com/appPlant/goo/releases
+[releases]: https://github.com/appPlant/ski/releases
 [docker]: https://docs.docker.com/engine/installation
 [license]: http://opensource.org/licenses/Apache-2.0
 [appplant]: www.appplant.de
