@@ -57,12 +57,37 @@ func (tableFormatter *TableFormatter) formatPlanet(planet Planet, opts *Opts) st
 	if err != nil {
 		return err.Error()
 	}
+	jsonString = strings.Replace(jsonString, "\n", "", -1)
 	return strings.Replace(jsonString, "'", "\"", -1)
+}
+
+//flattens the given JSON construct to 2 levels
+func flatten(toFlatten string) string {
+	const startMark = "appplant:json:start"
+	const endMark = "appplant:json:end"
+	const middleMark = "appplant:json:middle"
+	toFlatten = strings.Replace(toFlatten, "[\n[", startMark, -1)
+	toFlatten = strings.Replace(toFlatten, "],\n[", middleMark, -1)
+	toFlatten = strings.Replace(toFlatten, "]\n]", endMark, -1)
+	for strings.Contains(toFlatten, "[") {
+		runes := []rune(toFlatten)
+		safeSubstring := string(runes[strings.Index(toFlatten, "["):strings.Index(toFlatten, "]")])
+		cleanedSubstring := strings.Replace(safeSubstring, "'", "", -1)
+		cleanedSubstring = strings.Replace(cleanedSubstring, ",", ";", -1)
+		toFlatten = strings.Replace(toFlatten, safeSubstring, cleanedSubstring, 1)
+		toFlatten = strings.Replace(toFlatten, "[", "'", 1)
+		toFlatten = strings.Replace(toFlatten, "]", "'", 1)
+	}
+	toFlatten = strings.Replace(toFlatten, startMark, "[\n[", -1)
+	toFlatten = strings.Replace(toFlatten, middleMark, "],\n[", -1)
+	toFlatten = strings.Replace(toFlatten, endMark, "]\n]", -1)
+	return toFlatten
 }
 
 // Converts the quite special format textFSM returns to proper JSON format
 func convertToJSON(toConvert string) string {
-	return fmt.Sprintf("[\n%s]\n", strings.Replace(toConvert, "]\n[", "],\n[", -1))
+	var toFlatten = fmt.Sprintf("[\n%s]\n", strings.Replace(toConvert, "]\n[", "],\n[", -1))
+	return flatten(toFlatten)
 }
 
 // executes phyton2 program "textFSM" with provided template and temporary file and returns the answer

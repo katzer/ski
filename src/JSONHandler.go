@@ -33,9 +33,12 @@ func decode(jsonObject string) ([][]string, error) {
 	var toReturn = make([][]string, 0)
 	err := json.Unmarshal(jsonBlob, &toReturn)
 	if err != nil {
+		log.Errorln("In JSONHandler:decode : ")
+		log.Errorln("JSON String is " + jsonObject)
 		log.Errorln(err)
 		return make([][]string, 0), err
 	}
+	log.Debugf("Return is  %o:", toReturn)
 	return toReturn, nil
 }
 
