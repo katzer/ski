@@ -58,7 +58,14 @@ func (tableFormatter *TableFormatter) formatPlanet(planet Planet, opts *Opts) st
 		return err.Error()
 	}
 	jsonString = strings.Replace(jsonString, "\n", "", -1)
-	return strings.Replace(jsonString, "'", "\"", -1)
+	jsonString = strings.Replace(jsonString, "'", "\"", -1)
+	parseKeysIntoPlanet(planet, jsonString)
+	return jsonString
+}
+
+func parseKeysIntoPlanet(planet Planet, JSONString string) {
+	JSONObj, _ := decode(JSONString)
+	planet.outputStruct.keys = JSONObj[0]
 }
 
 //flattens the given JSON construct to 2 levels

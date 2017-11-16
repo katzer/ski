@@ -24,6 +24,7 @@ type Planet struct {
 type StructuredOuput struct {
 	planet   string
 	output   string
+	keys     []string
 	table    [][]string
 	position int
 	errored  bool
