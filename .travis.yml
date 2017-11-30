@@ -14,6 +14,7 @@ script:
 - scripts/bintest
 
 before_deploy:
+- gem install os 
 - scripts/release
 - export BUILD_VERSION=`rake version`
 - sudo chmod -R 1777 releases
