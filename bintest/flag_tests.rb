@@ -27,6 +27,6 @@ module FlagTests
     output, error, status = Open3.capture3(PATH, BIN, '-v')
     check_error(output, error, 'test_version')
     assert_true status.success?, 'Process did not exit cleanly'
-    assert_include output, 'v1.4.2dev'
+    assert_include output, 'v1.4.4'
   end
 end
