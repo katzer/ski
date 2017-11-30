@@ -32,4 +32,5 @@ RUN go get github.com/fatih/color
 
 ENV ORBIT_HOME $APP_HOME/bintest/orbit
 
+RUN gem install --no-ri --no-rdoc os
 RUN gem install --no-ri --no-rdoc json -v 1.8.2
