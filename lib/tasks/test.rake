@@ -40,5 +40,7 @@ namespace :test do
       cp_r bin_path, orbit_path
       sh "ruby #{APP_ROOT}/bintest/ski.rb #{test_bin_path}"
     end
+    rm "#{ssh_path}/orbit.key"
+    rm_rf "#{orbit_path}/reports" if Dir.exist? "#{orbit_path}/reports"
   end
 end
