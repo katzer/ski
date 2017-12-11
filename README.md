@@ -48,7 +48,7 @@ You'll be able to find the binaries in the following directories:
 - Linux (32-bit, for old distros): `build/i686-pc-linux-gnu-glibc-2.12/bin/ski`
 - Linux (64-bit GNU): `build/x86_64-pc-linux-gnu-glibc-2.14/bin/ski`
 - Linux (32-bit GNU): `build/i686-pc-linux-gnu-glibc-2.14/bin/ski`
-- Linux (64-bit BusyBox): `build/x86_64-pc-linux-busybox-musl/bin/ski`
+- Linux (64-bit Musl): `build/x86_64-alpine-linux-musl/bin/ski`
 - OS X (64-bit): `build/x86_64-apple-darwin15/bin/ski`
 - OS X (32-bit): `build/i386-apple-darwin15/bin/ski`
 - Windows (64-bit): `build/x86_64-w64-mingw32/bin/ski`

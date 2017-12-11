@@ -24,7 +24,7 @@ require 'rubygems'
 require 'os'
 require 'go/build'
 
-Go::Build.new('x86_64-pc-linux-busybox') do
+Go::Build.new('x86_64-alpine-linux-musl') do
   os :linux
   arch :amd64
   appname :ski
