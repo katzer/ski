@@ -1,4 +1,5 @@
-mruby/
-releases/
-bintest/logs/
-bintest/tmp/
+/mruby/
+/releases/
+/packages/
+/bintest/logs/
+/bintest/tmp/
