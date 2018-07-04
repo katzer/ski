@@ -30,5 +30,5 @@ plugins:
 
 exclude_patterns:
   - "bintest/"
+  - "mrblib/ext/"
   - "build_config.*"
-  - "Rakefile"
