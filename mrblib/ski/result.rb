@@ -1,8 +1,6 @@
-#!/bin/bash
-
-# MIT License
+# Apache 2.0 License
 #
-# Copyright (c) Sebastian Katzer 2017
+# Copyright (c) 2018 Sebastian Katzer, appPlant GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +20,35 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-PLANET=${@:$#}
+module SKI
+  # Encapsulate the result of a task execution.
+  class Result < BasicObject
+    # Create a result object with contains all infos about a task result.
+    #
+    # @param [ SKI::Planet ] planet The planet where the task has been executed.
+    # @param [ String ]      output The output of the remote execution.
+    # @param [ Boolean ]    success If the task executed in a successful way.
+    def initialize(planet, output, success)
+      @planet  = planet
+      @output  = output
+      @success = success
+    end
 
-if [[ $PLANET == "localhost" ]]; then
-  echo "1|localhost|server|Host|`whoami`@localhost"
-elif [[ $PLANET == "web" ]]; then
-  echo "1|localhost|web|Web|http://`whoami`.localhost"
-elif [[ $PLANET == "db" ]]; then
-  echo "1|localhost|db|MyDB|DB_USER:`whoami`@localhost"
-elif [[ $PLANET == "server" ]]; then
-  echo "1|localhost-1|server|Host 1|`whoami`@localhost"
-  echo "0|localhost-2|server|Host 2|ArgumentError: 'initialize'"
-  echo "1|localhost-3|server|Host 3|`whoami`@localhost"
-elif [[ $PLANET == "error" ]]; then
-  echo "0|localhost|server|Host|ArgumentError: 'initialize'" >&2 && exit 1
-else
-  echo "unknown planet" >&2 && exit 1
-fi
+    # The output of the remote execution.
+    #
+    # @return [ String ]
+    attr_reader :output
+
+    # The planet where the task has been executed.
+    #
+    # @return [ SKI::Planet ]
+    attr_reader :planet
+
+    # If the task executed in a successful way.
+    #
+    # @return [ Boolean ]
+    def successful?
+      @success
+    end
+  end
+end

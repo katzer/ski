@@ -84,6 +84,13 @@ assert('no command') do
   assert_include output, 'ArgumentError'
 end
 
+assert('command and script') do
+  _, output, status = Open3.capture3(BIN, '-c', 'echo', '-s', 'path', 'host')
+
+  assert_false status.success?, 'Process did exit cleanly'
+  assert_include output, 'ArgumentError'
+end
+
 assert('no matcher') do
   _, output, status = Open3.capture3(BIN, '-c', 'echo')
 

@@ -1,8 +1,6 @@
-#!/bin/bash
-
-# MIT License
+# Apache 2.0 License
 #
-# Copyright (c) Sebastian Katzer 2017
+# Copyright (c) 2018 Sebastian Katzer, appPlant GmbH
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +20,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-PLANET=${@:$#}
+module SKI
+  module Task
+    class ServerTask < BaseTask
+      # Execute the shell command on the remote database.
+      #
+      # @param [ SKI::Planet ] planet The planet where to execute the task.
+      #
+      # @return [ Void ]
+      def exec(planet)
+        connect(planet) do |ssh|
+          log "Executing shell command on #{ssh.host}" do
+            sh(ssh) { |out, suc| Result.new(planet, out, suc) }
+          end
+        end
+      end
 
-if [[ $PLANET == "localhost" ]]; then
-  echo "1|localhost|server|Host|`whoami`@localhost"
-elif [[ $PLANET == "web" ]]; then
-  echo "1|localhost|web|Web|http://`whoami`.localhost"
-elif [[ $PLANET == "db" ]]; then
-  echo "1|localhost|db|MyDB|DB_USER:`whoami`@localhost"
-elif [[ $PLANET == "server" ]]; then
-  echo "1|localhost-1|server|Host 1|`whoami`@localhost"
-  echo "0|localhost-2|server|Host 2|ArgumentError: 'initialize'"
-  echo "1|localhost-3|server|Host 3|`whoami`@localhost"
-elif [[ $PLANET == "error" ]]; then
-  echo "0|localhost|server|Host|ArgumentError: 'initialize'" >&2 && exit 1
-else
-  echo "unknown planet" >&2 && exit 1
-fi
+      private
+
+      # Execute the shell command on the remote database and yields the code
+      # block with the captured result.
+      #
+      # @param [ SSH::Session ] ssh The SSH session with is connected to the
+      #                             remote host.
+      #
+      # @return [ SKI::Result ]
+      def sh(ssh)
+        channel  = ssh.open_channel
+        out, suc = channel.capture2e(command)
+
+        yield(out, suc && channel.exitstatus == 0)
+      end
+    end
+  end
+end

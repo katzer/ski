@@ -37,10 +37,36 @@ module SKI
     #
     # @return [ Void ]
     def exec
-      validate
+      validate && results = async { |opts| SKI::Planet.new(*opts).exec(@spec) }
+
+      results.each do |res|
+        puts "#{res.output}\t#{res.successful?}"
+      end
     end
 
     private
+
+    # Devide the list of planets into slices and execute the code block
+    # for each slice within an own thread.
+    #
+    # @param [ Proc ] &block A code block to execute per slice.
+    #
+    # @return [ Void ]
+    def async(&block)
+      servers = planets
+      size    = [(servers.count / 20.0).round, 1].max
+      ths     = []
+      res     = []
+
+      servers.each_slice(size) do |slice|
+        slice.each { |opt| res << block&.call(opt) }
+        # ths << Thread.new(slice) { |opts| opts.map! { |opt| block&.call(opt) } }
+      end
+
+      ths.map(&:join).each { |results| res.concat(results) }
+
+      res
+    end
 
     # rubocop:disable AbcSize, CyclomaticComplexity, LineLength, PerceivedComplexity
 
@@ -50,14 +76,11 @@ module SKI
     #
     # @return [ Hash<Symbol,Object> ] opts
     def convert(opts)
-      opts[:job]      = "#{ENV['ORBIT_HOME']}/jobs/#{opts[:job]}.json"      if opts[:job]
-      opts[:template] = "#{ENV['ORBIT_HOME']}/templates/#{opts[:template]}" if opts[:template]
+      script = opts[:script]
 
-      if opts[:script]&.include?('.sh')
-        opts[:script] = "#{ENV['ORBIT_HOME']}/scripts/#{opts[:script]}"
-      elsif opts[:script]&.include?('.sql')
-        opts[:script] = "#{ENV['ORBIT_HOME']}/sql/#{opts[:script]}"
-      end
+      opts[:template] = expand_path('template', opts[:template]) if opts[:template]
+      opts[:script]   = expand_path('scripts', script) if script&.include? '.sh'
+      opts[:script]   = expand_path('sql', script) if script&.include? '.sql'
 
       opts
     end
@@ -68,9 +91,11 @@ module SKI
     # @return [ Boolean ] true if valid
     def validate
       raise ArgumentError,     'Missing command or script'          unless @spec[:command] || @spec[:script]
+      raise ArgumentError,     'Execute with command or script'     if     @spec[:command] && @spec[:script]
       raise ArgumentError,     'Missing matcher'                    unless @spec[:tail].any?
-      raise File::NoFileError, "No such file - #{@spec[:script]}"   if @spec[:script]   && !File.file?(@spec[:script])
-      raise File::NoFileError, "No such file - #{@spec[:template]}" if @spec[:template] && !File.file?(@spec[:template])
+      raise File::NoFileError, "No such file - #{@spec[:script]}"   if     @spec[:script]   && !File.file?(@spec[:script])
+      raise File::NoFileError, "No such file - #{@spec[:template]}" if     @spec[:template] && !File.file?(@spec[:template])
+
       true
     end
 
@@ -80,12 +105,21 @@ module SKI
     #
     # @return [ Array<"user@host"> ]
     def planets
-      cmd = %(#{ENV['ORBIT_BIN']}/fifa -f=ssh "#{@spec[:tail].join('" "')}")
+      cmd = %(#{ENV['ORBIT_BIN']}/fifa -f=ski "#{@spec[:tail].join('" "')}")
       out = `#{cmd}`
 
       raise "#{cmd} failed with exit code #{$?}" unless $? == 0
 
-      out.split("\n").map! { |ssh| ssh.split('@') }
+      out.split("\n").map! { |line| line.split('|') }
+    end
+
+    # Helper to construct absolute path.
+    #
+    # @param [ Array<String> ] *folders The folders to join with $ORBIT_HOME.
+    #
+    # @return [ String ]
+    def expand_path(*folders)
+      File.join(ENV['ORBIT_HOME'], *folders)
     end
   end
 end

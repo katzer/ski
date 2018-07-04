@@ -21,11 +21,12 @@
 # SOFTWARE.
 
 @parser = OptParser.new do |opts|
-  opts.add :command,  :string
-  opts.add :script,   :string
-  opts.add :job,      :string
-  opts.add :template, :string
-  opts.add :pretty,   :bool, false
+  opts.add :command,    :string
+  opts.add :script,     :string
+  opts.add :job,        :string
+  opts.add :template,   :string
+  opts.add :pretty,     :bool, false
+  opts.add :'no-color', :bool, false
 end
 
 @parser.on! :help do
@@ -40,6 +41,7 @@ Options:
 -t, --template  Template to be used to transform the output
 -j, --job       Execute job specified in file
 -p, --pretty    Pretty print output as a table
+--no-color      Print errors without colors
 -h, --help      This help text
 -v, --version   Show version number
 USAGE

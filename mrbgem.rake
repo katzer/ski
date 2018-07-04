@@ -32,10 +32,13 @@ MRuby::Gem::Specification.new('ski') do |spec|
 
   spec.add_dependency 'mruby-io',              core: 'mruby-io'
   spec.add_dependency 'mruby-exit',            core: 'mruby-exit'
+  spec.add_dependency 'mruby-enum-ext',        core: 'mruby-enum-ext'
+  spec.add_dependency 'mruby-thread',          mgem: 'mruby-thread'
   spec.add_dependency 'mruby-tiny-opt-parser', mgem: 'mruby-tiny-opt-parser'
   spec.add_dependency 'mruby-ansi-colors',     mgem: 'mruby-ansi-colors'
   spec.add_dependency 'mruby-env',             mgem: 'mruby-env'
   spec.add_dependency 'mruby-os',              mgem: 'mruby-os'
   spec.add_dependency 'mruby-ssh',             mgem: 'mruby-ssh'
-  # spec.add_dependency 'mruby-logger',          mgem: 'mruby-logger'
+  spec.add_dependency 'mruby-logger',          mgem: 'mruby-logger'
+  spec.add_dependency 'mruby-dir',             mgem: 'mruby-dir'
 end
