@@ -21,88 +21,110 @@
 # SOFTWARE.
 
 module SKI
-  module Task
-    class BaseTask
-      # Default configuration for every SSH connection
-      SSH_CONFIG = { key: ENV['ORBIT_KEY'], compress: true, timeout: 5_000 }.freeze
+  # Base class for all task types
+  class BaseTask
+    # Default configuration for every SSH connection
+    SSH_CONFIG = { key: ENV['ORBIT_KEY'], compress: true, timeout: 5000 }.freeze
 
-      # Initialize the task specified by opts.
-      #
-      # @param [ Hash<Symbol,Object> ] opts A key-value hash.
-      #
-      # @return [ Void ]
-      def initialize(opts)
-        @opts = opts
+    # Initialize the task specified by opts.
+    #
+    # @param [ Hash<Symbol,Object> ] opts A key-value hash.
+    #
+    # @return [ Void ]
+    def initialize(opts)
+      @opts = opts
+    end
+
+    protected
+
+    # The command to execute on the remote server.
+    #
+    # @return [ String ]
+    def command
+      (@opts[:script] ? IO.read(@opts[:script]) : @opts[:command])&.strip
+    end
+
+    # Return a task result.
+    #
+    # @param [ SKI::Planet ] planet   The planet where the result comes from.
+    # @param [ String ]      output   The output of the task execution.
+    # @param [ Boolean ]     no_error If the task executed without an error.
+    #                                 Defaults to: true
+    #
+    # @return [ SKI::Result ]
+    def result(planet, output, no_error = true)
+      Result.new(planet, output, no_error)
+    end
+
+    # Return a task result where the error bit is set.
+    #
+    # @param [ SKI::Planet ] planet The planet where the result comes from.
+    # @param [ String ]      output The output of the task execution.
+    #
+    # @return [ SKI::Result ]
+    def error(planet, output)
+      logger.error(output)
+      result(planet, output, false)
+    end
+
+    private
+
+    # Logging device that writes into $ORBIT_HOME/log/plip.log
+    #
+    # @return [ Logger ]
+    def logger
+      $logger ||= begin
+        dir = File.join(ENV['ORBIT_HOME'], 'logs')
+        Dir.mkdir(dir) unless Dir.exist? dir
+
+        Logger.new("#{dir}/ski.log", formatter: lambda do |sev, ts, _, msg|
+          "[#{sev[0, 3]}] #{ts}: #{msg}\n"
+        end)
       end
+    end
 
-      protected
+    # Write a log message, execute the code block and write another log.
+    # that the task is done.
+    #
+    # @param [ String ] msg The message to log.
+    # @param [ Proc ] block The code block to execute.
+    #
+    # @return [ Void ]
+    def log(msg)
+      logger.info msg
+      res = yield
+      logger.info "#{msg} done"
+      res
+    end
 
-      # The command to execute on the remote server.
-      #
-      # @return [ String ]
-      def command
-        (@opts[:script] ? IO.read(@opts[:script]) : @opts[:command])&.strip
-      end
+    # Write an error log message.
+    #
+    # @param [ String ] user The remote user.
+    # @param [ String ] host The remote host.
+    # @param [ SSH::Session ] ssh The connected SSH session.
+    # @param [ String ] msg  The error message.
+    #
+    # @return [ Void ]
+    def log_error(usr, host, ssh, msg = nil)
+      logger.error "#{usr}@#{host} #{ssh&.last_error} #{ssh&.last_errno} #{msg}"
+    end
 
-      private
-
-      # Logging device that writes into $ORBIT_HOME/log/plip.log
-      #
-      # @return [ Logger ]
-      def logger
-        $logger ||= begin
-          dir = File.join(ENV['ORBIT_HOME'], 'logs')
-          Dir.mkdir(dir) unless Dir.exist? dir
-
-          Logger.new("#{dir}/ski.log", formatter: lambda do |sev, ts, _, msg|
-            "[#{sev[0, 3]}] #{ts}: #{msg}\n"
-          end)
-        end
-      end
-
-      # Write a log message, execute the code block and write another log.
-      # that the task is done.
-      #
-      # @param [ String ] msg The message to log.
-      # @param [ Proc ] block The code block to execute.
-      #
-      # @return [ Void ]
-      def log(msg)
-        logger.info msg
-        res = yield
-        logger.info "#{msg} done"
-        res
-      end
-
-      # Write an error log message.
-      #
-      # @param [ String ] user The remote user.
-      # @param [ String ] host The remote host.
-      # @param [ SSH::Session ] ssh The connected SSH session.
-      # @param [ String ] msg  The error message.
-      #
-      # @return [ Void ]
-      def log_error(usr, host, ssh, msg = nil)
-        logger.error "#{usr}@#{host} #{ssh&.last_error} #{ssh&.last_errno} #{msg}"
-      end
-
-      # Start an SSH session.
-      #
-      # @param [ SKI::Planet ] planet The planet where to connect to.
-      #
-      # @return [ Void ]
-      def connect(planet)
-        user, host = planet.user_and_host
-        ssh        = SSH.start(host, user, SSH_CONFIG.dup)
-        res        = yield(ssh)
-        log_error(user, host, ssh) if ssh.last_error
-        res
-      rescue RuntimeError => e
-        log_error(user, host, ssh, e.message)
-        [e.message, false]
-      ensure
-        ssh&.close
-      end
+    # Start an SSH session.
+    #
+    # @param [ SKI::Planet ] planet The planet where to connect to.
+    #
+    # @return [ Void ]
+    def connect(planet)
+      user, host = planet.user_and_host
+      ssh        = SSH.start(host, user, SSH_CONFIG.dup)
+      res        = yield(ssh)
+      log_error(user, host, ssh) if ssh.last_error
+      res
+    rescue RuntimeError => e
+      log_error(user, host, ssh, e.message)
+      Result.new(planet, e.message, false)
+    ensure
+      ssh&.close
     end
   end
 end

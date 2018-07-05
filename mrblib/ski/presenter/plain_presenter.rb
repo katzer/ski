@@ -21,15 +21,15 @@
 # SOFTWARE.
 
 module SKI
-  # Does not execute anything since the planet is not valid.
-  class InvalidTask < BaseTask
-    # Only format the error message received from fifa.
+  # Print the output to STDOUT
+  class PlainPresenter < BasePresenter
+    # Format and print the results to STDOUT.
     #
-    # @param [ SKI::Planet ] planet The planet where to execute the task.
+    # @param [ Array<SKI::Result> ] *results 1 to n results to print out.
     #
     # @return [ Void ]
-    def exec(planet)
-      error(planet, "Cannot execute command for #{planet.type}")
+    def print(*results)
+      results.each { |res| STDOUT.puts colorize_output(res) }
     end
   end
 end

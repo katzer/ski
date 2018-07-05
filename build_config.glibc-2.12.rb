@@ -34,12 +34,12 @@ MRuby::Build.new do |conf|
   gem_config(conf)
 end
 
-# MRuby::Build.new('x86_64-pc-linux-gnu-glibc-2.12') do |conf|
-#   toolchain :clang
+MRuby::Build.new('x86_64-pc-linux-gnu-glibc-2.12') do |conf|
+  toolchain :clang
 
-#   [conf.cc, conf.cxx, conf.linker].each do |cc|
-#     cc.flags << '-Oz'
-#   end
+  [conf.cc, conf.cxx, conf.linker].each do |cc|
+    cc.flags << '-Oz'
+  end
 
-#   gem_config(conf)
-# end
+  gem_config(conf)
+end

@@ -22,14 +22,14 @@
 
 module SKI
   # Does not execute anything since the planet is not valid.
-  class InvalidTask < BaseTask
+  class ErrorTask < BaseTask
     # Only format the error message received from fifa.
     #
     # @param [ SKI::Planet ] planet The planet where to execute the task.
     #
     # @return [ Void ]
     def exec(planet)
-      error(planet, "Cannot execute command for #{planet.type}")
+      error(planet, planet.connection)
     end
   end
 end

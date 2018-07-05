@@ -30,7 +30,7 @@ module SKI
     # @param [ Boolean ]    success If the task executed in a successful way.
     def initialize(planet, output, success)
       @planet  = planet
-      @output  = output
+      @output  = output&.freeze
       @success = success
     end
 

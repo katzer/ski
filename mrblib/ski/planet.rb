@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 module SKI
+  # Wrapper around the planet details that fifa returned in ski format
   class Planet < BasicObject
     # Initialize a wrapper for a planet instance.
     #
@@ -78,12 +79,32 @@ module SKI
     #
     # @return [ SKI::Result ] The result of the task.
     def exec(spec)
-      case valid? ? type : 'invalid'
-      when 'invalid' then Task::InvalidTask.new(spec)
-      when 'server'  then Task::ServerTask.new(spec)
-      when 'db'      then Task::DatabaseTask.new(spec)
-      else                Task::UnknownTask.new(spec)
+      case task_type(spec)
+      when :error    then ErrorTask.new(spec)
+      when :invalid  then InvalidTask.new(spec)
+      when 'server'  then ServerTask.new(spec)
+      when 'db'      then DatabaseTask.new(spec)
+      else                UnknownTask.new(spec)
       end.exec(self)
+    end
+
+    private
+
+    # Internal helper method that determines the right task class based on what
+    # fifa responded and if the planet type and script extension match.
+    #
+    # @param [ Hash ] spec The spec for the task.
+    #
+    # @return [ Boolean ]
+    def task_type(spec)
+      return :error unless valid?
+
+      file = spec[:script]
+
+      return :invalid if (file && type == 'db'     && file !~ /\.sql$/) \
+                      || (file && type == 'server' && file !~ /\.sh$/)
+
+      type
     end
   end
 end

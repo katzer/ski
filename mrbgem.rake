@@ -28,6 +28,7 @@ MRuby::Gem::Specification.new('ski') do |spec|
   spec.version = SKI::VERSION
   spec.bins    = ['ski']
 
+  spec.mruby.cc.defines += %w[MBEDTLS_THREADING_PTHREAD MBEDTLS_THREADING_C]
   spec.mruby.cc.defines += %w[LIBSSH2_HAVE_ZLIB HAVE_UNISTD_H]
 
   spec.add_dependency 'mruby-io',              core: 'mruby-io'
@@ -41,4 +42,6 @@ MRuby::Gem::Specification.new('ski') do |spec|
   spec.add_dependency 'mruby-ssh',             mgem: 'mruby-ssh'
   spec.add_dependency 'mruby-logger',          mgem: 'mruby-logger'
   spec.add_dependency 'mruby-dir',             mgem: 'mruby-dir'
+  spec.add_dependency 'mruby-terminal-table',  mgem: 'mruby-terminal-table'
+  spec.add_dependency 'mruby-regexp-pcre',     mgem: 'mruby-regexp-pcre'
 end

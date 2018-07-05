@@ -21,15 +21,38 @@
 # SOFTWARE.
 
 module SKI
-  # Does not execute anything since the planet is not valid.
-  class InvalidTask < BaseTask
-    # Only format the error message received from fifa.
+  # Base class for all presenters
+  class BasePresenter < BasicObject
+    # Initialize a new formatter object.
     #
-    # @param [ SKI::Planet ] planet The planet where to execute the task.
+    # @param [ Boolean ] no_color false to print errors without red color.
+    #                             Defaults to: true
     #
     # @return [ Void ]
-    def exec(planet)
-      error(planet, "Cannot execute command for #{planet.type}")
+    def initialize(no_color = false)
+      @no_color = no_color
+    end
+
+    protected
+
+    # Colorize the output of the task result.
+    #
+    # @param [ SKI::Result ] result The task result to colorize.
+    #
+    # @return [ String ]
+    def colorize_output(result)
+      colorize_text(result.output, result.successful?)
+    end
+
+    # Colorize the text depend on the given flags.
+    #
+    # @param [ String ] text      The text to colorize.
+    # @param [ Boolean ] no_error Set to false if its an error message.
+    #
+    # @return [ String ]
+    def colorize_text(text, no_error = true)
+      return text if text.nil? || @no_color || no_error
+      text.split("\n").map! { |s| s.set_color(:red) }.join("\n")
     end
   end
 end

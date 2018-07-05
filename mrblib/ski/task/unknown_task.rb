@@ -21,18 +21,15 @@
 # SOFTWARE.
 
 module SKI
-  module Task
-    # Does not execute anything since the type is not supported.
-    class UnknownTask < InvalidTask
-      # Just log an error message.
-      #
-      # @param [ SKI::Planet ] planet The planet where to execute the task.
-      #
-      # @return [ Void ]
-      def exec(planet)
-        logger.error "Unsupported planet type: #{planet.type}"
-        super
-      end
+  # Does not execute anything since the type is not supported.
+  class UnknownTask < BaseTask
+    # Just log an error message.
+    #
+    # @param [ SKI::Planet ] planet The planet where to execute the task.
+    #
+    # @return [ Void ]
+    def exec(planet)
+      error(planet, "Unknown planet type: #{planet.type}")
     end
   end
 end

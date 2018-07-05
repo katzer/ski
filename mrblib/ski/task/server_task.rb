@@ -21,36 +21,35 @@
 # SOFTWARE.
 
 module SKI
-  module Task
-    class ServerTask < BaseTask
-      # Execute the shell command on the remote database.
-      #
-      # @param [ SKI::Planet ] planet The planet where to execute the task.
-      #
-      # @return [ Void ]
-      def exec(planet)
-        connect(planet) do |ssh|
-          log "Executing shell command on #{ssh.host}" do
-            sh(ssh) { |out, suc| Result.new(planet, out, suc) }
-          end
+  # Execute shell commands on the remote server
+  class ServerTask < BaseTask
+    # Execute the shell command on the remote server.
+    #
+    # @param [ SKI::Planet ] planet The planet where to execute the task.
+    #
+    # @return [ Void ]
+    def exec(planet)
+      connect(planet) do |ssh|
+        log "Executing shell command on #{ssh.host}" do
+          sh(ssh) { |out, suc| result(planet, out, suc) }
         end
       end
+    end
 
-      private
+    private
 
-      # Execute the shell command on the remote database and yields the code
-      # block with the captured result.
-      #
-      # @param [ SSH::Session ] ssh The SSH session with is connected to the
-      #                             remote host.
-      #
-      # @return [ SKI::Result ]
-      def sh(ssh)
-        channel  = ssh.open_channel
-        out, suc = channel.capture2e(command)
+    # Execute the shell command on the remote server and yields the code block
+    # with the captured result.
+    #
+    # @param [ SSH::Session ] ssh The SSH session with is connected to the
+    #                             remote host.
+    #
+    # @return [ SKI::Result ]
+    def sh(ssh)
+      channel  = ssh.open_channel
+      out, suc = channel.capture2e(command)
 
-        yield(out, suc && channel.exitstatus == 0)
-      end
+      yield(out, suc && channel.exitstatus == 0)
     end
   end
 end
