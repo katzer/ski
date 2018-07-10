@@ -35,10 +35,10 @@ compile: &defaults
   command: rake compile
 test:
   <<: *defaults
-  command: rake test
+  command: rake sshd test
 bintest:
   <<: *defaults
-  command: rake test:bintest
+  command: rake sshd test:bintest
 mtest:
   <<: *defaults
   command: rake test:mtest
