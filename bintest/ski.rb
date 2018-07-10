@@ -96,13 +96,19 @@ assert('pretty [-p]') do
 
   assert_true status.success?, 'Process did not exit cleanly'
   assert_include output, '| NR. | ID          | TYPE   | CONNECTION                 | NAME   | OUTPUT                     |'
+
+  if ENV['OS'] == 'Windows_NT'
+    assert_include output, "| \e[0;31;49mFailed to connect\e[0m          |\n"
+  else
+    assert_include output, "| test                       |\n"
+  end
 end
 
-assert('pretty [--pretty]') do
-  output, status = Open3.capture2(BIN, '--pretty', '-c', 'echo test', 'server')
+assert('no color [--no-color]') do
+  output, status = Open3.capture2(BIN, '--no-color', '-p', '-c', 'echo test', 'server')
 
   assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, "| test                       |\n"
+  assert_include output, "| ArgumentError: 'initialize |\n"
 end
 
 assert('no matcher') do
