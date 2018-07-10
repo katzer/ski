@@ -41,7 +41,7 @@ matrix:
 
 script:
 - if [[ $TRAVIS_COMMIT_MESSAGE == *\\[ci-compile\\]* ]]; then rake compile; else echo 'skip compile'; fi;
-- if [[ $TRAVIS_TAG ]]; then echo 'skip test'; else rake test; fi;
+- if [[ $TRAVIS_TAG ]]; then echo 'skip test'; else rake bintest; fi;
 
 before_deploy:
 - rake release
