@@ -66,7 +66,14 @@ end
 #
 # @return [ Hash<Symbol, Object> ]
 def parse(args)
-  opts        = @parser.parse(args.empty? ? ['-h'] : args)
+  opts = @parser.parse(args.empty? ? ['-h'] : args)
+
+  if opts[:job]
+    args = File.read("#{ENV['ORBIT_HOME']}/jobs/#{opts[:job]}.skijob")
+               .split(/(?<!\\)\s+/).map! { |f| f.gsub(/[\\'"]/, '') }
+    opts = @parser.parse(args)
+  end
+
   opts[:tail] = @parser.tail
   opts
 end
