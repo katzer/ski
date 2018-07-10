@@ -57,7 +57,7 @@ module SKI
     #
     # @return [ String ]
     def output=(output)
-      @output = output&.chop! || output || ''
+      @output = output&.chomp! || output || ''
     end
   end
 end

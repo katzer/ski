@@ -49,7 +49,7 @@ module SKI
     #
     # @return [ String ]
     def columns
-      skifsm('--columns').chop!
+      skifsm('--columns').chomp!
     end
 
     # Update output for each result through parsed textfsm template.

@@ -53,6 +53,7 @@ module SKI
     #
     # @return [ SKI::Result ]
     def result(planet, output, no_error = true)
+      output = %("#{output.chomp! || output}") if @opts[:template] && !no_error
       Result.new(planet, output, no_error)
     end
 
@@ -122,7 +123,7 @@ module SKI
       res
     rescue RuntimeError => e
       log_error(user, host, ssh, e.message)
-      Result.new(planet, e.message, false)
+      result(planet, e.message, false)
     ensure
       ssh&.close
     end
