@@ -1,6 +1,9 @@
 /mruby/
 /releases/
 /packages/
+/bintest/jobs/
 /bintest/logs/
 /bintest/scripts/
+/bintest/reports/
+/bintest/sql/
 /bintest/tmp/
