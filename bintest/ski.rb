@@ -91,6 +91,20 @@ assert('command and script') do
   assert_include output, 'ArgumentError'
 end
 
+assert('pretty [-p]') do
+  output, status = Open3.capture2(BIN, '-p', '-c', 'echo test', 'server')
+
+  assert_true status.success?, 'Process did not exit cleanly'
+  assert_include output, '| NR. | ID          | TYPE   | CONNECTION                 | NAME   | OUTPUT                     |'
+end
+
+assert('pretty [--pretty]') do
+  output, status = Open3.capture2(BIN, '--pretty', '-c', 'echo test', 'server')
+
+  assert_true status.success?, 'Process did not exit cleanly'
+  assert_include output, "| test                       |\n"
+end
+
 assert('no matcher') do
   _, output, status = Open3.capture3(BIN, '-c', 'echo')
 

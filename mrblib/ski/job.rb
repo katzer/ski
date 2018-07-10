@@ -38,11 +38,10 @@ module SKI
     #
     # @return [ Void ]
     def exec
-      case presenter
-      when TablePresenter
-        present(*async { |opts| SKI::Planet.new(*opts).exec(@spec) })
-      when PlainPresenter
-        async { |opts| present SKI::Planet.new(*opts).exec(@spec) }
+      if @spec[:pretty] || @spec[:job]
+        present(async { |opts| SKI::Planet.new(*opts).exec(@spec) })
+      else
+        async { |opts| present([SKI::Planet.new(*opts).exec(@spec)]) }
       end
     end
 
@@ -63,7 +62,8 @@ module SKI
         ths << Thread.new(slice) { |opts| opts.map! { |opt| block&.call(opt) } }
       end
 
-      ths.map!(&:join).each_with_object([]) { |res, o| o.concat(res) if res[0] }
+      ths.map!(&:join).flatten!.compact!
+      ths
     end
 
     # Convert the parsed spec values.
@@ -72,9 +72,9 @@ module SKI
     #
     # @return [ Hash<Symbol,Object> ] opt
     def convert(opt)
-      script = opt[:script]
+      script, tpl = opt[:script], opt[:template]
 
-      opt[:template] = expand_path('template', opt[:template]) if opt[:template]
+      opt[:template] = expand_path('templates', "#{tpl}.textfsm") if tpl
       opt[:script]   = expand_path('scripts', script) if script&.include? '.sh'
       opt[:script]   = expand_path('sql', script)     if script&.include? '.sql'
 
@@ -122,12 +122,21 @@ module SKI
       File.join(ENV['ORBIT_HOME'], *folders)
     end
 
-    # The presenter for the job output.
+    # The formatter for the output.
+    #
+    # @return [ SKI::BaseFormatter ]
+    def formatter
+      @formatter ||= TemplateFormatter.new(@spec[:template]) if @spec[:template]
+    end
+
+    # The presenter for the output.
     #
     # @return [ SKI::BasePresenter ]
     def presenter
       @presenter ||= begin
-        if @spec[:pretty]
+        if @spec[:job]
+          WebPresenter.new(@spec[:job], formatter&.columns)
+        elsif @spec[:pretty]
           TablePresenter.new(@spec[:'no-color'])
         else
           PlainPresenter.new(@spec[:'no-color'])
@@ -140,8 +149,10 @@ module SKI
     # @param [ Array<SKI::Result> ] *results The results to format and present.
     #
     # @return [ Void ]
-    def present(*results)
-      presenter.print(*results) && nil
+    def present(results)
+      formatter&.format(results)
+      presenter.present(results)
+      nil
     end
   end
 end

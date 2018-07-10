@@ -22,33 +22,42 @@
 
 module SKI
   # Encapsulate the result of a task execution.
-  class Result < BasicObject
+  class Result
     # Create a result object with contains all infos about a task result.
     #
     # @param [ SKI::Planet ] planet The planet where the task has been executed.
     # @param [ String ]      output The output of the remote execution.
     # @param [ Boolean ]    success If the task executed in a successful way.
-    def initialize(planet, output, success)
-      @planet  = planet
-      @output  = output&.freeze
-      @success = success
-    end
-
-    # The output of the remote execution.
     #
-    # @return [ String ]
-    attr_reader :output
+    # @return [ Void ]
+    def initialize(planet, output, success)
+      @planet     = planet
+      @success    = success
+      self.output = output
+    end
 
     # The planet where the task has been executed.
     #
     # @return [ SKI::Planet ]
     attr_reader :planet
 
+    # The output of the remote execution.
+    #
+    # @return [ String ]
+    attr_reader :output
+
     # If the task executed in a successful way.
     #
     # @return [ Boolean ]
-    def successful?
-      @success
+    attr_accessor :success
+
+    # Setter for the result output.
+    #
+    # @param [ String ] output The output of the remote execution.
+    #
+    # @return [ String ]
+    def output=(output)
+      @output = output&.chop! || output || ''
     end
   end
 end

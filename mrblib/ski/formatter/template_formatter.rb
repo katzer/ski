@@ -21,38 +21,54 @@
 # SOFTWARE.
 
 module SKI
-  # Base class for all presenters
-  class BasePresenter < BasicObject
-    # Initialize a new presenter object.
+  # Convert the output based on a TextFSM template file.
+  class TemplateFormatter
+    # The absolute path to the skifsm.pyc script
+    FSM_PATH = File.join(ENV['ORBIT_HOME'].to_s, 'vendor/textfsm/skifsm.py')
+
+    # Initialize a new formatter.
     #
-    # @param [ Boolean ] no_color false to print errors without red color.
-    #                             Defaults to: true
+    # @param [ String ] tpl The path of the template file.
     #
     # @return [ Void ]
-    def initialize(no_color = false)
-      @no_color = no_color
+    def initialize(tpl)
+      @tpl = tpl
     end
 
-    protected
-
-    # Colorize the output of the task result.
+    # Replace output for each result through parsed textfsm template.
     #
-    # @param [ SKI::Result ] result The task result to colorize.
+    # @param [ Array<SKI::Result> ] results The results to format.
     #
-    # @return [ String ]
-    def colorize(result)
-      colorize_text(result.output, result.success)
+    # @return [ Array<SKI::Result> ]
+    def format(results)
+      results.each { |res| update_output_by_template(res) if res.success }
+      results
     end
 
-    # Colorize the text depend on the given flags.
-    #
-    # @param [ String ] text      The text to colorize.
-    # @param [ Boolean ] no_error Set to false if its an error message.
+    # The columns for the template.
     #
     # @return [ String ]
-    def colorize_text(text, no_error = true)
-      return text if text.nil? || @no_color || no_error
-      text.split("\n").map! { |s| s.set_color(:red) }.join("\n")
+    def columns
+      skifsm('--columns').chop!
+    end
+
+    # Update output for each result through parsed textfsm template.
+    #
+    # @param [ SKI::Result ] res The result to update.
+    #
+    # @return [ SKI::Result ]
+    def update_output_by_template(res)
+      res.output  = skifsm("<<EOF\n#{res.output}\nEOF")
+      res.success = $? == 0
+    end
+
+    # Invoke the skifsm.pyc script with the given additional arguments.
+    #
+    # @param [ String ] args The additional arguments.
+    #
+    # return [ String ]
+    def skifsm(args)
+      `python #{FSM_PATH} #{@tpl} #{args}`
     end
   end
 end

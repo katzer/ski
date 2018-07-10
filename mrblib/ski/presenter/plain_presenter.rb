@@ -25,11 +25,11 @@ module SKI
   class PlainPresenter < BasePresenter
     # Format and print the results to STDOUT.
     #
-    # @param [ Array<SKI::Result> ] *results 1 to n results to print out.
+    # @param [ Array<SKI::Result> ] results The results to print out.
     #
     # @return [ Void ]
-    def print(*results)
-      results.each { |res| STDOUT.puts colorize_output(res) }
+    def present(results)
+      results.each { |res| STDOUT.puts colorize(res) }
     end
   end
 end
