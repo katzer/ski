@@ -92,19 +92,18 @@ assert('command and script') do
 end
 
 assert('pretty [-p]') do
+  skip if ENV['OS'] == 'Windows_NT'
+
   output, status = Open3.capture2(BIN, '-p', '-c', 'echo test', 'server')
 
   assert_true status.success?, 'Process did not exit cleanly'
   assert_include output, '| NR. | ID          | TYPE   | CONNECTION                  | NAME   | OUTPUT                      |'
-
-  if ENV['OS'] == 'Windows_NT'
-    assert_include output, "| \e[0;31;49mFailed to connect.\e[0m          |\n"
-  else
-    assert_include output, "| test                        |\n"
-  end
+  assert_include output, "| test                        |\n"
 end
 
 assert('no color [--no-color]') do
+  skip if ENV['OS'] == 'Windows_NT'
+
   output, status = Open3.capture2(BIN, '--no-color', '-p', '-c', 'echo test', 'server')
 
   assert_true status.success?, 'Process did not exit cleanly'
