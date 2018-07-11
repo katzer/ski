@@ -57,7 +57,7 @@ module SKI
     #
     # @return [ String ]
     def output=(output)
-      @output = output&.chomp! || output || ''
+      @output = output&.gsub!(/(^\n|\n$)/, '') || output || ''
     end
   end
 end
