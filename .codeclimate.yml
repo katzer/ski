@@ -28,6 +28,12 @@ plugins:
     config:
       file: .rubocop.yml
 
+checks:
+  method-complexity:
+    enabled: true
+    config:
+      threshold: 6
+
 exclude_patterns:
   - "bintest/"
   - "mrblib/ext/"
