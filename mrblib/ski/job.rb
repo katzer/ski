@@ -62,7 +62,7 @@ module SKI
         ths << Thread.new(slice) { |opts| opts.map! { |opt| block&.call(opt) } }
       end
 
-      ths.map!(&:join).flatten!.compact!
+      ths.map!(&:join).flatten!&.compact!
       ths
     end
 
