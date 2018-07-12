@@ -30,9 +30,7 @@ module SKI
     # @return [ Void ]
     def exec(planet)
       connect(planet) do |ssh|
-        log "Executing shell command on #{ssh.host}" do
-          sh(ssh) { |out, suc| result(planet, out, suc) }
-        end
+        log("Executing shell command on #{ssh.host}") { shell(planet, ssh) }
       end
     end
 
@@ -41,15 +39,16 @@ module SKI
     # Execute the shell command on the remote server and yields the code block
     # with the captured result.
     #
-    # @param [ SSH::Session ] ssh The SSH session with is connected to the
-    #                             remote host.
+    # @param [ SKI::Planet ] planet The planet where to execute the task.
+    # @param [ SSH::Session ] ssh   The SSH session with is connected to the
+    #                               remote host.
     #
     # @return [ SKI::Result ]
-    def sh(ssh)
-      channel  = ssh.open_channel
-      out, suc = channel.capture2e(command)
+    def shell(planet, ssh)
+      channel = ssh.open_channel
+      out, ok = channel.capture2e(command)
 
-      yield(out, suc && channel.exitstatus == 0)
+      result(planet, out, ok && channel.exitstatus == 0)
     end
   end
 end

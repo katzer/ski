@@ -25,6 +25,8 @@ module SKI
   class DatabaseTask < BaseTask
     # The shell command to invoke pqdb_sql.out
     PQDB = '. profiles/%s.prof > /dev/null && exe/pqdb_sql.out -s -x %s'.freeze
+    # The ending of each well formatted sql
+    EXIT = ";\nexit\n".freeze
 
     # Execute the SQL command on the remote database.
     #
@@ -34,8 +36,7 @@ module SKI
     def exec(planet)
       connect(planet) do |ssh|
         log "Executing SQL command on #{ssh.host}" do
-          cmd = format(PQDB, planet.user, planet.db)
-          pqdb(ssh, cmd) { |out, ok| result(planet, out, ok) }
+          sql(planet, ssh, format(PQDB, planet.user, planet.db))
         end
       end
     end
@@ -46,7 +47,7 @@ module SKI
     #
     # @return [ String ]
     def command
-      (cmd = super)[-1] == ';' ? cmd : "#{cmd};"
+      ((cmd = super)[-1] == ';' ? cmd.chop! : cmd) << EXIT
     end
 
     private
@@ -54,20 +55,19 @@ module SKI
     # Execute the SQL command on the remote database and yields the code
     # block with the captured result.
     #
-    # @param [ SSH::Session ] ssh      The SSH session that is connected to
-    #                                  the remote host.
-    # @param [ String ]       pqdb_cmd The shell command to invoke pqdb_sql.
+    # @param [ SKI::Planet ]  planet The planet where to execute the task.
+    # @param [ SSH::Session ]    ssh The SSH session that is connected to the
+    #                                remote host.
+    # @param [ String ]          cmd The shell command to invoke pqdb_sql.
     #
     # @return [ SKI::Result ]
-    def pqdb(ssh, pqdb_cmd, &block)
-      io, ok = ssh.open_channel.popen2e(pqdb_cmd)
+    def sql(planet, ssh, cmd)
+      channel = ssh.open_channel
+      io, ok  = channel.popen2e(cmd)
 
-      io.puts(command)
-      io.puts('exit')
+      io.write(command)
 
-      block&.call(io.gets(nil), ok)
-    ensure
-      io&.close(false)
+      result(planet, io.gets(nil), ok && channel.close(true) == 0)
     end
   end
 end

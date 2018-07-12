@@ -45,11 +45,11 @@ module SKI
     # @return [ Void ]
     def present(results)
       open_report_file do |f|
-        f << "#{@ts}\n#{@cols}"
+        f.write "#{@ts}\n#{@cols}"
 
         results.each do |r, p = r.planet|
           r.output.split("\n").each do |o|
-            f << %(\n["#{p.id}","#{p.name}",#{r.success},#{o}])
+            f.write %(\n["#{p.id}","#{p.name}",#{r.success},#{o}])
           end
         end
       end

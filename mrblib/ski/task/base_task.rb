@@ -118,7 +118,7 @@ module SKI
     def connect(planet)
       user, host = planet.user_and_host
       ssh        = SSH.start(host, user, SSH_CONFIG.dup)
-      res        = yield(ssh)
+      res        = yield(ssh, planet)
       log_error(user, host, ssh) if ssh.last_error
       res
     rescue RuntimeError => e
