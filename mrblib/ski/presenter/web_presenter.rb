@@ -45,10 +45,12 @@ module SKI
     # @return [ Void ]
     def present(results)
       open_report_file do |f|
-        f.write "#{@ts}\n#{@cols}\n"
+        f << "#{@ts}\n#{@cols}"
 
-        results.each do |r, l = %(["#{r.planet.id}",#{r.success})|
-          r.output.split("\n").each { |o| f.puts "#{l},#{o}]" }
+        results.each do |r, p = r.planet|
+          r.output.split("\n").each do |o|
+            f << %(\n["#{p.id}","#{p.name}",#{r.success},#{o}])
+          end
         end
       end
     end
@@ -66,7 +68,7 @@ module SKI
         when '_s' then [name[0...-2], 'string']
         when '_i' then [name[0...-2], 'int']
         when '_f' then [name[0...-2], 'float']
-        else           [name, 'string']
+        else           [name,         'string']
         end
       end.inspect
     end
@@ -76,8 +78,10 @@ module SKI
     # @param [ Proc ] &block The code block to call for.
     #
     # @return [ Void ]
-    def open_report_file(&block)
-      File.open("#{make_report_file_dir}/#{@ts}.skirep", 'w+', &block)
+    def open_report_file
+      File.open("#{make_report_file_dir}/#{@ts}.skirep", 'w+') do |f|
+        yield(f) && STDOUT.puts("Written report to: #{f.path}")
+      end
     end
 
     # Create all parent directories within $ORBIT_HOME
