@@ -24,7 +24,7 @@ module SKI
   # Execute SQL command on the remote database.
   class DatabaseTask < BaseTask
     # The shell command to invoke pqdb_sql.out
-    PQDB = '. profiles/%s.prof && exe/pqdb_sql.out -s -x %s'.freeze
+    PQDB = '. profiles/%s.prof > /dev/null && exe/pqdb_sql.out -s -x %s'.freeze
 
     # Execute the SQL command on the remote database.
     #
