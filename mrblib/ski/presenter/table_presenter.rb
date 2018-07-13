@@ -56,13 +56,28 @@ module SKI
 
     # Converts the results into table row structures.
     #
-    # @param [ Array<SKI::Result> ] list The results to convert into rows.
+    # @param [ Array<SKI::Result> ] results The results to convert into rows.
     #
     # @return [ Array ]
-    def rows(list)
-      list.each_with_index do |r, i, p = r.planet|
-        list[i] = ["#{i + 1}.", p.id, p.type, p.connection, p.name, colorize(r)]
-      end
+    def rows(results)
+      results.each_with_index { |res, idx| results[idx] = row(res, idx + 1) }
+    end
+
+    # Convert the results into table row structure.
+    #
+    # @param [ Result ] res The result to convert into a row.
+    # @param [ Int ]    idx The index of the row to render.
+    #
+    # @return [ Array ]
+    def row(res, idx)
+      [
+        "#{idx}.",
+        res.planet.id,
+        res.planet.type,
+        res.planet.connection,
+        res.planet.name,
+        colorize_text(adjust(res), res.success)
+      ]
     end
   end
 end

@@ -22,18 +22,18 @@
 
 module SKI
   # Save the output under /results/<job> for iss
-  class WebPresenter < BasicObject
+  class WebPresenter < BasePresenter
     # Absolute path to $ORBIT_HOME/reports
     REPORTS_DIR = File.join(ENV['ORBIT_HOME'].to_s, 'reports').freeze
 
     # Initialize a new presenter object.
     #
-    # @param [ Boolean ] job  The name of the job.
-    # @param [ String ]  cols The name of the columns.
+    # @param [ Hash ]   spec The parsed command line arguments.
+    # @param [ String ] cols The name of the columns.
     #
     # @return [ Void ]
-    def initialize(job, cols)
-      @job  = job
+    def initialize(spec, cols)
+      super(spec)
       @ts   = Time.now.to_i
       @cols = columns(cols || 'OUTPUT')
     end
@@ -88,7 +88,7 @@ module SKI
     #
     # @return [ String ] The report sub folder
     def make_report_file_dir
-      rep_dir = File.join(REPORTS_DIR, @job)
+      rep_dir = File.join(REPORTS_DIR, @spec[:job])
 
       [REPORTS_DIR, rep_dir].each { |dir| Dir.mkdir(dir) unless Dir.exist? dir }
 

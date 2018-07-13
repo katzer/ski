@@ -135,11 +135,11 @@ module SKI
     def presenter
       @presenter ||= begin
         if @spec[:job]
-          WebPresenter.new(@spec[:job], formatter&.columns)
+          WebPresenter.new(@spec, formatter&.columns)
         elsif @spec[:pretty]
-          TablePresenter.new(@spec[:'no-color'])
+          TablePresenter.new(@spec)
         else
-          PlainPresenter.new(@spec[:'no-color'])
+          PlainPresenter.new(@spec)
         end
       end
     end

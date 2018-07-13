@@ -25,12 +25,11 @@ module SKI
   class BasePresenter < BasicObject
     # Initialize a new presenter object.
     #
-    # @param [ Boolean ] no_color false to print errors without red color.
-    #                             Defaults to: true
+    # @param [ Hash ] spec The parsed command line arguments.
     #
     # @return [ Void ]
-    def initialize(no_color = false)
-      @no_color = no_color
+    def initialize(spec)
+      @spec = spec
     end
 
     protected
@@ -51,8 +50,18 @@ module SKI
     #
     # @return [ String ]
     def colorize_text(text, no_error = true)
-      return text if text.nil? || @no_color || no_error
+      return text if text.nil? || @spec[:'no-color'] || no_error
       text.split("\n").map! { |s| s.set_color(:red) }.join("\n")
+    end
+
+    # Adjust the width of the result task output.
+    #
+    # @param [ SKI::Result ] result The task result to adjust.
+    #
+    # @return [ String ]
+    def adjust(result)
+      return result.output if @spec[:width] == 0
+      result.output.scan(/.{1,#{@spec[:width]}}/).join("\n")
     end
   end
 end

@@ -25,6 +25,7 @@
   opts.add :script,     :string
   opts.add :job,        :string
   opts.add :template,   :string
+  opts.add :width,      :int, 0
   opts.add :pretty,     :bool, false
   opts.add :'no-color', :bool, false
 end
@@ -41,6 +42,7 @@ Options:
 -t, --template  Template to be used to transform the output
 -j, --job       Execute job specified in file
 -p, --pretty    Pretty print output as a table
+-w, --width     Width of output column in characters
 --no-color      Print errors without colors
 -h, --help      This help text
 -v, --version   Show version number

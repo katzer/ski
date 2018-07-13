@@ -104,10 +104,19 @@ end
 assert('no color [--no-color]') do
   skip if ENV['OS'] == 'Windows_NT'
 
-  output, status = Open3.capture2(BIN, '--no-color', '-p', '-c', 'echo test', 'server')
+  output, status = Open3.capture2(BIN, '--no-color', '--pretty', '-c', 'echo test', 'server')
 
   assert_true status.success?, 'Process did not exit cleanly'
   assert_include output, "| ArgumentError: 'initialize' |\n"
+end
+
+assert('width [-w]') do
+  skip if ENV['OS'] == 'Windows_NT'
+
+  output, status = Open3.capture2(BIN, '-p', '-w', '6', '-c', '123', 'server')
+
+  assert_true status.success?, 'Process did not exit cleanly'
+  assert_include output, '| NR. | ID          | TYPE   | CONNECTION                  | NAME   | OUTPUT |'
 end
 
 assert('no matcher') do
