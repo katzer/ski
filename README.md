@@ -1,174 +1,165 @@
-# ski [![Build Status](https://travis-ci.org/appPlant/ski.svg?branch=master)](https://travis-ci.org/appPlant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![codebeat badge](https://codebeat.co/badges/b0a926f1-d7bf-4ee1-9bc8-4cb1e087d347)](https://codebeat.co/projects/github-com-appplant-ski)
+# ski [![Build Status](https://travis-ci.org/appPlant/ski.svg?branch=master)](https://travis-ci.org/appPlant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/appPlant/ski/maintainability)
 
 Execute commands or collect informations on multiple servers in parallel.
 
     $ ski -h
-    usage: ski [options...] -c="<command>" <planets>... 
+
+    usage: ski [options...] matchers...
     Options:
-    -s="<scriptname>"   	Execute script and return result
-    -c="<command>"  	    Execute script and return result
-    -t=<"templatename>" 	Templatefile to be applied 
-    -p    			        Pretty print output as a table
-    -l    			        Load bash profiles on Server
-    -t    			        Show type of planet
-    -h    			        Display this help text
-    -v    			        Show version number
-    -d			            Show extended debug informations
+    -c, --command   Execute command and return result
+    -s, --script    Execute script and return result
+    -t, --template  Template to be used to transform the output
+    -j, --job       Execute job specified in file
+    -p, --pretty    Pretty print output as a table
+    -w, --width     Width of output column in characters
+    --no-color      Print errors without colors
+    -h, --help      This help text
+    -v, --version   Show version number
 
 
 ## Prerequisites
-Create an enviroment variable called `ORBIT_HOME` and set it to the absolute path of the ski folder-structure. 
 
-Example: You save the release at `/home/youruser/workspace/ski`. Your `ORBIT_HOME` should be `/home/youruser/workspace/ski`as well
+You'll need to add `ORBIT_HOME`, `ORBIT_KEY` and `ORBIT_BIN` first to your profile:
 
-Either create an enviroment variable called `ORBIT_KEY` containing an absolute path to the ssh private key that should be used for executing commands on the planets or save said key at `ski/config/ssh/`.
-
-You'll need the following installed and in your `PATH`:
-- [fifa][ff]
+    $ export ORBIT_HOME=/path/to/orbit
 
 ## Installation
 
 Download the latest version from the [release page][releases] and add the executable to your `PATH`.
 
+## Usage
+
+Execute shell commands:
+
+    $ ski -c 'echo Greetings from $PACKAGE_NAME' mars pluto
+
+    Greetings from Mars
+    Greetings from Pluto
+
+Execute shell scripts:
+
+    $ ski -s greet.sh mars pluto
+
+Execute SQL commands:
+
+    $ ski -c 'SELECT * FROM DUAL' db
+
+    D
+    -
+    X
+
+Execute SQL scripts:
+
+    $ ski -s dummy.sql db
+
+Pretty table output:
+
+    $ ski -p -c env localhost
+
+    +-----+-----------+--------+----------------+------+--------------------------------------------------------+
+    |                                          ski -p -c env localhost                                          |
+    +-----+-----------+--------+----------------+------+--------------------------------------------------------+
+    | NR. | ID        | TYPE   | CONNECTION     | NAME | OUTPUT                                                 |
+    +-----+-----------+--------+----------------+------+--------------------------------------------------------+
+    |  1. | localhost | server | root@localhost | Host | SSH_CONNECTION=127.0.0.1 49154 127.0.0.1 22            |
+    |     |           |        |                |      | USER=root                                              |
+    |     |           |        |                |      | PWD=/root                                              |
+    |     |           |        |                |      | HOME=/root                                             |
+    |     |           |        |                |      | SSH_CLIENT=127.0.0.1 49154 22                          |
+    |     |           |        |                |      | MAIL=/var/mail/root                                    |
+    |     |           |        |                |      | SHELL=/bin/bash                                        |
+    |     |           |        |                |      | SHLVL=1                                                |
+    |     |           |        |                |      | LOGNAME=root                                           |
+    |     |           |        |                |      | PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin |
+    |     |           |        |                |      | _=/usr/bin/env                                         |
+    +-----+-----------+--------+----------------+------+--------------------------------------------------------+
+
+### Templates
+
+Execute a shell or SQL command or script and convert the output based on a [TextFSM][textfsm] template.
+
+    $ ski -s vparams.sql -t vparams db
+
+The SQL script could look like this:
+
+```sql
+SET PAGESIZE 0
+SET NEWPAGE 0
+SET SPACE 0
+SET LINESIZE 18000
+SET WRAP OFF
+SET FEEDBACK OFF
+SET ECHO OFF
+SET VERIFY OFF
+SET HEADING OFF
+SET TAB OFF
+SET COLSEP ' , '
+
+SELECT NUM, NAME, VALUE FROM V$PARAMETER WHERE NUM IN (526, 530);
+```
+
+The template file could look like this:
+
+    $ cat $ORBIT_HOME/templates/vparams.textfsm
+
+    Value Num (\d+)
+    Value Name (\S*)
+    Value Value (\S*)
+
+    Start
+      ^ *${Num}[ |,]*${Name}[ |,]*${Value} -> Record
+
+### Jobs
+
+Bundle command-line arguments to a job to save the report output.
+
+    $ ski -j vparams
+
+The job file could look like this:
+
+    $ cat $ORBIT_HOME/jobs/vparams.skijob
+
+    -s vparam.sql -t vparam db
+
+The report result could look like this:
+
+    $ cat $ORBIT_HOME/reports/vparams/1531410936.skirep
+
+    1531410936
+    [["Num", "int"], ["Name", "string"], ["Value", "string"]]
+    ["db","Operativ DB",true,["526", "optimizer_adaptive_plans", "FALSE"]]
+    ["db","Operativ DB",true,["530", "optimizer_adaptive_statistics", "FALSE"]]
+
 ## Development
 
 Clone the repo:
-    
-    $ git clone https://github.com/appPlant/ski.git && cd ski/
+
+    $ git clone https://github.com/appplant/ski.git && cd ski/
 
 And then execute:
 
-```bash
-$ scripts/compile # https://docs.docker.com/engine/installation
-```
+    $ rake compile
+
+To compile the sources locally for the host machine only:
+
+    $ MRUBY_CLI_LOCAL=1 rake compile
 
 You'll be able to find the binaries in the following directories:
 
-- Linux (64-bit, for old distros): `build/x86_64-pc-linux-gnu-glibc-2.12/bin/ski`
-- Linux (32-bit, for old distros): `build/i686-pc-linux-gnu-glibc-2.12/bin/ski`
-- Linux (64-bit GNU): `build/x86_64-pc-linux-gnu-glibc-2.14/bin/ski`
-- Linux (32-bit GNU): `build/i686-pc-linux-gnu-glibc-2.14/bin/ski`
-- Linux (64-bit Musl): `build/x86_64-alpine-linux-musl/bin/ski`
-- OS X (64-bit): `build/x86_64-apple-darwin15/bin/ski`
-- OS X (32-bit): `build/i386-apple-darwin15/bin/ski`
-- Windows (64-bit): `build/x86_64-w64-mingw32/bin/ski`
-- Windows (32-bit): `build/i686-w64-mingw32/bin/ski`
+- Linux (64-bit Musl): `mruby/build/x86_64-alpine-linux-musl/bin/ski`
+- Linux (64-bit GNU): `mruby/build/x86_64-pc-linux-gnu/bin/ski`
+- Linux (64-bit, for old distros): `mruby/build/x86_64-pc-linux-gnu-glibc-2.12/bin/ski`
+- OS X (64-bit): `mruby/build/x86_64-apple-darwin15/bin/ski`
+- Windows (64-bit): `mruby/build/x86_64-w64-mingw32/bin/ski`
+- Host: `mruby/build/host2/bin/ski`
 
-## Basic Usage
+For the complete list of build tasks:
 
-Execute commands or collect informations on multiple servers in parallel.
-
-    $ ski -h
-    usage: ski [options...] -c="<command>" <planets>... 
-    Options:
-    -s="<scriptname>"   	        Execute script and return result
-    -c="<command>"  	        Execute script and return result
-    -t=<"templatename>" 	        Templatefile to be applied 
-    -p    			        Pretty print output as a table
-    -l    			        Load bash profiles on Server
-    -h    			        Display this help text
-    -v    			        Show version number
-    -d			            Show extended debug informations
-
-#### Command execution - Linux server
-Use ski to execute commands on linux server planets:
-```
-$ ski -c="echo hi" app-package-1
-hi
-```
-
-#### Command execution - Database
-Use ski to execute commands on database planets:
-```
-$ ski -c="SELECT * FROM DUAL;" ora-db
-D
--
-X
-```
-#### Script execution - Linux server
-Use ski to execute bash scripts on linux server planets:
-```
-$ ski -s="echo-script.sh" app-package-1
-hi
-```
-
-#### Script execution - Database
-Use ski to execute sql srcipts on database planets:
-```
-$ ski -s="select.sql" ora-db
-D
--
-X
-```
-
-#### Prettyprinting script and command execution
-Set the pretty flag to display the planet output from any script or command execution in a neat, readable manner:
-```
-$ ski -c="echo hi" -p app
-+-----+-----+---------------+-------------------+--------+---------------------------------------+
-| NR  | ID  |     NAME      |      ADDRESS      |  TYPE  |                OUTPUT                 |
-+-----+-----+---------------+-------------------+--------+---------------------------------------+
-|   0 | app | App-Package 1 | user@localhost    | server |                  hi                   |
-+-----+-----+---------------+-------------------+--------+---------------------------------------+
-```
-
-#### Output conversion to JSON - template
-Provide a [TextFSM](https://github.com/google/textfsm/wiki/TextFSM) template to convert the output of a planet to json:
-```
-$ ski -s="showver.sh" -t="showver" app
-
-[
-["showver_version", "Section", "Suse", "UnixVersion", "UnixPatch", "Key", "Value", "Key2", "Value2", "Os", "OracleDb"],
-["2.1", "", "", "", "", "", "", "", "", "", ""],
-["", "binaries", "", "", "", "", "", "", "", "", ""],
-...
-]
-```
-
-#### Prettyprinting output converted to JSON
-Set the pretty flag to display the planet output from any [TextFSM](https://github.com/google/textfsm/wiki/TextFSM) template converted execution in a neat, readable manner:
-```
-$ ski -s="showver.sh" -t="showver" -p app
-
-| showver_version | Section  | gateway                                   |
-|-----------------|----------|-------------------------------------------|
-| 2.1             | binaries | 4.6.1.1 (build time Oct 21 2015 10:35:11) |
-```
-#### Jobs
-Provide a JSON jobfile to persistently save a configuration to run ski with. Any flag not set in this jobfile will be considered not provided. This way complicated ski execution settings can be stored and called with providing but one parameter to ski.
-The output from this job will be stored in an automatically created folder called `job_output`
-
-Usage: 
-```
-$ ski -j="showver.json" app
-```
-
-```
-showver.json:
-
-{
-  "pretty"     : true,
-  "scriptName" : "showver.sh",
-  "template"   : "showver",
-  "planets"    : [ "app-1", "app-2", "app-3", "app-5" ]
-}
-```
-
-## Releases
-
-    $ scripts/release
-
-Affer this command finishes, you'll see the /releases for each target in the releases directory.
-
-## Tests
-
-To run all integration tests:
-
-    $ scripts/bintest
+    $ rake -T
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/appPlant/ski.
+Bug reports and pull requests are welcome on GitHub at https://github.com/appplant/ski.
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -176,17 +167,15 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/appPla
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-
 ## License
 
 The code is available as open source under the terms of the [Apache 2.0 License][license].
 
 Made with :yum: from Leipzig
 
-© 2016 [appPlant GmbH][appplant]
+© 2018 [appPlant GmbH][appplant]
 
-[ff]: https://github.com/appPlant/ff/releases
-[releases]: https://github.com/appPlant/ski/releases
-[docker]: https://docs.docker.com/engine/installation
+[releases]: https://github.com/appplant/ski/releases
+[textfsm]: https://github.com/google/textfsm/wiki/TextFSM
 [license]: http://opensource.org/licenses/Apache-2.0
 [appplant]: www.appplant.de
