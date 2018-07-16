@@ -10,9 +10,9 @@ Execute commands or collect informations on multiple servers in parallel.
     -s, --script    Execute script and return result
     -t, --template  Template to be used to transform the output
     -j, --job       Execute job specified in file
+    -n, --no-color  Print errors without colors
     -p, --pretty    Pretty print output as a table
     -w, --width     Width of output column in characters
-    --no-color      Print errors without colors
     -h, --help      This help text
     -v, --version   Show version number
 
