@@ -64,10 +64,9 @@ module SKI
     def sql(planet, ssh, cmd)
       channel = ssh.open_channel
       io, ok  = channel.popen2e(cmd)
+      out     = io.<<(command).gets(nil)
 
-      io.write(command)
-
-      result(planet, io.gets(nil), ok && channel.close(true) == 0)
+      result(planet, out, ok && channel.close == 0 && out !~ /^(ORA|SP2)-/)
     end
   end
 end
