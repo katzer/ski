@@ -41,15 +41,20 @@ module SKI
     #
     # @return [ Array<SKI::Result> ]
     def format(results)
-      results.each { |res| update_output_by_template(res) if res.success }
-      results
+      results.each_with_object([]) do |r, list|
+        list << r && next unless r.success
+
+        outputs, suc = template_output(r)
+
+        list.concat(outputs.map! { |o| Result.new(r.planet, o, suc) })
+      end
     end
 
     # The columns for the template.
     #
-    # @return [ String ]
+    # @return [ Array<String> ]
     def columns
-      skifsm('--columns').chomp!
+      (cols = skifsm('--columns')).chomp!&.split || cols
     end
 
     # Update output for each result through parsed textfsm template.
@@ -57,9 +62,13 @@ module SKI
     # @param [ SKI::Result ] res The result to update.
     #
     # @return [ SKI::Result ]
-    def update_output_by_template(res)
-      res.output  = skifsm("<<EOF\n#{res.output}\nEOF")
-      res.success = $? == 0
+    def template_output(res)
+      output = skifsm("<<EOF\n#{res.output}\nEOF")
+
+      output.sub!(/^\n*/, '')
+      output.chomp!
+
+      [output.split("\n"), $? == 0]
     end
 
     # Invoke the skifsm.pyc script with the given additional arguments.

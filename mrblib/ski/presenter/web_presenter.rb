@@ -35,7 +35,7 @@ module SKI
     def initialize(spec, cols)
       super(spec)
       @ts   = Time.now.to_i
-      @cols = columns(cols || 'OUTPUT')
+      @cols = columns(cols || ['OUTPUT'])
     end
 
     # Format and print the results to $ORBIT_HOME/reports.
@@ -44,18 +44,33 @@ module SKI
     #
     # @return [ Void ]
     def present(results)
-      open_report_file do |f|
-        f.write "#{@ts}\n#{@cols}"
-
-        results.each do |r, p = r.planet|
-          r.output.split("\n").each do |o|
-            f.write %(\n["#{p.id}","#{p.name}",#{r.success},#{o}])
-          end
-        end
+      File.open("#{make_report_file_dir}/#{@ts}.skirep", 'w+') do |f|
+        f.write render_timestamp_and_columns
+        results.each { |res| f.write render_result(res) }
+        STDOUT.puts("Written report to: #{f.path}")
       end
     end
 
     private
+
+    # Render the  header of each report file.
+    #
+    # @return [ String ]
+    def render_timestamp_and_columns
+      "#{@ts}\n#{@cols}"
+    end
+
+    # Render result into a string that can be written to the IO pipe.
+    #
+    # @param [ SKI::Result ] res The result to render.
+    #
+    # @return [ String ]
+    def render_result(res)
+      planet = res.planet
+      output = res.output.gsub!("\n", '\n') || res.output
+
+      %(\n["#{planet.id}","#{planet.name}",#{res.success},#{output}])
+    end
 
     # Convert the columns into tuples of name and type.
     #
@@ -63,7 +78,7 @@ module SKI
     #
     # @return [ String ]
     def columns(cols)
-      cols.split.map! do |name|
+      cols.map! do |name|
         case name[-2, 2]
         when '_s' then [name[0...-2], 'string']
         when '_i' then [name[0...-2], 'int']
@@ -71,17 +86,6 @@ module SKI
         else           [name,         'string']
         end
       end.inspect
-    end
-
-    # Open the file and pass to the code block to invoke.
-    #
-    # @param [ Proc ] &block The code block to call for.
-    #
-    # @return [ Void ]
-    def open_report_file
-      File.open("#{make_report_file_dir}/#{@ts}.skirep", 'w+') do |f|
-        yield(f) && STDOUT.puts("Written report to: #{f.path}")
-      end
     end
 
     # Create all parent directories within $ORBIT_HOME
