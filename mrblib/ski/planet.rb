@@ -53,7 +53,7 @@ module SKI
     #
     # @return [ String ]
     def db
-      @connection.split(':')[0] if valid? && type == 'db'
+      @connection.split(':')[0] if valid? && db?
     end
 
     # The name of the SSH user.
@@ -68,7 +68,7 @@ module SKI
     # @return [ Array<String> ]
     def user_and_host
       user, host = @connection.split('@') if valid?
-      user       = user.split(':')[-1]    if user && type == 'db'
+      user       = user.split(':')[-1]    if user && db?
 
       [user, host]
     end
@@ -90,6 +90,13 @@ module SKI
 
     private
 
+    # Test if the planet is from type 'db'.
+    #
+    # @return [ Boolean ]
+    def db?
+      type == 'db'
+    end
+
     # Internal helper method that determines the right task class based on what
     # fifa responded and if the planet type and script extension match.
     #
@@ -101,8 +108,7 @@ module SKI
 
       file = spec[:script]
 
-      return :invalid if (file && type == 'db'     && file !~ /\.sql$/) \
-                      || (file && type == 'server' && file !~ /\.sh$/)
+      return :invalid if file && ((db? && file !~ /\.sql$/) || (!db? && file !~ /\.sh$/))
 
       type
     end
