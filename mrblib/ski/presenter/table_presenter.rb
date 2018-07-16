@@ -23,10 +23,21 @@
 module SKI
   # Print the output to STDOUT as a table
   class TablePresenter < BasePresenter
-    # The default table columns
-    COLUMNS = %w[NR. ID TYPE CONNECTION NAME OUTPUT].freeze
-    # The default table style
+    # The default columns
+    COLUMNS = %w[NR. ID NAME].freeze
+    # The table style
     STYLE   = { all_separators: true }.freeze
+
+    # Initialize a new presenter object.
+    #
+    # @param [ Hash ]   spec The parsed command line arguments.
+    # @param [ String ] cols The name of the columns.
+    #
+    # @return [ Void ]
+    def initialize(spec, cols = nil)
+      super(spec)
+      @columns = cols ? cols.map! { |c| c.sub(/_.?$/, '').upcase } : ['OUTPUT']
+    end
 
     # Format and print the results to STDOUT.
     #
@@ -47,7 +58,7 @@ module SKI
     def table(results)
       Terminal::Table.new do |t|
         t.title    = ARGV.join(' ').sub(/^(.*?)(?=ski)/, '')
-        t.headings = COLUMNS
+        t.headings = COLUMNS + @columns
         t.style    = STYLE
         t.rows     = rows(results)
         t.align_column 0, :right
@@ -70,14 +81,21 @@ module SKI
     #
     # @return [ Array ]
     def row(res, idx)
-      [
-        "#{idx}.",
-        res.planet.id,
-        res.planet.type,
-        res.planet.connection,
-        res.planet.name,
-        colorize_text(adjust(res), res.success)
-      ]
+      ["#{idx}.", res.planet.id, res.planet.name].concat(cells(res))
+    end
+
+    # Convert the results into row structure with only optional cells.
+    #
+    # @param [ Result ] res The result to convert into a row.
+    #
+    # @return [ Array ]
+    def cells(res)
+      return [colorize_text(adjust(res))] unless @spec[:template]
+
+      cells = res.output[2..-3].split('", "')
+      cells.map! { |c| colorize_text(c, res.success) } unless res.success
+
+      @columns.zip(cells).map! { |c| c[1] || '' }
     end
   end
 end

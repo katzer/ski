@@ -133,15 +133,13 @@ module SKI
     #
     # @return [ SKI::BasePresenter ]
     def presenter
-      @presenter ||= begin
-        if @spec[:job]
-          WebPresenter.new(@spec, formatter&.columns)
-        elsif @spec[:pretty]
-          TablePresenter.new(@spec)
-        else
-          PlainPresenter.new(@spec)
-        end
-      end
+      @presenter ||= if @spec[:job]
+                       WebPresenter.new(@spec, formatter&.columns)
+                     elsif @spec[:pretty]
+                       TablePresenter.new(@spec, formatter&.columns)
+                     else
+                       PlainPresenter.new(@spec)
+                     end
     end
 
     # Format the results and send them to the presenter.
@@ -150,9 +148,8 @@ module SKI
     #
     # @return [ Void ]
     def present(results)
-      formatter&.format(results)
-      presenter.present(results)
-      nil
+      results = formatter.format(results) if formatter
+      presenter.present(results) && nil
     end
   end
 end

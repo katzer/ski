@@ -97,7 +97,7 @@ assert('pretty [-p]') do
   output, status = Open3.capture2(BIN, '-p', '-c', 'echo test', 'server')
 
   assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, '| NR. | ID          | TYPE   | CONNECTION                  | NAME   | OUTPUT                      |'
+  assert_include output, '| NR. | ID          | NAME   | OUTPUT                      |'
   assert_include output, "| test                        |\n"
 end
 
@@ -116,7 +116,7 @@ assert('width [-w]') do
   output, status = Open3.capture2(BIN, '-p', '-w', '6', '-c', '123', 'server')
 
   assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, '| NR. | ID          | TYPE   | CONNECTION                  | NAME   | OUTPUT |'
+  assert_include output, '| NR. | ID          | NAME   | OUTPUT |'
 end
 
 assert('no matcher') do
