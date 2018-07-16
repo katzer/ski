@@ -110,6 +110,19 @@ module SKI
       logger.error "#{usr}@#{host} #{ssh&.last_error} #{ssh&.last_errno} #{msg}"
     end
 
+    # Establish a SSH connection to the host and make sure that the timeout is
+    # only used for the connect period.
+    #
+    # @param [ String ] user The remote user.
+    # @param [ String ] host The remote host.
+    #
+    # @return [ SSH::Session ]
+    def __connect__(user, host)
+      ssh = SSH.start(host, user, SSH_CONFIG.dup)
+      ssh.timeout = 0
+      ssh
+    end
+
     # Start an SSH session.
     #
     # @param [ SKI::Planet ] planet The planet where to connect to.
@@ -117,7 +130,7 @@ module SKI
     # @return [ Void ]
     def connect(planet)
       user, host = planet.user_and_host
-      ssh        = SSH.start(host, user, SSH_CONFIG.dup)
+      ssh        = __connect__(user, host)
       res        = yield(ssh, planet)
       log_error(user, host, ssh) if ssh.last_error
       res
