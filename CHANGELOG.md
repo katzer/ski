@@ -1,11 +1,127 @@
 # Release Notes: _ski_
 
+### 1.4.6 (not yet released)
 
+__Note:__ Tool has been fully reworked.
 
+    $ ski -h
 
+    usage: ski [options...] matchers...
+    Options:
+    -c, --command   Execute command and return result
+    -s, --script    Execute script and return result
+    -t, --template  Template to be used to transform the output
+    -j, --job       Execute job specified in file
+    -n, --no-color  Print errors without colors
+    -p, --pretty    Pretty print output as a table
+    -w, --width     Width of output column in characters
+    -h, --help      This help text
+    -v, --version   Show version number
 
-# 0.9.2 (not yet released)
+#### Commands
 
+Execute shell commands:
+
+    $ ski -c 'echo Greetings from $PACKAGE_NAME' mars pluto
+
+    Greetings from Mars
+    Greetings from Pluto
+
+Execute shell scripts:
+
+    $ ski -s greet.sh mars pluto
+
+Execute SQL commands:
+
+    $ ski -c 'SELECT * FROM DUAL' db
+
+    D
+    -
+    X
+
+Execute SQL scripts:
+
+    $ ski -s dummy.sql db
+
+Pretty table output:
+
+    $ ski -p -c env localhost
+
+    +-----+-----------+--------+----------------+------+--------------------------------------------------------+
+    |                                          ski -p -c env localhost                                          |
+    +-----+-----------+--------+----------------+------+--------------------------------------------------------+
+    | NR. | ID        | TYPE   | CONNECTION     | NAME | OUTPUT                                                 |
+    +-----+-----------+--------+----------------+------+--------------------------------------------------------+
+    |  1. | localhost | server | root@localhost | Host | SSH_CONNECTION=127.0.0.1 49154 127.0.0.1 22            |
+    |     |           |        |                |      | USER=root                                              |
+    |     |           |        |                |      | PWD=/root                                              |
+    |     |           |        |                |      | HOME=/root                                             |
+    |     |           |        |                |      | SSH_CLIENT=127.0.0.1 49154 22                          |
+    |     |           |        |                |      | MAIL=/var/mail/root                                    |
+    |     |           |        |                |      | SHELL=/bin/bash                                        |
+    |     |           |        |                |      | SHLVL=1                                                |
+    |     |           |        |                |      | LOGNAME=root                                           |
+    |     |           |        |                |      | PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin |
+    |     |           |        |                |      | _=/usr/bin/env                                         |
+    +-----+-----------+--------+----------------+------+--------------------------------------------------------+
+
+#### Templates
+
+Execute a shell or SQL command or script and convert the output based on a [TextFSM][textfsm] template.
+
+    $ ski -s vparams.sql -t vparams db
+
+The SQL script could look like this:
+
+```sql
+SET PAGESIZE 0
+SET NEWPAGE 0
+SET SPACE 0
+SET LINESIZE 18000
+SET WRAP OFF
+SET FEEDBACK OFF
+SET ECHO OFF
+SET VERIFY OFF
+SET HEADING OFF
+SET TAB OFF
+SET COLSEP ' , '
+
+SELECT NUM, NAME, VALUE FROM V$PARAMETER WHERE NUM IN (526, 530);
+```
+
+The template file could look like this:
+
+    $ cat $ORBIT_HOME/templates/vparams.textfsm
+
+    Value Num (\d+)
+    Value Name (\S*)
+    Value Value (\S*)
+
+    Start
+      ^ *${Num}[ |,]*${Name}[ |,]*${Value} -> Record
+
+#### Jobs
+
+Bundle command-line arguments to a job to save the report output.
+
+    $ ski -j vparams
+
+The job file could look like this:
+
+    $ cat $ORBIT_HOME/jobs/vparams.skijob
+
+    -s vparam.sql -t vparam db
+
+The report result could look like this:
+
+    $ cat $ORBIT_HOME/reports/vparams/1531410936.skirep
+
+    1531410936
+    [["Num", "int"], ["Name", "string"], ["Value", "string"]]
+    ["db","Operativ DB",true,["526", "optimizer_adaptive_plans", "FALSE"]]
+    ["db","Operativ DB",true,["530", "optimizer_adaptive_statistics", "FALSE"]]
+
+### 1.4.4 (30.11.2017)
 
 ### Now supports jobs
 
@@ -126,7 +242,7 @@ Ski now colorizes occuring errors in ugly-mode and the whole row of an errored p
 
 
 
-## 0.9.1 (15.02.2017)
+### 0.9.1 (15.02.2017)
 
 1. Renamed the tool to ski (<b>S</b>ascha <b>K</b>nows <b>I</b>t).
 
@@ -183,7 +299,7 @@ Ski now colorizes occuring errors in ugly-mode and the whole row of an errored p
    ```
 
 
-## 0.9.0 (12.12.2016)
+### 0.9.0 (12.12.2016)
 
 1. Execute command/script/sql on multiple planets at same time:
 
