@@ -39,9 +39,9 @@ module SKI
     # @return [ Void ]
     def exec
       if @spec[:pretty] || @spec[:job]
-        present(async { |opts| SKI::Planet.new(*opts).exec(@spec) })
+        present(async { |opts| SKI::Planet.new(opts).exec(@spec) })
       else
-        async { |opts| present([SKI::Planet.new(*opts).exec(@spec)]) }
+        async { |opts| present([SKI::Planet.new(opts).exec(@spec)]) }
       end
     end
 
@@ -110,7 +110,7 @@ module SKI
 
       raise "#{cmd} failed with exit code #{$?}" unless $? == 0
 
-      out.split("\n").map! { |line| line.split('|') }
+      out.split("\n")
     end
 
     # Helper to construct absolute path.

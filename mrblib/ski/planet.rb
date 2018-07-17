@@ -25,19 +25,12 @@ module SKI
   class Planet < BasicObject
     # Initialize a wrapper for a planet instance.
     #
-    # @param [ String ] suc        '0' if the connection contains an error.
-    # @param [ String ] id         The ID of the planet.
-    # @param [ String ] type       The type of the planet.
-    # @param [ String ] name       The name of the planet.
-    # @param [ String ] connection The connection string.
+    # @param [ String ] res The string returned by "fifa -f ski ..."
     #
     # @return [ Void ]
-    def initialize(suc, id, type, name, connection)
-      @suc        = suc == '1'
-      @id         = id
-      @type       = type
-      @name       = name
-      @connection = connection
+    def initialize(res)
+      @suc, @id, @type, @name, @connection = res.split('|')
+      @suc                                 = @suc == '1'
     end
 
     attr_reader :id, :type, :name, :connection
@@ -108,7 +101,8 @@ module SKI
 
       file = spec[:script]
 
-      return :invalid if file && ((db? && file !~ /\.sql$/) || (!db? && file !~ /\.sh$/))
+      return :invalid if file && ((db? && file !~ /\.sql$/) || \
+                                 (!db? && file !~ /\.sh$/))
 
       type
     end
