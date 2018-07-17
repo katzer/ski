@@ -118,9 +118,11 @@ module SKI
     #
     # @return [ SSH::Session ]
     def __connect__(user, host)
-      ssh = SSH.start(host, user, SSH_CONFIG.dup)
-      ssh.timeout = 0
-      ssh
+      log "Connecting to #{user}@#{host}" do
+        ssh = SSH.start(host, user, SSH_CONFIG.dup)
+        ssh.timeout = 0
+        ssh
+      end
     end
 
     # Start an SSH session.
