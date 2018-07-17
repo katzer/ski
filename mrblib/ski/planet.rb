@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# codebeat:disable[TOO_MANY_IVARS]
+
 module SKI
   # Wrapper around the planet details that fifa returned in ski format
   class Planet < BasicObject
@@ -108,3 +110,5 @@ module SKI
     end
   end
 end
+
+# codebeat:enable[TOO_MANY_IVARS]

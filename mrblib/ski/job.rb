@@ -81,6 +81,7 @@ module SKI
       opt
     end
 
+    # codebeat:disable[ABC]
     # rubocop:disable AbcSize, CyclomaticComplexity, LineLength, PerceivedComplexity
 
     # Validate the parsed command-line arguments.
@@ -100,6 +101,7 @@ module SKI
     end
 
     # rubocop:enable AbcSize, CyclomaticComplexity, LineLength, PerceivedComplexity
+    # codebeat:enable[ABC]
 
     # Server list retrieved from fifa.
     #

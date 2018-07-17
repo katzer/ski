@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# codebeat:disable[ABC]
+
 class String
   ##
   # call-seq:
@@ -38,3 +40,5 @@ class String
     (z >= 0) ? self[a..z] : ""
   end
 end
+
+# codebeat:enable[ABC]
