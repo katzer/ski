@@ -60,7 +60,7 @@ MRuby::CrossBuild.new('x86_64-apple-darwin15') do |conf|
 
   [conf.cc, conf.linker].each do |cc|
     cc.command = 'x86_64-apple-darwin15-clang'
-    cc.flags << '-Oz'
+    cc.flags  += %w[-Oz -mmacosx-version-min=10.11 -stdlib=libstdc++]
   end
   conf.cxx.command      = 'x86_64-apple-darwin15-clang++'
   conf.archiver.command = 'x86_64-apple-darwin15-ar'
