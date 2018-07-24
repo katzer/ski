@@ -113,7 +113,7 @@ module SKI
 
       raise "#{cmd} failed with exit code #{$?}" unless $? == 0
 
-      out.split("\n")
+      out.split("\n").map!(&:chomp)
     end
 
     # Helper to construct absolute path.
