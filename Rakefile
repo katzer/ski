@@ -30,4 +30,4 @@ def docker_run(cmd, tag = 'glibc-2.14', ver = ENV['MRUBY_VERSION'])
   sh "MRUBY_CLI_TAG='#{tag}' MRUBY_VERSION=#{ver} docker-compose run #{cmd}"
 end
 
-Dir["#{__dir__}/mrblib/tasks/**/*.rake"].each { |file| load file }
+Dir["#{__dir__}/tasks/**/*.rake"].each { |file| load file }
