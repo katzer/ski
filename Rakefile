@@ -22,6 +22,9 @@
 
 require 'open3'
 
+ENV['MRUBY_CLI_LOCAL'] ||= '1'   if ENV['OS'] == 'Windows_NT'
+ENV['TOOLCHAIN']       ||= 'gcc' if ENV['OS'] == 'Windows_NT'
+
 def in_a_docker_container?
   Open3.capture2e('grep -q docker /proc/self/cgroup')[-1].success?
 end
