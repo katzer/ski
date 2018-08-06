@@ -46,14 +46,14 @@ assert('usage [-h]') do
   output, status = Open3.capture2(BIN, '-h')
 
   assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, 'usage'
+  assert_include output, 'Usage'
 end
 
 assert('usage [--help]') do
   output, status = Open3.capture2(BIN, '--help')
 
   assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, 'usage'
+  assert_include output, 'Usage'
 end
 
 assert('no $ORBIT_KEY') do

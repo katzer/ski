@@ -4,7 +4,7 @@ Execute commands or collect informations on multiple servers in parallel.
 
     $ ski -h
 
-    usage: ski [options...] matchers...
+    Usage: ski [options...] matchers...
     Options:
     -c, --command   Execute command and return result
     -s, --script    Execute script and return result
