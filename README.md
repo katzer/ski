@@ -1,4 +1,4 @@
-# ski [![Build Status](https://travis-ci.org/appPlant/ski.svg?branch=master)](https://travis-ci.org/appPlant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/appPlant/ski/maintainability)
+# ski - Sascha Knows It <br>[![GitHub release](https://img.shields.io/github/release/appplant/ski.svg)](https://github.com/appplant/ski/releases) [![Build Status](https://travis-ci.org/appplant/ski.svg?branch=master)](https://travis-ci.org/appplant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/appplant/ski/maintainability)
 
 Execute commands or collect informations on multiple servers in parallel.
 
@@ -15,7 +15,6 @@ Execute commands or collect informations on multiple servers in parallel.
     -w, --width     Width of output column in characters
     -h, --help      This help text
     -v, --version   Show version number
-
 
 ## Prerequisites
 
