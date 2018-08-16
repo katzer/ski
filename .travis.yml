@@ -26,6 +26,12 @@ sudo: false
 os:
 - linux
 
+env:
+  global:
+    - ORBIT_HOME=$TRAVIS_BUILD_DIR/bintest
+    - ORBIT_BIN=$TRAVIS_BUILD_DIR/bintest/tools
+    - ORBIT_KEY=$TRAVIS_BUILD_DIR/Rakefile
+
 matrix:
   include:
   - env: MRUBY_VERSION=1.4.1
