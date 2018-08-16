@@ -1,6 +1,6 @@
 # Release Notes: _ski_
 
-### 1.4.6 (not yet released)
+### 1.4.6 (16.08.2018)
 
 __Note:__ Tool has been fully reworked.
 
