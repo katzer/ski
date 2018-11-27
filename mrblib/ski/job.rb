@@ -108,7 +108,7 @@ module SKI
     # @return [ Array<"user@host"> ]
     def planets
       args = @spec[:tail].join('" "')
-      cmd  = %(#{ENV['ORBIT_BIN']}/fifa --no-color -f=ski "#{args}")
+      cmd  = %(#{ENV['ORBIT_BIN']}/fifa --no-color -f ski "#{args}")
       out  = `#{cmd}`
 
       raise "#{cmd} failed with exit code #{$?}" unless $? == 0
