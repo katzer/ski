@@ -1,5 +1,11 @@
 # Release Notes: _ski_
 
+### 1.4.7 (02.01.2019)
+
+1. Dropped compatibility with orbit v1.4.6 due to breaking changes in _fifa_
+
+2. Removed LVAR section for non test builds 
+
 ### 1.4.6 (16.08.2018)
 
 __Note:__ Tool has been fully reworked.
