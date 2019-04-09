@@ -1,4 +1,4 @@
-# ski - Sascha Knows It <br>[![GitHub release](https://img.shields.io/github/release/appplant/ski.svg)](https://github.com/appplant/ski/releases) [![Build Status](https://travis-ci.org/appplant/ski.svg?branch=master)](https://travis-ci.org/appplant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/appplant/ski/maintainability)
+# ski - Sascha Knows It <br>[![GitHub release](https://img.shields.io/github/release/appplant/ski.svg)](https://github.com/appplant/ski/releases) [![Build Status](https://travis-ci.com/appplant/ski.svg?branch=master)](https://travis-ci.com/appplant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/appplant/ski/maintainability)
 
 Execute commands or collect informations on multiple servers in parallel.
 
@@ -170,7 +170,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/apppla
 
 The code is available as open source under the terms of the [Apache 2.0 License][license].
 
-Made with :yum: from Leipzig
+Made with :yum: in Leipzig
 
 © 2018 [appPlant GmbH][appplant]
 
