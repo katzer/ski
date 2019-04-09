@@ -22,7 +22,7 @@
 
 desc 'environment variables'
 task :environment do
-  ENV['MRUBY_VERSION'] ||= '2.0.0'
+  ENV['MRUBY_VERSION'] ||= '2.0.1'
   ENV['MRUBY_ROOT']      = File.expand_path('mruby')
   ENV['MRUBY_CONFIG']    = File.expand_path(ENV['MRUBY_CONFIG'] || 'build_config.glibc-2.14.rb')
 end

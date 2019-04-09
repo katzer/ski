@@ -22,5 +22,5 @@
 
 unless in_a_docker_container?
   desc 'open shell'
-  task(:shell) { docker_run 'shell', 'glibc-2.14', '2.0.0' }
+  task(:shell) { docker_run 'shell', 'glibc-2.14', '2.0.1' }
 end
