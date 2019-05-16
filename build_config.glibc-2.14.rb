@@ -20,11 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-def gem_config(conf)
-  conf.cc.defines += %w[MBEDTLS_THREADING_PTHREAD MBEDTLS_THREADING_C]
-  conf.cc.defines += %w[LIBSSH2_HAVE_ZLIB HAVE_UNISTD_H]
-  conf.gem __dir__
-end
+require_relative 'gem_config'
 
 MRuby::Build.new do |conf|
   toolchain ENV.fetch('TOOLCHAIN', :clang)
@@ -34,6 +30,7 @@ MRuby::Build.new do |conf|
   conf.enable_test
 
   gem_config(conf)
+  gem_openssl_config(conf) if ENV['LIBSSH2_OPENSSL']
 end
 
 MRuby::Build.new('x86_64-pc-linux-gnu') do |conf|
@@ -44,6 +41,7 @@ MRuby::Build.new('x86_64-pc-linux-gnu') do |conf|
   end
 
   gem_config(conf)
+  gem_openssl_config(conf) if ENV['LIBSSH2_OPENSSL']
 end
 
 MRuby::CrossBuild.new('x86_64-alpine-linux-musl') do |conf|
