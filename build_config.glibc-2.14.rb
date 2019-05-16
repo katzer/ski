@@ -21,6 +21,8 @@
 # SOFTWARE.
 
 def gem_config(conf)
+  conf.cc.defines += %w[MBEDTLS_THREADING_PTHREAD MBEDTLS_THREADING_C]
+  conf.cc.defines += %w[LIBSSH2_HAVE_ZLIB HAVE_UNISTD_H]
   conf.gem __dir__
 end
 
