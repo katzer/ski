@@ -20,13 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-def gem_config(conf)
+def gem_config(conf, with_openssl: false)
   conf.cc.defines += %w[MBEDTLS_THREADING_PTHREAD MBEDTLS_THREADING_C]
   conf.cc.defines += %w[LIBSSH2_HAVE_ZLIB HAVE_UNISTD_H]
+  gem_config_for_openssl(conf) if with_openssl
   conf.gem __dir__
 end
 
-def gem_openssl_config(conf)
+def gem_config_for_openssl(conf)
   conf.cc.defines += %w[MRB_SSH_LINK_CRYPTO LIBSSH2_OPENSSL]
   conf.linker.libraries += %w[ssl crypto]
 end

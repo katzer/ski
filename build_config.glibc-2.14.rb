@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require_relative 'gem_config'
+require_relative 'build_config_helper'
 
 MRuby::Build.new do |conf|
   toolchain ENV.fetch('TOOLCHAIN', :clang)
@@ -30,7 +30,6 @@ MRuby::Build.new do |conf|
   conf.enable_test
 
   gem_config(conf)
-  gem_openssl_config(conf) if ENV['LIBSSH2_OPENSSL']
 end
 
 MRuby::Build.new('x86_64-pc-linux-gnu') do |conf|
@@ -41,7 +40,16 @@ MRuby::Build.new('x86_64-pc-linux-gnu') do |conf|
   end
 
   gem_config(conf)
-  gem_openssl_config(conf) if ENV['LIBSSH2_OPENSSL']
+end
+
+MRuby::Build.new('x86_64-pc-linux-gnu-openssl') do |conf|
+  toolchain :clang
+
+  [conf.cc, conf.cxx, conf.linker].each do |cc|
+    cc.flags << '-Oz'
+  end
+
+  gem_config(conf, with_openssl: true)
 end
 
 MRuby::CrossBuild.new('x86_64-alpine-linux-musl') do |conf|

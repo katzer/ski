@@ -68,6 +68,7 @@ deploy:
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-alpine-linux-musl.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-gnu.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-gnu-glibc-2.12.tgz"
+  - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-gnu-openssl.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-w64-mingw32.tgz"
   skip_cleanup: true
   on:
