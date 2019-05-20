@@ -46,6 +46,6 @@ task release: 'environment' do
       FileUtils.rm_rf(name)
     end
   else
-    %w[12 14].each { |v| docker_run 'release', "glibc-2.#{v}" }
+    docker_run 'release'
   end
 end

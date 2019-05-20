@@ -30,7 +30,7 @@ namespace :test do
         t.run_test if t.test_enabled?
       end
     else
-      docker_run 'mtest', 'glibc-2.12'
+      docker_run 'mtest'
     end
   end
 end

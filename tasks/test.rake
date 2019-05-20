@@ -26,6 +26,6 @@ task test: 'environment' do
     %w[deps tuneup].each { |t| Rake::Task["mruby:#{t}"].invoke }
     Dir.chdir('mruby') { Rake::Task['mruby:test'].invoke }
   else
-    docker_run 'test', 'glibc-2.12'
+    docker_run 'test'
   end
 end

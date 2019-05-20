@@ -20,7 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require_relative 'build_config_helper'
+def gem_config(conf, glibc_version: '2.19', with_openssl: false)
+  conf.cc.defines += %w[MBEDTLS_THREADING_PTHREAD MBEDTLS_THREADING_C]
+  conf.cc.defines += %w[LIBSSH2_HAVE_ZLIB HAVE_UNISTD_H]
+
+  configure_glibc(conf, glibc_version) unless conf.is_a? MRuby::CrossBuild
+  configure_openssl(conf) if with_openssl
+
+  conf.gem __dir__
+end
+
+def configure_openssl(conf)
+  conf.cc.defines += %w[MRB_SSH_LINK_CRYPTO LIBSSH2_OPENSSL]
+  conf.linker.libraries += %w[ssl crypto]
+end
+
+def configure_glibc(conf, version)
+  [conf.cc, conf.cxx].each do |cc|
+    cc.flags << "-include #{ENV['GLIBC_HEADERS']}/x64/force_link_glibc_#{version}.h"
+  end
+end
 
 MRuby::Build.new do |conf|
   toolchain ENV.fetch('TOOLCHAIN', :clang)
@@ -40,6 +59,16 @@ MRuby::Build.new('x86_64-pc-linux-gnu') do |conf|
   end
 
   gem_config(conf)
+end
+
+MRuby::Build.new('x86_64-pc-linux-gnu-glibc-2.9') do |conf|
+  toolchain :clang
+
+  [conf.cc, conf.cxx, conf.linker].each do |cc|
+    cc.flags << '-Oz'
+  end
+
+  gem_config(conf, glibc_version: '2.9')
 end
 
 MRuby::Build.new('x86_64-pc-linux-gnu-openssl') do |conf|
@@ -70,6 +99,7 @@ MRuby::CrossBuild.new('x86_64-apple-darwin15') do |conf|
     cc.command = 'x86_64-apple-darwin15-clang'
     cc.flags  += %w[-Oz -mmacosx-version-min=10.11 -stdlib=libstdc++]
   end
+
   conf.cxx.command      = 'x86_64-apple-darwin15-clang++'
   conf.archiver.command = 'x86_64-apple-darwin15-ar'
 
@@ -86,6 +116,7 @@ MRuby::CrossBuild.new('x86_64-w64-mingw32') do |conf|
     cc.command = 'x86_64-w64-mingw32-gcc'
     cc.flags += %w[-Os -DPCRE_STATIC]
   end
+
   conf.cxx.command      = 'x86_64-w64-mingw32-cpp'
   conf.archiver.command = 'x86_64-w64-mingw32-gcc-ar'
   conf.exts.executable  = '.exe'

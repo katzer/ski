@@ -27,7 +27,7 @@ namespace :test do
       %w[mruby:deps mruby:tuneup compile].each { |t| Rake::Task[t].invoke }
       Dir.chdir('mruby') { MRuby.each_target { run_bintest if bintest_enabled? } }
     else
-      docker_run 'bintest', 'glibc-2.12'
+      docker_run 'bintest'
     end
   end
 end

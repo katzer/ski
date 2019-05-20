@@ -25,6 +25,6 @@ task compile: 'environment' do
   if in_a_docker_container? || ENV['MRUBY_CLI_LOCAL']
     %w[deps tuneup all strip].each { |t| Rake::Task["mruby:#{t}"].invoke }
   else
-    %w[12 14].each { |v| docker_run 'compile', "glibc-2.#{v}" }
+    docker_run 'compile'
   end
 end

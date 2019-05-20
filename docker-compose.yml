@@ -21,13 +21,13 @@
 # SOFTWARE.
 
 compile: &defaults
-  image: appplant/mruby-cli:${MRUBY_CLI_TAG}
+  image: appplant/mruby-cli
   working_dir: /home/mruby/code
   volumes:
     - .:/home/mruby/code:rw
   environment:
     MRUBY_VERSION: ${MRUBY_VERSION}
-    MRUBY_CONFIG: build_config.${MRUBY_CLI_TAG}.rb
+    MRUBY_CONFIG: build_config.rb
     ORBIT_HOME: /home/mruby/code/bintest
     ORBIT_BIN: /home/mruby/code/bintest/tools
     ORBIT_KEY: /root/.ssh/dev.key

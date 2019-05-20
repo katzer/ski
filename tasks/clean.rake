@@ -26,7 +26,7 @@ task clean: 'environment' do
     if in_a_docker_container? || ENV['MRUBY_CLI_LOCAL']
       %w[environment clean].each { |t| Rake::Task["mruby:#{t}"].invoke }
     else
-      %w[12 14].each { |v| docker_run 'clean', "glibc-2.#{v}" }
+      docker_run 'clean'
     end
   end
 end

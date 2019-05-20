@@ -29,8 +29,8 @@ def in_a_docker_container?
   Open3.capture2e('grep -q docker /proc/self/cgroup')[-1].success?
 end
 
-def docker_run(cmd, tag = 'glibc-2.14', ver = ENV['MRUBY_VERSION'])
-  sh "MRUBY_CLI_TAG='#{tag}' MRUBY_VERSION=#{ver} docker-compose run #{cmd}"
+def docker_run(cmd, ver = ENV['MRUBY_VERSION'])
+  sh "MRUBY_VERSION=#{ver} docker-compose run #{cmd}"
 end
 
 Dir["#{__dir__}/tasks/**/*.rake"].each { |file| load file }
