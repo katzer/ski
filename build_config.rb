@@ -24,7 +24,7 @@ def gem_config(conf, glibc_version: '2.19', with_openssl: false)
   conf.cc.defines += %w[MBEDTLS_THREADING_PTHREAD MBEDTLS_THREADING_C]
   conf.cc.defines += %w[LIBSSH2_HAVE_ZLIB HAVE_UNISTD_H]
 
-  configure_glibc(conf, glibc_version) unless conf.is_a? MRuby::CrossBuild
+  configure_glibc(conf, glibc_version)
   configure_openssl(conf) if with_openssl
 
   conf.gem __dir__
@@ -35,9 +35,11 @@ def configure_openssl(conf)
   conf.linker.libraries += %w[ssl crypto]
 end
 
-def configure_glibc(conf, version)
+def configure_glibc(conf, ver)
+  return if !ENV['GLIBC_HEADERS'] || conf.is_a?(MRuby::CrossBuild)
+
   [conf.cc, conf.cxx].each do |cc|
-    cc.flags << "-include #{ENV['GLIBC_HEADERS']}/x64/force_link_glibc_#{version}.h"
+    cc.flags << "-include #{ENV['GLIBC_HEADERS']}/x64/force_link_glibc_#{ver}.h"
   end
 end
 
