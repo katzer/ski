@@ -32,7 +32,7 @@ end
 
 def configure_openssl(conf)
   conf.cc.defines += %w[MRB_SSH_LINK_CRYPTO LIBSSH2_OPENSSL]
-  conf.linker.libraries += %w[ssl crypto]
+  conf.linker.libraries << 'crypto'
 end
 
 def configure_glibc(conf, ver)
