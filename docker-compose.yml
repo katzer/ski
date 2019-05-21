@@ -31,6 +31,7 @@ compile: &defaults
     ORBIT_HOME: /home/mruby/code/bintest
     ORBIT_BIN: /home/mruby/code/bintest/tools
     ORBIT_KEY: /root/.ssh/dev.key
+    LIBSSH2_VERSION: head
   command: rake compile
 test:
   <<: *defaults
