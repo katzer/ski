@@ -32,9 +32,6 @@ end
 
 @parser.on! :help do
   <<-USAGE
-
-#{SKI::LOGO}
-
 Usage: ski [options...] matchers...
 Options:
 -c, --command   Execute command and return result
