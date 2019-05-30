@@ -28,32 +28,22 @@ BIN = File.expand_path('../mruby/bin/ski', __dir__).freeze
 NO_KEY  = ENV.to_h.merge('ORBIT_KEY' => nil).freeze
 BAD_KEY = ENV.to_h.merge('ORBIT_KEY' => 'bad file').freeze
 
-assert('version [-v]') do
-  output, status = Open3.capture2(BIN, '-v')
+%w[-v --version].each do |flag|
+  assert("version [#{flag}]") do
+    output, status = Open3.capture2(NO_KEY, BIN, flag)
 
-  assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, SKI::VERSION
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, SKI::VERSION
+  end
 end
 
-assert('version [--version]') do
-  output, status = Open3.capture2(BIN, '--version')
+%w[-h --help].each do |flag|
+  assert("usage [#{flag}]") do
+    output, status = Open3.capture2(NO_KEY, BIN, flag)
 
-  assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, SKI::VERSION
-end
-
-assert('usage [-h]') do
-  output, status = Open3.capture2(BIN, '-h')
-
-  assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, 'Usage'
-end
-
-assert('usage [--help]') do
-  output, status = Open3.capture2(BIN, '--help')
-
-  assert_true status.success?, 'Process did not exit cleanly'
-  assert_include output, 'Usage'
+    assert_true status.success?, 'Process did not exit cleanly'
+    assert_include output, 'Usage'
+  end
 end
 
 assert('no $ORBIT_KEY') do

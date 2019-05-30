@@ -25,34 +25,48 @@ module SKI
   class Job
     # Initialize a new job that coordinates the execution of the tasks.
     #
-    # @param [ Hash ] spec The parsed command line arguments.
+    # @param [ Hash<Symbol,Object> ] spec The parsed command line arguments.
     #
     # @return [ Void ]
     def initialize(spec)
-      @spec = validate convert spec
+      @spec = convert(spec)
     end
 
-    # Split the job into multiple tasks and execute them asynchron.
-    #
-    # @param [ Hash<Symbol, _> ] opts A key:value map.
+    # Execute the command specified by the opts.
     #
     # @return [ Void ]
     def exec
       if @spec[:pretty] || @spec[:job]
-        present(async { |opts| SKI::Planet.new(opts).exec(@spec) })
+        exec_and_present_aggregated
       else
-        async { |opts| present([SKI::Planet.new(opts).exec(@spec)]) }
+        exec_and_present
       end
     end
 
     private
 
-    # Devide the list of planets into slices and execute the code block
-    # for each slice within an own thread.
+    # Split the job into multiple tasks, execute them
+    # and present the result once a job is done.
+    #
+    # @return [ Void ]
+    def exec_and_present
+      validate && async { |opts| present([SKI::Planet.new(opts).exec(@spec)]) }
+    end
+
+    # Split the job into multiple tasks, execute them
+    # and present all results at once when all jobs are done.
+    #
+    # @return [ Void ]
+    def exec_and_present_aggregated
+      validate && present(async { |opts| SKI::Planet.new(opts).exec(@spec) })
+    end
+
+    # Devide the list of planets into slices and execute
+    # the code block for each slice within an own thread.
     #
     # @param [ Proc ] &block A code block to execute per slice.
     #
-    # @return [ Void ]
+    # @return [ Array<SKI::Result> ]
     def async(&block)
       servers = planets
       size    = [(servers.count / 20.0).round, 1].max
@@ -81,35 +95,53 @@ module SKI
       opt
     end
 
+    # Validate the parsed command-line arguments.
+    # Raises an error in case of something is missing or invalid.
+    #
+    # @return [ Boolean ] true if valid
+    def validate
+      validate_envs && validate_args
+    end
+
     # codebeat:disable[ABC]
     # rubocop:disable AbcSize, CyclomaticComplexity, LineLength, PerceivedComplexity
 
     # Validate the parsed command-line arguments.
     # Raises an error in case of something is missing or invalid.
     #
-    # @param [ Hash<Symbol,Object> ] opt A key:value map.
-    #
-    # @return [ Hash<Symbol,Object> ] opt
-    def validate(opt)
-      raise ArgumentError,     'Missing command or script'        unless opt[:command] || opt[:script]
-      raise ArgumentError,     'Execute with command or script'   if     opt[:command] && opt[:script]
-      raise ArgumentError,     'Missing matcher'                  unless opt[:tail].any?
-      raise File::NoFileError, "No such file - #{opt[:script]}"   if     opt[:script]   && !File.file?(opt[:script])
-      raise File::NoFileError, "No such file - #{opt[:template]}" if     opt[:template] && !File.file?(opt[:template])
+    # @return [ Boolean ] true if valid
+    def validate_args
+      raise ArgumentError,     'Missing command or script'          unless @spec[:command] || @spec[:script]
+      raise ArgumentError,     'Execute with command or script'     if     @spec[:command] && @spec[:script]
+      raise ArgumentError,     'Missing matcher'                    unless @spec[:tail].any?
+      raise File::NoFileError, "No such file - #{@spec[:script]}"   if     @spec[:script]   && !File.file?(@spec[:script])
+      raise File::NoFileError, "No such file - #{@spec[:template]}" if     @spec[:template] && !File.file?(@spec[:template])
 
-      opt
+      true
+    end
+
+    # Validate environment arguments.
+    # Raises an error in case of something is missing or invalid.
+    #
+    # @return [ Boolean ] true if valid
+    def validate_envs
+      raise KeyError,          '$ORBIT_BIN not set'   unless ENV['ORBIT_BIN']
+      raise KeyError,          '$ORBIT_KEY not set'   unless ENV['ORBIT_KEY']
+      raise File::NoFileError, '$ORBIT_KEY not found' unless File.exist? ENV['ORBIT_KEY']
+
+      true
     end
 
     # rubocop:enable AbcSize, CyclomaticComplexity, LineLength, PerceivedComplexity
     # codebeat:enable[ABC]
 
-    # Server list retrieved from fifa.
+    # Retrieve list of servers in ski format from fifa.
     #
-    # @return [ Array<"user@host"> ]
+    # @return [ Array<String> ]
     def planets
-      args = @spec[:tail].join('" "')
-      cmd  = %(#{ENV['ORBIT_BIN']}/fifa -n -f ski "#{args}")
-      out  = `#{cmd}`
+      query = @spec[:tail].join('" "')
+      cmd   = %(#{ENV['ORBIT_BIN']}/fifa -n -f ski "#{query}")
+      out   = `#{cmd}`
 
       raise "#{cmd} failed with exit code #{$?}" unless $? == 0
 
@@ -122,7 +154,9 @@ module SKI
     #
     # @return [ String ]
     def expand_path(*folders)
-      File.join(ENV['ORBIT_HOME'], *folders)
+      File.join(ENV.fetch('ORBIT_HOME'), *folders)
+    rescue KeyError
+      raise '$ORBIT_HOME not set'
     end
 
     # The formatter for the output.

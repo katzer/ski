@@ -56,14 +56,14 @@ end
 #
 # @return [ Void ]
 def __main__(args)
-  validate && SKI::Job.new(parse(args[1..-1])).exec
+  SKI::Job.new(parse(args[1..-1])).exec
 end
 
 # Parse the command-line arguments.
 #
 # @param [ Array<String> ] args The command-line arguments to parse.
 #
-# @return [ Hash<Symbol, Object> ]
+# @return [ Hash<Symbol,Object> ]
 def parse(args)
   opts = @parser.parse(args.empty? ? ['-h'] : args)
   job  = opts[:job]
@@ -78,15 +78,4 @@ def parse(args)
 
   opts[:tail] = @parser.tail
   opts
-end
-
-# Validate the environment variables.
-# Raises an error in case of something is missing or invalid.
-#
-# @return [ Void ]
-def validate
-  %w[ORBIT_HOME ORBIT_BIN ORBIT_KEY].each do |env|
-    raise "#{env} not set"   unless ENV[env]
-    raise "#{env} not found" unless File.exist? ENV[env]
-  end
 end
