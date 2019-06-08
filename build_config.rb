@@ -20,27 +20,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-def gem_config(conf, glibc_version: '2.19', with_openssl: false)
-  conf.cc.defines += %w[MBEDTLS_THREADING_PTHREAD MBEDTLS_THREADING_C]
-  conf.cc.defines += %w[LIBSSH2_HAVE_ZLIB HAVE_UNISTD_H]
+require_relative 'mrblib/mruby/build'
 
-  configure_glibc(conf, glibc_version)
-  configure_openssl(conf) if with_openssl
+def gem_config(conf, glibc_version: '2.19', with_openssl: false, link_static: false)
+  conf.glibc_version = glibc_version
+
+  conf.enable_zlib
+  conf.enable_optimizations
+  conf.enable_static if link_static
+
+  if with_openssl
+    conf.enable_openssl
+  else
+    conf.enable_mbedtls_threading
+  end
 
   conf.gem __dir__
-end
-
-def configure_openssl(conf)
-  conf.cc.defines += %w[MRB_SSH_LINK_CRYPTO LIBSSH2_OPENSSL]
-  conf.linker.libraries << 'crypto'
-end
-
-def configure_glibc(conf, ver)
-  return if !ENV['GLIBC_HEADERS'] || conf.is_a?(MRuby::CrossBuild)
-
-  [conf.cc, conf.cxx].each do |cc|
-    cc.flags << "-include #{ENV['GLIBC_HEADERS']}/x64/force_link_glibc_#{ver}.h"
-  end
 end
 
 MRuby::Build.new do |conf|
@@ -56,19 +51,11 @@ end
 MRuby::Build.new('x86_64-pc-linux-gnu') do |conf|
   toolchain :clang
 
-  [conf.cc, conf.cxx, conf.linker].each do |cc|
-    cc.flags << '-Oz'
-  end
-
   gem_config(conf)
 end
 
 MRuby::Build.new('x86_64-pc-linux-gnu-glibc-2.9') do |conf|
   toolchain :clang
-
-  [conf.cc, conf.cxx, conf.linker].each do |cc|
-    cc.flags << '-Oz'
-  end
 
   gem_config(conf, glibc_version: '2.9')
 end
@@ -76,37 +63,32 @@ end
 MRuby::Build.new('x86_64-pc-linux-gnu-openssl') do |conf|
   toolchain :clang
 
-  [conf.cc, conf.cxx, conf.linker].each do |cc|
-    cc.flags << '-Oz'
-  end
-
   gem_config(conf, with_openssl: true)
 end
 
 MRuby::CrossBuild.new('x86_64-alpine-linux-musl') do |conf|
   toolchain :gcc
 
-  [conf.cc, conf.linker].each do |cc|
+  [conf.cc, conf.cxx, conf.linker].each do |cc|
     cc.command = 'musl-gcc'
-    cc.flags << '-Os'
   end
 
   gem_config(conf)
 end
 
-MRuby::CrossBuild.new('x86_64-apple-darwin15') do |conf|
+MRuby::CrossBuild.new('x86_64-apple-darwin17') do |conf|
   toolchain :clang
 
   [conf.cc, conf.linker].each do |cc|
-    cc.command = 'x86_64-apple-darwin15-clang'
-    cc.flags  += %w[-Oz -mmacosx-version-min=10.11 -stdlib=libstdc++]
+    cc.command = 'x86_64-apple-darwin17-clang'
+    cc.flags  += %w[-mmacosx-version-min=10.13 -stdlib=libstdc++]
   end
 
-  conf.cxx.command      = 'x86_64-apple-darwin15-clang++'
-  conf.archiver.command = 'x86_64-apple-darwin15-ar'
+  conf.cxx.command      = 'x86_64-apple-darwin17-clang++'
+  conf.archiver.command = 'x86_64-apple-darwin17-ar'
 
   conf.build_target     = 'x86_64-pc-linux-gnu'
-  conf.host_target      = 'x86_64-apple-darwin15'
+  conf.host_target      = 'x86_64-apple-darwin17'
 
   gem_config(conf)
 end
@@ -116,7 +98,10 @@ MRuby::CrossBuild.new('x86_64-w64-mingw32') do |conf|
 
   [conf.cc, conf.linker].each do |cc|
     cc.command = 'x86_64-w64-mingw32-gcc'
-    cc.flags += %w[-Os -DPCRE_STATIC]
+  end
+
+  [conf.cc, conf.cxx].each do |cc|
+    cc.defines << 'PCRE_STATIC'
   end
 
   conf.cxx.command      = 'x86_64-w64-mingw32-cpp'

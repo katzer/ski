@@ -20,17 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'open3'
-
-ENV['MRUBY_CLI_LOCAL'] ||= '1'   if ENV['OS'] == 'Windows_NT'
-ENV['TOOLCHAIN']       ||= 'gcc' if ENV['OS'] == 'Windows_NT'
-
-def in_a_docker_container?
-  Open3.capture2e('grep -q docker /proc/self/cgroup')[-1].success?
+namespace :mruby do
+  desc 'strip binary'
+  task strip: 'mruby:environment' do
+    MRuby.targets.each_pair do |name, spec|
+      Dir["#{spec.build_dir}/bin/#{MRuby::Gem.current.name}*"].each do |bin|
+        if RbConfig::CONFIG['host_os'].include? 'darwin'
+          sh "strip -u -r -arch all #{bin}"
+        elsif name.include? 'darwin'
+          sh "x86_64-apple-darwin17-strip -u -r -arch all #{bin}"
+        else
+          sh "strip --strip-unneeded #{bin}"
+        end
+      end
+    end
+  end
 end
-
-def docker_run(cmd, ver = ENV['MRUBY_VERSION'])
-  sh "MRUBY_VERSION=#{ver} docker-compose run #{cmd}"
-end
-
-Dir["#{__dir__}/mrblib/tasks/**/*.rake"].each { |file| load file }

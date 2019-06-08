@@ -20,18 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-namespace :mruby do
-  desc 'strip binary'
-  task strip: 'mruby:environment' do
-    MRuby.targets.each_pair do |name, spec|
-      Dir["#{spec.build_dir}/bin/#{MRuby::Gem.current.name}*"].each do |bin|
-        if RbConfig::CONFIG['host_os'].include? 'darwin'
-          sh "strip -u -r -arch all #{bin}"
-        elsif name.include? 'darwin'
-          sh "x86_64-apple-darwin15-strip -u -r -arch all #{bin}"
-        else
-          sh "strip --strip-unneeded #{bin}"
-        end
+desc 'update all git based mrbgems'
+task updategems: 'mruby:environment' do
+  MRuby.each_target do
+    gems.each do |mgem|
+      next unless File.exist?("#{mgem.dir}/.git")
+
+      Dir.chdir(mgem.dir) do
+        sh "git pull origin #{`git symbolic-ref --short HEAD`.strip}"
       end
     end
   end

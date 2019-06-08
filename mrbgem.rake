@@ -28,6 +28,8 @@ MRuby::Gem::Specification.new('ski') do |spec|
   spec.version = SKI::VERSION
   spec.bins    = ['ski']
 
+  spec.rbfiles -= Dir.glob("#{spec.dir}/mrblib/mruby/**/*.rb")
+
   spec.add_dependency 'mruby-io',              core: 'mruby-io'
   spec.add_dependency 'mruby-exit',            core: 'mruby-exit'
   spec.add_dependency 'mruby-enum-ext',        core: 'mruby-enum-ext'

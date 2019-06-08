@@ -20,17 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+dist: xenial
+
 language: generic
 sudo: false
 
 os:
 - linux
-
-env:
-  global:
-    - ORBIT_HOME=$TRAVIS_BUILD_DIR/bintest
-    - ORBIT_BIN=$TRAVIS_BUILD_DIR/bintest/tools
-    - ORBIT_KEY=$TRAVIS_BUILD_DIR/Rakefile
 
 matrix:
   include:
@@ -64,7 +60,7 @@ deploy:
   provider: releases
   api_key: "$GITHUB_OAUTH_TOKEN"
   file:
-  - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-apple-darwin15.tgz"
+  - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-apple-darwin17.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-alpine-linux-musl.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-gnu.tgz"
   - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-gnu-glibc-2.9.tgz"
