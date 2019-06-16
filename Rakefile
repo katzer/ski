@@ -20,17 +20,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require 'open3'
-
-ENV['MRUBY_CLI_LOCAL'] ||= '1'   if ENV['OS'] == 'Windows_NT'
-ENV['TOOLCHAIN']       ||= 'gcc' if ENV['OS'] == 'Windows_NT'
-
-def in_a_docker_container?
-  Open3.capture2e('grep -q docker /proc/self/cgroup')[-1].success?
-end
-
-def docker_run(cmd, ver = ENV['MRUBY_VERSION'])
-  sh "MRUBY_VERSION=#{ver} docker-compose run #{cmd}"
-end
-
-Dir["#{__dir__}/mrblib/tasks/**/*.rake"].each { |file| load file }
+require 'mruby_utils/rake_tasks'

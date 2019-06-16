@@ -20,20 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-require_relative 'mrblib/mruby/build'
+require 'mruby_utils/build_helpers'
 
-def gem_config(conf, glibc_version: '2.19', with_openssl: false, link_static: false)
-  conf.glibc_version = glibc_version
-
-  conf.enable_zlib
+def gem_config(conf, glibc_version: '2.19', openssl: false, static: false)
   conf.enable_optimizations
-  conf.enable_static if link_static
 
-  if with_openssl
-    conf.enable_openssl
-  else
-    conf.enable_mbedtls_threading
-  end
+  conf.configure_libssh2(openssl: openssl, threading: true)
+
+  conf.glibc_version = glibc_version
+  conf.static        = static
 
   conf.gem __dir__
 end
@@ -63,7 +58,7 @@ end
 MRuby::Build.new('x86_64-pc-linux-gnu-openssl') do |conf|
   toolchain :clang
 
-  gem_config(conf, with_openssl: true)
+  gem_config(conf, openssl: true)
 end
 
 MRuby::CrossBuild.new('x86_64-alpine-linux-musl') do |conf|
