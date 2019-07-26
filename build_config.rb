@@ -22,13 +22,14 @@
 
 require 'mruby_utils/build_helpers'
 
-def gem_config(conf, glibc_version: '2.19', openssl: false, static: false)
+def gem_config(conf, glibc_version: '2.19', openssl: false)
   conf.enable_optimizations
 
-  conf.configure_libssh2(openssl: openssl, threading: true)
+  conf.configure_libssh2(
+    source: 'katzer/libssh2#feature/mbedtls-ecdsa-support',
+    openssl: openssl, threading: true)
 
   conf.glibc_version = glibc_version
-  conf.static        = static
 
   conf.gem __dir__
 end
