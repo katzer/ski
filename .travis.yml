@@ -20,10 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-dist: xenial
+dist: bionic
 
 language: generic
-sudo: false
 
 os:
 - linux
@@ -32,10 +31,8 @@ matrix:
   include:
   - env: MRUBY_VERSION=2.0.1
     services: [docker]
-    sudo: false
   - env: MRUBY_VERSION=head
     services: [docker]
-    sudo: false
   allow_failures:
   - env: MRUBY_VERSION=head
 
