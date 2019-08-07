@@ -27,7 +27,6 @@ compile: &defaults
     - .:/home/mruby/code:rw
   environment:
     MRUBY_VERSION: ${MRUBY_VERSION}
-    MRUBY_CONFIG: build_config.rb
     ORBIT_HOME: /home/mruby/code/bintest
     ORBIT_BIN: /home/mruby/code/bintest/tools
     ORBIT_KEY: /root/.ssh/dev.key
