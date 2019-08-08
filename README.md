@@ -18,7 +18,7 @@ Execute commands or collect informations on multiple servers in parallel.
 
 ## Prerequisites
 
-You'll need to add `ORBIT_HOME`, `ORBIT_KEY` and `ORBIT_BIN` first to your profile:
+You'll need to add `ORBIT_HOME`, `ORBIT_KEY` and `ORBIT_PATH` first to your profile:
 
     $ export ORBIT_HOME=/path/to/orbit
 

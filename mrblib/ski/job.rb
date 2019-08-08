@@ -125,7 +125,7 @@ module SKI
     #
     # @return [ Boolean ] true if valid
     def validate_envs
-      raise KeyError,          '$ORBIT_BIN not set'   unless ENV['ORBIT_BIN']
+      raise KeyError,          '$ORBIT_PATH not set'  unless ENV['ORBIT_PATH']
       raise KeyError,          '$ORBIT_KEY not set'   unless ENV['ORBIT_KEY']
       raise File::NoFileError, '$ORBIT_KEY not found' unless File.exist? ENV['ORBIT_KEY']
 
@@ -140,7 +140,7 @@ module SKI
     # @return [ Array<String> ]
     def planets
       query = @spec[:tail].join('" "')
-      cmd   = %(#{ENV['ORBIT_BIN']}/fifa -n -f ski "#{query}")
+      cmd   = %(#{ENV['ORBIT_PATH']}/fifa -n -f ski "#{query}")
       out   = `#{cmd}`
 
       raise "#{cmd} failed with exit code #{$?}" unless $? == 0
