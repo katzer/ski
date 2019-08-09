@@ -22,12 +22,12 @@
 
 require 'mruby_utils/build_helpers'
 
-def gem_config(conf, glibc_version: '2.19', openssl: false)
+def gem_config(conf, glibc_version: '2.19')
   conf.enable_optimizations
 
   conf.configure_libssh2(
     source: 'katzer/libssh2#feature/mbedtls-ecdsa-support',
-    openssl: openssl, threading: true)
+    threading: true)
 
   conf.glibc_version = glibc_version
 
@@ -58,12 +58,6 @@ MRuby::Build.new('x86_64-pc-linux-gnu-glibc-2.9') do |conf|
   toolchain :clang
 
   gem_config(conf, glibc_version: '2.9')
-end
-
-MRuby::Build.new('x86_64-pc-linux-gnu-openssl') do |conf|
-  toolchain :clang
-
-  gem_config(conf, openssl: true)
 end
 
 MRuby::CrossBuild.new('x86_64-alpine-linux-musl') do |conf|
