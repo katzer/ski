@@ -1,6 +1,25 @@
 # Release Notes: _ski_
 
-### 1.4.7 (02.01.2019)
+Execute commands or collect informations on multiple servers in parallel.
+
+## 1.5.0
+
+Released at: UNRELEASED
+
+1. Added support for `ECDSA` for both key exchange and host key algorithms
+
+2. Compiled binary for OSX build with MacOSX10.13 SDK (Darwin17)
+
+3. Upgraded to mruby 2.0.1
+
+[Full Changelog](https://github.com/appplant/ski/compare/1.4.7...HEAD)
+
+## 1.4.7
+
+Released at: 02.01.2019
+
+<details><summary>Releasenotes</summary>
+<p>
 
 1. Dropped compatibility with orbit v1.4.6 due to breaking changes in _fifa_.
 
@@ -8,9 +27,19 @@
 
 3. Upgraded to mruby 2.0.0
 
-### 1.4.6 (16.08.2018)
+</p>
 
-__Note:__ Tool has been fully reworked.
+[Full Changelog](https://github.com/appplant/ski/compare/1.4.6...1.4.7)
+</details>
+
+## 1.4.6
+
+Released at: 16.08.2018
+
+<details><summary>Releasenotes</summary>
+<p>
+
+Tool has been fully reworked!
 
     $ ski -h
 
@@ -25,8 +54,6 @@ __Note:__ Tool has been fully reworked.
     -w, --width     Width of output column in characters
     -h, --help      This help text
     -v, --version   Show version number
-
-#### Commands
 
 Execute shell commands:
 
@@ -129,19 +156,27 @@ The report result could look like this:
     ["db","Operativ DB",true,["526", "optimizer_adaptive_plans", "FALSE"]]
     ["db","Operativ DB",true,["530", "optimizer_adaptive_statistics", "FALSE"]]
 
-### 1.4.4 (30.11.2017)
+</p>
 
-### Now supports jobs
+[Full Changelog](https://github.com/appplant/ski/compare/1.4.4...1.4.6)
+</details>
+
+## 1.4.4
+
+Released at: 30.11.2017
+
+<details><summary>Releasenotes</summary>
+<p>
 
 Provide jobfile by using 
-    ```
-    ski -j job.json
-    ```
+
+    $ ski -j job.json
+
 All other flags will be ignored when the -j flag is provided.
 The jobfile can be provided as a relative path or as an absolute path.
 When provided as a relative path, ski starts looking for it in the folder ORBIT_HOME/jobs
 Jobfiles have to be in the following form:
-    ```
+
     {
         "debug":true,
         "help":false,
@@ -158,10 +193,9 @@ Jobfiles have to be in the following form:
         ],
         "LogFile":""
     }
-    ```
+
 When running in jobmode, ski writes the output at ORBIT_HOME/jobs_output/$JOBNAME$/$TIMESTAMP$ in the following form:
 
-    ```
     {
         "meta": {
             "debug": true,
@@ -190,7 +224,6 @@ When running in jobmode, ski writes the output at ORBIT_HOME/jobs_output/$JOBNAM
             }
         ]
     }
-    ```
 
 ### Formatter
 Ski now uses Interfaces and a FormatterFactory to dynamically create the right formatter for a job.
@@ -248,9 +281,17 @@ Ski now colorizes occuring errors in ugly-mode and the whole row of an errored p
 
 24. removed deprecated functions
 
+</p>
 
+[Full Changelog](https://github.com/appplant/ski/compare/0.9.1...1.4.4)
+</details>
 
-### 0.9.1 (15.02.2017)
+## 0.9.1
+
+Released at: 15.02.2017
+
+<details><summary>Releasenotes</summary>
+<p>
 
 1. Renamed the tool to ski (<b>S</b>ascha <b>K</b>nows <b>I</b>t).
 
@@ -306,8 +347,17 @@ Ski now colorizes occuring errors in ugly-mode and the whole row of an errored p
    [34mINFO[0m[2017-02-15 15:05:17] Started with args: [./ski -s=showver.sh app]
    ```
 
+</p>
 
-### 0.9.0 (12.12.2016)
+[Full Changelog](https://github.com/appplant/ski/compare/0.9.0...0.9.1)
+</details>
+
+## 0.9.0
+
+Released at: 12.12.2016
+
+<details><summary>Releasenotes</summary>
+<p>
 
 1. Execute command/script/sql on multiple planets at same time:
 
@@ -339,3 +389,8 @@ Ski now colorizes occuring errors in ugly-mode and the whole row of an errored p
    ```
 
 4. Changed the ssh authentification handling in a way that goo looks for a keyfile at $ORBIT_KEY rather than relying on the keyfile being managed by the ssh-manager.
+
+</p>
+
+[Full Changelog](https://github.com/appplant/ski/compare/1405d1037363ff32e8c2bf28664efd9896859631...0.9.0)
+</details>
