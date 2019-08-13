@@ -21,5 +21,5 @@
 # SOFTWARE.
 
 module SKI
-  VERSION = '1.5.0.beta.1'.freeze
+  VERSION = '1.5.0'.freeze
 end

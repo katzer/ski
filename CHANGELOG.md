@@ -4,7 +4,7 @@ Execute commands or collect informations on multiple servers in parallel.
 
 ## 1.5.0
 
-Released at: UNRELEASED
+Released at: 13.08.2019
 
 1. Added support for `ECDSA` for both key exchange and host key algorithms
 
@@ -12,7 +12,7 @@ Released at: UNRELEASED
 
 3. Upgraded to mruby 2.0.1
 
-[Full Changelog](https://github.com/appplant/ski/compare/1.4.7...HEAD)
+[Full Changelog](https://github.com/appplant/ski/compare/1.4.7...1.5.0)
 
 ## 1.4.7
 
