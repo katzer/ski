@@ -1,4 +1,4 @@
-# ski - Sascha Knows It <br>[![GitHub release](https://img.shields.io/github/release/appplant/ski.svg)](https://github.com/appplant/ski/releases) [![Build Status](https://travis-ci.com/appPlant/ski.svg?branch=master)](https://travis-ci.com/appPlant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/appplant/ski/maintainability)
+# ski - Sascha Knows It <br>[![GitHub release](https://img.shields.io/github/release/appPlant/ski.svg)](https://github.com/appplant/ski/releases) [![Build Status](https://travis-ci.com/appPlant/ski.svg?branch=master)](https://travis-ci.com/appPlant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/appplant/ski/maintainability)
 
 Execute commands or collect informations on multiple servers in parallel.
 
@@ -18,7 +18,7 @@ Execute commands or collect informations on multiple servers in parallel.
 
 ## Prerequisites
 
-You'll need to add `ORBIT_HOME`, `ORBIT_KEY` and `ORBIT_PATH` first to your profile:
+You'll need to add `ORBIT_HOME` and `ORBIT_KEY` first to your profile:
 
     $ export ORBIT_HOME=/path/to/orbit
 

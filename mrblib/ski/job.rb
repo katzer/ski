@@ -139,7 +139,7 @@ module SKI
     # @return [ Array<String> ]
     def planets
       query = @spec[:tail].join('" "')
-      fifa  = ENV.include?('ORBIT_PATH') ? "#{ENV['ORBIT_PATH']}/fifa" : 'fifa'
+      fifa  = ENV.include?('ORBIT_BIN') ? "#{ENV['ORBIT_BIN']}/fifa" : 'fifa'
       cmd   = %(#{fifa} -n -f ski "#{query}")
       out   = `#{cmd}`
 
