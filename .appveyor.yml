@@ -28,7 +28,7 @@ environment:
     TOOLCHAIN: gcc
     MRUBY_CLI_LOCAL: 1
     ORBIT_HOME: '%APPVEYOR_BUILD_FOLDER%\bintest'
-    ORBIT_PATH: '%APPVEYOR_BUILD_FOLDER%\bintest\tools'
+    ORBIT_BIN: '%APPVEYOR_BUILD_FOLDER%\bintest\tools'
     ORBIT_KEY: '%APPVEYOR_BUILD_FOLDER%\Rakefile'
     LIBSSH2_VERSION: head
   matrix:
