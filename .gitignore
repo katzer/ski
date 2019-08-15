@@ -2,10 +2,7 @@ mruby/
 releases/
 packages/
 build/
-bintest/job/
 bintest/log/
-bintest/script/
 bintest/report/
-bintest/sql/
 bintest/tmp/
 Gemfile.lock

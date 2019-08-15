@@ -81,6 +81,35 @@ assert('command and script') do
   assert_include output, 'ArgumentError'
 end
 
+assert('command') do
+  skip if ENV['OS'] == 'Windows_NT'
+
+  output, status = Open3.capture2(BIN, '-c', 'echo test', 'localhost')
+
+  assert_true status.success?, 'Process did not exit cleanly'
+  assert_equal output, "test\n"
+end
+
+assert('script') do
+  skip if ENV['OS'] == 'Windows_NT'
+
+  output, status = Open3.capture2(BIN, '-s', 'test.sh', 'localhost')
+
+  assert_true status.success?, 'Process did not exit cleanly'
+  assert_equal output, "test\n"
+end
+
+assert('job') do
+  skip if ENV['OS'] == 'Windows_NT'
+
+  output, status = Open3.capture2(BIN, '-j', 'test')
+
+  assert_true status.success?, 'Process did not exit cleanly'
+  assert_include output, "#{ENV['ORBIT_HOME']}/report/test/"
+  assert_include output, '.skirep'
+  assert_true Dir.exist? "#{ENV['ORBIT_HOME']}/report/test"
+end
+
 assert('pretty [-p]') do
   skip if ENV['OS'] == 'Windows_NT'
 
