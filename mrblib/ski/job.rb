@@ -88,8 +88,8 @@ module SKI
     def convert(opt)
       script, tpl = opt[:script], opt[:template]
 
-      opt[:template] = expand_path('templates', "#{tpl}.textfsm") if tpl
-      opt[:script]   = expand_path('scripts', script) if script&.include? '.sh'
+      opt[:template] = expand_path('template', "#{tpl}.textfsm") if tpl
+      opt[:script]   = expand_path('script', script) if script&.include? '.sh'
       opt[:script]   = expand_path('sql', script)     if script&.include? '.sql'
 
       opt

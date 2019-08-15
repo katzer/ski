@@ -23,9 +23,6 @@
 module SKI
   # Convert the output based on a TextFSM template file.
   class TemplateFormatter
-    # The absolute path to the skifsm.pyc script
-    FSM_PATH = File.join(ENV['ORBIT_HOME'].to_s, 'vendor/textfsm/skifsm.py')
-
     # Initialize a new formatter.
     #
     # @param [ String ] tpl The path of the template file.
@@ -77,7 +74,7 @@ module SKI
     #
     # return [ String ]
     def skifsm(args)
-      `python #{FSM_PATH} #{@tpl} #{args}`
+      `python #{ENV['ORBIT_HOME']}/vendor/textfsm/skifsm.py #{@tpl} #{args}`
     end
   end
 end

@@ -23,9 +23,6 @@
 module SKI
   # Save the output under /results/<job> for iss
   class WebPresenter < BasePresenter
-    # Absolute path to $ORBIT_HOME/reports
-    REPORTS_DIR = File.join(ENV['ORBIT_HOME'].to_s, 'reports').freeze
-
     # Initialize a new presenter object.
     #
     # @param [ Hash ]   spec The parsed command line arguments.
@@ -38,13 +35,13 @@ module SKI
       @cols = columns(cols || ['OUTPUT'])
     end
 
-    # Format and print the results to $ORBIT_HOME/reports.
+    # Format and print the results to $ORBIT_HOME/report/.
     #
     # @param [ Array<SKI::Result> ] results The results to print out.
     #
     # @return [ Void ]
     def present(results)
-      File.open("#{make_report_file_dir}/#{@ts}.skirep", 'w+') do |f|
+      File.open("#{make_report_dir}/#{@ts}.skirep", 'w+') do |f|
         f.write render_timestamp_and_columns
         results.each { |res| f.write render_result(res) }
         STDOUT.puts("Written report to: #{f.path}")
@@ -91,10 +88,11 @@ module SKI
     # Create all parent directories within $ORBIT_HOME
     #
     # @return [ String ] The report sub folder
-    def make_report_file_dir
-      rep_dir = File.join(REPORTS_DIR, @spec[:job])
+    def make_report_dir
+      rep_dir     = File.join(ENV['ORBIT_HOME'], 'report')
+      rep_job_dir = File.join(rep_dir, @spec[:job])
 
-      [REPORTS_DIR, rep_dir].each { |dir| Dir.mkdir(dir) unless Dir.exist? dir }
+      [rep_dir, rep_job_dir].each { |dir| Dir.mkdir(dir) unless Dir.exist? dir }
 
       rep_dir
     end

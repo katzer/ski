@@ -56,26 +56,29 @@ end
 #
 # @return [ Void ]
 def __main__(args)
-  SKI::Job.new(parse(args[1..-1])).exec
+  SKI::Job.new(__parse__(args[1..-1])).exec
 end
 
 # Parse the command-line arguments.
 #
-# @param [ Array<String> ] args The command-line arguments to parse.
+# @param [ Array<String> ] args The command-line arguments.
 #
 # @return [ Hash<Symbol,Object> ]
-def parse(args)
-  opts = @parser.parse(args.empty? ? ['-h'] : args)
-  job  = opts[:job]
-
-  if job
-    opts = @parser.parse(
-      File.read("#{ENV['ORBIT_HOME']}/jobs/#{job}.skijob")
-          .split(/(?<!\\)\s+/).map! { |f| f.gsub(/[\\'"]/, '') }
-          .concat(['-j', job])
-    )
-  end
-
+def __parse__(args)
+  opts        = @parser.parse(args.empty? ? ['-h'] : args)
+  opts        = __parse_skijob__(opts[:job]) if opts[:job]
   opts[:tail] = @parser.tail
   opts
+end
+
+# Parse the skijob file.
+#
+# @param [ String ] job The name of the file.
+#
+# @return [ Hash<Symbol,Object> ]
+def __parse_skijob__(job)
+  @parser.parse IO.read("#{ENV['ORBIT_HOME']}/job/#{job}.skijob")
+                  .split(/(?<!\\)\s+/)
+                  .map! { |f| f.gsub(/[\\'"]/, '') }
+                  .concat(['-j', job])
 end
