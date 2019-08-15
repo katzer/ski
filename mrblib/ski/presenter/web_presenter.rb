@@ -92,9 +92,11 @@ module SKI
       rep_dir     = File.join(ENV['ORBIT_HOME'], 'report')
       rep_job_dir = File.join(rep_dir, @spec[:job])
 
-      [rep_dir, rep_job_dir].each { |dir| Dir.mkdir(dir) unless Dir.exist? dir }
+      [rep_dir, rep_job_dir].each do |dir|
+        Dir.mkdir(dir) unless Dir.exist? dir
+      end
 
-      rep_dir
+      rep_job_dir
     end
   end
 end
