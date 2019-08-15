@@ -103,7 +103,6 @@ module SKI
       validate_envs && validate_args
     end
 
-    # codebeat:disable[ABC]
     # rubocop:disable AbcSize, CyclomaticComplexity, LineLength, PerceivedComplexity
 
     # Validate the parsed command-line arguments.
@@ -132,7 +131,6 @@ module SKI
     end
 
     # rubocop:enable AbcSize, CyclomaticComplexity, LineLength, PerceivedComplexity
-    # codebeat:enable[ABC]
 
     # Retrieve list of servers in ski format from fifa.
     #
