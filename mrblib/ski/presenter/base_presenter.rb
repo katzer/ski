@@ -50,8 +50,11 @@ module SKI
     #
     # @return [ String ]
     def colorize_text(text, no_error = true)
-      return text if text.nil? || @spec[:'no-color'] || no_error
-      text.split("\n").map! { |s| s.set_color(:red) }.join("\n")
+      if text.nil? || @spec[:'no-color'] || no_error
+        text
+      else
+        text.split("\n").map! { |s| s.set_color(:red) }.join("\n")
+      end
     end
 
     # Adjust the width of the result task output.
@@ -60,8 +63,11 @@ module SKI
     #
     # @return [ String ]
     def adjust(result)
-      return result.output if @spec[:width] == 0
-      result.output.scan(/.{1,#{@spec[:width]}}/).join("\n")
+      if @spec[:width] == 0
+        result.output
+      else
+        result.output.scan(/.{1,#{@spec[:width]}}/).join("\n")
+      end
     end
   end
 end
