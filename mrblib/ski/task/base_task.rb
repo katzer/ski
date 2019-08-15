@@ -23,9 +23,6 @@
 module SKI
   # Base class for all task types
   class BaseTask
-    # Default configuration for every SSH connection
-    SSH_CONFIG = { key: ENV['ORBIT_KEY'], compress: true, timeout: 5000 }.freeze
-
     # Initialize the task specified by opts.
     #
     # @param [ Hash<Symbol,Object> ] opts A key-value hash.
@@ -119,10 +116,19 @@ module SKI
     # @return [ SSH::Session ]
     def __connect__(user, host)
       log "Connecting to #{user}@#{host}" do
-        ssh = SSH.start(host, user, SSH_CONFIG.dup)
+        ssh = SSH.start(host, user, ssh_config)
         ssh.timeout = 0
         ssh
       end
+    end
+
+    # Configuration for SSH connection.
+    #
+    # @return [ Hash<Symbol,Object> ]
+    def ssh_config
+      { key: ENV.fetch('ORBIT_KEY'), compress: true, timeout: 5_000 }
+    rescue KeyError
+      raise '$ORBIT_KEY not set'
     end
 
     # Start an SSH session.
