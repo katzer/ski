@@ -24,4 +24,5 @@ ruby '>=2.5'
 
 source 'https://rubygems.org'
 
-gem 'mruby_utils', '>=1.4.3'
+gem 'mruby_utils', '>=1.4.2'
+gem 'rake', '>=11.0.0'
