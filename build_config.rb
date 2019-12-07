@@ -33,7 +33,7 @@ def gem_config(conf, glibc_version: '2.19')
 
   [conf.cc, conf.cxx].each do |cc|
     cc.defines << 'MRB_WITHOUT_FLOAT'
-  end if ENV['MRUBY_VERSION'] == 'head'
+  end
 
   conf.gem __dir__
 end
