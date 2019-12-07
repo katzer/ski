@@ -110,11 +110,11 @@ module SKI
     #
     # @return [ Boolean ] true if valid
     def validate_args
-      raise ArgumentError,     'Missing command or script'          unless @spec[:command] || @spec[:script]
-      raise ArgumentError,     'Execute with command or script'     if     @spec[:command] && @spec[:script]
-      raise ArgumentError,     'Missing matcher'                    unless @spec[:tail].any?
-      raise File::NoFileError, "No such file - #{@spec[:script]}"   if     @spec[:script]   && !File.file?(@spec[:script])
-      raise File::NoFileError, "No such file - #{@spec[:template]}" if     @spec[:template] && !File.file?(@spec[:template])
+      raise ArgumentError, 'Missing command or script'          unless @spec[:command] || @spec[:script]
+      raise ArgumentError, 'Execute with command or script'     if     @spec[:command] && @spec[:script]
+      raise ArgumentError, 'Missing matcher'                    unless @spec[:tail].any?
+      raise ArgumentError, "No such file - #{@spec[:script]}"   if     @spec[:script]   && !File.file?(@spec[:script])
+      raise ArgumentError, "No such file - #{@spec[:template]}" if     @spec[:template] && !File.file?(@spec[:template])
 
       true
     end
@@ -124,8 +124,8 @@ module SKI
     #
     # @return [ Boolean ] true if valid
     def validate_envs
-      raise KeyError,          '$ORBIT_KEY not set'   unless ENV['ORBIT_KEY']
-      raise File::NoFileError, '$ORBIT_KEY not found' unless File.exist? ENV['ORBIT_KEY']
+      raise KeyError, '$ORBIT_KEY not set'   unless ENV['ORBIT_KEY']
+      raise KeyError, '$ORBIT_KEY not found' unless File.exist? ENV['ORBIT_KEY']
 
       true
     end

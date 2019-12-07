@@ -149,12 +149,12 @@ assert('bad script') do
   _, output, status = Open3.capture3(BIN, '-s', 'path', 'host')
 
   assert_false status.success?, 'Process did exit cleanly'
-  assert_include output, 'NoFileError'
+  assert_include output, 'ArgumentError'
 end
 
 assert('bad template') do
   _, output, status = Open3.capture3(BIN, '-c', 'echo', '-t', 'path', 'host')
 
   assert_false status.success?, 'Process did exit cleanly'
-  assert_include output, 'NoFileError'
+  assert_include output, 'ArgumentError'
 end
