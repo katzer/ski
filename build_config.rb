@@ -74,12 +74,12 @@ MRuby::CrossBuild.new('x86_64-apple-darwin17') do |conf|
   toolchain :clang
 
   [conf.cc, conf.linker].each do |cc|
-    cc.command = 'x86_64-apple-darwin17-clang'
-    cc.flags  += %w[-mmacosx-version-min=10.13 -stdlib=libstdc++]
+    cc.command = 'x86_64-apple-darwin19-clang'
+    cc.flags << '-mmacosx-version-min=10.13'
   end
 
-  conf.cxx.command      = 'x86_64-apple-darwin17-clang++'
-  conf.archiver.command = 'x86_64-apple-darwin17-ar'
+  conf.cxx.command      = 'x86_64-apple-darwin19-clang++'
+  conf.archiver.command = 'x86_64-apple-darwin19-ar'
 
   conf.build_target     = 'x86_64-pc-linux-gnu'
   conf.host_target      = 'x86_64-apple-darwin17'
