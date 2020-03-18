@@ -22,6 +22,8 @@
 
 require 'mruby_utils/build_helpers'
 
+MRuby::Lockfile.disable
+
 def gem_config(conf, glibc_version: '2.19')
   conf.enable_optimizations
 
