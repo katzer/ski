@@ -53,7 +53,7 @@ before_deploy:
 - build/x86_64-pc-linux-gnu/bin/ski -v
 - sudo chmod -R 1777 releases
 - sudo chmod -R 1777 build/host/mrbgems
-- export BUILD_VERSION=`rake version`
+- export BUILD_VERSION=`rake -s version`
 - echo $BUILD_VERSION
 - ls -la releases
 - ls -la releases/v$BUILD_VERSION
