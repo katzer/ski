@@ -4,11 +4,19 @@ Execute commands or collect informations on multiple servers in parallel.
 
 ## 1.5.1
 
-Released at: UNRELEASED
+Released at: 18.03.2020
 
-1. Singularized folder names.
+1. Singularized folder names
 
-[Full Changelog](https://github.com/appplant/ski/compare/1.5.0...HEAD)
+2. Fixed potential memory leaks.
+
+3. Compiled with `MRB_WITHOUT_FLOAT`
+
+4. Compiled binary for OSX build with MacOSX10.15 SDK
+
+5. Upgraded to mruby 2.1.0
+
+[Full Changelog](https://github.com/appplant/ski/compare/1.5.0...1.5.1)
 
 ## 1.5.0
 
