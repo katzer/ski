@@ -17,7 +17,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR   OTHER DEALINGS IN THE
 # SOFTWARE.
 
 require 'mruby_utils/build_helpers'
@@ -26,10 +26,6 @@ MRuby::Lockfile.disable
 
 def gem_config(conf, glibc_version: '2.19')
   conf.enable_optimizations
-
-  conf.configure_libssh2(
-    source: 'katzer/libssh2#feature/mbedtls-ecdsa-support',
-    threading: true)
 
   conf.glibc_version = glibc_version
 
