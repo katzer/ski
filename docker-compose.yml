@@ -20,33 +20,36 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-compile: &defaults
-  image: appplant/mruby-cli
-  working_dir: /home/mruby/code
-  volumes:
-    - .:/home/mruby/code:rw
-  environment:
-    MRUBY_VERSION: ${MRUBY_VERSION}
-    ORBIT_HOME: /home/mruby/code/bintest
-    ORBIT_BIN: /home/mruby/code/bintest/tools
-    ORBIT_KEY: /root/.ssh/dev.key
-    LIBSSH2_VERSION: head
-  command: rake compile
-test:
-  <<: *defaults
-  command: rake sshd test
-bintest:
-  <<: *defaults
-  command: rake sshd test:bintest
-mtest:
-  <<: *defaults
-  command: rake test:mtest
-clean:
-  <<: *defaults
-  command: rake clean
-shell:
-  <<: *defaults
-  command: bash
-release:
-  <<: *defaults
-  command: rake release
+version: "3.9"
+
+services:
+  compile: &defaults
+    image: appplant/mruby-cli
+    working_dir: /home/mruby/code
+    volumes:
+      - .:/home/mruby/code:rw
+    environment:
+      MRUBY_VERSION: ${MRUBY_VERSION}
+      ORBIT_HOME: /home/mruby/code/bintest
+      ORBIT_BIN: /home/mruby/code/bintest/tools
+      ORBIT_KEY: /root/.ssh/dev.key
+      LIBSSH2_VERSION: head
+    command: rake compile
+  test:
+    <<: *defaults
+    command: rake test
+  bintest:
+    <<: *defaults
+    command: rake test:bintest
+  mtest:
+    <<: *defaults
+    command: rake test:mtest
+  clean:
+    <<: *defaults
+    command: rake clean
+  shell:
+    <<: *defaults
+    command: bash
+  release:
+    <<: *defaults
+    command: rake release
