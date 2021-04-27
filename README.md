@@ -1,4 +1,4 @@
-# ski - Sascha Knows It <br>[![GitHub release](https://img.shields.io/github/release/appPlant/ski.svg)](https://github.com/appplant/ski/releases) [![Build Status](https://travis-ci.com/appPlant/ski.svg?branch=master)](https://travis-ci.com/appPlant/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/appplant/ski/maintainability)
+# ski - Sascha Knows It <br>[![GitHub release](https://img.shields.io/github/release/katzer/ski.svg)](https://github.com/katzer/ski/releases) [![Build Status](https://travis-ci.com/katzer/ski.svg?branch=master)](https://travis-ci.com/katzer/ski) [![Build status](https://ci.appveyor.com/api/projects/status/f5imsl77fmg2omba/branch/master?svg=true)](https://ci.appveyor.com/project/katzer/goo/branch/master) [![Maintainability](https://api.codeclimate.com/v1/badges/e5995227dd52c2f7221e/maintainability)](https://codeclimate.com/github/katzer/ski/maintainability)
 
 Execute commands or collect informations on multiple servers in parallel.
 
@@ -133,7 +133,7 @@ The report result could look like this:
 
 Clone the repo:
 
-    $ git clone https://github.com/appplant/ski.git && cd ski/
+    $ git clone https://github.com/katzer/ski.git && cd ski/
 
 Install the dependencies:
 
@@ -162,7 +162,7 @@ For the complete list of build tasks:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/appplant/ski.
+Bug reports and pull requests are welcome on GitHub at https://github.com/katzer/ski.
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -178,7 +178,7 @@ Made with :heart: in Leipzig
 
 © 2018 [appPlant GmbH][appplant]
 
-[releases]: https://github.com/appplant/ski/releases
+[releases]: https://github.com/katzer/ski/releases
 [textfsm]: https://github.com/google/textfsm/wiki/TextFSM
 [license]: http://opensource.org/licenses/Apache-2.0
 [appplant]: www.appplant.de
