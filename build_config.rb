@@ -43,6 +43,8 @@ MRuby::Build.new do |conf|
   conf.enable_debug
   conf.enable_test
 
+  conf.build_mrbc_exec
+
   gem_config(conf)
 end
 

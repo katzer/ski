@@ -32,7 +32,7 @@ environment:
     ORBIT_KEY: '%APPVEYOR_BUILD_FOLDER%\Rakefile'
     LIBSSH2_VERSION: head
   matrix:
-  - MRUBY_VERSION: 2.1.2
+  - MRUBY_VERSION: 3.0.0
   - MRUBY_VERSION: head
 
 matrix:

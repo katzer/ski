@@ -87,7 +87,7 @@ assert('command') do
   output, status = Open3.capture2(BIN, '-c', 'echo test', 'localhost')
 
   assert_true status.success?, 'Process did not exit cleanly'
-  assert_equal output, "test\n"
+  assert_equal "test\n", output
 end
 
 assert('script') do
@@ -96,7 +96,7 @@ assert('script') do
   output, status = Open3.capture2(BIN, '-s', 'test.sh', 'localhost')
 
   assert_true status.success?, 'Process did not exit cleanly'
-  assert_equal output, "test\n"
+  assert_equal "test\n", output
 end
 
 assert('job') do

@@ -22,7 +22,7 @@
 
 module SKI
   # Base class for all presenters
-  class BasePresenter < BasicObject
+  class BasePresenter
     # Initialize a new presenter object.
     #
     # @param [ Hash ] spec The parsed command line arguments.

@@ -69,12 +69,14 @@ module SKI
     # @return [ Array<SKI::Result> ]
     def async(&block)
       servers = planets
-      size    = [(servers.count / 20.0).round, 1].max
+      size    = [servers.count / 20, 1].max
       ths     = []
 
       servers.each_slice(size) do |slice|
         ths << Thread.new(slice) { |opts| opts.map! { |opt| block&.call(opt) } }
       end
+
+      # puts block&.call(servers.first)
 
       ths.map!(&:join).flatten!&.compact!
       ths

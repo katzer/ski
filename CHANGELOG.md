@@ -2,6 +2,17 @@
 
 Execute commands or collect informations on multiple servers in parallel.
 
+## 1.5.2
+
+Released at:
+
+1. Upgraded to mruby 3.0.0
+
+[Full Changelog](https://github.com/appplant/ski/compare/1.5.1...HEAD)
+
+<details><summary>Releasenotes</summary>
+<p>
+
 ## 1.5.1
 
 Released at: 18.03.2020
@@ -16,7 +27,10 @@ Released at: 18.03.2020
 
 5. Upgraded to mruby 2.1.0
 
+</p>
+
 [Full Changelog](https://github.com/appplant/ski/compare/1.5.0...1.5.1)
+</details>
 
 ## 1.5.0
 
