@@ -22,7 +22,7 @@ You'll need to add `ORBIT_HOME` first to your profile:
 
     $ export ORBIT_HOME=/path/to/orbit
 
-And setup the SSH agent for passwordless authentification:
+Then setup the SSH agent for passwordless authentication:
 
     $ ssh-add /path/to/key
 
