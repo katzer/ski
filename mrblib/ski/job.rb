@@ -76,8 +76,6 @@ module SKI
         ths << Thread.new(slice) { |opts| opts.map! { |opt| block&.call(opt) } }
       end
 
-      # puts block&.call(servers.first)
-
       ths.map!(&:join).flatten!&.compact!
       ths
     end
