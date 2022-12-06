@@ -75,11 +75,11 @@ module SKI
     # @return [ SKI::Result ] The result of the task.
     def exec(spec)
       case task_type(spec)
-      when :error    then ErrorTask.new(spec)
-      when :invalid  then InvalidTask.new(spec)
       when 'server'  then ServerTask.new(spec)
       when 'db'      then DatabaseTask.new(spec)
-      else                UnknownTask.new(spec)
+      when :error    then ErrorTask.new(spec)
+      when :invalid  then InvalidTask.new(spec)
+      else                ShellTask.new(spec)
       end.exec(self)
     end
 

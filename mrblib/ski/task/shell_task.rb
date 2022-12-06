@@ -21,15 +21,42 @@
 # SOFTWARE.
 
 module SKI
-  # Does not execute anything since the type is not supported.
-  class UnknownTask < BaseTask
-    # Just log an error message.
+  # Execute HTTP requests
+  class WebTask < ServerTask
+    # Request the REST-API of the web server.
     #
     # @param [ SKI::Planet ] planet The planet where to execute the task.
     #
     # @return [ Void ]
     def exec(planet)
-      error(planet, "Unknown planet type: #{planet.type}")
+      log("Executing shell command for #{planet.connection}") { shell(planet) }
+    end
+
+    # The command to execute on the remote server.
+    #
+    # @param [ SKI::Planet ] planet The planet where to execute the task.
+    #
+    # @return [ String ]
+    def command(planet)
+      [
+        "export ORBIT_PLANET_ID=#{planet.id}",
+        "export ORBIT_PLANET_URL=#{planet.connection}",
+        super()
+      ].join(";")
+    end
+
+    private
+
+    # Execute the shell command for the remote server and yields the code block
+    # with the captured result.
+    #
+    # @param [ SKI::Planet ] planet The planet where to execute the task.
+    #
+    # @return [ SKI::Result ]
+    def shell(planet)
+      out = `#{command(planet)}`
+
+      result(planet, out, $? == 0)
     end
   end
 end
