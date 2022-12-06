@@ -63,8 +63,9 @@ deploy:
     token: "$GITHUB_OAUTH_TOKEN"
     edge: true
     file:
-    - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-apple-darwin17.tgz"
+    - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-arm64-apple-darwin19.tgz"
     - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-alpine-linux-musl.tgz"
+    - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-apple-darwin19.tgz"
     - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-gnu.tgz"
     - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-pc-linux-gnu-glibc-2.9.tgz"
     - "releases/v$BUILD_VERSION/ski-$BUILD_VERSION-x86_64-w64-mingw32.tgz"

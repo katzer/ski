@@ -70,19 +70,36 @@ MRuby::CrossBuild.new('x86_64-alpine-linux-musl') do |conf|
   gem_config(conf)
 end
 
-MRuby::CrossBuild.new('x86_64-apple-darwin17') do |conf|
+MRuby::CrossBuild.new('x86_64-apple-darwin19') do |conf|
   toolchain :clang
 
   [conf.cc, conf.linker].each do |cc|
-    cc.command = 'x86_64-apple-darwin19-clang'
-    cc.flags << '-mmacosx-version-min=10.13'
+    cc.command = 'x86_64-apple-darwin20.4-clang'
+    cc.flags << '-mmacosx-version-min=10.15'
   end
 
-  conf.cxx.command      = 'x86_64-apple-darwin19-clang++'
-  conf.archiver.command = 'x86_64-apple-darwin19-ar'
+  conf.cxx.command      = 'x86_64-apple-darwin20.4-clang++'
+  conf.archiver.command = 'x86_64-apple-darwin20.4-ar'
 
   conf.build_target     = 'x86_64-pc-linux-gnu'
-  conf.host_target      = 'x86_64-apple-darwin17'
+  conf.host_target      = 'x86_64-apple-darwin19'
+
+  gem_config(conf)
+end
+
+MRuby::CrossBuild.new('arm64-apple-darwin19') do |conf|
+  toolchain :clang
+
+  [conf.cc, conf.linker].each do |cc|
+    cc.command = 'arm64-apple-darwin20.4-clang'
+    cc.flags << '-mmacosx-version-min=10.15'
+  end
+
+  conf.cxx.command      = 'arm64-apple-darwin20.4-clang++'
+  conf.archiver.command = 'arm64-apple-darwin20.4-ar'
+
+  conf.build_target     = 'arm64-pc-linux-gnu'
+  conf.host_target      = 'arm64-apple-darwin19'
 
   gem_config(conf)
 end
