@@ -14,7 +14,7 @@ Released at:
 
 4. Added binary for `arm64-apple-darwin19` target.
 
-5. Upgraded to mruby 3.0.0
+5. Upgraded to mruby 3.2.0
 
 [Full Changelog](https://github.com/appplant/ski/compare/1.5.1...HEAD)
 

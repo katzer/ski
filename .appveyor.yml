@@ -31,7 +31,7 @@ environment:
     ORBIT_BIN: '%APPVEYOR_BUILD_FOLDER%\bintest\tools'
     LIBSSH2_VERSION: head
   matrix:
-  - MRUBY_VERSION: 3.0.0
+  - MRUBY_VERSION: 3.2.0
   - MRUBY_VERSION: head
 
 matrix:

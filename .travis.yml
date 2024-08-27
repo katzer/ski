@@ -31,7 +31,7 @@ env:
 
 jobs:
   include:
-  - env: MRUBY_VERSION=3.0.0
+  - env: MRUBY_VERSION=3.2.0
     services: [docker]
   - env: MRUBY_VERSION=head
     services: [docker]
@@ -73,5 +73,5 @@ deploy:
       tags: true
       branch: master
       condition:
-      - "$MRUBY_VERSION == 3.0.0"
+      - "$MRUBY_VERSION == 3.2.0"
       - "$TRAVIS_OS_NAME == linux"
