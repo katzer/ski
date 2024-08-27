@@ -4,7 +4,7 @@ Execute commands or collect informations on multiple servers in parallel.
 
 ## 1.5.2
 
-Released at:
+Released at: 27.08.2024
 
 1. Use SSH Agent instead of `$ORBIT_KEY` for authentication.
 
@@ -16,7 +16,7 @@ Released at:
 
 5. Upgraded to mruby 3.2.0
 
-[Full Changelog](https://github.com/appplant/ski/compare/1.5.1...HEAD)
+[Full Changelog](https://github.com/appplant/ski/compare/1.5.1...1.5.2)
 
 <details><summary>Releasenotes</summary>
 <p>
