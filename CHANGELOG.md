@@ -16,7 +16,7 @@ Released at: 27.08.2024
 
 5. Upgraded to mruby 3.2.0
 
-[Full Changelog](https://github.com/appplant/ski/compare/1.5.1...1.5.2)
+[Full Changelog](https://github.com/katzer/ski/compare/1.5.1...1.5.2)
 
 <details><summary>Releasenotes</summary>
 <p>
@@ -37,7 +37,7 @@ Released at: 18.03.2020
 
 </p>
 
-[Full Changelog](https://github.com/appplant/ski/compare/1.5.0...1.5.1)
+[Full Changelog](https://github.com/katzer/ski/compare/1.5.0...1.5.1)
 </details>
 
 ## 1.5.0
@@ -55,7 +55,7 @@ Released at: 13.08.2019
 
 </p>
 
-[Full Changelog](https://github.com/appplant/ski/compare/1.4.7...1.5.0)
+[Full Changelog](https://github.com/katzer/ski/compare/1.4.7...1.5.0)
 </details>
 
 ## 1.4.7
@@ -73,7 +73,7 @@ Released at: 02.01.2019
 
 </p>
 
-[Full Changelog](https://github.com/appplant/ski/compare/1.4.6...1.4.7)
+[Full Changelog](https://github.com/katzer/ski/compare/1.4.6...1.4.7)
 </details>
 
 ## 1.4.6
@@ -202,7 +202,7 @@ The report result could look like this:
 
 </p>
 
-[Full Changelog](https://github.com/appplant/ski/compare/1.4.4...1.4.6)
+[Full Changelog](https://github.com/katzer/ski/compare/1.4.4...1.4.6)
 </details>
 
 ## 1.4.4
@@ -327,7 +327,7 @@ Ski now colorizes occuring errors in ugly-mode and the whole row of an errored p
 
 </p>
 
-[Full Changelog](https://github.com/appplant/ski/compare/0.9.1...1.4.4)
+[Full Changelog](https://github.com/katzer/ski/compare/0.9.1...1.4.4)
 </details>
 
 ## 0.9.1
@@ -393,7 +393,7 @@ Released at: 15.02.2017
 
 </p>
 
-[Full Changelog](https://github.com/appplant/ski/compare/0.9.0...0.9.1)
+[Full Changelog](https://github.com/katzer/ski/compare/0.9.0...0.9.1)
 </details>
 
 ## 0.9.0
@@ -436,5 +436,5 @@ Released at: 12.12.2016
 
 </p>
 
-[Full Changelog](https://github.com/appplant/ski/compare/1405d1037363ff32e8c2bf28664efd9896859631...0.9.0)
+[Full Changelog](https://github.com/katzer/ski/compare/1405d1037363ff32e8c2bf28664efd9896859631...0.9.0)
 </details>
